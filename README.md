@@ -35,14 +35,18 @@ The minimum product is not a general-purpose IDE, a general-purpose circuit simu
 | [`proposal/`](proposal/) | One-page LaTeX proposal and compiled PDF |
 | [`docs/research/student-evaluation-findings.md`](docs/research/student-evaluation-findings.md) | Evidence base, method, themes, and limitations |
 | [`docs/research/technical-feasibility.md`](docs/research/technical-feasibility.md) | VS Code, container, simulator, and AI integration research |
+| [`docs/research/measurement-literature.md`](docs/research/measurement-literature.md) | Research basis for surveys, learning measures, trust, workload, analysis, and ethics |
 | [`docs/design/product-requirements.md`](docs/design/product-requirements.md) | Functional and non-functional requirements |
 | [`docs/design/system-architecture.md`](docs/design/system-architecture.md) | Component model, trust boundaries, and data flow |
 | [`docs/design/course-workflows.md`](docs/design/course-workflows.md) | Student and instructor workflows for CIS 310 and CIS 450 |
 | [`docs/design/ai-safety-and-privacy.md`](docs/design/ai-safety-and-privacy.md) | Academic-integrity, privacy, security, and escalation controls |
 | [`docs/planning/evaluation-plan.md`](docs/planning/evaluation-plan.md) | Research questions, metrics, and pilot plan |
+| [`docs/planning/rq-instrument-matrix.md`](docs/planning/rq-instrument-matrix.md) | Item-level mapping from each RQ to its primary and supporting evidence |
+| [`docs/planning/analysis-plan.md`](docs/planning/analysis-plan.md) | Pre-specified outcomes, estimands, models, missing-data rules, and reporting limits |
 | [`docs/planning/implementation-roadmap.md`](docs/planning/implementation-roadmap.md) | Schedule, work allocation, risks, and definition of done |
 | [`docs/planning/traceability-matrix.md`](docs/planning/traceability-matrix.md) | Student needs mapped to requirements and validation |
 | [`schemas/`](schemas/) | Proposed versioned formats for course packs, evidence, and processor designs |
+| [`instruments/`](instruments/) | Pre/post surveys, item-to-RQ map, task pulse, assignments, rubrics, calibration task, logs, and data dictionary |
 
 ## Project constraints
 
@@ -67,4 +71,4 @@ This repository intentionally contains no raw course evaluations, student names,
 
 ## Current status
 
-The repository contains the validated proposal and a research-backed product specification. Implementation will begin with requirements validation and a vertical prototype; no claim is made that the proposed learning benefits or feedback turnaround have already been achieved.
+The repository contains the compiled client-facing proposal, research-backed product specification, and a complete draft measurement package. The instruments still require institutional determination, expert review, cognitive testing, and piloting before use. Implementation will begin with requirements validation and a vertical prototype; no claim is made that the proposed learning benefits or feedback turnaround have already been achieved.

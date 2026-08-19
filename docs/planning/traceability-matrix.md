@@ -18,6 +18,8 @@ This matrix keeps product claims connected to the student-evaluation evidence an
 | Generic ChatGPT referrals can reduce trust | Constrained evidence-grounded coach; visible authority hierarchy | FR-AI-01--07 | Unsupported-claim, leakage, citation, and trust measures |
 | Software cannot fix course alignment or classroom climate | Explicit product non-goals and human responsibility | Non-goals; NFR-06--10 | Client review and evaluation-report limitations |
 
+Detailed measurement coverage is maintained in [`rq-instrument-matrix.md`](rq-instrument-matrix.md). Learning is evaluated with matched pre/post assignments; student perception, telemetry, expert review, trust-calibration cases, accessibility observation, and staff workload logs provide distinct supporting evidence.
+
 ## Claim discipline
 
 | Stage | Permitted statement |

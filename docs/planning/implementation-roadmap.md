@@ -30,10 +30,11 @@ The allocation is a planning baseline, not an individual workload contract. Scop
 - Confirm reference CIS 450 and CIS 310 activities.
 - Interview client and representative users using non-sensitive examples.
 - Validate goals, non-goals, data flows, and acceptance criteria.
+- Confirm RQs, primary outcome, comparison condition, parallel-assignment objectives, and draft item-to-RQ map with the client/assessment reviewer.
 - Create clickable UX prototype and threat model.
 - Finalize repository conventions and continuous integration.
 
-**Exit:** client-approved requirements, architecture, privacy boundary, and test strategy.
+**Exit:** client-approved requirements, architecture, privacy boundary, test strategy, and evaluation-measurement specification.
 
 ### October 2026: vertical technical spikes
 
@@ -81,6 +82,8 @@ The allocation is a planning baseline, not an individual workload contract. Scop
 - Run threat, prompt-injection, privacy, accessibility, and dependency tests.
 - Complete expert correctness review.
 - Run synthetic-task usability sessions.
+- Complete expert instrument review, questionnaire cognitive interviews, parallel-form pilot, and rater training.
+- Freeze approved instruments, scoring, assignment forms, telemetry dictionary, and analysis plan before any classroom data collection.
 - Fix high-severity issues and document known limitations.
 - Package VSIX and prebuilt container candidate.
 
@@ -91,6 +94,7 @@ The allocation is a planning baseline, not an individual workload contract. Scop
 - Demonstrate the two end-to-end workflows.
 - Deliver source, VSIX, course packs, schemas, container, tests, and documentation.
 - Present evaluation results without overclaiming.
+- Deliver blank pre/post instruments, parallel assignments, scoring rubrics, workload log, synthetic analysis data, and a reproducible analysis template.
 - Transfer maintenance knowledge.
 - Obtain client product-evaluation letter.
 

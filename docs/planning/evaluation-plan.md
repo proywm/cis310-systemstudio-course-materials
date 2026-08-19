@@ -28,6 +28,32 @@ The project should not claim success from deployment, usage, or satisfaction alo
 | Reduced support overhead | Instructor/TA minutes per resolved routine request | Must not reduce access or shift hidden work to students |
 | Better setup experience | First-attempt and eventual environment-validation rate by platform | Diagnose platform disparities rather than averaging them away |
 
+## Measurement architecture
+
+The study uses multiple evidence sources because no questionnaire can establish all eight claims:
+
+- **Learning:** matched parallel pre/post assignments scored blind with a common 100-point rubric.
+- **Accuracy and safety:** offline benchmarks and blinded expert ratings of technical correctness, evidence validity, hint calibration, privacy, commands, and escalation.
+- **Usefulness:** productive retry behavior, supported by perceived-usefulness and feedback-quality items.
+- **Timeliness:** event timestamps ending at the first expert-rated useful response, supported by student perception.
+- **Human workload:** active-minute instructor/TA case logs including verification and rework.
+- **Trust:** a behavioral calibration task, supported by repeated trust-literacy items.
+- **Equity/accessibility:** setup and task success disaggregated by supported platform/access mode, plus moderated observation.
+
+The full mapping is in [`rq-instrument-matrix.md`](rq-instrument-matrix.md). Draft instruments and scoring rules are in [`../../instruments/`](../../instruments/), and the pre-specified models are in [`analysis-plan.md`](analysis-plan.md).
+
+## Pre/post sequence
+
+1. pre-survey: background, task-specific self-efficacy, and evidence/AI trust literacy;
+2. baseline parallel assignment with the AI coach disabled;
+3. practice activity in either deterministic-evidence or deterministic-evidence-plus-AI condition;
+4. immediate task workload/experience pulse;
+5. alternate-form near-transfer assignment with the AI coach disabled;
+6. post-survey repeating the exact self-efficacy/trust-literacy items and adding usefulness, quality, accessibility, safety, and open responses; and
+7. behavioral trust-calibration task and optional delayed-transfer assignment.
+
+The primary learning outcome is the blinded post-assignment score adjusted for the baseline score. Self-reported confidence, satisfaction, and official course evaluations remain secondary evidence.
+
 ## Phase 1: offline technical benchmark
 
 Create a benchmark from instructor-authored reference solutions and seeded faults. Do not begin with identifiable historical submissions.
@@ -106,6 +132,8 @@ Recommended pilot characteristics:
 - platform and accessibility subgroup checks; and
 - instructor override and immediate opt-out.
 
+When practicable, research consent and linkage are managed by a person who does not grade the students, and the instructor remains unaware of participation status until final grades are submitted. The appropriate U-M determination, recruitment/consent process, FERPA handling, and data-retention plan must be in place before collection.
+
 A useful comparison is deterministic evidence plus static resources versus deterministic evidence plus the constrained AI coach. This isolates the value added by generated explanation instead of comparing the complete tool with no support.
 
 ## Core metrics
@@ -124,6 +152,17 @@ A useful comparison is deterministic evidence plus static resources versus deter
 - accessibility task success; and
 - opt-out and adverse-event counts.
 
+## Instrument-development gates
+
+Before the classroom pilot:
+
+- content experts confirm each item/task matches its intended construct and RQ;
+- 5--8 non-graded students complete a cognitive-interview round on questionnaire wording;
+- Forms A and B are piloted for content, time, and difficulty equivalence;
+- graders train on anchor responses and demonstrate acceptable agreement;
+- item wording, scoring, primary outcome, exclusions, and analysis are frozen; and
+- all offline technical, safety, privacy, accessibility, and cross-platform gates pass.
+
 ## Interpretation limits
 
 - Open-ended course evaluations are self-selected and cannot estimate prevalence precisely.
@@ -132,6 +171,8 @@ A useful comparison is deterministic evidence plus static resources versus deter
 - Higher assignment completion may reflect answer leakage rather than learning.
 - A pilot in one CIS 310 or CIS 450 activity does not establish effectiveness across courses.
 - Satisfaction and trust must be interpreted alongside correctness and learning measures.
+- A pre/post change without an appropriate comparison condition does not by itself establish that the tool caused the change.
+- Official end-of-semester course evaluations are anonymous course-level context, not an individual study outcome or randomized comparison.
 
 ## Reporting language
 

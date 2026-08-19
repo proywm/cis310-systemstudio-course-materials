@@ -55,3 +55,11 @@
 **Decision:** Complete one CIS 450 C/xv6 workflow and one CIS 310 4-bit processor workflow before adding courses, dashboards, wider processors, HDL features, or LMS integration.
 
 **Rationale:** The full vision is larger than one senior-design cycle. Two end-to-end workflows are substantial, testable, and directly grounded in the evaluation findings.
+
+## ADR-008: Separate learning, perception, behavior, quality, and workload measures
+
+**Status:** Proposed
+
+**Decision:** Use parallel scored assignments for learning, questionnaires for student perceptions, telemetry for behavior/timing, blinded expert review for technical quality/safety, a scenario task for trust calibration, and active-minute staff logs for human workload.
+
+**Rationale:** Satisfaction or self-reported confidence cannot establish learning, accuracy, timeliness, safety, or reduced workload. Distinct measures keep each claim tied to evidence that can support it.
