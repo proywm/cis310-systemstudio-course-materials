@@ -97,7 +97,7 @@ VS Code also exposes AI extensibility and language-model tool APIs, but those sh
 
 ## Security feasibility
 
-VS Code Workspace Trust exists because opening a workspace can lead extensions, tasks, or language tools to execute code. SystemStudio AI must declare limited support for untrusted workspaces and disable build, test, container, and AI-context collection commands until trust is granted. Student code must run in a constrained container with time, memory, filesystem, and network limits.
+VS Code Workspace Trust exists because opening a workspace can lead extensions, tasks, or language tools to execute code. SystemStudio AI must declare limited support for untrusted workspaces and disable native build, test, simulator-launch, container, and AI-context collection commands until trust is granted. Arbitrary native student code must run in a constrained environment with time, memory, filesystem, and network limits. The CIS 310 embedded assembly lab is a narrower case: it interprets a fixed instruction allowlist in isolated memory, never starts a host process, and therefore remains available without a native execution path.
 
 ## Recommended baseline stack
 
@@ -111,7 +111,7 @@ VS Code Workspace Trust exists because opening a workspace can lead extensions, 
 - Provider-neutral AI adapter with a deterministic no-AI fallback
 - Unit tests for pure modules and VS Code integration tests for extension behavior
 
-The implemented CIS 310 assembly pilot refines the generic “containerized assembly” item into two explicit paths: portable NASM x86-64 in a constrained `linux/amd64` Docker image, and exact MASM compatibility on Windows only. See the [assembly toolchain decision](assembly-toolchain.md) for the course-dialect evidence, cross-platform tradeoffs, and current validation boundary.
+The implemented CIS 310 assembly pilot replaces the generic “containerized assembly” item with a no-prerequisite, source-level IA-32 teaching engine. It recognizes a documented MASM/NASM classroom subset while keeping exact object-file, ABI, API, macro, and production-tool compatibility outside the claim. See the [assembly decision](assembly-toolchain.md) for the course-dialect evidence, cross-platform rationale, safety limits, and validation boundary.
 
 ## Primary references
 

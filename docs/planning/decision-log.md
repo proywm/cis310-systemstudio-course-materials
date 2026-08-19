@@ -82,8 +82,16 @@
 
 ## ADR-011: Separate portable assembly from exact MASM compatibility
 
-**Status:** Accepted for pilot; implemented August 2026
+**Status:** Superseded by ADR-012 after the initial pilot; August 2026
 
 **Decision:** Provide an original NASM x86-64 Linux lab in a pinned `linux/amd64` container as the common Windows/Linux/macOS path. Detect Docker, request consent before building the local image, and constrain student execution with no network, dropped capabilities, bounded memory/CPU/processes, and Workspace Trust. Keep exact Microsoft MASM/Irvine work as a separately labeled Windows-only path; do not auto-translate between dialects or redistribute proprietary tools and course examples.
 
 **Rationale:** The reviewed CIS 310 materials use 32-bit Windows MASM conventions, which are not portable to macOS or Linux. NASM supports the major host object formats, but it does not implement MASM memory models and a Linux runtime does not provide the Windows API. One containerized NASM/ELF environment gives students consistent build behavior without misrepresenting it as MASM. Apple Silicon can run the selected x86-64 container through platform emulation, with a documented performance cost.
+
+## ADR-012: Embed a source-level IA-32 teaching engine
+
+**Status:** Accepted and implemented August 2026
+
+**Decision:** Replace the Docker/NASM execution path with an original TypeScript IA-32 teaching interpreter bundled in the extension. Support the documented course subset of register, memory, integer, flags, branch, loop, stack, and procedure behaviors; recognize common MASM/Irvine classroom wrappers and a NASM-style IA-32 form; provide assemble/run/step/reset and visible machine state. Use a fixed 1 MiB memory model, line-numbered diagnostics, bounded output, and a 10,000-instruction run limit. Do not invoke a shell or host toolchain. Label the interface as a teaching subset and keep exact object-file, ABI, API, macro, and unsupported-instruction work outside the claim.
+
+**Rationale:** The course emphasizes IA-32 registers, EFLAGS, memory, stack, and execution observation, while the container pilot introduced a Docker prerequisite and changed the examples to x86-64 Linux. A source-level model removes the cross-platform installation barrier and more directly targets the shared learning concepts. It cannot replace production MASM/NASM, so that boundary is visible in the lab and compatibility guide.

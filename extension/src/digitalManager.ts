@@ -431,8 +431,8 @@ function starterReadme(): string {
     `4. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
     `5. Run **CIS 310: Open Circuit in Digital** to edit and interact with the circuit.\n` +
     `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n\n` +
-    `For assembly programming, read \`assembly/README.md\`. The portable lab uses NASM x86-64 in a ` +
-    `consistent container; exact Microsoft MASM remains a separate Windows-only path.\n\n` +
+    `For assembly programming, read \`assembly/README.md\`. The embedded lab provides a source-level ` +
+    `IA-32 MASM/NASM teaching subset with no Docker or native toolchain requirement.\n\n` +
     `No ALU, register-file, or processor solution is bundled. This protects the learning task while ` +
     `retaining a small half-adder example for tool orientation.\n\n` +
     `## Suggested learning sequence\n\n` +
@@ -449,7 +449,6 @@ function starterThirdPartyNotice(): string {
     `- Release: ${DIGITAL_RELEASE.releaseUrl}\n` +
     `- License: ${DIGITAL_RELEASE.licenseName}\n` +
     `- License text: ${DIGITAL_RELEASE.licenseUrl}\n\n` +
-    `The portable assembly Dockerfile downloads Debian packages for NASM, GNU binutils, Make, and GDB ` +
-    `only after confirmation. Package licenses are available in the built image under \`/usr/share/doc\`. ` +
-    `Microsoft MASM, Irvine libraries, and course/textbook examples are not redistributed.\n`;
+    `The embedded assembly teaching engine is original SystemStudio code and does not bundle Microsoft MASM, ` +
+    `NASM, Irvine libraries, operating-system SDKs, or course/textbook examples.\n`;
 }

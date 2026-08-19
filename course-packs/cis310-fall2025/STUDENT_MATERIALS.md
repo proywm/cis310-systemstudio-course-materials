@@ -45,9 +45,6 @@
 
 ## Assembly programming
 
-SystemStudio keeps two assembly paths separate so that syntax and runtime expectations remain accurate:
+Use **CIS 310: Create Embedded Assembly Lab**, open `assembly/embedded/add-two.asm`, and choose **Open Embedded Assembly Lab**. The same source-level IA-32 teaching engine runs on Windows, Linux, macOS, and Remote SSH without Docker, Visual Studio, NASM, a linker, administrator access, or another download.
 
-- **Portable Assembly Lab (recommended for shared laptop support):** NASM syntax, x86-64 instructions, and the Linux system-call ABI in one containerized environment on Windows, Linux, and macOS.
-- **Exact MASM compatibility:** Microsoft MASM and Windows-specific course examples on Windows only. MASM source is not automatically translated to NASM.
-
-Use **CIS 310: Create Portable Assembly Lab** from the extension, then open `assembly/README.md`. The first build requires Docker Desktop or Docker Engine already installed and running.
+The lab lets you assemble, step, run, and reset while observing registers, flags, data, stack, output, and the recent instruction trace. It recognizes common course MASM wrappers and a documented NASM-style 32-bit subset. Read `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, macros, or arbitrary external libraries.

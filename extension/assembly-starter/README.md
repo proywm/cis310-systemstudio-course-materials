@@ -1,15 +1,18 @@
-# CIS 310 Assembly Paths
+# CIS 310 Embedded Assembly Lab
 
-SystemStudio provides two deliberately separate paths because portable NASM and Microsoft MASM are not source-compatible.
+Open `embedded/add-two.asm`, then run **CIS 310: Open Embedded Assembly Lab**. The lab is built into the extension and works in desktop or remote VS Code on Windows, Linux, Intel Mac, and Apple Silicon. It needs no Docker, native assembler, compiler, SDK, administrator access, or network connection.
 
-## Recommended: Portable Assembly Lab
+The side-by-side lab provides four controls:
 
-Open `portable/hello.asm`, then run **CIS 310: Build and Run Portable Assembly**. The extension builds and executes it in the same isolated NASM x86-64 Linux environment on Windows, Linux, Intel Mac, and Apple Silicon.
+1. **Assemble** parses the current source and resets the machine.
+2. **Step** executes one source instruction and highlights the next source line.
+3. **Run** executes until `EXIT`, `HLT`, program completion, an error, or the 10,000-instruction safety limit.
+4. **Reset** restores registers, flags, data, output, and the stack.
 
-Prerequisite: Docker Desktop or Docker Engine must be installed and running. The extension asks before it builds the course toolchain image; it does not silently install Docker or change administrator settings.
+You can inspect EAX–EIP, arithmetic flags, the top of the stack, declared data, program output, and a recent execution trace. Try `embedded/loop-sum.asm` after the MASM-style example.
 
-The generated object file and executable appear under the workspace `build/` directory. Do not submit generated build artifacts unless the instructor requests them.
+## What “embedded” means
 
-## Optional: exact MASM compatibility
+SystemStudio interprets a documented classroom subset of 32-bit x86 at the source level in a 1 MiB teaching memory model. It accepts the common instructions used for registers, data, arithmetic, flags, branches, procedures, and stack exercises. It also recognizes the common MASM/Irvine teaching wrappers and a NASM-style IA-32 form.
 
-If an activity explicitly uses `.386`, `.model flat,stdcall`, `INVOKE`, Irvine libraries, or Microsoft `ml.exe`, use the [Windows MASM guide](MASM_WINDOWS.md). That syntax and runtime are Windows-specific and are not automatically translated by SystemStudio.
+This is intentionally not a claim of full Microsoft MASM or NASM compatibility. It does not emit PE/ELF objects, run arbitrary native code, or reproduce Windows/Linux ABIs. See [the compatibility guide](COMPATIBILITY.md) before assigning an example that uses macros, operating-system calls, external libraries, x87, SIMD, or an unsupported directive.

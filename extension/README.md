@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the accelerated CIS 310 implementation track. It gives students one VS Code entry point for creating, opening, previewing, and testing Digital logic circuits; running a portable assembly lab; and navigating mapped course materials while the broader senior-design project continues in parallel.
+This is the accelerated CIS 310 implementation track. It gives students one VS Code entry point for creating, opening, previewing, and testing Digital logic circuits; running an embedded IA-32 assembly lab; and navigating mapped course materials while the broader senior-design project continues in parallel.
 
 **Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
 
@@ -21,8 +21,8 @@ This is the accelerated CIS 310 implementation track. It gives students one VS C
 - rendered, student-facing previews for the course guide and assignments rather than raw Markdown source;
 - local, SHA-256-verified assignment references copied into generated starter workspaces;
 - a starter-workspace generator with one upstream half-adder orientation example, an empty `circuits/work/` area, and assembly guides;
-- NASM syntax highlighting plus a one-click portable x86-64 build/run workflow in a constrained `linux/amd64` Docker container;
-- an explicit Windows-only guide for exact MASM/Irvine activities; and
+- MASM/NASM IA-32 highlighting plus a no-setup, source-level embedded assembly engine with assemble, step, run, reset, registers, flags, memory, stack, output, and trace views;
+- starter programs and an explicit compatibility guide separating the classroom subset from full native MASM/NASM toolchains; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
 The course pack is an instructor-review reference imported from Fall 2025. Historical dates, grading policies, and submission rules are not authoritative. All 13 presentations are bundled as SHA-256-verified offline PDFs; their private Drive URLs remain provenance metadata and are not opened by the extension. No ALU, register-file, or processor solution is bundled.
@@ -39,9 +39,9 @@ Reimplementing Digital’s canvas as a webview is not part of this accelerated M
 
 ## Assembly compatibility boundary
 
-The cross-platform workflow is named **Portable Assembly Lab**, not “MASM IDE.” It uses NASM syntax, ELF64 objects, Linux system calls, and x86-64 System V conventions in the same container on Windows, Linux, and macOS. Apple Silicon uses `linux/amd64` emulation and can be slower.
+The **Embedded Assembly Lab** is original extension code: a bounded, source-level IA-32 teaching interpreter. It recognizes the common MASM wrappers used in CIS 310 (`.386`, `.model flat,stdcall`, `.stack`, `.data`, `.code`, `PROC`/`ENDP`, `INVOKE ExitProcess`, `EXIT`) and a documented NASM-style 32-bit subset. It executes no native student code and needs no Docker, assembler, linker, SDK, administrator access, or network connection.
 
-Existing course examples that use `.386`, `.model flat,stdcall`, `INVOKE`, `ExitProcess`, or Irvine libraries require real Microsoft MASM and Windows. The extension provides a setup guide for that path but does not translate source automatically or redistribute Microsoft/textbook components.
+It is not full `ml.exe` or NASM. It does not emit PE/ELF objects, reproduce an OS ABI, load external Irvine binaries, or implement every instruction, directive, macro, x87, or SIMD feature. EIP uses synthetic teaching addresses rather than encoded instruction lengths. Activities requiring exact binaries, operating-system calls, external libraries, or unsupported syntax still need the instructor-approved native toolchain. See `assembly/COMPATIBILITY.md` in a generated lab.
 
 ## Student installation
 
@@ -49,7 +49,7 @@ Existing course examples that use `.386`, `.model flat,stdcall`, `INVOKE`, `Exit
 
 Install Java 8 or newer. Java 17 or 21 is recommended. The extension checks Java but does not silently modify the operating system or install a privileged runtime.
 
-For the Portable Assembly Lab, install and start [Docker Desktop or Docker Engine](https://docs.docker.com/get-started/get-docker/). Docker is not needed for course-material reading or Digital circuits. The extension detects Docker and asks before it builds the local course image.
+The Embedded Assembly Lab has no additional prerequisite. Its engine is bundled in the VSIX and behaves the same way on Windows, Linux, macOS, and Remote SSH because it does not execute a host binary.
 
 ### Build and install the development VSIX
 
@@ -76,7 +76,7 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 8. Use **Open in Digital** for graphical editing and interactive simulation.
 9. Save in Digital, return to VS Code, refresh the preview, and rerun tests.
 
-For assembly, select **Create portable assembly lab**, open `assembly/portable/hello.asm`, and select **Build and run assembly file**. The first run asks permission to build the local toolchain image. Read `assembly/MASM_WINDOWS.md` when an instructor task specifically requires Microsoft MASM.
+For assembly, select **Create embedded assembly lab**, open `assembly/embedded/add-two.asm`, and select **Open assembly lab**. Use **Assemble**, **Step**, **Run**, and **Reset** beside the editor while inspecting registers, flags, stack, data, output, and the execution trace. Read `assembly/COMPATIBILITY.md` before using a file that depends on a full native assembler or OS runtime.
 
 Course guides and assignments open as rendered documents. Instructors and developers can use **Open With → Text Editor** when they intentionally need to inspect or edit the Markdown source.
 
@@ -95,10 +95,13 @@ Course guides and assignments open as rendered documents. Instructors and develo
 | `CIS 310: Browse Presentations` | Opens one of 13 bundled, integrity-checked PDF presentations |
 | `CIS 310: Browse Assignments` | Opens one of four packaged, integrity-checked assignment references |
 | `CIS 310: Open Course-Material Guide` | Opens the local lecture-to-assignment map and release warning |
-| `CIS 310: Create Portable Assembly Lab` | Adds original NASM starter material and the separate MASM guide to the workspace |
-| `CIS 310: Check Assembly Toolchain` | Reports Docker access and local course-image status |
-| `CIS 310: Build and Run Portable Assembly` | Assembles, links, and runs a workspace `.asm` in the constrained course container |
-| `CIS 310: Open Windows MASM Guide` | Explains the exact Windows-only MASM path |
+| `CIS 310: Create Embedded Assembly Lab` | Adds original MASM-style and NASM-style IA-32 starter programs and the compatibility guide |
+| `CIS 310: Check Embedded Assembly Engine` | Confirms the bundled, no-prerequisite execution model |
+| `CIS 310: Open Embedded Assembly Lab` | Opens the side-by-side machine-state interface for a `.asm` file |
+| `CIS 310: Run Embedded Assembly` | Runs the current file with a 10,000-instruction safety bound |
+| `CIS 310: Step Embedded Assembly` | Executes one source instruction and reveals the next source line |
+| `CIS 310: Reset Embedded Assembly` | Restores the initial register, flag, data, stack, and output state |
+| `CIS 310: Open Assembly Compatibility Guide` | Documents the supported classroom subset and exact-toolchain boundary |
 
 ## Where Digital is installed
 
@@ -112,8 +115,8 @@ The exact path appears in **CIS 310: Check Environment** and the **SystemStudio 
 - The extension verifies the ZIP and JAR SHA-256 digests.
 - Processes use argument arrays with `shell: false`; workspace text never becomes a shell command.
 - Simulation, SVG export, and tests require Workspace Trust.
-- Portable assembly requires Workspace Trust and runs with no network, all capabilities dropped, `no-new-privileges`, a read-only workspace (except `build/`), a read-only container root, and CPU, memory, and process limits.
-- Assembly source must remain within the current workspace; the extension does not execute a user-supplied shell command.
+- Embedded assembly never starts a process or executes native student code. It uses a fresh 1 MiB in-memory model, a 10,000-instruction run limit, a 4,096-byte output-string limit, and source-line diagnostics.
+- The engine has no filesystem, shell, process, or network instruction and remains available in a restricted workspace.
 - The Digital remote-control TCP server remains disabled by default.
 - The extension sends no circuit, test, identity, or telemetry data to an AI or external service.
 - Downloads and generated previews remain in extension-managed local storage.
@@ -127,14 +130,13 @@ npm run check
 
 Press `F5` from this folder in VS Code after running `npm run compile`, or install the packaged VSIX.
 
-The automated check covers manifest validation, assignment and presentation integrity, circuit-starter metadata, blank-circuit structure, assembly workspace containment, safe paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. A live portable-assembly image test remains pending because the current development account cannot access the installed Docker daemon socket. Classroom deployment still requires instructor content review, packaged-PDF rendering review, Docker-enabled Windows/Linux/macOS smoke tests, and accessibility validation.
+The automated check covers manifest validation, assignment and presentation integrity, circuit-starter metadata, blank-circuit structure, embedded MASM/NASM parsing and execution, arithmetic flags, registers, memory, calls/returns, runtime helpers, diagnostics, infinite-loop bounds, safe ZIP paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor content review, packaged-PDF rendering review, Windows/Linux/macOS UI smoke tests, and accessibility validation.
 
 ## Current limitations
 
 - the native Java GUI cannot open on a Remote SSH host without a graphical display, although materials, starter generation, previews, and headless tests remain available;
 - Java must already be available or configured;
-- Docker Desktop/Engine must already be installed, running, and accessible for the portable assembly lab;
-- portable NASM is not source-compatible with MASM; exact MASM/Irvine work remains Windows-only;
+- embedded assembly covers a documented IA-32 teaching subset rather than full MASM/NASM, binary generation, OS APIs, or arbitrary Irvine libraries;
 - presentations are bundled as PDFs for offline use, but still require instructor content and accessibility review;
 - packaged assignments retain historical wording and are reference material until the instructor approves a student release;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;

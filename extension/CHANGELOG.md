@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.5.0
+
+- Replaced the Docker/NASM container workflow with an original, extension-native IA-32 teaching interpreter that requires no external toolchain or administrator setup.
+- Added a side-by-side Assembly Lab with assemble, run, step, reset, registers, flags, stack, declared data, program output, and a recent source trace.
+- Added classroom MASM wrappers, common Irvine-style output helpers, a documented NASM-style IA-32 subset, exact source-line diagnostics, and bounded execution.
+- Added MASM-style and NASM-style starter programs plus an explicit compatibility guide; the extension does not claim full MASM/NASM or object-file compatibility.
+- Added a safe v0.4 lab upgrade that archives the generated container-pilot guide and adds embedded starters without overwriting student `.asm` files.
+
 ## 0.4.0
 
 - Bundled all 13 CIS 310 presentations as integrity-checked offline PDFs.
@@ -11,8 +19,7 @@
 - Added a generic **Create a New Digital Circuit** action that works before Digital is installed.
 - Added per-assignment blank-circuit buttons with collision-safe filenames and no solution content.
 - Split the Course Materials view into Homework and Project Assignments.
-- Added the Portable Assembly Lab: NASM/x86-64 editing, environment checks, and constrained one-click build/run in a `linux/amd64` Docker image.
-- Added an explicit Windows-only MASM guide; portable NASM is not represented as source-compatible MASM.
+- Added the original Portable Assembly Lab pilot (superseded in 0.5.0 by the embedded IA-32 lab).
 - Added assembly/circuit path validation, syntax highlighting, starter content, research notes, and automated coverage.
 
 ## 0.2.2

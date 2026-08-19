@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "NASM Assembly",
+  "name": "SystemStudio MASM/NASM IA-32 Teaching Assembly",
   "scopeName": "source.nasm",
   "patterns": [
     { "include": "#comments" },
@@ -30,17 +30,17 @@
     },
     "directives": {
       "patterns": [
-        { "match": "(?i)\\b(?:bits|section|segment|global|extern|equ|db|dw|dd|dq|resb|resw|resd|resq|times)\\b", "name": "keyword.control.directive.nasm" }
+        { "match": "(?i)(?:\\.386|\\.model|\\.stack|\\.data|\\.code|\\b(?:bits|section|segment|global|extern|include|title|proc|endp|end|equ|byte|word|dword|db|dw|dd|dup|offset|ptr)\\b)", "name": "keyword.control.directive.nasm" }
       ]
     },
     "registers": {
       "patterns": [
-        { "match": "(?i)\\b(?:r(?:ax|bx|cx|dx|si|di|bp|sp|8|9|10|11|12|13|14|15)|e(?:ax|bx|cx|dx|si|di|bp|sp)|(?:ax|bx|cx|dx|si|di|bp|sp)|[abcd][lh])\\b", "name": "variable.language.register.nasm" }
+        { "match": "(?i)\\b(?:e(?:ax|bx|cx|dx|si|di|bp|sp|ip)|(?:ax|bx|cx|dx|si|di|bp|sp)|[abcd][lh])\\b", "name": "variable.language.register.nasm" }
       ]
     },
     "instructions": {
       "patterns": [
-        { "match": "(?i)\\b(?:mov|lea|push|pop|add|sub|inc|dec|imul|mul|idiv|div|and|or|xor|not|shl|shr|cmp|test|jmp|je|jne|jg|jge|jl|jle|ja|jae|jb|jbe|call|ret|syscall|nop)\\b", "name": "keyword.operator.instruction.nasm" }
+        { "match": "(?i)\\b(?:mov|movzx|movsx|lea|xchg|push|pop|pushad|popad|pushfd|popfd|add|adc|sub|sbb|inc|dec|neg|imul|mul|idiv|div|and|or|xor|not|shl|sal|shr|sar|cmp|test|jmp|j[a-z]+|loop|call|ret|leave|invoke|clc|stc|cmc|cdq|int|exit|hlt|nop)\\b", "name": "keyword.operator.instruction.nasm" }
       ]
     }
   }

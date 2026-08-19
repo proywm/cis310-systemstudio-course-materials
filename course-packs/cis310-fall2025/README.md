@@ -28,7 +28,7 @@ The only simulator example retained in the generated student workspace is Digita
 
 ## Assembly boundary
 
-The reviewed course archive uses Microsoft/Irvine-style MASM conventions in its assembly material. The extension does not copy exams, quizzes, textbook slides, or proprietary support libraries from that archive. Instead, it supplies an original portable NASM x86-64 orientation lab and a separate guide for exact Windows MASM setup. These are intentionally distinct because the syntax, object formats, APIs, and calling conventions are not interchangeable.
+The reviewed course archive uses Microsoft/Irvine-style MASM conventions in its assembly material. The extension does not copy exams, quizzes, textbook slides, proprietary support libraries, or archived assembly examples from that source. Instead, it supplies an original embedded IA-32 teaching interpreter, original MASM-style and NASM-style starters, and a compatibility guide. The engine targets shared register/memory/flags/stack concepts and does not claim that source-level teaching support is interchangeable with exact object formats, APIs, calling conventions, macros, or native production tools.
 
 ## Presentation boundary
 

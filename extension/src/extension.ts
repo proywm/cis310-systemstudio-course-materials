@@ -1,6 +1,7 @@
 import { access } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { AssemblyLabPanel } from './assemblyLabPanel';
 import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
@@ -111,6 +112,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(
     output,
+    assemblyManager,
     statusTree,
     materialsTree,
     tests,
@@ -269,107 +271,105 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.createAssemblyLab', async () => {
-      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the portable assembly lab');
+      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the embedded assembly lab');
       if (!workspaceFolder) {
-        await vscode.window.showErrorMessage('Open a local folder before creating the portable assembly lab.');
+        await vscode.window.showErrorMessage('Open a local folder before creating the embedded assembly lab.');
         return;
       }
       const existingGuide = path.join(workspaceFolder.uri.fsPath, 'assembly', 'README.md');
+      let labExists = false;
       try {
         await access(existingGuide);
-        const action = await vscode.window.showInformationMessage(
-          `The portable assembly lab already exists at ${path.dirname(existingGuide)}.`,
-          'Open Guide'
-        );
-        if (action === 'Open Guide') {
-          await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(existingGuide));
-        }
-        return;
+        labExists = true;
       } catch {
         // Expected when the lab has not been created yet.
+      }
+      if (labExists) {
+        try {
+          const upgraded = await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
+          const action = await vscode.window.showInformationMessage(
+            upgraded.addedFiles
+              ? `Added the v0.5 embedded assembly starters without overwriting student .asm files.`
+              : `The embedded assembly lab already exists at ${path.dirname(existingGuide)}.`,
+            'Open Guide',
+            'Open Assembly Lab'
+          );
+          if (action === 'Open Guide') {
+            await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(upgraded.guidePath));
+          } else if (action === 'Open Assembly Lab') {
+            const uri = vscode.Uri.file(upgraded.entryPath);
+            await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
+            await AssemblyLabPanel.show(context, assemblyManager, uri);
+          }
+        } catch (error) {
+          await showFailure('Could not update the embedded assembly lab', error, output);
+        }
+        return;
       }
       try {
         const created = await assemblyManager.createLab(workspaceFolder.uri.fsPath);
         const action = await vscode.window.showInformationMessage(
-          `Created the portable assembly lab at ${created}.`,
+          `Created the embedded assembly lab at ${created}. No toolchain installation is required.`,
           'Open Guide',
-          'Open hello.asm'
+          'Open Assembly Lab'
         );
         if (action === 'Open Guide') {
           await vscode.commands.executeCommand(
             'markdown.showPreview',
             vscode.Uri.file(path.join(created, 'README.md'))
           );
-        } else if (action === 'Open hello.asm') {
-          await vscode.window.showTextDocument(vscode.Uri.file(path.join(created, 'portable', 'hello.asm')));
+        } else if (action === 'Open Assembly Lab') {
+          const uri = vscode.Uri.file(path.join(created, 'embedded', 'add-two.asm'));
+          await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
+          await AssemblyLabPanel.show(context, assemblyManager, uri);
         }
       } catch (error) {
-        await showFailure('Could not create the portable assembly lab', error, output);
+        await showFailure('Could not create the embedded assembly lab', error, output);
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.checkAssemblyEnvironment', async () => {
       const status = await assemblyManager.getStatus();
       output.appendLine([
-        'CIS 310 Portable Assembly Lab environment check',
-        `Container platform: linux/amd64`,
-        `Docker available: ${status.dockerAvailable ? 'yes' : 'no'}`,
-        `Docker server: ${status.dockerVersion ?? 'not detected'}`,
-        `Course image: ${assemblyManager.imageName}`,
-        `Course image ready: ${status.imageReady ? 'yes' : 'no'}`,
-        `Workspace trusted: ${vscode.workspace.isTrusted ? 'yes' : 'no'}`,
+        'CIS 310 Embedded Assembly Lab check',
+        `Engine bundled: ${status.embeddedReady ? 'yes' : 'no'}`,
+        'Host toolchain required: no',
+        'Docker required: no',
+        'Administrator access required: no',
+        'Execution model: bounded source-level IA-32 teaching interpreter',
         `Detail: ${status.detail}`
       ].join('\n'));
       output.show(true);
-      if (!status.dockerAvailable) {
-        await showDockerRequired();
-        return;
+      await vscode.window.showInformationMessage(
+        'Embedded Assembly Lab is ready. It needs no Docker, native assembler, SDK, or administrator setup.'
+      );
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openAssemblyLab', async (candidate?: vscode.Uri) => {
+      const uri = await resolveAssemblyUri(candidate);
+      if (uri) {
+        await AssemblyLabPanel.show(context, assemblyManager, uri, 'assemble');
       }
-      if (!status.imageReady) {
-        const action = await vscode.window.showInformationMessage(
-          'Docker is ready. Build the local CIS 310 NASM x86-64 course image now?',
-          'Build Course Image'
-        );
-        if (action === 'Build Course Image') {
-          await prepareAssemblyImage(assemblyManager, output);
-          statusTree.refresh();
-        }
-        return;
-      }
-      await vscode.window.showInformationMessage('Portable Assembly Lab is ready: NASM x86-64 in the linux/amd64 course container.');
     }),
     vscode.commands.registerCommand('systemstudioCis310.runAssembly', async (candidate?: vscode.Uri) => {
-      if (!requireTrustedWorkspace()) {
-        return;
-      }
       const uri = await resolveAssemblyUri(candidate);
       if (!uri) {
         return;
       }
-      const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
-      if (!workspaceFolder || workspaceFolder.uri.scheme !== 'file') {
-        await vscode.window.showErrorMessage('The assembly source must be inside an open local workspace folder.');
-        return;
+      await AssemblyLabPanel.show(context, assemblyManager, uri, 'run');
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.stepAssembly', async (candidate?: vscode.Uri) => {
+      const uri = await resolveAssemblyUri(candidate);
+      if (uri) {
+        await AssemblyLabPanel.show(context, assemblyManager, uri, 'step');
       }
-      if (!(await prepareAssemblyImage(assemblyManager, output))) {
-        return;
-      }
-      try {
-        const result = await vscode.window.withProgress(
-          { location: vscode.ProgressLocation.Notification, title: 'Building and running portable assembly', cancellable: true },
-          (_progress, token) => assemblyManager.run(uri.fsPath, workspaceFolder.uri.fsPath, token)
-        );
-        output.show(true);
-        if (result.code === 0 && !result.timedOut && !result.cancelled) {
-          await vscode.window.showInformationMessage(`Assembly completed: ${path.basename(uri.fsPath)}. See SystemStudio output.`);
-        } else {
-          await vscode.window.showErrorMessage(`Assembly failed: ${path.basename(uri.fsPath)}. See SystemStudio output.`);
-        }
-      } catch (error) {
-        await showFailure('Could not run the portable assembly source', error, output);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.resetAssembly', async (candidate?: vscode.Uri) => {
+      const uri = await resolveAssemblyUri(candidate);
+      if (uri) {
+        await AssemblyLabPanel.show(context, assemblyManager, uri, 'reset');
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.openMasmGuide', async () => {
-      await vscode.commands.executeCommand('markdown.showPreview', assemblyManager.masmGuideUri);
+      await vscode.commands.executeCommand('markdown.showPreview', assemblyManager.compatibilityGuideUri);
     }),
     vscode.commands.registerCommand('systemstudioCis310.browseLectures', async () => {
       await browseCourseMaterials(courseMaterials, 'presentation', 'Choose a CIS 310 presentation');
@@ -631,11 +631,11 @@ async function resolveAssemblyUri(candidate?: vscode.Uri): Promise<vscode.Uri | 
   }
   if (!uri) {
     const selected = await vscode.window.showOpenDialog({
-      title: 'Select a portable NASM source file',
+      title: 'Select a MASM/NASM teaching source file',
       canSelectFiles: true,
       canSelectFolders: false,
       canSelectMany: false,
-      filters: { 'NASM assembly': ['asm'] }
+      filters: { 'x86 assembly': ['asm'] }
     });
     uri = selected?.[0];
   }
@@ -643,48 +643,8 @@ async function resolveAssemblyUri(candidate?: vscode.Uri): Promise<vscode.Uri | 
     return undefined;
   }
   if (uri.scheme !== 'file' || !uri.fsPath.toLowerCase().endsWith('.asm')) {
-    await vscode.window.showErrorMessage('Select a local NASM source file with the .asm extension.');
+    await vscode.window.showErrorMessage('Select a local x86 assembly source file with the .asm extension.');
     return undefined;
   }
   return uri;
-}
-
-async function prepareAssemblyImage(manager: AssemblyManager, output: vscode.OutputChannel): Promise<boolean> {
-  const status = await manager.getStatus();
-  if (!status.dockerAvailable) {
-    await showDockerRequired();
-    return false;
-  }
-  if (status.imageReady) {
-    return true;
-  }
-  const decision = await vscode.window.showInformationMessage(
-    'Build the CIS 310 Portable Assembly Lab image? Docker will download a pinned Debian linux/amd64 base and install NASM, binutils, Make, and GDB locally. The first build may take several minutes.',
-    { modal: true },
-    'Build Course Image'
-  );
-  if (decision !== 'Build Course Image') {
-    return false;
-  }
-  try {
-    await vscode.window.withProgress(
-      { location: vscode.ProgressLocation.Notification, title: 'Building CIS 310 portable assembly toolchain', cancellable: true },
-      (_progress, token) => manager.buildImage(token)
-    );
-    await vscode.window.showInformationMessage('Portable Assembly Lab image is ready.');
-    return true;
-  } catch (error) {
-    await showFailure('Could not build the portable assembly toolchain', error, output);
-    return false;
-  }
-}
-
-async function showDockerRequired(): Promise<void> {
-  const action = await vscode.window.showWarningMessage(
-    'The Portable Assembly Lab requires Docker Desktop or Docker Engine to be installed and running. SystemStudio does not install privileged system software automatically.',
-    'Open Docker Setup'
-  );
-  if (action === 'Open Docker Setup') {
-    await vscode.env.openExternal(vscode.Uri.parse('https://docs.docker.com/get-started/get-docker/'));
-  }
 }

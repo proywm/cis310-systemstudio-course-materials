@@ -80,34 +80,32 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
         )
       : actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
     const assemblyStatus = new vscode.TreeItem(
-      assembly.imageReady
-        ? 'Portable assembly: ready'
-        : assembly.dockerAvailable
-          ? 'Portable assembly: setup required'
-          : 'Portable assembly: Docker unavailable',
+      'Embedded assembly: ready',
       vscode.TreeItemCollapsibleState.None
     );
-    assemblyStatus.iconPath = new vscode.ThemeIcon(assembly.imageReady ? 'verified-filled' : 'terminal');
-    assemblyStatus.description = assembly.imageReady
-      ? 'NASM x86-64'
-      : assembly.dockerAvailable
-        ? 'build course image'
-        : 'install/start/allow Docker';
+    assemblyStatus.iconPath = new vscode.ThemeIcon(assembly.embeddedReady ? 'verified-filled' : 'terminal');
+    assemblyStatus.description = 'MASM/NASM IA-32 teaching subset';
+    assemblyStatus.tooltip = assembly.detail;
     assemblyStatus.command = {
       command: 'systemstudioCis310.checkAssemblyEnvironment',
-      title: 'Check portable assembly toolchain'
+      title: 'Check embedded assembly engine'
     };
     const createAssembly = actionItem(
-      'Create portable assembly lab',
+      'Create embedded assembly lab',
       'systemstudioCis310.createAssemblyLab',
       'terminal-bash'
     );
+    const openAssembly = actionItem(
+      'Open assembly lab',
+      'systemstudioCis310.openAssemblyLab',
+      'debug-alt'
+    );
     const runAssembly = actionItem(
-      'Build and run assembly file',
+      'Run assembly file',
       'systemstudioCis310.runAssembly',
       'run'
     );
-    const masm = actionItem('Open Windows MASM guide', 'systemstudioCis310.openMasmGuide', 'book');
+    const masm = actionItem('Open assembly compatibility guide', 'systemstudioCis310.openMasmGuide', 'book');
     const docs = actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book');
 
     return [
@@ -120,6 +118,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       open,
       assemblyStatus,
       createAssembly,
+      openAssembly,
       runAssembly,
       masm,
       docs
