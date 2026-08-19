@@ -82,16 +82,32 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     if (element.type === 'section') {
       const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.Expanded);
-      item.iconPath = new vscode.ThemeIcon(element.section === 'presentation' ? 'preview' : element.section === 'homework' ? 'checklist' : 'notebook');
+      item.iconPath = new vscode.ThemeIcon(
+        element.section === 'syllabus'
+          ? 'book'
+          : element.section === 'presentation'
+            ? 'preview'
+            : element.section === 'homework'
+              ? 'checklist'
+              : 'notebook'
+      );
       return item;
     }
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
-    item.description = element.resource.kind === 'presentation' ? 'bundled offline PDF' : 'packaged reference';
-    item.tooltip = element.resource.kind === 'presentation'
+    item.description = element.resource.kind === 'syllabus'
+      ? 'Fall 2026 PDF · review fields'
+      : element.resource.kind === 'presentation'
+        ? 'bundled offline PDF'
+        : 'packaged reference';
+    item.tooltip = element.resource.kind === 'syllabus'
+      ? 'Fall 2026 working syllabus with the verified Monday/Wednesday calendar. Canvas-controlled fields require instructor confirmation before release.'
+      : element.resource.kind === 'presentation'
       ? `${element.resource.sourceTitle}\nPackaged for offline viewing; no Drive access required.`
       : `${element.resource.sourceTitle}\nHistorical policy and deadlines require instructor review.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
-    item.iconPath = new vscode.ThemeIcon(element.resource.kind === 'presentation' ? 'file-media' : 'markdown');
+    item.iconPath = new vscode.ThemeIcon(
+      element.resource.kind === 'syllabus' ? 'file-pdf' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'
+    );
     item.command = {
       command: 'systemstudioCis310.openCourseMaterial',
       title: 'Open course material',
@@ -107,6 +123,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (!element) {
       return [
         { type: 'notice' },
+        { type: 'section', section: 'syllabus', label: `Syllabus (${this.materials.getResources('syllabus').length})` },
         { type: 'section', section: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
         { type: 'section', section: 'homework', label: `Homework (${this.materials.getAssignments('homework').length})` },
         { type: 'section', section: 'project', label: `Project Assignments (${this.materials.getAssignments('project').length})` }
@@ -115,8 +132,8 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (element.type !== 'section') {
       return [];
     }
-    const resources = element.section === 'presentation'
-      ? this.materials.getResources('presentation')
+    const resources = element.section === 'presentation' || element.section === 'syllabus'
+      ? this.materials.getResources(element.section)
       : this.materials.getAssignments(element.section);
     return resources.map((resource) => ({ type: 'resource', resource }));
   }
@@ -128,5 +145,5 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
 
 type MaterialsNode =
   | { type: 'notice' }
-  | { type: 'section'; section: 'presentation' | AssignmentCategory; label: string }
+  | { type: 'section'; section: 'syllabus' | 'presentation' | AssignmentCategory; label: string }
   | { type: 'resource'; resource: CourseMaterialResource };

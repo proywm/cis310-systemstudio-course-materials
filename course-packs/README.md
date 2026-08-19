@@ -4,7 +4,7 @@ This is the entry point for course content integrated with SystemStudio.
 
 ## Available pack
 
-- [`cis310-fall2026/`](cis310-fall2026/README.md) — Fall 2026 CIS 310 workspace containing 13 bundled offline presentations, three homework references, and three project references.
+- [`cis310-fall2026/`](cis310-fall2026/README.md) — Fall 2026 CIS 310 workspace containing a packaged syllabus PDF, 13 bundled offline presentations, three homework references, and three project references.
 
 The current pack is marked **instructor review required**. It preserves historical Fall 2025 source material for Fall 2026 preparation and testing; the linked Fall 2026 Canvas course controls instructions, deadlines, points, and submission.
 

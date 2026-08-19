@@ -1,0 +1,215 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.72in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{titlesec}
+
+\definecolor{MichiganBlue}{HTML}{00274C}
+\definecolor{MichiganMaize}{HTML}{FFCB05}
+\definecolor{SoftBlue}{HTML}{EAF2F8}
+\definecolor{SoftGray}{HTML}{F3F4F6}
+\hypersetup{colorlinks=true,linkcolor=MichiganBlue,urlcolor=MichiganBlue,pdftitle={CIS 310 Fall 2026 Syllabus},pdfauthor={Probir Roy}}
+\setlist[itemize]{leftmargin=1.35em,itemsep=2pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.5em,itemsep=2pt,topsep=4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\titleformat{\section}{\large\bfseries\color{MichiganBlue}}{}{0pt}{}[\color{MichiganMaize}\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{MichiganBlue}}{}{0pt}{}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CIS 310 --- Fall 2026}
+\rhead{Working syllabus}
+\cfoot{\thepage\ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\canvas}{\href{https://canvas.umd.umich.edu/courses/552144}{Fall 2026 CIS 310 Canvas}}
+\newcommand{\calendarlink}{\href{https://umdearborn.edu/sites/default/files/unmanaged/pdf/registrar/2026-2027-academic-calendar.pdf}{official 2026--2027 academic calendar}}
+\newcommand{\instructorcheck}[1]{\textcolor{MichiganBlue}{\textbf{Confirm in Canvas:}} #1}
+
+\begin{document}
+
+\begin{center}
+{\color{MichiganBlue}\rule{\textwidth}{2.5pt}}\\[7pt]
+{\LARGE\bfseries CIS 310}\par
+{\Large Computer Organization and Assembly Language}\par
+{\large Fall 2026 $\cdot$ 4 credit hours}\par
+\vspace{7pt}
+\colorbox{MichiganMaize}{\parbox{0.92\textwidth}{\centering\bfseries Instructor-review working syllabus --- update the highlighted Canvas-controlled fields before student release.}}
+\vspace{7pt}
+{\color{MichiganBlue}\rule{\textwidth}{1.2pt}}
+\end{center}
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.24\textwidth}X}
+Instructor & Dr. Probir Roy\\
+Email & \href{mailto:probirr@umich.edu}{probirr@umich.edu}\\
+Meeting pattern & Mondays and Wednesdays; first meeting Wednesday, August 26, 2026\\
+Class time and location & \instructorcheck{section, CRN, meeting time, room, and delivery mode}\\
+Office hours & \instructorcheck{office location, days/times, and appointment method}\\
+Course site & \canvas\\
+Calendar & \calendarlink\\
+\end{tabularx}
+
+\vspace{4pt}
+\colorbox{SoftBlue}{\parbox{0.96\textwidth}{\textbf{Source-of-truth rule.} This PDF gives the Fall 2026 course structure and the verified university calendar. Canvas controls current deadlines, points, required files, collaboration and AI-use rules, announcements, class changes, and submission receipts. If this document and Canvas differ, follow the instructor's current Canvas announcement and ask for clarification.}}
+
+\section{Course description and prerequisites}
+
+The architecture of computer systems and associated software. Topics include digital logic circuits, computer interfacing, interrupt systems, input/output systems, memory systems, assemblers and assembly-language programming, and computer networks. This is the current UM-Dearborn catalog description.
+
+\textbf{Prerequisites:} MATH 115, CIS 200, and CIS 275. Students should be ready to use binary and hexadecimal notation, Boolean reasoning, and basic programming concepts. If any prerequisite topic feels unfamiliar, use the short practice path in SystemStudio and seek help early.
+
+\section{Learning outcomes}
+
+By the end of the course, a successful student should be able to:
+
+\begin{enumerate}
+  \item represent and interpret signed and unsigned data in binary and hexadecimal;
+  \item analyze and synthesize combinational circuits using truth tables, Boolean algebra, Karnaugh maps, adders, decoders, and multiplexers;
+  \item analyze and build sequential circuits using latches, flip-flops, registers, counters, and finite-state behavior;
+  \item explain memory organization, buses, address decoding, caches, I/O, interrupts, and the instruction cycle;
+  \item describe register-transfer operations, datapath/control interaction, and basic processor pipelining;
+  \item write, trace, and explain introductory IA-32 assembly programs, including registers, flags, memory, stack, branches, and procedures; and
+  \item integrate and test processor components, then communicate expected behavior, observed evidence, and remaining uncertainty.
+\end{enumerate}
+
+\section{Learning workflow and course technology}
+
+Class meetings combine explanation, prediction, worked examples, circuit or assembly demonstrations, and short evidence checks. For project work, use the sequence \textbf{predict $\rightarrow$ build $\rightarrow$ test $\rightarrow$ inspect evidence $\rightarrow$ explain}.
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.23\textwidth}X}
+Canvas & The authoritative course site and the only submission destination. Confirm every due date and submission receipt there.\\
+SystemStudio CIS 310 & The VS Code extension provides the syllabus, calendar, 13 offline presentation PDFs, three homework references, three project references, setup checks, a guided tutorial, and a local help router.\\
+Digital v0.31 & The extension can install and checksum-verify the simulator in extension-managed storage. Java 8 or newer is required for the native Digital application. Use local desktop VS Code for the graphical editor; Remote SSH is not required.\\
+Embedded assembly lab & The extension provides Irvine32 Classroom and NASM IA-32 teaching profiles on the same bounded source-level interpreter. Windows, macOS, Linux, and Remote SSH use the same lab without Docker, Visual Studio, a native assembler/linker, or administrator access. It is a teaching subset, not full native MASM or NASM.\\
+Student computer & A current desktop version of VS Code and enough access to install the course extension. Contact the instructor promptly if hardware, Java, accessibility, or installation creates a barrier.\\
+\end{tabularx}
+
+\subsection{Technology recovery plan}
+
+If a tool fails, save the source file, capture the exact error and relevant screenshot, and report the expected result, observed result, evidence, and one attempted fix. Continue reading or prediction work while the issue is resolved. Do not wait until the submission deadline to report a setup problem. Canvas remains available independently of the extension.
+
+\section{Course materials}
+
+The extension bundles the presentation sequence locally as PDFs so students do not depend on external file-hosting access during study. The course pack also separates the three homework references from the three processor-project milestones:
+
+\begin{itemize}
+  \item \textbf{Homework 1:} logic foundations;
+  \item \textbf{Homework 2:} sequential logic and state machines;
+  \item \textbf{Homework 3:} memory and assembly foundations;
+  \item \textbf{Project 1:} registers and DRAM;
+  \item \textbf{Project 2:} register file and ALU; and
+  \item \textbf{Project 3:} integrated 4-bit processor.
+\end{itemize}
+
+\instructorcheck{textbook titles/editions and whether each is required or recommended.} Historical textbook editions have deliberately not been carried into this Fall 2026 draft.
+
+\section{Assessment, grading, and submission}
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.25\textwidth}X}
+Homework (3 references) & Canvas gives the released questions, points, due dates, allowed collaboration, and required submission format.\\
+Processor projects (3 milestones) & Build and test the requested circuit artifacts. Canvas identifies individual/group rules, demonstrations, reports, and files to submit.\\
+Quizzes and examinations & \instructorcheck{number, format, point values, make-up rules, and coverage.}\\
+Final examination & The university examination period is December 10--11 and December 14--16. The exact CIS 310 time and room must be taken from the Registrar/Canvas schedule, not inferred from this syllabus.\\
+Course grade & \instructorcheck{assessment weights or total points, grade scale, late-work rules, incomplete requirements, and instructor-requested withdrawal policy.}\\
+\end{tabularx}
+
+\textbf{Submission rule:} Submit every required deliverable in Canvas and verify that Canvas recorded it. A local file, simulator run, email attachment, or SystemStudio preview is not a course submission unless the current Canvas assignment explicitly says otherwise.
+
+\section{Communication, feedback, and help}
+
+\begin{itemize}
+  \item Use the Canvas method specified by the instructor for course questions and private matters. \instructorcheck{the normal response-time expectation and preferred communication channel.}
+  \item Before asking about a technical problem, record: what you expected, what happened, the exact evidence, what you tried, and the decision you need help making.
+  \item The SystemStudio Helper can route a question to a topic, tool, syllabus, calendar, or Canvas. It is local and deterministic; it does not know private grades, live deadlines, or instructor decisions.
+  \item Seek help early when a prerequisite, setup step, circuit behavior, assembly trace, assignment instruction, or team interaction is unclear.
+\end{itemize}
+
+\section{Academic integrity, collaboration, and AI}
+
+Students are responsible for following the \href{https://umdearborn.edu/policies-and-procedures/faculty-and-staff-policies-and-procedures/academic-integrity}{UM-Dearborn academic-integrity requirements}, the Academic Code of Conduct, and the specific rules on each Canvas assignment. Do not submit another person's work, share solution artifacts, or misrepresent generated or copied work as your own.
+
+Collaboration and generative-AI permissions are assignment-specific. If a Canvas assignment does not clearly authorize a type of assistance, ask the instructor before using it in submitted work. The SystemStudio workflow may organize instructor-approved materials and explain visible tool evidence, but it does not replace the student's reasoning or certify that an answer is correct.
+
+\section{Accessibility, well-being, and university policies}
+
+Students who encounter disability-related barriers or need academic accommodations should contact \href{https://umdearborn.edu/disability-and-accessibility-services}{Disability and Accessibility Services (DAS)} and communicate approved accommodations to the instructor. Course technology should not prevent equitable participation; report accessibility barriers as early as possible so an alternative path can be arranged.
+
+Current academic policies, including attendance, grading, final examinations, and academic conduct, are linked from the University's \href{https://umdearborn.edu/policies-and-procedures/academic-policies-and-procedures}{Academic Policies and Procedures} page. Student support and well-being resources remain available through UM-Dearborn. Canvas announcements will identify any additional course-specific policies after instructor review.
+
+\section{Tentative Fall 2026 course calendar}
+
+The university dates below are verified against the official Fall 2026 calendar. Topic placement is a proposed instructional sequence and may move; Canvas announcements control changes. No assignment deadline is inferred here.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.08\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.65\textwidth}}
+\toprule
+\textbf{Mtg.} & \textbf{Date} & \textbf{Planned focus}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mtg.} & \textbf{Date} & \textbf{Planned focus}\\
+\midrule
+\endhead
+1 & Wed Aug 26 & Orientation; abstraction; data representation\\
+2 & Mon Aug 31 & Binary and hexadecimal representation\\
+3 & Wed Sep 2 & Signed data, two's complement, and adders\\
+-- & Mon Sep 7 & \textbf{Labor Day holiday --- no class}\\
+4 & Wed Sep 9 & Boolean operations and truth tables\\
+5 & Mon Sep 14 & Boolean algebra and circuit simplification\\
+6 & Wed Sep 16 & Karnaugh-map method\\
+7 & Mon Sep 21 & Karnaugh maps and don't-care conditions\\
+8 & Wed Sep 23 & Decoders, multiplexers, and data selection\\
+9 & Mon Sep 28 & Combinational design and evidence-based testing\\
+10 & Wed Sep 30 & Latches, clocks, and state\\
+11 & Mon Oct 5 & Flip-flops, registers, and counters\\
+12 & Wed Oct 7 & Sequential-circuit analysis and verification\\
+13 & Mon Oct 12 & Memory organization and memory maps\\
+14 & Wed Oct 14 & Buses and address decoding\\
+15 & Mon Oct 19 & I/O protocols and polling\\
+16 & Wed Oct 21 & Interrupts and asynchronous behavior\\
+17 & Mon Oct 26 & Memory hierarchy and storage latency\\
+18 & Wed Oct 28 & Cache and locality\\
+19 & Mon Nov 2 & Register-transfer language and micro-operations\\
+20 & Wed Nov 4 & Arithmetic units and ALU design\\
+21 & Mon Nov 9 & Control unit and instruction cycle\\
+22 & Wed Nov 11 & Datapath/control integration\\
+23 & Mon Nov 16 & Processor components and pipelining\\
+24 & Wed Nov 18 & Address spaces and x86 registers\\
+-- & Nov 21--29 & \textbf{Thanksgiving recess --- no class Nov 23 or Nov 25}\\
+25 & Mon Nov 30 & Assembly syntax, translation, and execution model\\
+26 & Wed Dec 2 & Embedded assembly tracing: registers, flags, stack, and memory\\
+27 & Mon Dec 7 & Integration, review, and last regular class\\
+-- & Dec 8--9 & Study days\\
+-- & Dec 10--11, 14--16 & University examination period; verify the CIS 310 slot in Canvas\\
+\bottomrule
+\end{longtable}
+
+\section{Instructor finalization checklist}
+
+Before releasing this syllabus to students, confirm and replace the remaining Canvas-controlled fields:
+
+\begin{itemize}
+  \item section/CRN, meeting time, room, and delivery mode;
+  \item office hours, office/online location, communication channel, and response-time expectation;
+  \item required/recommended textbooks and editions;
+  \item assessment categories, points or weights, grade scale, late/make-up rules, and incomplete/withdrawal language;
+  \item assignment, quiz, examination, and project dates;
+  \item final-exam time and room from the official schedule;
+  \item attendance/participation and assignment-specific collaboration/AI rules; and
+  \item accessibility review of the PDF, presentations, assignments, simulator workflow, and assembly lab.
+\end{itemize}
+
+\vfill
+\footnotesize
+\textbf{Source note.} Updated August 19, 2026. The current UM-Dearborn catalog supplies the course title, credits, description, and prerequisites. The official UM-Dearborn 2026--2027 academic calendar supplies term dates. The locally packaged Fall 2026 course materials supply the topic sequence. No historical schedule, room, office hours, textbook edition, grading distribution, attendance penalty, assignment deadline, or final-exam time has been carried forward. Current Fall 2026 Canvas information is authoritative.
+
+\end{document}

@@ -18,6 +18,21 @@ describe('student helper', () => {
     assert.match(text, /Homework 3/);
   });
 
+  it('answers calendar questions from the verified term schedule', () => {
+    const reply = answerStudentQuestion('When does the semester start and what days do we meet?');
+    const text = JSON.stringify(reply);
+    assert.match(text, /August 26/);
+    assert.match(text, /27 regular/);
+    assert.ok(reply.actions.some((action) => action.id === 'open-calendar'));
+    assert.ok(reply.actions.some((action) => action.id === 'open-canvas'));
+  });
+
+  it('opens the packaged syllabus while routing live fields to Canvas', () => {
+    const reply = answerStudentQuestion('Where is the syllabus and office hours?');
+    assert.ok(reply.actions.some((action) => action.id === 'open-syllabus'));
+    assert.match(JSON.stringify(reply), /instructor-confirmed fields in Canvas/);
+  });
+
   it('distinguishes Remote SSH from a Digital installation failure', () => {
     const reply = answerStudentQuestion('Why will Digital not open over SSH?');
     assert.match(JSON.stringify(reply), /local desktop VS Code/);

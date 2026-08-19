@@ -5,6 +5,7 @@ test/**
 node_modules/**
 **/*.map
 media/half-adder-preview.svg
+course-packs/**/syllabus/*.tex
 *.vsix
 tsconfig.json
 esbuild.mjs

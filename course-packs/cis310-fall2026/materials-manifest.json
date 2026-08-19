@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -12,6 +12,18 @@
   "sourceFolder": "https://drive.google.com/drive/folders/1tyJh-06nEZ9oHTYyPfnC2UQHNGXBlSiZ",
   "studentIndexPath": "STUDENT_MATERIALS.md",
   "resources": [
+    {
+      "id": "syllabus-fall-2026",
+      "kind": "syllabus",
+      "order": 0,
+      "title": "CIS 310 Fall 2026 Syllabus",
+      "sourceTitle": "Fall 2026 working syllabus generated from the current UM-Dearborn catalog, official calendar, Canvas, and local course pack",
+      "sourceUrl": "https://github.com/proywm/systemstudio-ai-senior-design/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf",
+      "modifiedAt": "2026-08-19T19:52:36Z",
+      "localPath": "syllabus/CIS310_Fall_2026_Syllabus.pdf",
+      "sha256": "61a8cd7bca808f9e3361aa88960cac61aa668f6268d995d9f47aadb7cb5946c6",
+      "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
+    },
     {
       "id": "lecture-01",
       "kind": "presentation",

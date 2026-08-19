@@ -1,5 +1,7 @@
 export type StudentHelperAction =
   | 'open-canvas'
+  | 'open-calendar'
+  | 'open-syllabus'
   | 'open-materials'
   | 'start-tutorial'
   | 'check-environment'
@@ -21,6 +23,8 @@ export type StudentHelperRequest =
 
 const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-canvas',
+  'open-calendar',
+  'open-syllabus',
   'open-materials',
   'start-tutorial',
   'check-environment',
@@ -42,6 +46,44 @@ export function parseStudentHelperRequest(value: unknown): StudentHelperRequest 
 
 export function answerStudentQuestion(question: string): StudentHelperReply {
   const text = question.toLowerCase();
+
+  if (matches(text, ['syllabus', 'grading policy', 'grade scale', 'course policy', 'office hour', 'textbook'])) {
+    return {
+      title: 'Open the Fall 2026 syllabus and verify Canvas-controlled fields',
+      paragraphs: [
+        'The packaged PDF includes the course description, learning outcomes, tools, workflow, university-policy links, and the verified Monday/Wednesday term calendar.',
+        'Class time, room, office hours, textbook edition, grade weights, detailed deadlines, and the final-exam slot remain instructor-confirmed fields in Canvas.'
+      ],
+      checklist: [
+        'Open the syllabus PDF for the stable course structure.',
+        'Open Canvas for current section details and announcements.',
+        'Ask the instructor if a highlighted field has not yet been finalized.'
+      ],
+      actions: [
+        { id: 'open-syllabus', label: 'Open syllabus PDF' },
+        { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
+      ]
+    };
+  }
+
+  if (matches(text, ['calendar', 'semester start', 'classes begin', 'first class', 'labor day', 'thanksgiving', 'recess', 'study day', 'exam period', 'class meeting', 'meet on'])) {
+    return {
+      title: 'Fall 2026 meets Mondays and Wednesdays starting August 26',
+      paragraphs: [
+        'The verified university calendar yields 27 regular CIS 310 meetings: 13 Mondays and 14 Wednesdays, from Wednesday, August 26 through Monday, December 7.',
+        'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The university exam period is December 10–11 and 14–16; Canvas must confirm the CIS 310 final-exam slot.'
+      ],
+      checklist: [
+        'Open the visual calendar to see every meeting date.',
+        'Export all-day placeholders, or enter the confirmed Canvas time for timed events.',
+        'Use Canvas for assignment deadlines, room, changes, and the final exam.'
+      ],
+      actions: [
+        { id: 'open-calendar', label: 'Open Fall 2026 calendar' },
+        { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
+      ]
+    };
+  }
 
   if (matches(text, ['deadline', 'due', 'when is', 'submit', 'submission', 'canvas', 'turn in'])) {
     return {

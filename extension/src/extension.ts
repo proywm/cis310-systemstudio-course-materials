@@ -7,6 +7,11 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
+import {
+  CourseCalendarPanel,
+  exportFall2026CourseCalendar,
+  openOfficialAcademicCalendar
+} from './courseCalendarPanel';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
 import { StatusTreeProvider } from './statusTree';
@@ -146,6 +151,23 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         );
       }
       await vscode.env.openExternal(uri);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openCourseCalendar', async () => {
+      CourseCalendarPanel.show(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.exportCourseCalendar', async () => {
+      await exportFall2026CourseCalendar();
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openAcademicCalendar', async () => {
+      await openOfficialAcademicCalendar();
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openSyllabus', async () => {
+      const syllabus = courseMaterials.getResource('syllabus-fall-2026');
+      if (!syllabus) {
+        await vscode.window.showErrorMessage('The packaged Fall 2026 syllabus is unavailable.');
+        return;
+      }
+      await courseMaterials.openResource(syllabus);
     }),
     vscode.commands.registerCommand('systemstudioCis310.setupDigital', setupDigital),
     vscode.commands.registerCommand('systemstudioCis310.checkEnvironment', async () => {

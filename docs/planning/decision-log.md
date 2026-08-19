@@ -111,3 +111,11 @@
 **Decision:** Add an extension-local conversational helper for topic routing, tool diagnosis, Canvas/submission redirection, and structured expected/observed/evidence/attempt prompts. Keep replies deterministic and disclose that it neither calls an external AI service nor knows current deadlines, grades work, or submits coursework. Route every deadline or submission question to the configured Fall 2026 Canvas course.
 
 **Rationale:** Student evaluations identify timely explanation, setup uncertainty, concept-to-implementation gaps, and lower-friction help-seeking as immediate needs. A bounded local helper addresses navigation and evidence collection without fabricating dates, transmitting student data, or claiming the reliability of an unevaluated AI coach. Generative coaching remains a separately evaluated senior-design workstream.
+
+## ADR-015: Package the Fall 2026 syllabus and derive the class calendar only from official dates
+
+**Status:** Accepted and implemented August 2026
+
+**Decision:** Package the syllabus as a local PDF and expose a visual/exportable Monday/Wednesday calendar in the extension. Use the current UM-Dearborn catalog, official 2026--2027 academic calendar, the confirmed meeting weekdays, the Fall 2026 Canvas link, and the local topic sequence. Do not infer class time, room, grading weights, deadlines, or the CIS 310 final-exam slot. Make all-day `.ics` meetings the default; timed export requires the user to enter the confirmed Canvas time and duration. Do not require Google Drive for syllabus, calendar, or presentation viewing.
+
+**Rationale:** Students need a readable semester plan in the same one-stop environment, but a convenient calendar can become harmful if it fabricates a time or converts an outdated deadline into apparent fact. Local packaging improves access and reliability, while explicit Canvas-controlled fields preserve instructor authority and make uncertainty visible.

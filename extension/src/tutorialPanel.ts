@@ -123,6 +123,8 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'show-tools': 'workbench.view.extension.systemstudioCis310',
     'show-materials': 'systemstudioCis310.openMaterialsIndex',
     'open-canvas': 'systemstudioCis310.openCanvas',
+    'open-calendar': 'systemstudioCis310.openCourseCalendar',
+    'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-helper': 'systemstudioCis310.openStudentHelper',
     'check-digital': 'systemstudioCis310.checkEnvironment',
     'setup-digital': 'systemstudioCis310.setupDigital',
@@ -306,14 +308,16 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="1" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Know where to learn and where to submit</h2>
     <p>The Fall 2026 workspace separates bundled study references from the authoritative Canvas course.</p>
-    <div class="instruction"><strong>Review all four:</strong> this prevents outdated material from being treated as current requirements.</div>
+    <div class="instruction"><strong>Review all six:</strong> this prevents a planning document from being mistaken for a live deadline or submission.</div>
     <div class="choices">
       ${choice('canvas', 'Fall 2026 Canvas', 'Authoritative deadlines, grading rules, required files, announcements, and submission.')}
+      ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Course structure, outcomes, tools, policies, and instructor-review fields open as a packaged PDF.')}
+      ${choice('calendar', 'Monday/Wednesday calendar', '27 verified regular meetings starting August 26, with holidays and recess identified.')}
       ${choice('presentations', '13 bundled presentations', 'Offline, integrity-checked PDFs open inside VS Code; no Google Drive access is required.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
     </div>
-    <div class="actions"><button data-action="open-canvas" class="primary">Open Fall 2026 Canvas</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
+    <div class="actions"><button data-action="open-canvas" class="primary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>

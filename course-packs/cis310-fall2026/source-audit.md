@@ -21,6 +21,12 @@ The Markdown/text versions were selected over duplicate DOCX files for the proce
 
 The folder has one primary item for each Lecture 1--12 and a second, detailed I/O PDF associated with Lecture 8. All are recorded in the materials manifest. Topic labels were checked against readable text extracted from each source. To remove the private-Drive runtime dependency, stored PowerPoint files were downloaded and converted to PDF with LibreOffice; stored PDFs were copied unchanged. The manifest binds every packaged PDF by local path and SHA-256 while retaining the original Drive URL only as provenance.
 
+## Fall 2026 syllabus and calendar
+
+The new syllabus was created from the current UM-Dearborn course catalog, the official 2026--2027 academic calendar, the instructor-provided Fall 2026 Canvas course URL, and the locally packaged topic sequence. It does not require or open Google Drive. Historical class time, room, office hours, textbook editions, grading rules, attendance penalties, deadlines, and final-exam times were not carried forward.
+
+For the confirmed Monday/Wednesday pattern, the official calendar yields 27 regular meetings: 13 Mondays and 14 Wednesdays, beginning August 26 and ending December 7. Labor Day and the Monday/Wednesday dates during Thanksgiving recess are excluded. The extension lists the university examination windows but does not infer the CIS 310 exam slot.
+
 ## Exclusions
 
 Search results outside the bounded folder contained grades, examinations, student submissions, accommodation information, and correspondence. None were copied or referenced in the course pack.
@@ -28,6 +34,7 @@ Search results outside the bounded folder contained grades, examinations, studen
 ## Instructor release checklist
 
 - [ ] Confirm these are the intended presentation revisions for the new course offering.
+- [ ] Complete the highlighted syllabus fields: section/CRN, time, room, office hours, textbooks, grading/late-work rules, detailed deadlines, attendance/AI rules, and final-exam slot.
 - [ ] Review the packaged PDF rendering and approve the presentation revisions for student release.
 - [ ] Update assignment deadlines, points, group rules, submission channel, and repository requirements.
 - [ ] Resolve any wording or technical corrections in the assignments.

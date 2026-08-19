@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the accelerated Fall 2026 CIS 310 implementation track. It gives students one VS Code entry point for Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, and a local evidence-and-routing helper while the broader senior-design project continues in parallel.
+This is the accelerated Fall 2026 CIS 310 implementation track. It gives students one VS Code entry point for the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, and a local evidence-and-routing helper while the broader senior-design project continues in parallel.
 
 **Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
 
@@ -17,7 +17,9 @@ This is the accelerated Fall 2026 CIS 310 implementation track. It gives student
 - VS Code Test Explorer discovery for `.dig` files containing a `Testcase` component;
 - a logically grouped activity-bar view for Course and Submission, Digital Circuit Design, Assembly Programming, Environment and Setup, and Help and Tutorial;
 - a configurable **Open Fall 2026 Canvas** action, defaulting to course 552144, with explicit reminders that students submit in Canvas;
-- a Course Materials view with 13 embedded offline PDFs, three homework references, and three project-assignment references;
+- a packaged Fall 2026 syllabus PDF with current catalog information, learning outcomes, the local course-tool workflow, policy links, a tentative topic sequence, and visibly unresolved instructor fields;
+- a visual course calendar with 27 verified Monday/Wednesday meetings from August 26 through December 7, official holidays/recess/study days/examination windows, and `.ics` export that does not guess the class time;
+- a Course Materials view with the syllabus, 13 embedded offline presentation PDFs, three homework references, and three project-assignment references;
 - a per-assignment hover button that creates a safely named blank circuit without overwriting existing work;
 - rendered, student-facing previews for the course guide and assignments rather than raw Markdown source;
 - local, SHA-256-verified assignment references copied into generated starter workspaces;
@@ -28,7 +30,7 @@ This is the accelerated Fall 2026 CIS 310 implementation track. It gives student
 - a local Student Helper for topic, tool, deadline/submission, and confusion routing, with quick prompts and evidence-building checklists; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
-The delivery workspace is Fall 2026. Its course pack is an instructor-review reference imported from Fall 2025, so [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) remains authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission. All 13 presentations are embedded as SHA-256-verified offline PDFs; private Drive URLs remain provenance metadata and are never opened for presentation viewing. No ALU, register-file, or processor solution is bundled.
+The delivery workspace is Fall 2026. Its assignments and presentations remain instructor-review references, so [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission. The new syllabus and all 13 presentations are embedded as SHA-256-verified PDFs. No Google Drive access is required for student use. No ALU, register-file, or processor solution is bundled.
 
 ## Honest integration boundary
 
@@ -70,14 +72,16 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 ## Student workflow
 
 1. Start or skip the guided tutorial; rerun it later from **Help and Tutorial**.
-2. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) to confirm the current task, deadline, and required files.
-3. Open **Course Materials** and select one of the 13 bundled PDFs, three homework references, or three project references.
-4. Run **CIS 310: Check Environment** before changing circuit work in response to a tool failure.
-5. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
-6. Predict one behavior, then use preview/tests as evidence before integrating a larger component.
-7. Use **Open in Digital** for graphical editing on local desktop VS Code.
-8. Ask the local Student Helper when the topic, tool, submission path, or expected-vs-observed result is unclear.
-9. Submit the required deliverables through Canvas and confirm that Canvas recorded the submission.
+2. Open the packaged **Fall 2026 syllabus** and review any fields still marked for instructor confirmation.
+3. Open the **Fall 2026 course calendar** to see all 27 Monday/Wednesday meetings; export all-day placeholders or enter a confirmed Canvas time for timed events.
+4. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) to confirm the current task, deadline, class details, and required files.
+5. Open **Course Materials** and select one of the 13 bundled presentation PDFs, three homework references, or three project references.
+6. Run **CIS 310: Check Environment** before changing circuit work in response to a tool failure.
+7. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
+8. Predict one behavior, then use preview/tests as evidence before integrating a larger component.
+9. Use **Open in Digital** for graphical editing on local desktop VS Code.
+10. Ask the local Student Helper when the topic, calendar, tool, submission path, or expected-vs-observed result is unclear.
+11. Submit the required deliverables through Canvas and confirm that Canvas recorded the submission.
 
 For assembly, select **Create Irvine32 / NASM assembly lab**, open `assembly/irvine32/AddTwo.asm`, and select **Open assembly lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. Use **Build**, **Step**, **Run**, and **Rebuild / Reset** beside the editor while inspecting registers, flags, stack, data, virtual-console input, output, and the execution trace. `assembly/irvine32/ConsoleInput.asm` demonstrates `ReadInt` and `ReadString`; `assembly/nasm-ia32/LoopSum.asm` demonstrates the alternate NASM source profile. Read the two assembly guides before using a file that depends on a full native assembler or OS runtime.
 
@@ -90,6 +94,10 @@ Course guides and assignments open as rendered documents. Instructors and develo
 | `CIS 310: Start or Rerun Guided Tutorial` | Walks through required student choices; can be skipped, resumed, or rerun |
 | `CIS 310: Ask the SystemStudio Helper` | Routes topic, tool, deadline/submission, and confusion questions to local evidence and actions |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page for requirements, deadlines, and submission |
+| `CIS 310: Open Fall 2026 Syllabus` | Opens the locally packaged syllabus PDF inside VS Code |
+| `CIS 310: Open Fall 2026 Course Calendar` | Shows all verified Monday/Wednesday meetings and official term milestones |
+| `CIS 310: Export Fall 2026 Calendar (.ics)` | Exports all-day placeholders or user-confirmed timed meetings without inferring deadlines |
+| `CIS 310: Open Official UM-Dearborn Academic Calendar` | Opens the official 2026--2027 calendar PDF |
 | `CIS 310: Install/Verify Digital Simulator` | Downloads or repairs the pinned simulator installation |
 | `CIS 310: Check Environment` | Reports Digital checksum, Java, and trust status |
 | `CIS 310: Open Circuit in Digital` | Launches the native Digital GUI on a `.dig` file |
@@ -136,7 +144,7 @@ npm run check
 
 Press `F5` from this folder in VS Code after running `npm run compile`, or install the packaged VSIX.
 
-The automated check covers manifest validation, assignment and presentation integrity, circuit-starter metadata, blank-circuit structure, the Visual Studio-style AddTwo source shape, profiled MASM/NASM parsing and execution, Irvine virtual-console input and flags, arithmetic, registers, memory, calls/returns, runtime helpers, diagnostics, infinite-loop bounds, all shipped starters, safe ZIP paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor content review, packaged-PDF rendering review, Windows/Linux/macOS UI smoke tests, and accessibility validation.
+The automated check covers the 27-meeting calendar and `.ics` export, syllabus/assignment/presentation integrity, manifest validation, circuit-starter metadata, blank-circuit structure, the Visual Studio-style AddTwo source shape, profiled MASM/NASM parsing and execution, Irvine virtual-console input and flags, arithmetic, registers, memory, calls/returns, runtime helpers, diagnostics, infinite-loop bounds, all shipped starters, safe ZIP paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor completion of the marked syllabus fields, content review, packaged-PDF rendering/accessibility review, and Windows/Linux/macOS UI smoke tests.
 
 ## Current limitations
 
@@ -145,6 +153,7 @@ The automated check covers manifest validation, assignment and presentation inte
 - embedded assembly covers documented Irvine32 Classroom and NASM IA-32 teaching subsets rather than full MASM/NASM, binary generation, OS APIs, or arbitrary Irvine procedures/libraries;
 - presentations are bundled as PDFs for offline use, but still require instructor content and accessibility review;
 - packaged assignments retain historical wording and are reference material until the instructor approves a student release;
+- the syllabus intentionally leaves class time/location, office hours, textbook editions, grading weights, detailed deadlines, and the final-exam slot for instructor confirmation rather than inferring them;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;
 - the local helper is a deterministic evidence-and-routing assistant, not a generative AI coach, grader, Canvas integration, or source of current deadlines;
 - the extension opens Canvas but does not read or submit Canvas coursework; and

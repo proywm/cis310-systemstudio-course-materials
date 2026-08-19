@@ -45,8 +45,20 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'cloud'
           ),
           describedActionItem(
+            'Open Fall 2026 syllabus',
+            'packaged PDF · review fields',
+            'systemstudioCis310.openSyllabus',
+            'file-pdf'
+          ),
+          describedActionItem(
+            'Open Fall 2026 course calendar',
+            '27 M/W meetings · starts Aug 26',
+            'systemstudioCis310.openCourseCalendar',
+            'calendar'
+          ),
+          describedActionItem(
             'Open bundled course-material guide',
-            '3 homework · 3 projects · 13 offline PDFs',
+            '3 homework · 3 projects · 13 presentation PDFs',
             'systemstudioCis310.openMaterialsIndex',
             'library'
           )

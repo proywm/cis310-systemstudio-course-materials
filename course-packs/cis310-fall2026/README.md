@@ -11,10 +11,12 @@ The extension labels this status and preserves the source titles and modificatio
 ## Included
 
 - 13 locally packaged, SHA-256-verified PDF presentations covering Lectures 1--12; Lecture 8 has a main deck and a detailed I/O companion PDF.
+- A locally packaged, SHA-256-verified Fall 2026 syllabus PDF with a verified Monday/Wednesday term calendar and clearly marked instructor-review fields.
 - Six local Markdown assignment references: three homework items and three processor-project milestones.
 - Explicit homework/project categories and safe blank-circuit starter metadata for circuit-design tasks.
 - A lecture-to-assignment concept map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md).
 - SHA-256 values for every locally packaged presentation and assignment.
+- No Google Drive requirement at runtime; the extension opens all syllabus and presentation PDFs from its own package.
 
 ## Deliberately excluded
 

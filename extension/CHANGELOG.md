@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.8.0
+
+- Added a packaged four-page Fall 2026 syllabus PDF with current catalog information, learning outcomes, course technology, assessment placeholders, policy links, and an instructor-finalization checklist.
+- Added a visual Fall 2026 course calendar for all 27 Monday/Wednesday meetings from August 26 through December 7, excluding Labor Day and Thanksgiving recess.
+- Added official term milestones for study days and examination windows without inventing the CIS 310 final-exam slot.
+- Added `.ics` export with an all-day default that does not guess the class time and an optional timed mode requiring the confirmed Canvas start time and duration.
+- Connected the syllabus and calendar to the grouped sidebar, Course Materials view, guided tutorial, Command Palette, and local Student Helper.
+- Kept the syllabus and presentation workflow fully local to the extension; Google Drive access is not required.
+
 ## 0.7.0
 
 - Reorganized the setup/tool tree into five student-centered groups instead of one flat command list.

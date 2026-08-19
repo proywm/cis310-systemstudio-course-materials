@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Managed Digital circuits, embedded Irvine32/NASM IA-32 assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -45,6 +45,10 @@
     "onCommand:systemstudioCis310.openGettingStarted",
     "onCommand:systemstudioCis310.openStudentHelper",
     "onCommand:systemstudioCis310.openCanvas",
+    "onCommand:systemstudioCis310.openCourseCalendar",
+    "onCommand:systemstudioCis310.exportCourseCalendar",
+    "onCommand:systemstudioCis310.openAcademicCalendar",
+    "onCommand:systemstudioCis310.openSyllabus",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
     "onCommand:systemstudioCis310.createCircuit",
@@ -99,6 +103,29 @@
         "title": "CIS 310: Open Fall 2026 Canvas Course",
         "category": "SystemStudio",
         "icon": "$(cloud)"
+      },
+      {
+        "command": "systemstudioCis310.openCourseCalendar",
+        "title": "CIS 310: Open Fall 2026 Course Calendar",
+        "category": "SystemStudio",
+        "icon": "$(calendar)"
+      },
+      {
+        "command": "systemstudioCis310.exportCourseCalendar",
+        "title": "CIS 310: Export Fall 2026 Calendar (.ics)",
+        "category": "SystemStudio",
+        "icon": "$(save-as)"
+      },
+      {
+        "command": "systemstudioCis310.openAcademicCalendar",
+        "title": "CIS 310: Open Official UM-Dearborn Academic Calendar",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openSyllabus",
+        "title": "CIS 310: Open Fall 2026 Syllabus",
+        "category": "SystemStudio",
+        "icon": "$(file-pdf)"
       },
       {
         "command": "systemstudioCis310.setupDigital",
@@ -277,18 +304,18 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Use the grouped Fall 2026 course, Digital circuit, assembly, setup, and help workflows.\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Use the grouped Fall 2026 course, Digital circuit, assembly, setup, and help workflows.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the Monday/Wednesday calendar](command:systemstudioCis310.openCourseCalendar)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Fall 2026 workspace: 13 presentations are bundled as offline PDFs, with three homework and three project references. Imported Fall 2025 content requires instructor review; Canvas is authoritative.\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+        "contents": "Fall 2026 workspace: the syllabus and 13 presentations are packaged PDFs, with three homework and three project references. No Google Drive access is required. Canvas is authoritative for current requirements and submission.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
       }
     ],
     "walkthroughs": [
       {
         "id": "systemstudioCis310.gettingStarted",
         "title": "Get Started with SystemStudio CIS 310",
-        "description": "Learn the Fall 2026 Canvas, bundled course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
+        "description": "Learn the Fall 2026 syllabus, calendar, Canvas, bundled course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
         "steps": [
           {
             "id": "guidedTour",
@@ -307,7 +334,7 @@
           {
             "id": "materials",
             "title": "Learn Offline; Verify and Submit in Canvas",
-            "description": "Open 13 bundled PDFs, three homework references, and three project references. Use Fall 2026 Canvas for current requirements and submission.\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
+            "description": "Open the packaged Fall 2026 syllabus PDF, verified Monday/Wednesday calendar, 13 bundled presentation PDFs, three homework references, and three project references. Use Canvas for current requirements and submission.\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
             "media": { "markdown": "media/tutorial/03-materials.md" },
             "completionEvents": ["onView:systemstudioCis310.materials"]
           },

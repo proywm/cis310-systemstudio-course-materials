@@ -109,6 +109,7 @@ describe('course-material manifest', () => {
       JSON.parse(await readFile(path.join(packRoot, 'materials-manifest.json'), 'utf8')) as unknown
     );
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'presentation').length, 13);
+    assert.equal(manifest.resources.filter((resource) => resource.kind === 'syllabus').length, 1);
     assert.equal(manifest.course.deliveryTerm, 'Fall 2026');
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 6);
     assert.equal(manifest.resources.filter((resource) => resource.assignmentCategory === 'homework').length, 3);
@@ -118,6 +119,9 @@ describe('course-material manifest', () => {
       assert.ok(equalsSha256(digest, resource.sha256));
       if (resource.kind === 'presentation') {
         assert.equal(path.extname(resource.localPath).toLowerCase(), '.pdf');
+      } else if (resource.kind === 'syllabus') {
+        assert.equal(path.extname(resource.localPath).toLowerCase(), '.pdf');
+        assert.equal(resource.id, 'syllabus-fall-2026');
       } else {
         assert.ok(resource.relatedPresentationIds?.length);
         assert.ok(resource.assignmentCategory === 'homework' || resource.assignmentCategory === 'project');

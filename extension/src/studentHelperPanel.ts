@@ -51,6 +51,8 @@ export class StudentHelperPanel implements vscode.Disposable {
 export async function executeStudentHelperAction(action: StudentHelperAction): Promise<void> {
   const commands: Record<StudentHelperAction, string> = {
     'open-canvas': 'systemstudioCis310.openCanvas',
+    'open-calendar': 'systemstudioCis310.openCourseCalendar',
+    'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-materials': 'systemstudioCis310.openMaterialsIndex',
     'start-tutorial': 'systemstudioCis310.startTutorial',
     'check-environment': 'systemstudioCis310.checkEnvironment',

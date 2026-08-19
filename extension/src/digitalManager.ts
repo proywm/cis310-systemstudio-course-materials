@@ -299,6 +299,12 @@ export class DigitalManager {
         force: false,
         errorOnExist: true
       });
+      await cp(path.join(coursePackSource, 'syllabus'), path.join(staging, 'course', 'syllabus'), {
+        recursive: true,
+        force: false,
+        errorOnExist: true,
+        filter: (source) => path.extname(source).toLowerCase() !== '.tex'
+      });
       await cp(
         path.join(coursePackSource, 'STUDENT_MATERIALS.md'),
         path.join(staging, 'course', 'README.md'),
