@@ -79,3 +79,11 @@
 **Decision:** Package readable assignment references and a lecture-to-assignment map in the extension, expose the original presentations through recorded Drive links, verify local assignment hashes at activation, and label the Fall 2025 pack as requiring instructor review. Keep current Canvas instructions authoritative. Exclude exams, grades, student records, hidden tests, and completed assignment-adjacent circuits.
 
 **Rationale:** Students need one discoverable path from concepts to the relevant task, but archived content and private links must not be represented as a ready Fall 2026 release. Removing Digital's completed ALU example avoids giving away a design that closely overlaps the register-file/ALU project while retaining a small half-adder example for simulator orientation.
+
+## ADR-011: Separate portable assembly from exact MASM compatibility
+
+**Status:** Accepted for pilot; implemented August 2026
+
+**Decision:** Provide an original NASM x86-64 Linux lab in a pinned `linux/amd64` container as the common Windows/Linux/macOS path. Detect Docker, request consent before building the local image, and constrain student execution with no network, dropped capabilities, bounded memory/CPU/processes, and Workspace Trust. Keep exact Microsoft MASM/Irvine work as a separately labeled Windows-only path; do not auto-translate between dialects or redistribute proprietary tools and course examples.
+
+**Rationale:** The reviewed CIS 310 materials use 32-bit Windows MASM conventions, which are not portable to macOS or Linux. NASM supports the major host object formats, but it does not implement MASM memory models and a Linux runtime does not provide the Windows API. One containerized NASM/ELF environment gives students consistent build behavior without misrepresenting it as MASM. Apple Silicon can run the selected x86-64 container through platform emulation, with a documented performance cost.

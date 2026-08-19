@@ -4,6 +4,7 @@ import { access, cp, mkdir, readFile, rename, rm, stat, writeFile } from 'node:f
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { equalsSha256, sha256File } from './core/checksum';
+import { BLANK_DIGITAL_CIRCUIT } from './core/circuitTemplate';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { downloadFile } from './core/download';
 import { isSupportedJava, parseJavaVersion, type ParsedJavaVersion } from './core/javaVersion';
@@ -228,6 +229,15 @@ export class DigitalManager {
     });
   }
 
+  async createBlankCircuit(circuitPath: string): Promise<void> {
+    if (path.extname(circuitPath).toLowerCase() !== '.dig') {
+      throw new Error('A Digital circuit filename must use the .dig extension.');
+    }
+    await mkdir(path.dirname(circuitPath), { recursive: true });
+    await writeFile(circuitPath, BLANK_DIGITAL_CIRCUIT, { encoding: 'utf8', flag: 'wx' });
+    this.output.appendLine(`Created blank Digital circuit: ${circuitPath}`);
+  }
+
   async runTests(circuitPath: string, token?: vscode.CancellationToken): Promise<CircuitTestResult> {
     await this.assertReady();
     await access(circuitPath);
@@ -284,6 +294,11 @@ export class DigitalManager {
         force: false,
         errorOnExist: true
       });
+      await cp(path.join(coursePackSource, 'presentations'), path.join(staging, 'course', 'presentations'), {
+        recursive: true,
+        force: false,
+        errorOnExist: true
+      });
       await cp(
         path.join(coursePackSource, 'STUDENT_MATERIALS.md'),
         path.join(staging, 'course', 'README.md'),
@@ -293,6 +308,11 @@ export class DigitalManager {
         path.join(coursePackSource, 'materials-manifest.json'),
         path.join(staging, 'course', 'materials-manifest.json'),
         { force: false, errorOnExist: true }
+      );
+      await cp(
+        path.join(this.context.extensionUri.fsPath, 'assembly-starter'),
+        path.join(staging, 'assembly'),
+        { recursive: true, force: false, errorOnExist: true }
       );
 
       await writeFile(path.join(staging, 'README.md'), starterReadme(), { encoding: 'utf8', flag: 'wx' });
@@ -304,7 +324,7 @@ export class DigitalManager {
       await writeFile(
         path.join(staging, '.vscode', 'settings.json'),
         `${JSON.stringify({
-          'files.associations': { '*.dig': 'digital-circuit' },
+          'files.associations': { '*.dig': 'digital-circuit', '*.asm': 'nasm' },
           'workbench.editorAssociations': {
             'course/*.md': 'vscode.markdown.preview.editor',
             'course/assignments/*.md': 'vscode.markdown.preview.editor'
@@ -411,6 +431,8 @@ function starterReadme(): string {
     `4. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
     `5. Run **CIS 310: Open Circuit in Digital** to edit and interact with the circuit.\n` +
     `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n\n` +
+    `For assembly programming, read \`assembly/README.md\`. The portable lab uses NASM x86-64 in a ` +
+    `consistent container; exact Microsoft MASM remains a separate Windows-only path.\n\n` +
     `No ALU, register-file, or processor solution is bundled. This protects the learning task while ` +
     `retaining a small half-adder example for tool orientation.\n\n` +
     `## Suggested learning sequence\n\n` +
@@ -426,5 +448,8 @@ function starterThirdPartyNotice(): string {
     `- Project: ${DIGITAL_RELEASE.sourceUrl}\n` +
     `- Release: ${DIGITAL_RELEASE.releaseUrl}\n` +
     `- License: ${DIGITAL_RELEASE.licenseName}\n` +
-    `- License text: ${DIGITAL_RELEASE.licenseUrl}\n`;
+    `- License text: ${DIGITAL_RELEASE.licenseUrl}\n\n` +
+    `The portable assembly Dockerfile downloads Debian packages for NASM, GNU binutils, Make, and GDB ` +
+    `only after confirmation. Package licenses are available in the built image under \`/usr/share/doc\`. ` +
+    `Microsoft MASM, Irvine libraries, and course/textbook examples are not redistributed.\n`;
 }

@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+
+action="${1:-}"
+source_path="${2:-}"
+
+case "$action" in
+  build|run) ;;
+  *) echo "Usage: systemstudio-asm <build|run> <relative-source.asm>" >&2; exit 64 ;;
+esac
+
+case "$source_path" in
+  ""|/*|*\\*|*[!A-Za-z0-9_./-]*|-*|*/-*|..|../*|*/../*|*/..) echo "Source must be a safe relative .asm path inside /workspace." >&2; exit 64 ;;
+  *.asm) ;;
+  *) echo "Source must have the .asm extension." >&2; exit 64 ;;
+esac
+
+if [ ! -f "$source_path" ]; then
+  echo "Assembly source not found: $source_path" >&2
+  exit 66
+fi
+
+name="$(basename "$source_path" .asm)"
+mkdir -p build
+object="build/${name}.o"
+program="build/${name}"
+
+nasm -f elf64 -g -F dwarf "$source_path" -o "$object"
+ld "$object" -o "$program"
+echo "Built $program"
+
+if [ "$action" = "run" ]; then
+  echo "--- program output ---"
+  "$program"
+fi

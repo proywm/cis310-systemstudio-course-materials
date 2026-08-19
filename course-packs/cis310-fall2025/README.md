@@ -10,8 +10,9 @@ The extension labels this status and preserves the source titles and modificatio
 
 ## Included
 
-- 13 presentation entries covering Lectures 1--12; Lecture 8 has a main deck and a detailed I/O companion PDF.
+- 13 locally packaged, SHA-256-verified PDF presentations covering Lectures 1--12; Lecture 8 has a main deck and a detailed I/O companion PDF.
 - Four local Markdown assignment references: Logic Foundations, Registers/DRAM, Register File/ALU, and the integrated 4-bit Processor.
+- Explicit homework/project categories and safe blank-circuit starter metadata for each listed task.
 - A lecture-to-assignment concept map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md).
 - SHA-256 values for every locally packaged assignment.
 
@@ -25,9 +26,13 @@ The extension labels this status and preserves the source titles and modificatio
 
 The only simulator example retained in the generated student workspace is Digital's basic half-adder, used as prerequisite practice rather than as a solution to a listed project.
 
+## Assembly boundary
+
+The reviewed course archive uses Microsoft/Irvine-style MASM conventions in its assembly material. The extension does not copy exams, quizzes, textbook slides, or proprietary support libraries from that archive. Instead, it supplies an original portable NASM x86-64 orientation lab and a separate guide for exact Windows MASM setup. These are intentionally distinct because the syntax, object formats, APIs, and calling conventions are not interchangeable.
+
 ## Presentation boundary
 
-The original presentation files remain in the private Drive folder and are opened from the extension through their recorded Drive URLs. The pack also includes a local, accessible topic-and-assignment map. The Drive metadata currently reports the source files as not shared; those links must be replaced with student-accessible Canvas or Drive URLs before classroom distribution.
+The extension ships offline PDF copies of all 13 presentations and verifies each copy before use. The recorded Drive URLs and source titles remain provenance metadata only; students do not need Drive access to open a presentation. PowerPoint sources were converted to PDF with LibreOffice, while source PDFs were copied without content conversion. Instructor review is still required before classroom release.
 
 ## Provenance
 

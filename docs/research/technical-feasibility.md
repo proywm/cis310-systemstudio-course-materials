@@ -111,6 +111,8 @@ VS Code Workspace Trust exists because opening a workspace can lead extensions, 
 - Provider-neutral AI adapter with a deterministic no-AI fallback
 - Unit tests for pure modules and VS Code integration tests for extension behavior
 
+The implemented CIS 310 assembly pilot refines the generic “containerized assembly” item into two explicit paths: portable NASM x86-64 in a constrained `linux/amd64` Docker image, and exact MASM compatibility on Windows only. See the [assembly toolchain decision](assembly-toolchain.md) for the course-dialect evidence, cross-platform tradeoffs, and current validation boundary.
+
 ## Primary references
 
 - [VS Code Extension API](https://code.visualstudio.com/api/)

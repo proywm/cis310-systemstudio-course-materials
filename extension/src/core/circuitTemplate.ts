@@ -1,0 +1,8 @@
+export const BLANK_DIGITAL_CIRCUIT = `<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>1</version>
+  <attributes/>
+  <visualElements/>
+  <wires/>
+</circuit>
+`;

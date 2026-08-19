@@ -1,6 +1,12 @@
 import * as path from 'node:path';
 
 export type CourseMaterialKind = 'presentation' | 'assignment';
+export type AssignmentCategory = 'homework' | 'project';
+
+export interface CircuitStarter {
+  fileName: string;
+  label: string;
+}
 
 export interface CourseMaterialResource {
   id: string;
@@ -15,6 +21,8 @@ export interface CourseMaterialResource {
   sha256?: string;
   relatedAssignmentIds?: string[];
   relatedPresentationIds?: string[];
+  assignmentCategory?: AssignmentCategory;
+  circuitStarter?: CircuitStarter;
 }
 
 export interface CourseMaterialsManifest {
@@ -129,9 +137,14 @@ function parseResource(value: unknown, index: number): CourseMaterialResource {
   if ((localPath === undefined) !== (sha256 === undefined)) {
     throw new Error(`resources[${index}] must provide localPath and sha256 together.`);
   }
+  if (kind === 'presentation' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.pdf')) {
+    throw new Error(`resources[${index}] must provide a packaged PDF presentation.`);
+  }
   if (sha256 && !/^[a-f0-9]{64}$/i.test(sha256)) {
     throw new Error(`resources[${index}].sha256 is invalid.`);
   }
+  const assignmentCategory = parseAssignmentCategory(resource.assignmentCategory, kind, index);
+  const circuitStarter = parseCircuitStarter(resource.circuitStarter, kind, index);
 
   return {
     id: requireString(resource.id, `resources[${index}].id`),
@@ -145,7 +158,40 @@ function parseResource(value: unknown, index: number): CourseMaterialResource {
     localPath,
     sha256,
     relatedAssignmentIds: optionalStringArray(resource.relatedAssignmentIds, `resources[${index}].relatedAssignmentIds`),
-    relatedPresentationIds: optionalStringArray(resource.relatedPresentationIds, `resources[${index}].relatedPresentationIds`)
+    relatedPresentationIds: optionalStringArray(resource.relatedPresentationIds, `resources[${index}].relatedPresentationIds`),
+    assignmentCategory,
+    circuitStarter
+  };
+}
+
+function parseAssignmentCategory(value: unknown, kind: CourseMaterialKind, index: number): AssignmentCategory | undefined {
+  if (value === undefined) {
+    if (kind === 'assignment') {
+      throw new Error(`resources[${index}].assignmentCategory is required for assignments.`);
+    }
+    return undefined;
+  }
+  if (kind !== 'assignment' || (value !== 'homework' && value !== 'project')) {
+    throw new Error(`resources[${index}].assignmentCategory is invalid.`);
+  }
+  return value;
+}
+
+function parseCircuitStarter(value: unknown, kind: CourseMaterialKind, index: number): CircuitStarter | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (kind !== 'assignment') {
+    throw new Error(`resources[${index}].circuitStarter is only valid for assignments.`);
+  }
+  const starter = requireRecord(value, `resources[${index}].circuitStarter`);
+  const fileName = requireString(starter.fileName, `resources[${index}].circuitStarter.fileName`);
+  if (path.basename(fileName) !== fileName || !/^[A-Za-z0-9][A-Za-z0-9._-]*\.dig$/i.test(fileName)) {
+    throw new Error(`resources[${index}].circuitStarter.fileName must be a safe .dig filename.`);
+  }
+  return {
+    fileName,
+    label: requireString(starter.label, `resources[${index}].circuitStarter.label`)
   };
 }
 

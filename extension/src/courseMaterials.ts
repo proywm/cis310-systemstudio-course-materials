@@ -6,6 +6,7 @@ import {
   parseCourseMaterialsManifest,
   resolveCoursePackPath,
   type CourseMaterialKind,
+  type AssignmentCategory,
   type CourseMaterialResource,
   type CourseMaterialsManifest
 } from './core/coursePack';
@@ -44,10 +45,15 @@ export class CourseMaterials {
     return this.manifest.resources.find((resource) => resource.id === id);
   }
 
+  getAssignments(category: AssignmentCategory): readonly CourseMaterialResource[] {
+    return this.getResources('assignment').filter((resource) => resource.assignmentCategory === category);
+  }
+
   async openResource(resource: CourseMaterialResource): Promise<void> {
     if (resource.localPath) {
       const uri = vscode.Uri.file(resolveCoursePackPath(this.rootPath, resource.localPath));
-      await vscode.commands.executeCommand('markdown.showPreview', uri);
+      const command = path.extname(uri.fsPath).toLowerCase() === '.md' ? 'markdown.showPreview' : 'vscode.open';
+      await vscode.commands.executeCommand(command, uri);
       return;
     }
     await vscode.env.openExternal(vscode.Uri.parse(resource.sourceUrl));
@@ -76,20 +82,24 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     if (element.type === 'section') {
       const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.Expanded);
-      item.iconPath = new vscode.ThemeIcon(element.kind === 'presentation' ? 'preview' : 'notebook');
+      item.iconPath = new vscode.ThemeIcon(element.section === 'presentation' ? 'preview' : element.section === 'homework' ? 'checklist' : 'notebook');
       return item;
     }
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
-    item.description = element.resource.kind === 'presentation' ? 'Drive' : 'local reference';
+    item.description = element.resource.kind === 'presentation' ? 'included PDF' : 'local reference';
     item.tooltip = element.resource.kind === 'presentation'
-      ? `${element.resource.sourceTitle}\nInstructor must grant student access to this Drive file.`
-      : `${element.resource.sourceTitle}\nHistorical policy and deadlines require instructor review.`;
+      ? `${element.resource.sourceTitle}\nPackaged for offline viewing; no Drive access required.`
+      : `${element.resource.sourceTitle}\nHistorical policy and deadlines require instructor review.` +
+        (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(element.resource.kind === 'presentation' ? 'file-media' : 'markdown');
     item.command = {
       command: 'systemstudioCis310.openCourseMaterial',
       title: 'Open course material',
       arguments: [element.resource.id]
     };
+    if (element.resource.circuitStarter) {
+      item.contextValue = 'systemstudioCis310.assignmentWithCircuit';
+    }
     return item;
   }
 
@@ -97,14 +107,18 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (!element) {
       return [
         { type: 'notice' },
-        { type: 'section', kind: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
-        { type: 'section', kind: 'assignment', label: `Assignments (${this.materials.getResources('assignment').length})` }
+        { type: 'section', section: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
+        { type: 'section', section: 'homework', label: `Homework (${this.materials.getAssignments('homework').length})` },
+        { type: 'section', section: 'project', label: `Project Assignments (${this.materials.getAssignments('project').length})` }
       ];
     }
     if (element.type !== 'section') {
       return [];
     }
-    return this.materials.getResources(element.kind).map((resource) => ({ type: 'resource', resource }));
+    const resources = element.section === 'presentation'
+      ? this.materials.getResources('presentation')
+      : this.materials.getAssignments(element.section);
+    return resources.map((resource) => ({ type: 'resource', resource }));
   }
 
   dispose(): void {
@@ -114,5 +128,5 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
 
 type MaterialsNode =
   | { type: 'notice' }
-  | { type: 'section'; kind: CourseMaterialKind; label: string }
+  | { type: 'section'; section: 'presentation' | AssignmentCategory; label: string }
   | { type: 'resource'; resource: CourseMaterialResource };

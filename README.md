@@ -30,7 +30,7 @@ This README is the project’s main entry point. Start here, then follow the doc
 | Team and effort | 3--4 interdisciplinary students; approximately 600--800 total hours |
 | Reference workflows | CIS 450 C/xv6 systems programming and CIS 310 4-bit processor design |
 | Product form | Installable VS Code extension with a versioned course environment |
-| Current status | CIS 310 extension v0.2.2 integrates the managed simulator, rendered course materials, and a Remote SSH fallback for non-GUI workflows; broader senior-design implementation and classroom validation remain pending |
+| Current status | CIS 310 extension v0.4.0 combines offline course PDFs, blank/assignment circuit creation, separated homework and projects, and a portable NASM lab while retaining an explicit Windows-only MASM path; classroom validation remains pending |
 
 SystemStudio AI will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and a constrained AI coach in a single VS Code experience.
 
@@ -60,7 +60,7 @@ The minimum product is not a general-purpose IDE, a general-purpose circuit simu
 
 ### Semester-start CIS 310 pilot
 
-The accelerated extension now manages a checksum-verified Digital v0.31 installation, detects Java, opens `.dig` circuits in Digital when a graphical desktop is available, renders Digital-generated SVG previews inside VS Code, runs embedded circuit tests through the official CLI, publishes eligible circuits to Test Explorer, and generates a starter workspace. Version 0.2.1 also provides a Course Materials view with 13 presentation links, four integrity-checked assignment references, explicit lecture-to-assignment mappings, and Remote SSH support for the non-GUI workflows. The source pack is from Fall 2025 and remains gated for instructor review; it does not replace current Canvas instructions. This is a technical MVP, not yet evidence of learning impact or classroom readiness. The AI coach, guided-practice system, custom processor canvas, help-packet workflow, and broader CIS 450 environment remain senior-design workstreams.
+The accelerated extension now manages a checksum-verified Digital v0.31 installation, detects Java, creates valid blank `.dig` files, opens circuits in Digital when a graphical desktop is available, renders Digital-generated SVG previews inside VS Code, runs embedded circuit tests through the official CLI, publishes eligible circuits to Test Explorer, and generates a starter workspace. The Course Materials view provides 13 bundled offline PDF presentations, separately grouped homework and project references, assignment-specific circuit-creation buttons, and explicit lecture mappings. Version 0.4.0 also includes a containerized NASM x86-64 lab with editing support and one-click build/run across Windows, Linux, and macOS; exact Microsoft MASM remains a documented Windows-only path. The source pack is from Fall 2025 and remains gated for instructor review; it does not replace current Canvas instructions. This is a technical MVP, not yet evidence of learning impact or classroom readiness. The AI coach, guided-practice system, custom processor canvas, help-packet workflow, and broader CIS 450 environment remain senior-design workstreams.
 
 ![Half-adder circuit rendered by the implemented preview pipeline](extension/media/half-adder-preview.png)
 
@@ -80,6 +80,7 @@ The accelerated extension now manages a checksum-verified Digital v0.31 installa
 
 - [Student-evaluation findings](docs/research/student-evaluation-findings.md): recurring needs, strengths, method, and evidence limitations.
 - [Technical feasibility](docs/research/technical-feasibility.md): VS Code, containers, simulation, and AI integration.
+- [Assembly toolchain decision](docs/research/assembly-toolchain.md): course-dialect evidence, portable NASM common ground, MASM boundary, and validation limits.
 - [Measurement literature](docs/research/measurement-literature.md): validity, self-efficacy, usefulness, trust, workload, pre/post analysis, privacy, and institutional requirements.
 
 ### 3. Product and technical design

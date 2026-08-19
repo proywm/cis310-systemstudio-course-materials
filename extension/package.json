@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "A managed Digital simulator and course-material workflow for CIS 310 inside Visual Studio Code.",
-  "version": "0.2.2",
+  "description": "Managed Digital circuits, portable assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
+  "version": "0.4.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -23,7 +23,9 @@
     "digital logic",
     "processor",
     "circuit simulator",
-    "Digital"
+    "Digital",
+    "NASM",
+    "assembly"
   ],
   "main": "./dist/extension.js",
   "extensionKind": [
@@ -35,20 +37,27 @@
     "onView:systemstudioCis310.materials",
     "onCustomEditor:systemstudioCis310.circuitPreview",
     "onLanguage:digital-circuit",
+    "onLanguage:nasm",
     "onCommand:systemstudioCis310.setupDigital",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
+    "onCommand:systemstudioCis310.createCircuit",
+    "onCommand:systemstudioCis310.createAssignmentCircuit",
     "onCommand:systemstudioCis310.testCircuit",
     "onCommand:systemstudioCis310.exportSvg",
     "onCommand:systemstudioCis310.createStarterWorkspace",
     "onCommand:systemstudioCis310.browseLectures",
     "onCommand:systemstudioCis310.browseAssignments",
-    "onCommand:systemstudioCis310.openMaterialsIndex"
+    "onCommand:systemstudioCis310.openMaterialsIndex",
+    "onCommand:systemstudioCis310.createAssemblyLab",
+    "onCommand:systemstudioCis310.checkAssemblyEnvironment",
+    "onCommand:systemstudioCis310.runAssembly",
+    "onCommand:systemstudioCis310.openMasmGuide"
   ],
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
-      "description": "Circuit preview, testing, and simulator launch execute a pinned Java application and are disabled until the workspace is trusted.",
+      "description": "Circuit preview/testing, simulator launch, and portable assembly execution are disabled until the workspace is trusted.",
       "restrictedConfigurations": [
         "systemstudioCis310.javaPath",
         "systemstudioCis310.testTimeoutSeconds"
@@ -75,6 +84,18 @@
         "command": "systemstudioCis310.openDigital",
         "title": "CIS 310: Open Circuit in Digital",
         "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.createCircuit",
+        "title": "CIS 310: Create a New Digital Circuit",
+        "category": "SystemStudio",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "systemstudioCis310.createAssignmentCircuit",
+        "title": "Create Assignment Circuit",
+        "category": "SystemStudio",
+        "icon": "$(new-file)"
       },
       {
         "command": "systemstudioCis310.testCircuit",
@@ -107,6 +128,27 @@
         "category": "SystemStudio"
       },
       {
+        "command": "systemstudioCis310.createAssemblyLab",
+        "title": "CIS 310: Create Portable Assembly Lab",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.checkAssemblyEnvironment",
+        "title": "CIS 310: Check Assembly Toolchain",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.runAssembly",
+        "title": "CIS 310: Build and Run Portable Assembly",
+        "category": "SystemStudio",
+        "icon": "$(run)"
+      },
+      {
+        "command": "systemstudioCis310.openMasmGuide",
+        "title": "CIS 310: Open Windows MASM Guide",
+        "category": "SystemStudio"
+      },
+      {
         "command": "systemstudioCis310.refresh",
         "title": "Refresh",
         "category": "SystemStudio",
@@ -129,6 +171,24 @@
           ".dig"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "nasm",
+        "aliases": [
+          "NASM Assembly",
+          "NASM"
+        ],
+        "extensions": [
+          ".asm"
+        ],
+        "configuration": "./assembly-language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "nasm",
+        "scopeName": "source.nasm",
+        "path": "./syntaxes/nasm.tmLanguage.json"
       }
     ],
     "customEditors": [
@@ -167,7 +227,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Install Digital, create a starter circuit workspace, run deterministic tests, and open `.dig` files from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)"
+        "contents": "Install Digital, create circuits, run deterministic tests, and use the portable assembly lab from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create New Circuit](command:systemstudioCis310.createCircuit)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)\n[Create Portable Assembly Lab](command:systemstudioCis310.createAssemblyLab)"
       },
       {
         "view": "systemstudioCis310.materials",
@@ -202,6 +262,18 @@
           "command": "systemstudioCis310.exportSvg",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",
           "group": "systemstudio@3"
+        },
+        {
+          "command": "systemstudioCis310.runAssembly",
+          "when": "resourceExtname == .asm && isWorkspaceTrusted",
+          "group": "systemstudio@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "systemstudioCis310.createAssignmentCircuit",
+          "when": "view == systemstudioCis310.materials && viewItem == systemstudioCis310.assignmentWithCircuit",
+          "group": "inline@1"
         }
       ],
       "editor/title": [
@@ -214,6 +286,11 @@
           "command": "systemstudioCis310.testCircuit",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",
           "group": "navigation@2"
+        },
+        {
+          "command": "systemstudioCis310.runAssembly",
+          "when": "resourceExtname == .asm && isWorkspaceTrusted",
+          "group": "navigation@1"
         }
       ]
     },

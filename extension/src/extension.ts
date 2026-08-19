@@ -1,6 +1,7 @@
 import { access } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
@@ -14,9 +15,10 @@ const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/')
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
   const manager = new DigitalManager(context, output);
+  const assemblyManager = new AssemblyManager(context, output);
   const courseMaterials = await CourseMaterials.load(context);
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
-  const statusTree = new StatusTreeProvider(manager);
+  const statusTree = new StatusTreeProvider(manager, assemblyManager);
   const tests = new DigitalTestController(manager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
   statusBar.command = 'systemstudioCis310.checkEnvironment';
@@ -149,6 +151,54 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await showFailure('Could not launch Digital', error, output);
       }
     }),
+    vscode.commands.registerCommand('systemstudioCis310.createCircuit', async () => {
+      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the new Digital circuit');
+      const defaultUri = workspaceFolder
+        ? vscode.Uri.joinPath(workspaceFolder.uri, 'circuits', 'work', 'new-circuit.dig')
+        : undefined;
+      const uri = await vscode.window.showSaveDialog({
+        title: 'Create a new Digital circuit',
+        defaultUri,
+        saveLabel: 'Create Circuit',
+        filters: { 'Digital circuits': ['dig'] }
+      });
+      if (!uri || uri.scheme !== 'file') {
+        return;
+      }
+      const target = uri.fsPath.toLowerCase().endsWith('.dig') ? uri.fsPath : `${uri.fsPath}.dig`;
+      try {
+        await manager.createBlankCircuit(target);
+        await offerToOpenCircuit(vscode.Uri.file(target));
+      } catch (error) {
+        await showFailure('Could not create the Digital circuit', error, output);
+      }
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.createAssignmentCircuit', async (candidate: unknown) => {
+      const resourceId = courseResourceId(candidate);
+      const resource = resourceId ? courseMaterials.getResource(resourceId) : undefined;
+      if (!resource?.circuitStarter) {
+        await vscode.window.showErrorMessage('This course-material entry does not define a circuit starter.');
+        return;
+      }
+      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the assignment circuit');
+      if (!workspaceFolder) {
+        await vscode.window.showErrorMessage('Open a local folder before creating an assignment circuit.');
+        return;
+      }
+      try {
+        const target = await createUniqueCircuit(
+          manager,
+          path.join(workspaceFolder.uri.fsPath, 'circuits', 'work'),
+          resource.circuitStarter.fileName
+        );
+        await offerToOpenCircuit(
+          vscode.Uri.file(target),
+          `Created ${path.basename(target)} for ${resource.title}`
+        );
+      } catch (error) {
+        await showFailure('Could not create the assignment circuit', error, output);
+      }
+    }),
     vscode.commands.registerCommand('systemstudioCis310.testCircuit', async (candidate?: vscode.Uri) => {
       if (!requireTrustedWorkspace()) {
         return;
@@ -218,6 +268,109 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await showFailure('Could not create the starter workspace', error, output);
       }
     }),
+    vscode.commands.registerCommand('systemstudioCis310.createAssemblyLab', async () => {
+      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the portable assembly lab');
+      if (!workspaceFolder) {
+        await vscode.window.showErrorMessage('Open a local folder before creating the portable assembly lab.');
+        return;
+      }
+      const existingGuide = path.join(workspaceFolder.uri.fsPath, 'assembly', 'README.md');
+      try {
+        await access(existingGuide);
+        const action = await vscode.window.showInformationMessage(
+          `The portable assembly lab already exists at ${path.dirname(existingGuide)}.`,
+          'Open Guide'
+        );
+        if (action === 'Open Guide') {
+          await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(existingGuide));
+        }
+        return;
+      } catch {
+        // Expected when the lab has not been created yet.
+      }
+      try {
+        const created = await assemblyManager.createLab(workspaceFolder.uri.fsPath);
+        const action = await vscode.window.showInformationMessage(
+          `Created the portable assembly lab at ${created}.`,
+          'Open Guide',
+          'Open hello.asm'
+        );
+        if (action === 'Open Guide') {
+          await vscode.commands.executeCommand(
+            'markdown.showPreview',
+            vscode.Uri.file(path.join(created, 'README.md'))
+          );
+        } else if (action === 'Open hello.asm') {
+          await vscode.window.showTextDocument(vscode.Uri.file(path.join(created, 'portable', 'hello.asm')));
+        }
+      } catch (error) {
+        await showFailure('Could not create the portable assembly lab', error, output);
+      }
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.checkAssemblyEnvironment', async () => {
+      const status = await assemblyManager.getStatus();
+      output.appendLine([
+        'CIS 310 Portable Assembly Lab environment check',
+        `Container platform: linux/amd64`,
+        `Docker available: ${status.dockerAvailable ? 'yes' : 'no'}`,
+        `Docker server: ${status.dockerVersion ?? 'not detected'}`,
+        `Course image: ${assemblyManager.imageName}`,
+        `Course image ready: ${status.imageReady ? 'yes' : 'no'}`,
+        `Workspace trusted: ${vscode.workspace.isTrusted ? 'yes' : 'no'}`,
+        `Detail: ${status.detail}`
+      ].join('\n'));
+      output.show(true);
+      if (!status.dockerAvailable) {
+        await showDockerRequired();
+        return;
+      }
+      if (!status.imageReady) {
+        const action = await vscode.window.showInformationMessage(
+          'Docker is ready. Build the local CIS 310 NASM x86-64 course image now?',
+          'Build Course Image'
+        );
+        if (action === 'Build Course Image') {
+          await prepareAssemblyImage(assemblyManager, output);
+          statusTree.refresh();
+        }
+        return;
+      }
+      await vscode.window.showInformationMessage('Portable Assembly Lab is ready: NASM x86-64 in the linux/amd64 course container.');
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.runAssembly', async (candidate?: vscode.Uri) => {
+      if (!requireTrustedWorkspace()) {
+        return;
+      }
+      const uri = await resolveAssemblyUri(candidate);
+      if (!uri) {
+        return;
+      }
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+      if (!workspaceFolder || workspaceFolder.uri.scheme !== 'file') {
+        await vscode.window.showErrorMessage('The assembly source must be inside an open local workspace folder.');
+        return;
+      }
+      if (!(await prepareAssemblyImage(assemblyManager, output))) {
+        return;
+      }
+      try {
+        const result = await vscode.window.withProgress(
+          { location: vscode.ProgressLocation.Notification, title: 'Building and running portable assembly', cancellable: true },
+          (_progress, token) => assemblyManager.run(uri.fsPath, workspaceFolder.uri.fsPath, token)
+        );
+        output.show(true);
+        if (result.code === 0 && !result.timedOut && !result.cancelled) {
+          await vscode.window.showInformationMessage(`Assembly completed: ${path.basename(uri.fsPath)}. See SystemStudio output.`);
+        } else {
+          await vscode.window.showErrorMessage(`Assembly failed: ${path.basename(uri.fsPath)}. See SystemStudio output.`);
+        }
+      } catch (error) {
+        await showFailure('Could not run the portable assembly source', error, output);
+      }
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openMasmGuide', async () => {
+      await vscode.commands.executeCommand('markdown.showPreview', assemblyManager.masmGuideUri);
+    }),
     vscode.commands.registerCommand('systemstudioCis310.browseLectures', async () => {
       await browseCourseMaterials(courseMaterials, 'presentation', 'Choose a CIS 310 presentation');
     }),
@@ -266,7 +419,7 @@ async function browseCourseMaterials(
 ): Promise<void> {
   const entries = courseMaterials.getResources(kind).map((resource) => ({
     label: resource.title,
-    description: kind === 'presentation' ? 'private Drive source' : 'packaged reference',
+    description: kind === 'presentation' ? 'packaged offline PDF' : 'packaged reference',
     detail: resource.concepts.join(', '),
     resource
   }));
@@ -414,4 +567,124 @@ async function showFailure(title: string, error: unknown, output: vscode.OutputC
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+async function chooseWorkspaceFolder(placeHolder: string): Promise<vscode.WorkspaceFolder | undefined> {
+  const folders = vscode.workspace.workspaceFolders?.filter((folder) => folder.uri.scheme === 'file') ?? [];
+  if (folders.length <= 1) {
+    return folders[0];
+  }
+  const selected = await vscode.window.showQuickPick(
+    folders.map((folder) => ({ label: folder.name, description: folder.uri.fsPath, folder })),
+    { placeHolder }
+  );
+  return selected?.folder;
+}
+
+async function createUniqueCircuit(manager: DigitalManager, directory: string, requestedFileName: string): Promise<string> {
+  const extension = path.extname(requestedFileName);
+  const stem = path.basename(requestedFileName, extension);
+  for (let attempt = 1; attempt <= 999; attempt += 1) {
+    const fileName = attempt === 1 ? requestedFileName : `${stem}-${attempt}${extension}`;
+    const target = path.join(directory, fileName);
+    try {
+      await manager.createBlankCircuit(target);
+      return target;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') {
+        throw error;
+      }
+    }
+  }
+  throw new Error(`Could not choose an unused circuit filename under ${directory}.`);
+}
+
+async function offerToOpenCircuit(uri: vscode.Uri, label = 'Created a blank Digital circuit'): Promise<void> {
+  const actions = nativeDigitalUnavailableReason() ? ['Reveal File'] : ['Open in Digital', 'Reveal File'];
+  const action = await vscode.window.showInformationMessage(`${label}: ${uri.fsPath}`, ...actions);
+  if (action === 'Open in Digital') {
+    await vscode.commands.executeCommand('systemstudioCis310.openDigital', uri);
+  } else if (action === 'Reveal File') {
+    await vscode.commands.executeCommand('revealInExplorer', uri);
+  }
+}
+
+function courseResourceId(candidate: unknown): string | undefined {
+  if (typeof candidate === 'string') {
+    return candidate;
+  }
+  if (typeof candidate !== 'object' || candidate === null) {
+    return undefined;
+  }
+  const resource = (candidate as { resource?: unknown }).resource;
+  if (typeof resource !== 'object' || resource === null) {
+    return undefined;
+  }
+  const id = (resource as { id?: unknown }).id;
+  return typeof id === 'string' ? id : undefined;
+}
+
+async function resolveAssemblyUri(candidate?: vscode.Uri): Promise<vscode.Uri | undefined> {
+  let uri = candidate;
+  if (!uri && vscode.window.activeTextEditor?.document.uri.path.toLowerCase().endsWith('.asm')) {
+    uri = vscode.window.activeTextEditor.document.uri;
+  }
+  if (!uri) {
+    const selected = await vscode.window.showOpenDialog({
+      title: 'Select a portable NASM source file',
+      canSelectFiles: true,
+      canSelectFolders: false,
+      canSelectMany: false,
+      filters: { 'NASM assembly': ['asm'] }
+    });
+    uri = selected?.[0];
+  }
+  if (!uri) {
+    return undefined;
+  }
+  if (uri.scheme !== 'file' || !uri.fsPath.toLowerCase().endsWith('.asm')) {
+    await vscode.window.showErrorMessage('Select a local NASM source file with the .asm extension.');
+    return undefined;
+  }
+  return uri;
+}
+
+async function prepareAssemblyImage(manager: AssemblyManager, output: vscode.OutputChannel): Promise<boolean> {
+  const status = await manager.getStatus();
+  if (!status.dockerAvailable) {
+    await showDockerRequired();
+    return false;
+  }
+  if (status.imageReady) {
+    return true;
+  }
+  const decision = await vscode.window.showInformationMessage(
+    'Build the CIS 310 Portable Assembly Lab image? Docker will download a pinned Debian linux/amd64 base and install NASM, binutils, Make, and GDB locally. The first build may take several minutes.',
+    { modal: true },
+    'Build Course Image'
+  );
+  if (decision !== 'Build Course Image') {
+    return false;
+  }
+  try {
+    await vscode.window.withProgress(
+      { location: vscode.ProgressLocation.Notification, title: 'Building CIS 310 portable assembly toolchain', cancellable: true },
+      (_progress, token) => manager.buildImage(token)
+    );
+    await vscode.window.showInformationMessage('Portable Assembly Lab image is ready.');
+    return true;
+  } catch (error) {
+    await showFailure('Could not build the portable assembly toolchain', error, output);
+    return false;
+  }
+}
+
+async function showDockerRequired(): Promise<void> {
+  const action = await vscode.window.showWarningMessage(
+    'The Portable Assembly Lab requires Docker Desktop or Docker Engine to be installed and running. SystemStudio does not install privileged system software automatically.',
+    'Open Docker Setup'
+  );
+  if (action === 'Open Docker Setup') {
+    await vscode.env.openExternal(vscode.Uri.parse('https://docs.docker.com/get-started/get-docker/'));
+  }
 }

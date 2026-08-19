@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { AssemblyManager } from './assemblyManager';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import type { DigitalManager } from './digitalManager';
@@ -7,7 +8,10 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
   private readonly changeEmitter = new vscode.EventEmitter<vscode.TreeItem | undefined>();
   readonly onDidChangeTreeData = this.changeEmitter.event;
 
-  constructor(private readonly manager: DigitalManager) {}
+  constructor(
+    private readonly manager: DigitalManager,
+    private readonly assemblyManager: AssemblyManager
+  ) {}
 
   refresh(): void {
     this.changeEmitter.fire(undefined);
@@ -18,7 +22,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
   }
 
   async getChildren(): Promise<vscode.TreeItem[]> {
-    const status = await this.manager.getStatus();
+    const [status, assembly] = await Promise.all([this.manager.getStatus(), this.assemblyManager.getStatus()]);
     const headlessRemote = isHeadlessRemote(vscode.env.remoteName);
     const digital = new vscode.TreeItem(
       status.integrityVerified
@@ -67,6 +71,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       'new-folder'
     );
     const materials = actionItem('Open course-material guide', 'systemstudioCis310.openMaterialsIndex', 'library');
+    const createCircuit = actionItem('Create a new Digital circuit', 'systemstudioCis310.createCircuit', 'new-file');
     const open = headlessRemote
       ? informationItem(
           'Digital GUI: use local desktop VS Code',
@@ -74,9 +79,51 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
           'remote'
         )
       : actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
+    const assemblyStatus = new vscode.TreeItem(
+      assembly.imageReady
+        ? 'Portable assembly: ready'
+        : assembly.dockerAvailable
+          ? 'Portable assembly: setup required'
+          : 'Portable assembly: Docker unavailable',
+      vscode.TreeItemCollapsibleState.None
+    );
+    assemblyStatus.iconPath = new vscode.ThemeIcon(assembly.imageReady ? 'verified-filled' : 'terminal');
+    assemblyStatus.description = assembly.imageReady
+      ? 'NASM x86-64'
+      : assembly.dockerAvailable
+        ? 'build course image'
+        : 'install/start/allow Docker';
+    assemblyStatus.command = {
+      command: 'systemstudioCis310.checkAssemblyEnvironment',
+      title: 'Check portable assembly toolchain'
+    };
+    const createAssembly = actionItem(
+      'Create portable assembly lab',
+      'systemstudioCis310.createAssemblyLab',
+      'terminal-bash'
+    );
+    const runAssembly = actionItem(
+      'Build and run assembly file',
+      'systemstudioCis310.runAssembly',
+      'run'
+    );
+    const masm = actionItem('Open Windows MASM guide', 'systemstudioCis310.openMasmGuide', 'book');
     const docs = actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book');
 
-    return [digital, java, trust, starter, materials, open, docs];
+    return [
+      digital,
+      java,
+      trust,
+      starter,
+      materials,
+      createCircuit,
+      open,
+      assemblyStatus,
+      createAssembly,
+      runAssembly,
+      masm,
+      docs
+    ];
   }
 
   dispose(): void {

@@ -17,7 +17,7 @@ The Markdown/text versions were selected over duplicate DOCX files for Assignmen
 
 ## Presentation selection
 
-The folder has one primary item for each Lecture 1--12 and a second, detailed I/O PDF associated with Lecture 8. All are recorded in the materials manifest. Topic labels were checked against readable text extracted from each source.
+The folder has one primary item for each Lecture 1--12 and a second, detailed I/O PDF associated with Lecture 8. All are recorded in the materials manifest. Topic labels were checked against readable text extracted from each source. To remove the private-Drive runtime dependency, stored PowerPoint files were downloaded and converted to PDF with LibreOffice; stored PDFs were copied unchanged. The manifest binds every packaged PDF by local path and SHA-256 while retaining the original Drive URL only as provenance.
 
 ## Exclusions
 
@@ -26,10 +26,10 @@ Search results outside the bounded folder contained grades, examinations, studen
 ## Instructor release checklist
 
 - [ ] Confirm these are the intended presentation revisions for the new course offering.
-- [ ] Publish presentations through student-accessible Canvas or Drive URLs and update the manifest.
+- [ ] Review the packaged PDF rendering and approve the presentation revisions for student release.
 - [ ] Update assignment deadlines, points, group rules, submission channel, and repository requirements.
 - [ ] Resolve any wording or technical corrections in the assignments.
 - [ ] Add instructor-authored public testcases without including hidden tests or solutions.
 - [ ] Confirm that the half-adder reference is permitted and that no direct ALU/processor solution is distributed.
-- [ ] Recompute assignment hashes and increment the course-pack version.
+- [ ] Recompute all packaged-material hashes and increment the course-pack version after any content change.
 - [ ] Run the extension's validation and cross-platform smoke tests.

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "NASM Assembly",
+  "scopeName": "source.nasm",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#directives" },
+    { "include": "#registers" },
+    { "include": "#instructions" },
+    { "match": "^[A-Za-z_.$?][A-Za-z0-9_.$?#@~]*:", "name": "entity.name.function.label.nasm" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "begin": ";", "end": "$", "name": "comment.line.semicolon.nasm" }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        { "begin": "\"", "end": "\"", "name": "string.quoted.double.nasm" },
+        { "begin": "'", "end": "'", "name": "string.quoted.single.nasm" }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        { "match": "\\b(?:0x[0-9A-Fa-f]+|[0-9A-Fa-f]+h|0b[01]+|[01]+b|[0-9]+)\\b", "name": "constant.numeric.nasm" }
+      ]
+    },
+    "directives": {
+      "patterns": [
+        { "match": "(?i)\\b(?:bits|section|segment|global|extern|equ|db|dw|dd|dq|resb|resw|resd|resq|times)\\b", "name": "keyword.control.directive.nasm" }
+      ]
+    },
+    "registers": {
+      "patterns": [
+        { "match": "(?i)\\b(?:r(?:ax|bx|cx|dx|si|di|bp|sp|8|9|10|11|12|13|14|15)|e(?:ax|bx|cx|dx|si|di|bp|sp)|(?:ax|bx|cx|dx|si|di|bp|sp)|[abcd][lh])\\b", "name": "variable.language.register.nasm" }
+      ]
+    },
+    "instructions": {
+      "patterns": [
+        { "match": "(?i)\\b(?:mov|lea|push|pop|add|sub|inc|dec|imul|mul|idiv|div|and|or|xor|not|shl|shr|cmp|test|jmp|je|jne|jg|jge|jl|jle|ja|jae|jb|jbe|call|ret|syscall|nop)\\b", "name": "keyword.operator.instruction.nasm" }
+      ]
+    }
+  }
+}
