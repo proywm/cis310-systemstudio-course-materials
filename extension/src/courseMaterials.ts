@@ -47,8 +47,7 @@ export class CourseMaterials {
   async openResource(resource: CourseMaterialResource): Promise<void> {
     if (resource.localPath) {
       const uri = vscode.Uri.file(resolveCoursePackPath(this.rootPath, resource.localPath));
-      const document = await vscode.workspace.openTextDocument(uri);
-      await vscode.window.showTextDocument(document, { preview: true });
+      await vscode.commands.executeCommand('markdown.showPreview', uri);
       return;
     }
     await vscode.env.openExternal(vscode.Uri.parse(resource.sourceUrl));
@@ -56,8 +55,7 @@ export class CourseMaterials {
 
   async openStudentIndex(): Promise<void> {
     const uri = vscode.Uri.file(resolveCoursePackPath(this.rootPath, this.manifest.studentIndexPath));
-    const document = await vscode.workspace.openTextDocument(uri);
-    await vscode.window.showTextDocument(document, { preview: true });
+    await vscode.commands.executeCommand('markdown.showPreview', uri);
   }
 }
 

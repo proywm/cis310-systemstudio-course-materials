@@ -2,6 +2,8 @@
 
 This is the accelerated CIS 310 implementation track. It gives students one VS Code entry point for installing, opening, previewing, and testing Digital logic circuits and for navigating mapped course materials while the broader senior-design project continues in parallel.
 
+**Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
+
 ## What is implemented
 
 - first-run prompt to install the pinned Digital v0.31 release;
@@ -14,6 +16,7 @@ This is the accelerated CIS 310 implementation track. It gives students one VS C
 - VS Code Test Explorer discovery for `.dig` files containing a `Testcase` component;
 - a CIS 310 activity-bar view showing Digital, Java, and workspace-trust status;
 - a Course Materials view with 13 presentation entries mapped to four assignments;
+- rendered, student-facing previews for the course guide and assignments rather than raw Markdown source;
 - local, SHA-256-verified assignment references copied into generated starter workspaces;
 - a starter-workspace generator with one upstream half-adder orientation example and an empty `circuits/work/` area; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
@@ -60,6 +63,8 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 7. Use **Run tests** or VS Code Test Explorer for deterministic circuit evidence.
 8. Use **Open in Digital** for graphical editing and interactive simulation.
 9. Save in Digital, return to VS Code, refresh the preview, and rerun tests.
+
+Course guides and assignments open as rendered documents. Instructors and developers can use **Open With → Text Editor** when they intentionally need to inspect or edit the Markdown source.
 
 ## Commands
 

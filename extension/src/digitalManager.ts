@@ -303,7 +303,13 @@ export class DigitalManager {
       );
       await writeFile(
         path.join(staging, '.vscode', 'settings.json'),
-        `${JSON.stringify({ 'files.associations': { '*.dig': 'digital-circuit' } }, null, 2)}\n`,
+        `${JSON.stringify({
+          'files.associations': { '*.dig': 'digital-circuit' },
+          'workbench.editorAssociations': {
+            'course/*.md': 'vscode.markdown.preview.editor',
+            'course/assignments/*.md': 'vscode.markdown.preview.editor'
+          }
+        }, null, 2)}\n`,
         { encoding: 'utf8', flag: 'wx' }
       );
       await rename(staging, target);

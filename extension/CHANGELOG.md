@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.2.2
+
+- Open the course guide and assignments as rendered Markdown previews instead of showing students the Markdown source.
+- Configure generated starter workspaces to render files under `course/` in the Markdown preview by default.
+- Make it explicit that Remote SSH is optional and replace the unavailable Digital GUI action with a local-desktop explanation on headless remote hosts.
+
 ## 0.2.1
 
 - Added a Remote SSH workspace-host fallback for course materials, starter workspaces, SVG previews, and headless tests.

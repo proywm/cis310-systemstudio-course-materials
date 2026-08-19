@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { isHeadlessRemote } from './core/runtimeEnvironment';
 import type { DigitalManager } from './digitalManager';
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -18,6 +19,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
 
   async getChildren(): Promise<vscode.TreeItem[]> {
     const status = await this.manager.getStatus();
+    const headlessRemote = isHeadlessRemote(vscode.env.remoteName);
     const digital = new vscode.TreeItem(
       status.integrityVerified
         ? `Digital ${DIGITAL_RELEASE.displayVersion}: installed`
@@ -29,7 +31,9 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
     digital.iconPath = new vscode.ThemeIcon(
       status.integrityVerified ? 'verified-filled' : status.installed ? 'error' : 'cloud-download'
     );
-    digital.description = status.integrityVerified ? 'ready' : 'setup required';
+    digital.description = status.integrityVerified
+      ? headlessRemote ? 'preview/tests ready' : 'ready'
+      : 'setup required';
     digital.command = {
       command: 'systemstudioCis310.setupDigital',
       title: 'Install or verify Digital'
@@ -63,7 +67,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       'new-folder'
     );
     const materials = actionItem('Open course-material guide', 'systemstudioCis310.openMaterialsIndex', 'library');
-    const open = actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
+    const open = headlessRemote
+      ? informationItem(
+          'Digital GUI: use local desktop VS Code',
+          `${vscode.env.remoteName} has no graphical display`,
+          'remote'
+        )
+      : actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
     const docs = actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book');
 
     return [digital, java, trust, starter, materials, open, docs];
@@ -72,6 +82,14 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
   dispose(): void {
     this.changeEmitter.dispose();
   }
+}
+
+function informationItem(label: string, description: string, icon: string): vscode.TreeItem {
+  const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
+  item.iconPath = new vscode.ThemeIcon(icon);
+  item.description = description;
+  item.tooltip = 'Remote SSH is optional. Use local desktop VS Code for the full Digital graphical editing workflow.';
+  return item;
 }
 
 function actionItem(label: string, command: string, icon: string): vscode.TreeItem {

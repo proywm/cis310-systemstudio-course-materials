@@ -30,7 +30,7 @@ This README is the project’s main entry point. Start here, then follow the doc
 | Team and effort | 3--4 interdisciplinary students; approximately 600--800 total hours |
 | Reference workflows | CIS 450 C/xv6 systems programming and CIS 310 4-bit processor design |
 | Product form | Installable VS Code extension with a versioned course environment |
-| Current status | CIS 310 extension v0.2.1 integrates the managed simulator, a review-gated Fall 2025 course-material pack, and a Remote SSH fallback for non-GUI workflows; broader senior-design implementation and classroom validation remain pending |
+| Current status | CIS 310 extension v0.2.2 integrates the managed simulator, rendered course materials, and a Remote SSH fallback for non-GUI workflows; broader senior-design implementation and classroom validation remain pending |
 
 SystemStudio AI will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and a constrained AI coach in a single VS Code experience.
 

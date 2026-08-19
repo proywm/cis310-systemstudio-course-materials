@@ -42,7 +42,7 @@ async function downloadWithRedirects(
       url,
       {
         headers: {
-          'User-Agent': 'SystemStudio-CIS310-VSCode/0.2.1',
+          'User-Agent': 'SystemStudio-CIS310-VSCode/0.2.2',
           Accept: 'application/octet-stream'
         }
       },

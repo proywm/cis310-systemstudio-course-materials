@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "A managed Digital simulator and course-material workflow for CIS 310 inside Visual Studio Code.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",

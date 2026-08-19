@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { isHeadlessRemote } from './core/runtimeEnvironment';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
@@ -365,10 +366,7 @@ function requireTrustedWorkspace(): boolean {
 }
 
 function nativeDigitalUnavailableReason(): string | undefined {
-  if (!vscode.env.remoteName) {
-    return undefined;
-  }
-  if (process.platform === 'linux' && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) {
+  if (isHeadlessRemote(vscode.env.remoteName)) {
     return `The native Digital editor cannot open on this ${vscode.env.remoteName} host because no graphical display is available. ` +
       'Circuit previews, tests, course materials, and starter workspaces remain available. Use local desktop VS Code for graphical editing.';
   }
