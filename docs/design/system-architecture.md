@@ -86,7 +86,7 @@ Adapters translate course-pack operations into controlled processes. They must:
 
 ### 5. Processor editor and simulator
 
-The processor design is stored as text-backed JSON. The visual editor is a projection of that model. The simulation core must be independent of the webview and expose a deterministic API such as:
+The target senior-design architecture stores the processor design as text-backed JSON. The visual editor is a projection of that model. The simulation core must be independent of the webview and expose a deterministic API such as:
 
 ```text
 load(design)
@@ -99,6 +99,8 @@ exportTrace()
 ```
 
 This interface allows unit tests and alternate renderers without starting VS Code.
+
+The accelerated CIS 310 MVP provides an earlier adapter layer rather than this full custom editor. It manages Digital v0.31 in extension global storage, uses the official CLI for test and SVG evidence, displays the SVG inside a custom editor, and opens Digital's native Swing window for graphical editing. The adapter is implemented and locally smoke-tested; the JSON editor and internal simulator above remain planned senior-design scope.
 
 ### 6. Evidence store
 

@@ -8,7 +8,7 @@ This README is the project’s main entry point. Start here, then follow the doc
 
 [![SystemStudio AI one-page proposal preview](docs/assets/systemstudio-ai-proposal-preview.png)](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf)
 
-*Current one-page proposal preview. Click the screenshot to open the PDF. The software UI has not yet been implemented.*
+*Current one-page proposal preview. Click the screenshot to open the PDF. An accelerated CIS 310 extension MVP is now implemented; the broader senior-design product remains in development.*
 
 ## Start here
 
@@ -17,7 +17,8 @@ This README is the project’s main entry point. Start here, then follow the doc
 | **Bruce / senior-design coordinator** | [One-page proposal](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf) | [Product requirements](docs/design/product-requirements.md) → [implementation roadmap](docs/planning/implementation-roadmap.md) → [evaluation plan](docs/planning/evaluation-plan.md) |
 | **Senior-design student team** | [Product requirements](docs/design/product-requirements.md) | [Course workflows](docs/design/course-workflows.md) → [system architecture](docs/design/system-architecture.md) → [implementation roadmap](docs/planning/implementation-roadmap.md) → [decision log](docs/planning/decision-log.md) |
 | **Teaching or assessment reviewer** | [Student-evaluation findings](docs/research/student-evaluation-findings.md) | [Measurement research](docs/research/measurement-literature.md) → [RQ-to-instrument matrix](docs/planning/rq-instrument-matrix.md) → [instruments](instruments/README.md) → [analysis plan](docs/planning/analysis-plan.md) |
-| **Software developer** | [Technical feasibility](docs/research/technical-feasibility.md) | [System architecture](docs/design/system-architecture.md) → [schemas](schemas/README.md) → [contribution guide](CONTRIBUTING.md) |
+| **CIS 310 pilot user** | [Extension guide](extension/README.md) | [Technical feasibility](docs/research/technical-feasibility.md) |
+| **Software developer** | [CIS 310 extension](extension/README.md) | [Technical feasibility](docs/research/technical-feasibility.md) → [system architecture](docs/design/system-architecture.md) → [schemas](schemas/README.md) → [contribution guide](CONTRIBUTING.md) |
 | **Privacy, security, or AI-safety reviewer** | [AI safety and privacy](docs/design/ai-safety-and-privacy.md) | [Security policy](SECURITY.md) → [expert feedback rubric](instruments/expert-feedback-rubric.md) → [data dictionary](instruments/data-dictionary.md) |
 
 ## Project at a glance
@@ -29,7 +30,7 @@ This README is the project’s main entry point. Start here, then follow the doc
 | Team and effort | 3--4 interdisciplinary students; approximately 600--800 total hours |
 | Reference workflows | CIS 450 C/xv6 systems programming and CIS 310 4-bit processor design |
 | Product form | Installable VS Code extension with a versioned course environment |
-| Current status | Proposal, product specification, research base, and draft evaluation package complete; implementation not yet started |
+| Current status | Accelerated CIS 310 extension MVP implemented and packaged; broader senior-design implementation and classroom validation remain pending |
 
 SystemStudio AI will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and a constrained AI coach in a single VS Code experience.
 
@@ -57,6 +58,14 @@ Students also valued hands-on work, group problem solving, live demonstrations, 
 
 The minimum product is not a general-purpose IDE, a general-purpose circuit simulator, an autonomous grader, or an unrestricted chatbot.
 
+### Semester-start CIS 310 pilot
+
+The accelerated extension now manages a checksum-verified Digital v0.31 installation, detects Java, opens `.dig` circuits in Digital, renders Digital-generated SVG previews inside VS Code, runs embedded circuit tests through the official CLI, publishes eligible circuits to Test Explorer, and generates a starter workspace. This is a technical MVP, not yet evidence of learning impact or classroom readiness. The AI coach, guided-practice system, custom processor canvas, help-packet workflow, and broader CIS 450 environment remain senior-design workstreams.
+
+![Half-adder circuit rendered by the implemented preview pipeline](extension/media/half-adder-preview.png)
+
+*Actual SVG output from the verified Digital v0.31 end-to-end smoke test. The extension displays this artifact inside its VS Code preview toolbar and results panel.*
+
 ## Documentation branches
 
 ### 1. Proposal and project definition
@@ -75,6 +84,7 @@ The minimum product is not a general-purpose IDE, a general-purpose circuit simu
 
 ### 3. Product and technical design
 
+- [Implemented CIS 310 extension](extension/README.md): installation, commands, current workflow, security controls, and limitations.
 - [Course workflows](docs/design/course-workflows.md): student and instructor paths for CIS 310 and CIS 450.
 - [System architecture](docs/design/system-architecture.md): components, trust boundaries, and data flow.
 - [AI safety and privacy](docs/design/ai-safety-and-privacy.md): academic integrity, data minimization, execution safety, and escalation.

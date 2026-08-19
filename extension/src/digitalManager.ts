@@ -1,0 +1,406 @@
+import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { access, cp, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
+import * as path from 'node:path';
+import * as vscode from 'vscode';
+import { equalsSha256, sha256File } from './core/checksum';
+import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { downloadFile } from './core/download';
+import { isSupportedJava, parseJavaVersion, type ParsedJavaVersion } from './core/javaVersion';
+import { runProcess, type ProcessResult } from './core/processRunner';
+import { extractZipSafely } from './core/safeZip';
+
+export interface JavaStatus {
+  executable: string;
+  available: boolean;
+  supported: boolean;
+  version?: ParsedJavaVersion;
+  detail: string;
+}
+
+export interface DigitalStatus {
+  installed: boolean;
+  integrityVerified: boolean;
+  version: string;
+  jarPath: string;
+  java: JavaStatus;
+}
+
+export interface CircuitTestResult {
+  passed: boolean;
+  output: string;
+  process: ProcessResult;
+}
+
+interface InstallMarker {
+  version: string;
+  installedAt: string;
+  sourceUrl: string;
+  archiveSha256: string;
+  jarSha256: string;
+  license: string;
+}
+
+export class DigitalManager {
+  private installPromise: Promise<void> | undefined;
+
+  constructor(
+    private readonly context: vscode.ExtensionContext,
+    private readonly output: vscode.OutputChannel
+  ) {}
+
+  get versionDirectory(): string {
+    return path.join(this.context.globalStorageUri.fsPath, 'digital', DIGITAL_RELEASE.version);
+  }
+
+  get digitalHome(): string {
+    return path.join(this.versionDirectory, 'Digital');
+  }
+
+  get jarPath(): string {
+    return path.join(this.versionDirectory, ...DIGITAL_RELEASE.jarRelativePath);
+  }
+
+  get javaExecutable(): string {
+    return vscode.workspace.getConfiguration('systemstudioCis310').get<string>('javaPath', 'java').trim() || 'java';
+  }
+
+  async getStatus(): Promise<DigitalStatus> {
+    const java = await this.checkJava();
+    let installed = false;
+    let integrityVerified = false;
+    try {
+      await access(this.jarPath);
+      installed = true;
+      integrityVerified = equalsSha256(await sha256File(this.jarPath), DIGITAL_RELEASE.jarSha256);
+    } catch {
+      installed = false;
+    }
+    return {
+      installed,
+      integrityVerified,
+      version: DIGITAL_RELEASE.displayVersion,
+      jarPath: this.jarPath,
+      java
+    };
+  }
+
+  async checkJava(): Promise<JavaStatus> {
+    const executable = this.javaExecutable;
+    try {
+      const result = await runProcess(executable, ['-version'], { timeoutMs: 10_000, maxOutputBytes: 128 * 1024 });
+      const detail = `${result.stdout}\n${result.stderr}`.trim();
+      const version = parseJavaVersion(detail);
+      return {
+        executable,
+        available: result.code === 0 || version !== undefined,
+        supported: isSupportedJava(version),
+        version,
+        detail
+      };
+    } catch (error) {
+      return {
+        executable,
+        available: false,
+        supported: false,
+        detail: error instanceof Error ? error.message : String(error)
+      };
+    }
+  }
+
+  async install(progress: vscode.Progress<{ message?: string; increment?: number }>, token: vscode.CancellationToken): Promise<void> {
+    if (!this.installPromise) {
+      this.installPromise = this.performInstall(progress, token).finally(() => {
+        this.installPromise = undefined;
+      });
+    }
+    return this.installPromise;
+  }
+
+  private async performInstall(
+    progress: vscode.Progress<{ message?: string; increment?: number }>,
+    token: vscode.CancellationToken
+  ): Promise<void> {
+    const storageRoot = this.context.globalStorageUri.fsPath;
+    const digitalRoot = path.join(storageRoot, 'digital');
+    const downloads = path.join(digitalRoot, 'downloads');
+    const archive = path.join(downloads, DIGITAL_RELEASE.archiveName);
+    const partialArchive = `${archive}.part`;
+    const staging = path.join(digitalRoot, `.staging-${DIGITAL_RELEASE.version}-${process.pid}`);
+
+    await mkdir(downloads, { recursive: true });
+    await rm(staging, { recursive: true, force: true });
+    try {
+      let archiveReady = false;
+      try {
+        archiveReady = equalsSha256(await sha256File(archive), DIGITAL_RELEASE.archiveSha256);
+      } catch {
+        archiveReady = false;
+      }
+
+      if (!archiveReady) {
+        progress.report({ message: `Downloading Digital ${DIGITAL_RELEASE.displayVersion}…` });
+        let lastPercent = 0;
+        await downloadFile(DIGITAL_RELEASE.downloadUrl, partialArchive, {
+          cancellation: token,
+          onProgress: ({ receivedBytes, totalBytes }) => {
+            if (!totalBytes) {
+              progress.report({ message: `Downloaded ${formatBytes(receivedBytes)}…` });
+              return;
+            }
+            const percent = Math.floor((receivedBytes / totalBytes) * 100);
+            const increment = Math.max(0, percent - lastPercent);
+            lastPercent = percent;
+            progress.report({ message: `Downloading Digital ${percent}%`, increment });
+          }
+        });
+        progress.report({ message: 'Verifying Digital archive…' });
+        const archiveHash = await sha256File(partialArchive);
+        if (!equalsSha256(archiveHash, DIGITAL_RELEASE.archiveSha256)) {
+          throw new Error(`Digital archive checksum mismatch. Expected ${DIGITAL_RELEASE.archiveSha256}, received ${archiveHash}.`);
+        }
+        await rm(archive, { force: true });
+        await rename(partialArchive, archive);
+      }
+
+      if (token.isCancellationRequested) {
+        throw new Error('Digital installation cancelled.');
+      }
+
+      progress.report({ message: 'Extracting Digital into extension storage…' });
+      await mkdir(staging, { recursive: true });
+      await extractZipSafely(archive, staging);
+
+      const stagedJar = path.join(staging, ...DIGITAL_RELEASE.jarRelativePath);
+      const jarHash = await sha256File(stagedJar);
+      if (!equalsSha256(jarHash, DIGITAL_RELEASE.jarSha256)) {
+        throw new Error(`Digital.jar checksum mismatch. Expected ${DIGITAL_RELEASE.jarSha256}, received ${jarHash}.`);
+      }
+
+      const marker: InstallMarker = {
+        version: DIGITAL_RELEASE.version,
+        installedAt: new Date().toISOString(),
+        sourceUrl: DIGITAL_RELEASE.downloadUrl,
+        archiveSha256: DIGITAL_RELEASE.archiveSha256,
+        jarSha256: DIGITAL_RELEASE.jarSha256,
+        license: DIGITAL_RELEASE.licenseName
+      };
+      await writeFile(path.join(staging, 'systemstudio-install.json'), `${JSON.stringify(marker, null, 2)}\n`, 'utf8');
+
+      await rm(this.versionDirectory, { recursive: true, force: true });
+      await rename(staging, this.versionDirectory);
+      this.output.appendLine(`Installed Digital ${DIGITAL_RELEASE.displayVersion} at ${this.versionDirectory}`);
+    } finally {
+      await rm(partialArchive, { force: true });
+      await rm(staging, { recursive: true, force: true });
+    }
+  }
+
+  async launch(circuitPath?: string): Promise<void> {
+    await this.assertReady();
+    await mkdir(this.configurationHome, { recursive: true });
+    const args = [
+      `-Duser.home=${this.configurationHome}`,
+      '-Dapple.awt.application.name=SystemStudio Digital',
+      '-jar',
+      this.jarPath
+    ];
+    if (circuitPath) {
+      await access(circuitPath);
+      args.push(circuitPath);
+    }
+
+    this.output.appendLine(`Launching Digital ${DIGITAL_RELEASE.displayVersion}${circuitPath ? ` with ${circuitPath}` : ''}.`);
+    await new Promise<void>((resolve, reject) => {
+      const child = spawn(this.javaExecutable, args, {
+        cwd: this.digitalHome,
+        env: this.digitalEnvironment,
+        detached: true,
+        shell: false,
+        stdio: 'ignore',
+        windowsHide: false
+      });
+      child.once('error', reject);
+      child.once('spawn', () => {
+        child.unref();
+        resolve();
+      });
+    });
+  }
+
+  async runTests(circuitPath: string, token?: vscode.CancellationToken): Promise<CircuitTestResult> {
+    await this.assertReady();
+    await access(circuitPath);
+    const result = await this.runCli(['test', '-circ', circuitPath, '-verbose'], token);
+    const output = normalizeOutput(result);
+    this.output.appendLine(`Digital test: ${circuitPath}`);
+    this.output.appendLine(output);
+    return { passed: result.code === 0 && !result.timedOut && !result.cancelled, output, process: result };
+  }
+
+  async exportSvg(circuitPath: string, token?: vscode.CancellationToken): Promise<string> {
+    await this.assertReady();
+    const sourceStat = await stat(circuitPath);
+    const fingerprint = createHash('sha256')
+      .update(`${circuitPath}\0${sourceStat.mtimeMs}\0${sourceStat.size}`)
+      .digest('hex')
+      .slice(0, 20);
+    const previewDirectory = path.join(this.context.globalStorageUri.fsPath, 'previews');
+    await mkdir(previewDirectory, { recursive: true });
+    const svgPath = path.join(previewDirectory, `${fingerprint}.svg`);
+    const result = await this.runCli(['svg', '-dig', circuitPath, '-svg', svgPath, '-highContrast'], token);
+    if (result.code !== 0 || result.timedOut || result.cancelled) {
+      throw new Error(`Digital SVG export failed.\n${normalizeOutput(result)}`);
+    }
+    return svgPath;
+  }
+
+  async createStarterWorkspace(parentDirectory: string): Promise<string> {
+    await this.assertReady();
+    const target = path.join(parentDirectory, 'SystemStudio-CIS310-Starter');
+    try {
+      await access(target);
+      throw new Error(`The starter folder already exists: ${target}.`);
+    } catch (error) {
+      if (error instanceof Error && error.message.startsWith('The starter folder already exists:')) {
+        throw error;
+      }
+    }
+    const staging = path.join(parentDirectory, `.SystemStudio-CIS310-Starter.staging-${process.pid}-${Date.now()}`);
+    await mkdir(path.join(staging, 'circuits'), { recursive: true });
+    await mkdir(path.join(staging, '.vscode'), { recursive: true });
+    try {
+      const halfAdderSource = path.join(this.digitalHome, 'examples', 'combinatorial', 'HalfAdder.dig');
+      await cp(halfAdderSource, path.join(staging, 'circuits', 'HalfAdder.dig'), { force: false, errorOnExist: true });
+
+      const aluSource = path.join(this.digitalHome, 'examples', 'processor', 'ALU');
+      await cp(aluSource, path.join(staging, 'circuits', 'ALU'), {
+        recursive: true,
+        force: false,
+        errorOnExist: true
+      });
+
+      await writeFile(path.join(staging, 'README.md'), starterReadme(), { encoding: 'utf8', flag: 'wx' });
+      await writeFile(
+        path.join(staging, 'THIRD_PARTY_NOTICES.md'),
+        starterThirdPartyNotice(),
+        { encoding: 'utf8', flag: 'wx' }
+      );
+      await writeFile(
+        path.join(staging, '.vscode', 'settings.json'),
+        `${JSON.stringify({ 'files.associations': { '*.dig': 'digital-circuit' } }, null, 2)}\n`,
+        { encoding: 'utf8', flag: 'wx' }
+      );
+      await rename(staging, target);
+      return target;
+    } finally {
+      await rm(staging, { recursive: true, force: true });
+    }
+  }
+
+  async containsEmbeddedTests(circuitPath: string): Promise<boolean> {
+    const content = await readFile(circuitPath, 'utf8');
+    return /<elementName>Testcase<\/elementName>/.test(content);
+  }
+
+  private get configurationHome(): string {
+    return path.join(this.context.globalStorageUri.fsPath, 'digital', 'configuration');
+  }
+
+  private get digitalEnvironment(): NodeJS.ProcessEnv {
+    return {
+      ...process.env,
+      XDG_CONFIG_HOME: this.configurationHome
+    };
+  }
+
+  private get timeoutMs(): number {
+    const seconds = vscode.workspace.getConfiguration('systemstudioCis310').get<number>('testTimeoutSeconds', 30);
+    return Math.max(5, Math.min(300, seconds)) * 1000;
+  }
+
+  private async assertReady(): Promise<void> {
+    const status = await this.getStatus();
+    if (!status.installed || !status.integrityVerified) {
+      throw new Error(`Digital ${DIGITAL_RELEASE.displayVersion} is not installed or failed its integrity check.`);
+    }
+    if (!status.java.available) {
+      throw new Error(`Java was not found at “${status.java.executable}”. Install Java ${MINIMUM_JAVA_MAJOR}+ or configure systemstudioCis310.javaPath.`);
+    }
+    if (!status.java.supported) {
+      throw new Error(`Java ${status.java.version?.raw ?? 'unknown'} is unsupported. Digital requires Java ${MINIMUM_JAVA_MAJOR} or newer.`);
+    }
+    await mkdir(this.configurationHome, { recursive: true });
+  }
+
+  private runCli(args: readonly string[], token?: vscode.CancellationToken): Promise<ProcessResult> {
+    return runProcess(
+      this.javaExecutable,
+      [
+        `-Duser.home=${this.configurationHome}`,
+        '-cp',
+        this.jarPath,
+        'CLI',
+        ...args
+      ],
+      {
+        cwd: this.digitalHome,
+        env: this.digitalEnvironment,
+        timeoutMs: this.timeoutMs,
+        maxOutputBytes: 2 * 1024 * 1024,
+        cancellation: token
+      }
+    );
+  }
+}
+
+function normalizeOutput(result: ProcessResult): string {
+  const sections = [result.stdout.trim(), result.stderr.trim()].filter(Boolean);
+  if (result.timedOut) {
+    sections.push('SystemStudio stopped Digital because the operation timed out.');
+  }
+  if (result.cancelled) {
+    sections.push('Operation cancelled.');
+  }
+  if (result.truncated) {
+    sections.push('Output truncated at the configured safety limit.');
+  }
+  if (sections.length === 0) {
+    sections.push(`Digital exited with code ${result.code ?? 'unknown'}.`);
+  }
+  return sections.join('\n');
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024 * 1024) {
+    return `${Math.round(bytes / 1024)} KiB`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`;
+}
+
+function starterReadme(): string {
+  return `# SystemStudio CIS 310 Starter\n\n` +
+    `This workspace was created by the SystemStudio CIS 310 VS Code extension.\n\n` +
+    `## Start\n\n` +
+    `1. Open \`circuits/HalfAdder.dig\`.\n` +
+    `2. Use **Open With → SystemStudio Circuit Preview** for an in-editor SVG view.\n` +
+    `3. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
+    `4. Run **CIS 310: Open Circuit in Digital** to edit and interact with the circuit.\n` +
+    `5. Save in Digital, return to VS Code, and rerun the tests.\n\n` +
+    `The \`circuits/ALU\` folder contains the upstream Digital ALU examples for guided exploration. ` +
+    `They are examples, not an assignment solution.\n\n` +
+    `## Suggested learning sequence\n\n` +
+    `- Verify the half-adder truth table.\n` +
+    `- Trace carry and sum separately.\n` +
+    `- Open \`circuits/ALU/ALU.dig\` and identify its input, operation, and output signals.\n` +
+    `- Create a new circuit for the instructor-provided 4-bit processor milestone.\n`;
+}
+
+function starterThirdPartyNotice(): string {
+  return `# Third-Party Notice\n\n` +
+    `The example \`.dig\` files in this workspace were copied from Digital ${DIGITAL_RELEASE.displayVersion}.\n\n` +
+    `- Project: ${DIGITAL_RELEASE.sourceUrl}\n` +
+    `- Release: ${DIGITAL_RELEASE.releaseUrl}\n` +
+    `- License: ${DIGITAL_RELEASE.licenseName}\n` +
+    `- License text: ${DIGITAL_RELEASE.licenseUrl}\n`;
+}

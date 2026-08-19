@@ -61,6 +61,14 @@ Prefer `ProcessExecution` over a constructed shell string when arguments are kno
 
 ## Processor-simulator options
 
+### Accelerated CIS 310 decision (August 2026)
+
+The semester-start MVP uses Option B with Digital v0.31. The implemented extension downloads the pinned upstream ZIP after user confirmation, verifies the ZIP and JAR SHA-256 values, safely extracts it into VS Code extension-managed storage, and keeps the simulator's configuration there. It uses Digital's headless CLI for embedded testcases and SVG export and launches the native Digital editor for graphical editing and interactive simulation.
+
+This adapter reduces separate student setup without claiming a technical capability VS Code does not provide: Digital is a Java Swing desktop application, so its native window is not embedded in a webview. The rendered SVG preview and deterministic test results are integrated inside VS Code; the full editor opens with one click as a managed companion window. Java remains an explicit prerequisite because silently installing a privileged host runtime would create platform, administrative-policy, and security risks.
+
+The broader senior-design comparison remains useful. A JSON-backed custom processor editor and focused simulator could later replace the companion-window boundary if testing shows that the added accessibility and interaction benefits justify the implementation cost.
+
 Two implementation paths should be prototyped before the October architecture decision:
 
 ### Option A: focused internal simulator
@@ -71,7 +79,7 @@ Implement only the components required for the reference 4-bit processor. Benefi
 
 The open-source **Digital** project is designed for educational logic circuits and includes tests, signal visualization, HDL import/export, and a remote TCP interface. It may be useful as an external engine or interoperability target. Before bundling or redistributing it, the team must review its license, packaging requirements, Java dependency, accessibility, and behavior on supported platforms.
 
-The MVP decision should be based on a two-week spike measuring integration complexity, deterministic trace access, packaging, and testability.
+For the broader product, the internal-simulator decision should still be based on a focused spike measuring editing needs, deterministic trace access, accessibility, packaging, and testability. The existing adapter supplies a working baseline for that comparison.
 
 ## AI integration strategy
 

@@ -1,0 +1,8 @@
+Copyright (c) 2026 Probir Roy. All rights reserved.
+
+This SystemStudio CIS 310 extension is private, unpublished software. No license
+is granted to copy, modify, distribute, sublicense, or sell it without the
+copyright holder's written permission.
+
+Third-party software used or installed by the extension remains subject to its
+own license. See THIRD_PARTY_NOTICES.md.

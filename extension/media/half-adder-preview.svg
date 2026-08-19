@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Digital by H.Neemann -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="47.25mm"
+   height="31.35mm"
+   viewBox="477 223 315 209">
+<g stroke-linecap="square">
+<path d="M 600,280 L 580,280 L 560,320 L 560,360" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 560,240 L 560,280 L 580,320 L 600,320" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 540,240 L 560,240 L 600,240" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 660,260 L 720,260" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 660,340 L 720,340" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 540,360 L 560,360 L 600,360" stroke="#000000" stroke-width="4.0" fill="none"/>
+<g>
+<circle cx="560.0" cy="240.0" r="4.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+<circle cx="560.0" cy="360.0" r="4.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<path d="M 601,230 L 659,230 L 659,290 L 601,290 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<text text-anchor="middle" x="630.0" y="252.0" fill="#000000" style="font-size:24px">=1</text>
+<circle cx="600.0" cy="240.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+<circle cx="600.0" cy="280.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+<circle cx="660.0" cy="260.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<path d="M 601,310 L 659,310 L 659,370 L 601,370 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<text text-anchor="middle" x="630.0" y="332.0" fill="#000000" style="font-size:24px">&amp;</text>
+<circle cx="600.0" cy="320.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+<circle cx="600.0" cy="360.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+<circle cx="660.0" cy="340.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<path d="M 509,225 L 539,225 L 539,255 L 509,255 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="524.0" cy="240.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="495.0" y="249.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">A</tspan></text>
+<circle cx="540.0" cy="240.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<path d="M 509,345 L 539,345 L 539,375 L 509,375 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="524.0" cy="360.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="495.0" y="369.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">B</tspan></text>
+<circle cx="540.0" cy="360.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<circle cx="736.0" cy="260.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<circle cx="736.0" cy="260.0" r="15.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="start" x="765.0" y="269.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">S</tspan></text>
+<circle cx="720.0" cy="260.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<circle cx="736.0" cy="340.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<circle cx="736.0" cy="340.0" r="15.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="start" x="765.0" y="349.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">C</tspan></text>
+<circle cx="720.0" cy="340.0" r="2.0" stroke="#000000" stroke-width="4.0" fill="#000000" />
+</g>
+<g>
+<path d="M 710,390 L 790,390 L 790,430 L 710,430 Z" stroke="#b4ffb4" stroke-width="0.0" fill="#b4ffb4" fill-opacity="0.7843137254901961"/>
+<path d="M 710,390 L 790,390 L 790,430 L 710,430 Z" stroke="#000000" stroke-width="2.0" fill="none"/>
+<text text-anchor="middle" x="750.0" y="419.0" fill="#000000" style="font-size:24px">Test</text>
+</g>
+</g>
+</svg>

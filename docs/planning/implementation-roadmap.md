@@ -8,6 +8,12 @@
 - Client meetings: at least biweekly
 - Method: iterative delivery with one vertical slice before expanding scope
 
+## Pre-semester accelerated CIS 310 pilot (August 2026)
+
+An initial VS Code extension is implemented ahead of the senior-design schedule so CIS 310 students can use a managed Digital workflow at semester start. The current build installs and verifies Digital v0.31 in extension storage, checks Java, previews circuits, runs embedded testcases, exposes eligible circuits in Test Explorer, opens the native simulator, and creates a starter workspace.
+
+Before classroom distribution, complete installation and workflow checks on the supported Windows and macOS configurations, conduct a keyboard/screen-reader review, confirm the instructor's circuit and testcase files, and prepare a support/rollback path. The pilot does not yet include the AI coach, grading, LMS integration, study telemetry, or the planned JSON-backed circuit editor. Those items remain within the senior-design schedule below.
+
 ## Work allocation
 
 | Workstream | Estimated hours |

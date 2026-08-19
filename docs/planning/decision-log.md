@@ -63,3 +63,11 @@
 **Decision:** Use parallel scored assignments for learning, questionnaires for student perceptions, telemetry for behavior/timing, blinded expert review for technical quality/safety, a scenario task for trust calibration, and active-minute staff logs for human workload.
 
 **Rationale:** Satisfaction or self-reported confidence cannot establish learning, accuracy, timeliness, safety, or reduced workload. Distinct measures keep each claim tied to evidence that can support it.
+
+## ADR-009: Ship a managed Digital adapter for the semester-start CIS 310 pilot
+
+**Status:** Accepted for pilot; implemented August 2026
+
+**Decision:** Provide a small VS Code extension that installs a pinned, checksum-verified Digital v0.31 release into extension global storage, integrates SVG previews and embedded testcase execution inside VS Code, and opens the native Digital editor for full circuit editing. Require Java as a visible prerequisite and do not enable Digital's remote TCP server.
+
+**Rationale:** The pilot immediately removes the separate Digital download/configuration step and provides one discoverable workflow without delaying for a complete circuit-editor reimplementation. Java Swing cannot be embedded as a native VS Code editor, so the companion window is an explicit, documented boundary. The senior-design team can continue the custom editor, guided learning, AI, accessibility, and evaluation work in parallel.

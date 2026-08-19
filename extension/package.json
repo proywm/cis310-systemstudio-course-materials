@@ -1,0 +1,229 @@
+{
+  "name": "systemstudio-cis310",
+  "displayName": "SystemStudio CIS 310",
+  "description": "A managed Digital simulator workflow for CIS 310 inside Visual Studio Code.",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "probir-roy",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/proywm/systemstudio-ai-senior-design.git",
+    "directory": "extension"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Education",
+    "Other"
+  ],
+  "keywords": [
+    "CIS 310",
+    "digital logic",
+    "processor",
+    "circuit simulator",
+    "Digital"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "ui"
+  ],
+  "activationEvents": [
+    "onView:systemstudioCis310.explorer",
+    "onCustomEditor:systemstudioCis310.circuitPreview",
+    "onLanguage:digital-circuit",
+    "onCommand:systemstudioCis310.setupDigital",
+    "onCommand:systemstudioCis310.checkEnvironment",
+    "onCommand:systemstudioCis310.openDigital",
+    "onCommand:systemstudioCis310.testCircuit",
+    "onCommand:systemstudioCis310.exportSvg",
+    "onCommand:systemstudioCis310.createStarterWorkspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Circuit preview, testing, and simulator launch execute a pinned Java application and are disabled until the workspace is trusted.",
+      "restrictedConfigurations": [
+        "systemstudioCis310.javaPath",
+        "systemstudioCis310.testTimeoutSeconds"
+      ]
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "The Digital desktop simulator requires local filesystem access."
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "systemstudioCis310.setupDigital",
+        "title": "CIS 310: Install/Verify Digital Simulator",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.checkEnvironment",
+        "title": "CIS 310: Check Environment",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openDigital",
+        "title": "CIS 310: Open Circuit in Digital",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.testCircuit",
+        "title": "CIS 310: Run Digital Circuit Tests",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.exportSvg",
+        "title": "CIS 310: Preview Digital Circuit",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.createStarterWorkspace",
+        "title": "CIS 310: Create Starter Workspace",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.refresh",
+        "title": "Refresh",
+        "category": "SystemStudio",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "systemstudioCis310.openDocumentation",
+        "title": "CIS 310: Open Extension Documentation",
+        "category": "SystemStudio"
+      }
+    ],
+    "languages": [
+      {
+        "id": "digital-circuit",
+        "aliases": [
+          "Digital Circuit",
+          "Digital"
+        ],
+        "extensions": [
+          ".dig"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "systemstudioCis310.circuitPreview",
+        "displayName": "SystemStudio Circuit Preview",
+        "selector": [
+          {
+            "filenamePattern": "*.dig"
+          }
+        ],
+        "priority": "option"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "systemstudioCis310",
+          "title": "SystemStudio CIS 310",
+          "icon": "media/chip.svg"
+        }
+      ]
+    },
+    "views": {
+      "systemstudioCis310": [
+        {
+          "id": "systemstudioCis310.explorer",
+          "name": "CIS 310 Setup and Tools"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "systemstudioCis310.explorer",
+        "contents": "Install Digital, create a starter circuit workspace, run deterministic tests, and open `.dig` files from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "systemstudioCis310.refresh",
+          "when": "view == systemstudioCis310.explorer",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "systemstudioCis310.openDigital",
+          "when": "resourceExtname == .dig && isWorkspaceTrusted",
+          "group": "systemstudio@1"
+        },
+        {
+          "command": "systemstudioCis310.testCircuit",
+          "when": "resourceExtname == .dig && isWorkspaceTrusted",
+          "group": "systemstudio@2"
+        },
+        {
+          "command": "systemstudioCis310.exportSvg",
+          "when": "resourceExtname == .dig && isWorkspaceTrusted",
+          "group": "systemstudio@3"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "systemstudioCis310.openDigital",
+          "when": "resourceExtname == .dig && isWorkspaceTrusted",
+          "group": "navigation@1"
+        },
+        {
+          "command": "systemstudioCis310.testCircuit",
+          "when": "resourceExtname == .dig && isWorkspaceTrusted",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SystemStudio CIS 310",
+      "properties": {
+        "systemstudioCis310.javaPath": {
+          "type": "string",
+          "default": "java",
+          "description": "Java executable used to run the pinned Digital simulator. Use an absolute path if Java is not on PATH."
+        },
+        "systemstudioCis310.testTimeoutSeconds": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 300,
+          "description": "Maximum duration for a headless Digital circuit test or SVG export."
+        },
+        "systemstudioCis310.promptToInstall": {
+          "type": "boolean",
+          "default": true,
+          "description": "Prompt once to install the pinned Digital release when the extension first activates."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/**/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run compile",
+    "package": "npm run check && vsce package --out systemstudio-cis310.vsix",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "@types/vscode": "1.100.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
+    "fflate": "0.8.3",
+    "tsx": "4.23.12",
+    "typescript": "7.0.2"
+  }
+}

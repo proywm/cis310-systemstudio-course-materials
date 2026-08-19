@@ -1,0 +1,10 @@
+.github/**
+.vscode/**
+src/**
+test/**
+node_modules/**
+**/*.map
+media/half-adder-preview.svg
+*.vsix
+tsconfig.json
+esbuild.mjs
