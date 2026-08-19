@@ -30,7 +30,7 @@ This README is the project’s main entry point. Start here, then follow the doc
 | Team and effort | 3--4 interdisciplinary students; approximately 600--800 total hours |
 | Reference workflows | CIS 450 C/xv6 systems programming and CIS 310 4-bit processor design |
 | Product form | Installable VS Code extension with a versioned course environment |
-| Current status | CIS 310 extension v0.2.0 integrates the managed simulator and a review-gated Fall 2025 course-material pack; broader senior-design implementation and classroom validation remain pending |
+| Current status | CIS 310 extension v0.2.1 integrates the managed simulator, a review-gated Fall 2025 course-material pack, and a Remote SSH fallback for non-GUI workflows; broader senior-design implementation and classroom validation remain pending |
 
 SystemStudio AI will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and a constrained AI coach in a single VS Code experience.
 
@@ -60,7 +60,7 @@ The minimum product is not a general-purpose IDE, a general-purpose circuit simu
 
 ### Semester-start CIS 310 pilot
 
-The accelerated extension now manages a checksum-verified Digital v0.31 installation, detects Java, opens `.dig` circuits in Digital, renders Digital-generated SVG previews inside VS Code, runs embedded circuit tests through the official CLI, publishes eligible circuits to Test Explorer, and generates a starter workspace. Version 0.2.0 also provides a Course Materials view with 13 presentation links, four integrity-checked assignment references, and explicit lecture-to-assignment mappings. The source pack is from Fall 2025 and remains gated for instructor review; it does not replace current Canvas instructions. This is a technical MVP, not yet evidence of learning impact or classroom readiness. The AI coach, guided-practice system, custom processor canvas, help-packet workflow, and broader CIS 450 environment remain senior-design workstreams.
+The accelerated extension now manages a checksum-verified Digital v0.31 installation, detects Java, opens `.dig` circuits in Digital when a graphical desktop is available, renders Digital-generated SVG previews inside VS Code, runs embedded circuit tests through the official CLI, publishes eligible circuits to Test Explorer, and generates a starter workspace. Version 0.2.1 also provides a Course Materials view with 13 presentation links, four integrity-checked assignment references, explicit lecture-to-assignment mappings, and Remote SSH support for the non-GUI workflows. The source pack is from Fall 2025 and remains gated for instructor review; it does not replace current Canvas instructions. This is a technical MVP, not yet evidence of learning impact or classroom readiness. The AI coach, guided-practice system, custom processor canvas, help-packet workflow, and broader CIS 450 environment remain senior-design workstreams.
 
 ![Half-adder circuit rendered by the implemented preview pipeline](extension/media/half-adder-preview.png)
 

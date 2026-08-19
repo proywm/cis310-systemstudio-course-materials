@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.2.1
+
+- Added a Remote SSH workspace-host fallback for course materials, starter workspaces, SVG previews, and headless tests.
+- Added a clear warning instead of attempting to launch the native Digital editor when a remote Linux host has no graphical display.
+
 ## 0.2.0
 
 - Added a Course Materials view with 13 mapped presentation entries and four packaged assignment references from the private Fall 2025 source folder.

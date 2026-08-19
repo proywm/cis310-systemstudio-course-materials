@@ -45,7 +45,7 @@ npm run package
 code --install-extension systemstudio-cis310.vsix
 ```
 
-Run the install command from the student's local desktop, or use **Extensions: Install from VSIX…** in the desktop VS Code window. The extension is deliberately a local UI extension because Digital opens a native graphical window; a remote SSH extension host cannot install or display it.
+Run the install command from the student's local desktop, or use **Extensions: Install from VSIX…** in the desktop VS Code window. Local desktop VS Code provides the full workflow. In a Remote SSH window, the extension can run on the workspace host for course materials, starter workspaces, SVG previews, and headless tests. The native Digital editor can open remotely only when that host has a graphical display; otherwise the extension explains the limitation and students should use local desktop VS Code for graphical editing.
 
 Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify Digital**. The extension downloads Digital only after confirmation and verifies both pinned checksums maintained in [`digitalRelease.ts`](https://github.com/proywm/systemstudio-ai-senior-design/blob/HEAD/extension/src/core/digitalRelease.ts).
 
@@ -104,7 +104,7 @@ The automated check covers manifest validation, assignment integrity, safe paths
 
 ## Current limitations
 
-- local desktop workspaces only; the Java GUI cannot open a remote filesystem path directly;
+- the native Java GUI cannot open on a Remote SSH host without a graphical display, although materials, starter generation, previews, and headless tests remain available;
 - Java must already be available or configured;
 - presentation files are not embedded; the current entries open private Fall 2025 Drive sources pending instructor publication;
 - packaged assignments retain historical wording and are reference material until the instructor approves a student release;

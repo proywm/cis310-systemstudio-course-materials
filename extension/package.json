@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "A managed Digital simulator and course-material workflow for CIS 310 inside Visual Studio Code.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -27,7 +27,8 @@
   ],
   "main": "./dist/extension.js",
   "extensionKind": [
-    "ui"
+    "ui",
+    "workspace"
   ],
   "activationEvents": [
     "onView:systemstudioCis310.explorer",

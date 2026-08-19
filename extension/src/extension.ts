@@ -129,6 +129,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       if (!requireTrustedWorkspace()) {
         return;
       }
+      const unavailableReason = nativeDigitalUnavailableReason();
+      if (unavailableReason) {
+        await vscode.window.showWarningMessage(unavailableReason);
+        return;
+      }
       const uri = await resolveCircuitUri(candidate);
       if (!uri) {
         return;
@@ -357,6 +362,17 @@ function requireTrustedWorkspace(): boolean {
   }
   void vscode.window.showErrorMessage('Trust this workspace before launching Digital or running circuit files.');
   return false;
+}
+
+function nativeDigitalUnavailableReason(): string | undefined {
+  if (!vscode.env.remoteName) {
+    return undefined;
+  }
+  if (process.platform === 'linux' && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) {
+    return `The native Digital editor cannot open on this ${vscode.env.remoteName} host because no graphical display is available. ` +
+      'Circuit previews, tests, course materials, and starter workspaces remain available. Use local desktop VS Code for graphical editing.';
+  }
+  return undefined;
 }
 
 async function maybePromptForInstall(
