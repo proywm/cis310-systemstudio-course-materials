@@ -1,8 +1,4 @@
-> **Fall 2026 course workspace — instructor review required.** This readable reference was prepared from the Fall 2025 instructor file named below. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, diagrams, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
->
-> Source title: `CIS310_HW2_v2 (2).docx`
-> Source last modified: `2025-08-26T18:46:03.000Z`
-> Source file: https://docs.google.com/document/d/1SqSvdF5-bemno36mNYnp2HGCtCaC5Lsg/edit
+> **Active Fall 2026 study reference.** Use this document to prepare and practice. The matching Canvas assignment is authoritative for the released questions, dates, points, allowed collaboration, file formats, diagrams, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 
 # CIS 310 Homework 2: Sequential Logic and State Machines
 
@@ -10,7 +6,7 @@
 
 Review Lecture 6 on latches, flip-flops, clocks, sequential circuits, and counters. Work through each state transition before constructing a circuit.
 
-## Tasks in the imported reference
+## Study tasks
 
 1. Determine the value of `Q` for the circuit diagram provided in the official assignment.
 2. Construct characteristic tables for SR, D, JK, and T flip-flops.
@@ -34,4 +30,4 @@ The source contains diagrams that are not reproduced in this text-only reference
 
 ## Submission
 
-Open the current Homework 2 assignment in Fall 2026 Canvas and submit the required files there. The archived source mentioned an individual submission and document formats, but those details must be confirmed in Canvas.
+Open the current Homework 2 assignment in Fall 2026 Canvas, follow its submission instructions, and confirm the submission receipt there.

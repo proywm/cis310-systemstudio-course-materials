@@ -46,7 +46,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Open Fall 2026 syllabus',
-            'packaged PDF · review fields',
+            'active PDF · Canvas current',
             'systemstudioCis310.openSyllabus',
             'file-pdf'
           ),

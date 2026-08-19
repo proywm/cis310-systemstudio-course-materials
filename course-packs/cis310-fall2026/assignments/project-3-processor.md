@@ -1,8 +1,4 @@
-> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
->
-> Source title: `cis310_Assignment3.md.txt`  
-> Source last modified: `2025-08-26T18:47:17.000Z`  
-> Source file: https://drive.google.com/file/d/1hWgrQOFSuGKXWa5SfC2F07ERtmIoa-K9/view
+> **Active Fall 2026 project reference.** Use this document to prepare and build incrementally. The matching Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, demonstrations, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 
 # Assignment 3: Implementing a 4-bit Processor
 

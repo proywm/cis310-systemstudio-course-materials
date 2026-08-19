@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.8.1
+
+- Reframed the repository and extension as active Fall 2026 student course materials.
+- Removed project-planning and research-only language from the student workflow.
+- Replaced external source links with local course-repository or Canvas links.
+- Marked the course pack as a student release while keeping Canvas authoritative for live section details and submission.
+
 ## 0.8.0
 
 - Added a packaged four-page Fall 2026 syllabus PDF with current catalog information, learning outcomes, course technology, assessment placeholders, policy links, and an instructor-finalization checklist.
@@ -7,7 +14,7 @@
 - Added official term milestones for study days and examination windows without inventing the CIS 310 final-exam slot.
 - Added `.ics` export with an all-day default that does not guess the class time and an optional timed mode requiring the confirmed Canvas start time and duration.
 - Connected the syllabus and calendar to the grouped sidebar, Course Materials view, guided tutorial, Command Palette, and local Student Helper.
-- Kept the syllabus and presentation workflow fully local to the extension; Google Drive access is not required.
+- Kept the syllabus and presentation workflow fully local to the extension; no external document-hosting account is required.
 
 ## 0.7.0
 
@@ -16,7 +23,7 @@
 - Added a local Student Helper for course-topic routing, tool diagnosis, Canvas/deadline redirection, and evidence-based help-request preparation; no conversation is sent to an external AI service.
 - Set the delivery workspace to Fall 2026 and added the exact Canvas course 552144 link as the authoritative requirements and submission destination.
 - Added Homework 2 and Homework 3 references from the instructor source folder, bringing the course pack to three homework and three project references.
-- Kept all 13 presentation PDFs embedded and checksum-verified in the extension so presentation viewing does not depend on Google Drive.
+- Kept all 13 presentation PDFs embedded and checksum-verified in the extension so presentation viewing does not depend on external document hosting.
 - Removed archived dates and collaboration claims from student-facing assignment references in favor of explicit Fall 2026 Canvas verification and submission instructions.
 
 ## 0.6.0
@@ -39,7 +46,7 @@
 ## 0.4.0
 
 - Bundled all 13 CIS 310 presentations as integrity-checked offline PDFs.
-- Removed the runtime dependency on private Google Drive access when opening presentations.
+- Removed the runtime dependency on private external hosting when opening presentations.
 - Preserved the original Drive titles and URLs only as source provenance.
 
 ## 0.3.0
@@ -47,8 +54,8 @@
 - Added a generic **Create a New Digital Circuit** action that works before Digital is installed.
 - Added per-assignment blank-circuit buttons with collision-safe filenames and no solution content.
 - Split the Course Materials view into Homework and Project Assignments.
-- Added the original Portable Assembly Lab pilot (superseded in 0.5.0 by the embedded IA-32 lab).
-- Added assembly/circuit path validation, syntax highlighting, starter content, research notes, and automated coverage.
+- Added the original Portable Assembly Lab prototype (superseded in 0.5.0 by the embedded IA-32 lab).
+- Added assembly/circuit path validation, syntax highlighting, starter content, technical notes, and automated coverage.
 
 ## 0.2.2
 

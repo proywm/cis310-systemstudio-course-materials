@@ -1,10 +1,10 @@
 # CIS 310 Fall 2026 Course Materials
 
-> **Fall 2026 course workspace:** [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for requirements, deadlines, points, allowed collaboration, required files, and submission. **Submit every required deliverable in Canvas; SystemStudio does not submit for you.** The study references were imported from Fall 2025 and require instructor review. All 13 presentations are embedded in the extension as offline, integrity-checked PDFs—no Google Drive access is required.
+> **Active Fall 2026 course workspace:** [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for requirements, deadlines, points, allowed collaboration, required files, and submission. **Submit every required deliverable in Canvas; SystemStudio does not submit for you.** The syllabus and all 13 presentations are packaged as local, integrity-checked PDFs.
 
 ## Start with the Fall 2026 course documents
 
-- Open the [CIS 310 Fall 2026 syllabus PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf). It contains the course structure, learning outcomes, technology workflow, policy links, and tentative 27-meeting topic sequence. Fields such as time, room, office hours, textbooks, grading weights, detailed deadlines, and the final-exam slot still require instructor confirmation in Canvas.
+- Open the [CIS 310 Fall 2026 syllabus PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf). It contains the course structure, learning outcomes, technology workflow, policy links, and 27-meeting topic sequence. Canvas supplies section-specific time, room, office hours, textbooks, grading details, deadlines, and the final-exam slot.
 - In the SystemStudio sidebar, select **Open Fall 2026 course calendar** to see every Monday/Wednesday meeting and the official holiday, recess, study-day, and examination periods. The extension can export these as `.ics` events without guessing the class time.
 - Use [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for live course details and submission.
 

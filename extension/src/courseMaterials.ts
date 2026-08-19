@@ -74,9 +74,9 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
   getTreeItem(element: MaterialsNode): vscode.TreeItem {
     if (element.type === 'notice') {
       const item = new vscode.TreeItem('Fall 2026 course: Canvas is authoritative', vscode.TreeItemCollapsibleState.None);
-      item.description = 'review imported references';
-      item.tooltip = 'Fall 2026 course workspace. Bundled references imported from Fall 2025 require instructor review; verify requirements and submit in Canvas.';
-      item.iconPath = new vscode.ThemeIcon('warning');
+      item.description = 'active materials · Canvas current';
+      item.tooltip = 'Active Fall 2026 course workspace. Use the packaged materials for study and Canvas for live requirements, deadlines, and submission.';
+      item.iconPath = new vscode.ThemeIcon('verified-filled');
       item.command = { command: 'systemstudioCis310.openMaterialsIndex', title: 'Open course-material guide' };
       return item;
     }
@@ -95,15 +95,15 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
     item.description = element.resource.kind === 'syllabus'
-      ? 'Fall 2026 PDF · review fields'
+      ? 'Fall 2026 PDF · Canvas current'
       : element.resource.kind === 'presentation'
         ? 'bundled offline PDF'
         : 'packaged reference';
     item.tooltip = element.resource.kind === 'syllabus'
-      ? 'Fall 2026 working syllabus with the verified Monday/Wednesday calendar. Canvas-controlled fields require instructor confirmation before release.'
+      ? 'Active Fall 2026 syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission.'
       : element.resource.kind === 'presentation'
-      ? `${element.resource.sourceTitle}\nPackaged for offline viewing; no Drive access required.`
-      : `${element.resource.sourceTitle}\nHistorical policy and deadlines require instructor review.` +
+      ? `${element.resource.sourceTitle}\nPackaged for offline viewing; no external document-hosting account required.`
+      : `${element.resource.sourceTitle}\nUse this study reference with the current Canvas assignment.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(
       element.resource.kind === 'syllabus' ? 'file-pdf' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'

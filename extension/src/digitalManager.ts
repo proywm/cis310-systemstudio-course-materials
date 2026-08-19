@@ -428,7 +428,7 @@ function formatBytes(bytes: number): string {
 function starterReadme(): string {
   return `# SystemStudio CIS 310 Starter\n\n` +
     `This workspace was created by the SystemStudio CIS 310 VS Code extension.\n\n` +
-    `This is a Fall 2026 course workspace. Bundled references imported from Fall 2025 require instructor review. ` +
+    `This is an active Fall 2026 course workspace. Use packaged materials for study. ` +
     `Current Fall 2026 Canvas instructions, deadlines, points, and submission rules are authoritative.\n\n` +
     `## Start\n\n` +
     `1. Read \`course/README.md\` and the current Canvas assignment.\n` +

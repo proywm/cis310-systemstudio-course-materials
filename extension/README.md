@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the accelerated Fall 2026 CIS 310 implementation track. It gives students one VS Code entry point for the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, and a local evidence-and-routing helper while the broader senior-design project continues in parallel.
+This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, and a local evidence-and-routing helper.
 
 **Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
 
@@ -30,7 +30,7 @@ This is the accelerated Fall 2026 CIS 310 implementation track. It gives student
 - a local Student Helper for topic, tool, deadline/submission, and confusion routing, with quick prompts and evidence-building checklists; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
-The delivery workspace is Fall 2026. Its assignments and presentations remain instructor-review references, so [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission. The new syllabus and all 13 presentations are embedded as SHA-256-verified PDFs. No Google Drive access is required for student use. No ALU, register-file, or processor solution is bundled.
+The delivery workspace is Fall 2026. [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission. The syllabus and all 13 presentations are embedded as SHA-256-verified PDFs, so students do not need an external document-hosting account. No ALU, register-file, or processor solution is bundled.
 
 ## Honest integration boundary
 
@@ -40,7 +40,7 @@ Digital is a Java Swing desktop application. VS Code webviews cannot embed its n
 2. **one click from VS Code:** the full Digital graphical editor and interactive simulator, opened on the selected circuit; and
 3. **one managed installation:** Digital is downloaded and stored by the extension, so students do not install Digital separately.
 
-Reimplementing Digital’s canvas as a webview is not part of this accelerated MVP. It remains a senior-design workstream if a fully native VS Code circuit editor is still desired.
+Digital's graphical editor opens as the managed native companion window because a Java Swing application cannot be embedded as a VS Code webview. Preview, testing, course materials, and assembly remain inside VS Code.
 
 ## Assembly compatibility boundary
 
@@ -67,7 +67,7 @@ code --install-extension systemstudio-cis310.vsix
 
 Run the install command from the student's local desktop, or use **Extensions: Install from VSIX…** in the desktop VS Code window. Local desktop VS Code provides the full workflow. In a Remote SSH window, the extension can run on the workspace host for course materials, starter workspaces, SVG previews, and headless tests. The native Digital editor can open remotely only when that host has a graphical display; otherwise the extension explains the limitation and students should use local desktop VS Code for graphical editing.
 
-Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify Digital**. The extension downloads Digital only after confirmation and verifies both pinned checksums maintained in [`digitalRelease.ts`](https://github.com/proywm/systemstudio-ai-senior-design/blob/HEAD/extension/src/core/digitalRelease.ts).
+Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify Digital**. The extension downloads Digital only after confirmation and verifies both pinned checksums maintained in [`digitalRelease.ts`](https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/extension/src/core/digitalRelease.ts).
 
 ## Student workflow
 
@@ -152,7 +152,7 @@ The automated check covers the 27-meeting calendar and `.ics` export, syllabus/a
 - Java must already be available or configured;
 - embedded assembly covers documented Irvine32 Classroom and NASM IA-32 teaching subsets rather than full MASM/NASM, binary generation, OS APIs, or arbitrary Irvine procedures/libraries;
 - presentations are bundled as PDFs for offline use, but still require instructor content and accessibility review;
-- packaged assignments retain historical wording and are reference material until the instructor approves a student release;
+- packaged assignments are active study references; Canvas controls released questions, grading rules, deadlines, and submission;
 - the syllabus intentionally leaves class time/location, office hours, textbook editions, grading weights, detailed deadlines, and the final-exam slot for instructor confirmation rather than inferring them;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;
 - the local helper is a deterministic evidence-and-routing assistant, not a generative AI coach, grader, Canvas integration, or source of current deadlines;

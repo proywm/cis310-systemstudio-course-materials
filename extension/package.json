@@ -1,14 +1,14 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Managed Digital circuits, embedded Irvine32/NASM IA-32 assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
-  "version": "0.8.0",
+  "description": "Active Fall 2026 CIS 310 materials, managed Digital circuits, and embedded Irvine32/NASM IA-32 assembly inside Visual Studio Code.",
+  "version": "0.8.1",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/proywm/systemstudio-ai-senior-design.git",
+    "url": "https://github.com/proywm/cis310-systemstudio-course-materials.git",
     "directory": "extension"
   },
   "engines": {
@@ -308,7 +308,7 @@
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Fall 2026 workspace: the syllabus and 13 presentations are packaged PDFs, with three homework and three project references. No Google Drive access is required. Canvas is authoritative for current requirements and submission.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+        "contents": "Active Fall 2026 workspace: the syllabus and 13 presentations are packaged PDFs, with three homework and three project references. No external document-hosting account is required. Canvas is authoritative for current requirements and submission.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
       }
     ],
     "walkthroughs": [

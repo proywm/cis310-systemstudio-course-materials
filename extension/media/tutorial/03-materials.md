@@ -6,4 +6,4 @@ SystemStudio includes these resources inside the extension:
 - Homework 1, Homework 2, and Homework 3 references; and
 - three processor-project references.
 
-No Google Drive access is needed to read a presentation. The Fall 2026 Canvas course controls deadlines, requirements, and submission.
+The presentations are packaged locally, so no external document-hosting account is needed. The Fall 2026 Canvas course controls deadlines, requirements, and submission.

@@ -15,8 +15,8 @@ const validManifest = {
     sourceTerm: 'Fall 2025',
     deliveryTerm: 'Fall 2026'
   },
-  status: 'instructor-review-required',
-  sourceFolder: 'https://drive.google.com/drive/folders/example',
+  status: 'student-release',
+  sourceFolder: 'https://github.com/example/cis310-course-materials/tree/main/course-packs/cis310-fall2026',
   studentIndexPath: 'STUDENT_MATERIALS.md',
   resources: [
     {
@@ -25,7 +25,7 @@ const validManifest = {
       order: 1,
       title: 'Lecture 1',
       sourceTitle: 'lecture.pptx',
-      sourceUrl: 'https://drive.google.com/file/example',
+      sourceUrl: 'https://github.com/example/cis310-course-materials/blob/main/course-packs/cis310-fall2026/presentations/lecture-01.pdf',
       modifiedAt: '2025-08-26T00:00:00Z',
       concepts: ['binary'],
       localPath: 'presentations/lecture-01.pdf',
@@ -38,7 +38,7 @@ const validManifest = {
       order: 2,
       title: 'Assignment 1',
       sourceTitle: 'assignment.md',
-      sourceUrl: 'https://drive.google.com/file/assignment',
+      sourceUrl: 'https://github.com/example/cis310-course-materials/blob/main/course-packs/cis310-fall2026/assignments/assignment-1.md',
       modifiedAt: '2025-08-26T00:00:00Z',
       concepts: ['binary'],
       assignmentCategory: 'homework',

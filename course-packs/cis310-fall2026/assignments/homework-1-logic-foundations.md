@@ -1,8 +1,4 @@
-> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
->
-> Source title: `CIS310-HW-1.md`  
-> Source last modified: `2025-08-26T18:49:40.000Z`  
-> Source file: https://drive.google.com/file/d/1UXgSeFrWlH-5geCrgXQrmf4R1rfLrgxU/view
+> **Active Fall 2026 study reference.** Use this document to prepare and practice. The matching Canvas assignment is authoritative for the released questions, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 
 # CIS 310 Homework 1: Logic Foundations
 
@@ -106,7 +102,7 @@
 - **File Formats**: Submit the following:
   - Truth tables, Boolean expressions and simulation screenshots in a single PDF.
   - Logic simulation files in a github repository (https://github.com/) and provide the repo link the PDF.
-- **Fall 2026 deadline and submission:** Open the current Homework 1 assignment in Canvas. Do not use an archived date from this reference.
+- **Fall 2026 deadline and submission:** Open the current Homework 1 assignment in Canvas and confirm the submission receipt there.
 ---
 
 ### **Grading Rubric**
