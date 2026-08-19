@@ -33,6 +33,14 @@ describe('student helper', () => {
     assert.match(JSON.stringify(reply), /instructor-confirmed fields in Canvas/);
   });
 
+  it('routes pre-class preparation to the required open book and author video path', () => {
+    const reply = answerStudentQuestion('What should I read and watch before class?');
+    const text = JSON.stringify(reply);
+    assert.match(text, /David Tarnoff/);
+    assert.match(text, /Read → Watch → Try 3 questions/);
+    assert.ok(reply.actions.some((action) => action.id === 'open-learning'));
+  });
+
   it('distinguishes Remote SSH from a Digital installation failure', () => {
     const reply = answerStudentQuestion('Why will Digital not open over SSH?');
     assert.match(JSON.stringify(reply), /local desktop VS Code/);

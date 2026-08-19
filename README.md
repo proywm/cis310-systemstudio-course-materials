@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension.
+This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice and local learning progress.
 
 ## Start here
 
@@ -10,11 +10,14 @@ This repository is the student-facing home for the course syllabus, semester cal
 |---|---|
 | Current requirements, deadlines, grades, announcements, and submission | [Fall 2026 CIS 310 Canvas](https://canvas.umd.umich.edu/courses/552144) |
 | Course policies, outcomes, tools, and topic sequence | [Fall 2026 syllabus PDF](course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf) |
-| Homework, projects, and presentation map | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
+| Open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
+| Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
+
+![SystemStudio CIS 310 Learning Center showing the grouped sidebar and Read, Watch, Try three questions preparation path](docs/images/systemstudio-learning-center.svg)
 
 ## Fall 2026 calendar
 
@@ -25,8 +28,13 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 ## What students receive
 
 - a locally packaged Fall 2026 syllabus PDF;
+- a Read → Watch → Try 3 questions path for every lecture topic, using focused sections of David Tarnoff's required open text and official author videos;
 - 13 integrity-checked presentation PDFs that open inside VS Code;
 - three homework references and three processor-project references;
+- 43 short, author-written practice questions, with at least three for each of the 13 presentation resources;
+- five-question recommended sessions, topic practice, and 10-question quiz mode;
+- explanations, related-lesson links, confidence checks, saved questions, and spaced review;
+- a local learning dashboard that reports practice evidence without estimating a grade or claiming mastery;
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
@@ -35,7 +43,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a skippable and rerunnable guided tutorial; and
 - a local helper for topic, tool, calendar, and Canvas routing.
 
-No external document-hosting account is required to open the packaged syllabus or presentations.
+No external document-hosting account is required to open the packaged syllabus or presentations. The required Tarnoff book and companion videos open from the author's official ETSU/YouTube sources; the extension does not redistribute them or use Google Drive.
 
 ## Install the extension
 
@@ -60,7 +68,7 @@ SECURITY.md                     Security and privacy reporting
 
 ## Help and privacy
 
-The extension does not transmit helper conversations, student code, circuit files, grades, or telemetry to an AI service. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
+The extension does not transmit helper conversations, reading/video checkmarks, practice history, student code, circuit files, grades, or telemetry to an AI service. Learning history is stored locally in VS Code and can be reset by the student. External book/video links have their own privacy practices. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
 
 For a course requirement or deadline, check Canvas first. For a technical question, include what you expected, what happened, the exact evidence, and what you already tried.
 

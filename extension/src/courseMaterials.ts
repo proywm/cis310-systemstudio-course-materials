@@ -80,6 +80,14 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
       item.command = { command: 'systemstudioCis310.openMaterialsIndex', title: 'Open course-material guide' };
       return item;
     }
+    if (element.type === 'practice') {
+      const item = new vscode.TreeItem('Prepare and practice', vscode.TreeItemCollapsibleState.None);
+      item.description = 'open book · author videos · readiness checks';
+      item.tooltip = 'Open the Read → Watch → Try 3 questions path, plus ungraded practice, explanations, saved questions, and spaced review.';
+      item.iconPath = new vscode.ThemeIcon('book');
+      item.command = { command: 'systemstudioCis310.openPracticeCenter', title: 'Open CIS 310 Learning' };
+      return item;
+    }
     if (element.type === 'section') {
       const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.Expanded);
       item.iconPath = new vscode.ThemeIcon(
@@ -123,6 +131,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (!element) {
       return [
         { type: 'notice' },
+        { type: 'practice' },
         { type: 'section', section: 'syllabus', label: `Syllabus (${this.materials.getResources('syllabus').length})` },
         { type: 'section', section: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
         { type: 'section', section: 'homework', label: `Homework (${this.materials.getAssignments('homework').length})` },
@@ -145,5 +154,6 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
 
 type MaterialsNode =
   | { type: 'notice' }
+  | { type: 'practice' }
   | { type: 'section'; section: 'syllabus' | 'presentation' | AssignmentCategory; label: string }
   | { type: 'resource'; resource: CourseMaterialResource };

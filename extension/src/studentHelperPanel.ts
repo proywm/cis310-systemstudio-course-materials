@@ -54,6 +54,8 @@ export async function executeStudentHelperAction(action: StudentHelperAction): P
     'open-calendar': 'systemstudioCis310.openCourseCalendar',
     'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-materials': 'systemstudioCis310.openMaterialsIndex',
+    'open-learning': 'systemstudioCis310.openPracticeCenter',
+    'practice-now': 'systemstudioCis310.startQuickPractice',
     'start-tutorial': 'systemstudioCis310.startTutorial',
     'check-environment': 'systemstudioCis310.checkEnvironment',
     'setup-digital': 'systemstudioCis310.setupDigital',
@@ -77,7 +79,7 @@ function helperHtml(webview: vscode.Webview): string {
 .message h2{font-size:1.05rem;margin:0 0 8px}.message p,.message li{line-height:1.45}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{color:var(--vscode-button-foreground);background:var(--vscode-button-background);border:0}
 form{display:flex;gap:8px;position:sticky;bottom:0;padding:14px 0;background:var(--vscode-editor-background)}input{flex:1;padding:9px 10px;color:var(--vscode-input-foreground);background:var(--vscode-input-background);border:1px solid var(--vscode-input-border)}form button{border:0;padding:8px 15px;color:var(--vscode-button-foreground);background:var(--vscode-button-background);cursor:pointer}
 </style></head><body><main class="shell"><h1>CIS 310 Student Helper</h1><p class="notice"><strong>Evidence and routing assistant:</strong> this local helper does not call an external AI service, know current deadlines, grade work, or submit to Canvas. Verify requirements and submit in Fall 2026 Canvas.</p>
-<div class="quick" aria-label="Common questions"><button data-question="What is due and where do I submit?">Due dates & submission</button><button data-question="What are the three homework topics?">Three homework items</button><button data-question="Digital will not open over SSH">Digital / SSH</button><button data-question="Which assembly profile should I use?">MASM / NASM</button><button data-question="I am stuck and need help">I’m stuck</button></div>
+<div class="quick" aria-label="Common questions"><button data-question="What should I read and watch before class?">Prepare before class</button><button data-question="How can I practice and track my learning?">Practice & progress</button><button data-question="What is due and where do I submit?">Due dates & submission</button><button data-question="What are the three homework topics?">Three homework items</button><button data-question="Digital will not open over SSH">Digital / SSH</button><button data-question="Which assembly profile should I use?">MASM / NASM</button><button data-question="I am stuck and need help">I’m stuck</button></div>
 <section id="history" aria-live="polite"></section><form id="form"><label for="question" style="position:absolute;left:-10000px">Ask a question</label><input id="question" maxlength="2000" placeholder="Ask about a topic, tool, deadline, or confusion…" autocomplete="off"><button type="submit">Ask</button></form></main>
 <script nonce="${nonce}">const vscode=acquireVsCodeApi();const history=document.getElementById('history');const input=document.getElementById('question');
 function addStudent(text){const box=document.createElement('article');box.className='message student';const h=document.createElement('h2');h.textContent='You';const p=document.createElement('p');p.textContent=text;box.append(h,p);history.append(box)}

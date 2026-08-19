@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.9.0
+
+- Reorganized the activity bar around one expanded **Start Here** path to reduce scanning and choice overload.
+- Added a 13-module **Read → Watch → Try 3 questions** pre-class path that maps every lecture resource to focused sections of David Tarnoff's required open text and an official author video.
+- Added self-reported local reading/video checkmarks, a next-incomplete preparation recommendation, lecture-specific readiness prompts, and direct book/video/lecture review links after practice feedback.
+- Updated the Fall 2026 syllabus and student guide with the required texts and complete lecture-to-book/video map; authoritative sources open directly and no Google Drive is used.
+- Added a local Learning Center with five-question recommended sessions, topic practice, 10-question quiz mode, immediate or delayed feedback, hints, explanations, and mapped packaged lessons.
+- Added 43 author-written questions covering six course-topic groups, with at least three questions for every presentation resource.
+- Added confidence checks, correct-but-uncertain and confident-miss feedback, saved questions, optional error reflection, and transparent spaced review.
+- Added a local progress dashboard for coverage, practice accuracy, due items, practice days, and confidence calibration without grade prediction, mastery claims, ranking, telemetry, or instructor reporting.
+- Connected practice to **Start Here**, Lessons and Assignments, the guided tutorial, and the local Student Helper.
+- Documented the research basis, student-evaluation response, cognitive-load decisions, privacy boundary, and classroom-review requirements in `LEARNING_DESIGN.md`.
+
 ## 0.8.1
 
 - Reframed the repository and extension as active Fall 2026 student course materials.

@@ -14,6 +14,8 @@ import {
 } from './courseCalendarPanel';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
+import { PracticePanel } from './practicePanel';
+import { PracticeStore } from './practiceStore';
 import { StatusTreeProvider } from './statusTree';
 import { StudentHelperPanel } from './studentHelperPanel';
 import { TutorialPanel } from './tutorialPanel';
@@ -26,8 +28,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const manager = new DigitalManager(context, output);
   const assemblyManager = new AssemblyManager(context, output);
   const courseMaterials = await CourseMaterials.load(context);
+  const practiceStore = new PracticeStore(context.globalState);
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
-  const statusTree = new StatusTreeProvider(manager, assemblyManager);
+  const statusTree = new StatusTreeProvider(manager, assemblyManager, practiceStore);
   const tests = new DigitalTestController(manager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
   statusBar.command = 'systemstudioCis310.checkEnvironment';
@@ -121,6 +124,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   context.subscriptions.push(
     output,
     assemblyManager,
+    practiceStore,
     statusTree,
     materialsTree,
     tests,
@@ -140,6 +144,20 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
       await StudentHelperPanel.show(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
+      await PracticePanel.show(context, practiceStore, courseMaterials);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.startQuickPractice', async () => {
+      await PracticePanel.show(context, practiceStore, courseMaterials, {
+        mode: 'practice', focus: 'recommended', length: 5
+      });
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.reviewPractice', async () => {
+      const dashboard = practiceStore.getDashboard();
+      await PracticePanel.show(context, practiceStore, courseMaterials, {
+        mode: 'practice', focus: dashboard.due > 0 ? 'due' : dashboard.saved > 0 ? 'saved' : 'recommended', length: 5
+      });
     }),
     vscode.commands.registerCommand('systemstudioCis310.openCanvas', async () => {
       const configured = vscode.workspace.getConfiguration('systemstudioCis310')

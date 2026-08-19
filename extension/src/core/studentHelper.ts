@@ -3,6 +3,8 @@ export type StudentHelperAction =
   | 'open-calendar'
   | 'open-syllabus'
   | 'open-materials'
+  | 'open-learning'
+  | 'practice-now'
   | 'start-tutorial'
   | 'check-environment'
   | 'setup-digital'
@@ -26,6 +28,8 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-calendar',
   'open-syllabus',
   'open-materials',
+  'open-learning',
+  'practice-now',
   'start-tutorial',
   'check-environment',
   'setup-digital',
@@ -47,12 +51,51 @@ export function parseStudentHelperRequest(value: unknown): StudentHelperRequest 
 export function answerStudentQuestion(question: string): StudentHelperReply {
   const text = question.toLowerCase();
 
+  if (matches(text, ['quiz', 'practice question', 'practice questions', 'learning progress', 'my progress', 'confidence', 'review missed'])) {
+    return {
+      title: 'Use short practice, then review the evidence',
+      paragraphs: [
+        'The CIS 310 Learning Center offers five-question practice with immediate explanations, quiz mode with feedback at the end, topic selection, saved questions, and spaced review.',
+        'Before feedback, record how sure you are. A correct-but-uncertain answer and a confident miss are both useful review signals. Progress stays on this device and is not a grade or mastery prediction.'
+      ],
+      checklist: [
+        'Start with the recommended five-question session.',
+        'Read the explanation even when your answer is correct.',
+        'Review due, missed, uncertain, or saved questions on another day.'
+      ],
+      actions: [
+        { id: 'practice-now', label: 'Start 5-question practice' },
+        { id: 'open-learning', label: 'Open learning dashboard' }
+      ]
+    };
+  }
+
+  if (matches(text, ['book', 'reading', 'what should i read', 'read before class', 'watch before class', 'tarnoff', 'author video', 'youtube', 'prepare for class', 'preparation'])) {
+    return {
+      title: 'Prepare with the open book before using the slides',
+      paragraphs: [
+        'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and one official author video.',
+        'Use the short Read → Watch → Try 3 questions path before class. The lecture PDF then becomes a guide for discussion instead of the only source you study.'
+      ],
+      checklist: [
+        'Open the next preparation module and read only its mapped chapter or sections.',
+        'Watch the mapped author video and write down one unresolved point.',
+        'Try the three-question readiness check without reopening the source.',
+        'Bring the unresolved point or a confident miss to class or to the instructor.'
+      ],
+      actions: [
+        { id: 'open-learning', label: 'Open Read → Watch → Practice path' },
+        { id: 'open-materials', label: 'See the complete lecture map' }
+      ]
+    };
+  }
+
   if (matches(text, ['syllabus', 'grading policy', 'grade scale', 'course policy', 'office hour', 'textbook'])) {
     return {
       title: 'Open the Fall 2026 syllabus and verify Canvas-controlled fields',
       paragraphs: [
         'The packaged PDF includes the course description, learning outcomes, tools, workflow, university-policy links, and the verified Monday/Wednesday term calendar.',
-        'Class time, room, office hours, textbook edition, grade weights, detailed deadlines, and the final-exam slot remain instructor-confirmed fields in Canvas.'
+        'Class time, room, office hours, the current Irvine edition/access instructions, grade weights, detailed deadlines, and the final-exam slot remain instructor-confirmed fields in Canvas.'
       ],
       checklist: [
         'Open the syllabus PDF for the stable course structure.',
@@ -114,6 +157,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Homework 3 → bundled Lectures 8–10 and 12.'
       ],
       actions: [
+        { id: 'practice-now', label: 'Practice five questions' },
         { id: 'open-materials', label: 'Open course-material guide' },
         { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
       ]
@@ -228,6 +272,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       'Evidence example: “I expected EAX=5 after ADD, but observed EAX=3.”'
     ],
     actions: [
+      { id: 'practice-now', label: 'Practice five questions' },
       { id: 'open-materials', label: 'Open course materials' },
       { id: 'start-tutorial', label: 'Start guided tutorial' },
       { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
@@ -244,6 +289,7 @@ function conceptBridge(title: string, source: string, checklist: string[], circu
     ],
     checklist,
     actions: [
+      { id: 'practice-now', label: 'Practice this material' },
       { id: 'open-materials', label: 'Open mapped materials' },
       ...(circuit ? [{ id: 'create-circuit' as const, label: 'Create a blank circuit' }] : [])
     ]

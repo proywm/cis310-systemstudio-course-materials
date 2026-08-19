@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Active Fall 2026 CIS 310 materials, managed Digital circuits, and embedded Irvine32/NASM IA-32 assembly inside Visual Studio Code.",
-  "version": "0.8.1",
+  "description": "Active Fall 2026 CIS 310 open-book preparation, practice, course materials, managed Digital circuits, and embedded IA-32 assembly inside Visual Studio Code.",
+  "version": "0.9.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -27,7 +27,9 @@
     "Irvine32",
     "MASM",
     "NASM",
-    "assembly"
+    "assembly",
+    "open textbook",
+    "retrieval practice"
   ],
   "main": "./dist/extension.js",
   "extensionKind": [
@@ -44,6 +46,9 @@
     "onCommand:systemstudioCis310.startTutorial",
     "onCommand:systemstudioCis310.openGettingStarted",
     "onCommand:systemstudioCis310.openStudentHelper",
+    "onCommand:systemstudioCis310.openPracticeCenter",
+    "onCommand:systemstudioCis310.startQuickPractice",
+    "onCommand:systemstudioCis310.reviewPractice",
     "onCommand:systemstudioCis310.openCanvas",
     "onCommand:systemstudioCis310.openCourseCalendar",
     "onCommand:systemstudioCis310.exportCourseCalendar",
@@ -97,6 +102,24 @@
         "command": "systemstudioCis310.openStudentHelper",
         "title": "CIS 310: Ask the SystemStudio Helper",
         "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openPracticeCenter",
+        "title": "CIS 310: Open Learning Dashboard",
+        "category": "SystemStudio",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "systemstudioCis310.startQuickPractice",
+        "title": "CIS 310: Start 5-Question Practice",
+        "category": "SystemStudio",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "systemstudioCis310.reviewPractice",
+        "title": "CIS 310: Review Due and Saved Questions",
+        "category": "SystemStudio",
+        "icon": "$(history)"
       },
       {
         "command": "systemstudioCis310.openCanvas",
@@ -293,29 +316,29 @@
       "systemstudioCis310": [
         {
           "id": "systemstudioCis310.explorer",
-          "name": "CIS 310 Setup and Tools"
+          "name": "CIS 310 Home"
         },
         {
           "id": "systemstudioCis310.materials",
-          "name": "Course Materials"
+          "name": "Lessons and Assignments"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Use the grouped Fall 2026 course, Digital circuit, assembly, setup, and help workflows.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the Monday/Wednesday calendar](command:systemstudioCis310.openCourseCalendar)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Start with one recommended learning action, then open details only when needed. Reading/video checkmarks and practice progress stay on this device and are not graded.\n[Prepare with book, video, and 3 questions](command:systemstudioCis310.openPracticeCenter)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Active Fall 2026 workspace: the syllabus and 13 presentations are packaged PDFs, with three homework and three project references. No external document-hosting account is required. Canvas is authoritative for current requirements and submission.\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+        "contents": "Active Fall 2026 lessons and assignments: every lecture has mapped open-book reading, an official author video, and readiness practice; the syllabus and 13 presentations are packaged PDFs, with three homework and three project references. Canvas is authoritative for current requirements and submission.\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
       }
     ],
     "walkthroughs": [
       {
         "id": "systemstudioCis310.gettingStarted",
         "title": "Get Started with SystemStudio CIS 310",
-        "description": "Learn the Fall 2026 syllabus, calendar, Canvas, bundled course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
+        "description": "Learn the Fall 2026 read-watch-practice, Canvas, course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
         "steps": [
           {
             "id": "guidedTour",
@@ -327,14 +350,14 @@
           {
             "id": "tools",
             "title": "Use the Grouped Student Workflow",
-            "description": "Open course/submission, circuit, assembly, environment, and help actions in logical groups.\n[Open SystemStudio](command:workbench.view.extension.systemstudioCis310)",
+            "description": "Begin with the next Read → Watch → Try module, then expand practice, circuits, assembly, setup, or help only when needed.\n[Open SystemStudio](command:workbench.view.extension.systemstudioCis310)\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)",
             "media": { "markdown": "media/tutorial/02-tools.md" },
             "completionEvents": ["onView:systemstudioCis310.explorer"]
           },
           {
             "id": "materials",
-            "title": "Learn Offline; Verify and Submit in Canvas",
-            "description": "Open the packaged Fall 2026 syllabus PDF, verified Monday/Wednesday calendar, 13 bundled presentation PDFs, three homework references, and three project references. Use Canvas for current requirements and submission.\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
+            "title": "Read Before Class; Verify and Submit in Canvas",
+            "description": "Use the mapped required open-book sections and official author videos before the 13 bundled lecture PDFs. The syllabus, calendar, presentations, three homework references, and three project references are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
             "media": { "markdown": "media/tutorial/03-materials.md" },
             "completionEvents": ["onView:systemstudioCis310.materials"]
           },

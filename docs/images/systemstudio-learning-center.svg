@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
+  <title id="title">SystemStudio CIS 310 Learning Center interface</title>
+  <desc id="description">A Visual Studio Code-style interface showing the grouped CIS 310 sidebar and a Read, Watch, Try three questions pre-class module.</desc>
+  <defs>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173a57"/>
+      <stop offset="1" stop-color="#252526"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="840" rx="14" fill="#181818"/>
+  <rect x="0" y="0" width="1440" height="44" rx="14" fill="#323233"/>
+  <circle cx="22" cy="22" r="6" fill="#ff5f57"/><circle cx="42" cy="22" r="6" fill="#febc2e"/><circle cx="62" cy="22" r="6" fill="#28c840"/>
+  <text x="720" y="28" text-anchor="middle" fill="#cccccc" font-family="Segoe UI, Arial, sans-serif" font-size="15">SystemStudio CIS 310 — Visual Studio Code</text>
+
+  <rect x="0" y="44" width="350" height="796" fill="#202020"/>
+  <line x1="350" y1="44" x2="350" y2="840" stroke="#3c3c3c"/>
+  <text x="24" y="82" fill="#f0f0f0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">SYSTEMSTUDIO CIS 310</text>
+  <text x="24" y="120" fill="#e7e7e7" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600">⌄  Start Here</text>
+  <rect x="15" y="138" width="320" height="54" rx="7" fill="#094771"/>
+  <text x="32" y="160" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">▣  Prepare Lecture 1</text>
+  <text x="55" y="180" fill="#c7dcec" font-family="Segoe UI, Arial, sans-serif" font-size="12">open book · author video · 3 questions</text>
+  <text x="32" y="221" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">✦  Start a 5-question readiness check</text>
+  <text x="55" y="241" fill="#999999" font-family="Segoe UI, Arial, sans-serif" font-size="12">recommended · explanations included</text>
+  <text x="32" y="279" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">☁  Open Canvas — submit coursework here</text>
+  <text x="55" y="299" fill="#999999" font-family="Segoe UI, Arial, sans-serif" font-size="12">Fall 2026 authority</text>
+  <text x="32" y="337" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">▦  Open Fall 2026 course calendar</text>
+  <line x1="20" y1="366" x2="330" y2="366" stroke="#3c3c3c"/>
+  <text x="24" y="402" fill="#d7d7d7" font-family="Segoe UI, Arial, sans-serif" font-size="15">›  Learn and Practice</text>
+  <text x="24" y="438" fill="#d7d7d7" font-family="Segoe UI, Arial, sans-serif" font-size="15">›  Build Digital Circuits</text>
+  <text x="24" y="474" fill="#d7d7d7" font-family="Segoe UI, Arial, sans-serif" font-size="15">›  Assembly Programming</text>
+  <text x="24" y="510" fill="#d7d7d7" font-family="Segoe UI, Arial, sans-serif" font-size="15">›  Environment and Setup</text>
+  <text x="24" y="546" fill="#d7d7d7" font-family="Segoe UI, Arial, sans-serif" font-size="15">›  Help and Tutorial</text>
+  <text x="24" y="808" fill="#858585" font-family="Segoe UI, Arial, sans-serif" font-size="12">Only Start Here is expanded by default</text>
+
+  <rect x="350" y="44" width="1090" height="796" fill="#1e1e1e"/>
+  <text x="392" y="91" fill="#8c8c8c" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">FALL 2026 · PREPARATION AND FORMATIVE PRACTICE</text>
+  <text x="392" y="128" fill="#f2f2f2" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="650">CIS 310 Learning</text>
+  <text x="392" y="155" fill="#b6b6b6" font-family="Segoe UI, Arial, sans-serif" font-size="15">Read → watch → retrieve → explain → review. One small next step at a time.</text>
+  <rect x="1204" y="86" width="194" height="34" rx="17" fill="none" stroke="#73c991"/>
+  <text x="1301" y="108" text-anchor="middle" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="12">Private on this device · not graded</text>
+
+  <rect x="392" y="190" width="1006" height="390" rx="13" fill="url(#hero)" stroke="#3794ff" filter="url(#shadow)"/>
+  <text x="422" y="228" fill="#9aa9b5" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">BEFORE CLASS · NEXT PREPARATION</text>
+  <text x="422" y="263" fill="#f4f4f4" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="650">Lecture 1: Introduction and Data Representation</text>
+  <text x="422" y="292" fill="#d3d3d3" font-family="Segoe UI, Arial, sans-serif" font-size="14">Why hardware matters; digital signals; binary and hexadecimal representation.</text>
+
+  <rect x="422" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
+  <circle cx="450" cy="354" r="15" fill="#0e639c"/><text x="450" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">1</text>
+  <text x="477" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Read the open book</text>
+  <text x="444" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 1 · §§1.1–1.7</text>
+  <text x="444" y="418" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 2 · §§2.1–2.5</text>
+  <rect x="444" y="443" width="116" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="502" y="465" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open reading</text>
+  <text x="444" y="511" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark reading completed</text>
+
+  <rect x="746" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
+  <circle cx="774" cy="354" r="15" fill="#0e639c"/><text x="774" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">2</text>
+  <text x="801" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Watch the author</text>
+  <text x="768" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 006: Hexadecimal Conversion</text>
+  <text x="768" y="418" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">Official Intermation author video</text>
+  <rect x="768" y="443" width="142" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="839" y="465" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open author video</text>
+  <text x="768" y="511" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark video completed</text>
+
+  <rect x="1070" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
+  <circle cx="1098" cy="354" r="15" fill="#0e639c"/><text x="1098" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">3</text>
+  <text x="1125" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Check readiness</text>
+  <text x="1092" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Can I convert a value between</text>
+  <text x="1092" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">binary and hexadecimal?</text>
+  <rect x="1092" y="443" width="132" height="34" rx="5" fill="#0e639c"/><text x="1158" y="465" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Try 3 questions</text>
+  <text x="1092" y="511" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">0 local attempts so far</text>
+
+  <rect x="392" y="614" width="1006" height="142" rx="10" fill="#252526" stroke="#474747"/>
+  <text x="418" y="651" fill="#f0f0f0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="650">Practice and review</text>
+  <text x="418" y="679" fill="#b8b8b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Start with a short mixed session. Explanations connect back to the book, author video, and lecture.</text>
+  <rect x="418" y="702" width="192" height="36" rx="5" fill="#0e639c"/><text x="514" y="725" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Start 5-question practice</text>
+  <rect x="622" y="702" width="178" height="36" rx="5" fill="#3a3d41"/><text x="711" y="725" text-anchor="middle" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="12">Take a 10-question quiz</text>
+  <text x="1398" y="814" text-anchor="end" fill="#787878" font-family="Segoe UI, Arial, sans-serif" font-size="11">Interface overview · v0.9.0</text>
+</svg>

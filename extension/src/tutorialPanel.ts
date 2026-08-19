@@ -33,7 +33,7 @@ export class TutorialPanel implements vscode.Disposable {
     if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
     if (context.globalState.get<TutorialProgress>(PROGRESS_KEY)) return false;
     const action = await vscode.window.showInformationMessage(
-      'Welcome to Fall 2026 CIS 310. Start the clickable tour of Canvas, bundled materials, Digital circuits, embedded assembly, and help?',
+      'Welcome to Fall 2026 CIS 310. Start the clickable tour of open-book preparation, learning practice, Canvas, bundled materials, Digital circuits, embedded assembly, and help?',
       'Start Guided Tutorial',
       'Skip for now'
     );
@@ -126,6 +126,8 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'open-calendar': 'systemstudioCis310.openCourseCalendar',
     'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-helper': 'systemstudioCis310.openStudentHelper',
+    'open-learning': 'systemstudioCis310.openPracticeCenter',
+    'practice-now': 'systemstudioCis310.startQuickPractice',
     'check-digital': 'systemstudioCis310.checkEnvironment',
     'setup-digital': 'systemstudioCis310.setupDigital',
     'create-circuit': 'systemstudioCis310.createCircuit',
@@ -298,6 +300,7 @@ function tutorialStepsHtml(): string {
     <p>Start from your task, not from a list of tools. This practice choice does not change configuration.</p>
     <div class="instruction"><strong>Choose one:</strong> the path that best matches your immediate need.</div>
     <div class="choices">
+      ${choice('prepare', 'Prepare before class', 'Read the mapped open-book section, watch the author video, then try three readiness questions.')}
       ${choice('requirements', 'Find requirements or submit', 'Go to the current Fall 2026 Canvas course; SystemStudio never submits for you.')}
       ${choice('circuit', 'Design or debug a circuit', 'Move from a lecture concept to a small circuit, prediction, preview, and test.')}
       ${choice('assembly', 'Write or trace assembly', 'Use the embedded Irvine32/NASM teaching lab without separate compiler setup.')}
@@ -308,16 +311,18 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="1" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Know where to learn and where to submit</h2>
     <p>The Fall 2026 workspace separates bundled study references from the authoritative Canvas course.</p>
-    <div class="instruction"><strong>Review all six:</strong> this prevents a packaged study reference from being mistaken for a live deadline or submission.</div>
+    <div class="instruction"><strong>Review all eight:</strong> each resource has one clear job, which keeps study, practice, and submission from competing for attention.</div>
     <div class="choices">
       ${choice('canvas', 'Fall 2026 Canvas', 'Authoritative deadlines, grading rules, required files, announcements, and submission.')}
       ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as a packaged PDF.')}
       ${choice('calendar', 'Monday/Wednesday calendar', '27 verified regular meetings starting August 26, with holidays and recess identified.')}
+      ${choice('openbook', 'Required open book and author videos', 'Focused Tarnoff chapters and official author videos come before the related class and slides.')}
       ${choice('presentations', '13 bundled presentations', 'Local, integrity-checked PDFs open inside VS Code without an external document-hosting account.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
+      ${choice('practice', 'CIS 310 Learning', 'Read → Watch → Try 3 questions, custom practice, quiz mode, confidence checks, explanations, and local spaced review.')}
     </div>
-    <div class="actions"><button data-action="open-canvas" class="primary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
+    <div class="actions"><button data-action="open-learning" class="primary">Open Read → Watch → Practice path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>
@@ -335,7 +340,7 @@ function tutorialStepsHtml(): string {
     <p>Use smaller, scaffolded practice and an explicit concept-to-implementation loop for homework and projects.</p>
     <div class="instruction"><strong>Review every stage:</strong> each should produce evidence before you continue.</div>
     <div class="choices">
-      ${choice('read', 'Read the mapped concept', 'Open the bundled PDF and matching homework/project reference.')}
+      ${choice('read', 'Read and watch before building', 'Open the mapped Tarnoff sections and author video; use the bundled PDF and matching homework/project reference after them.')}
       ${choice('predict', 'Predict a small behavior', 'Write inputs, expected outputs, states, or transitions before simulating.')}
       ${choice('build', 'Create and build one component', 'Use the assignment button or create a blank `.dig`; existing work is never overwritten.')}
       ${choice('evidence', 'Preview and test', 'Compare visible output or a deterministic testcase with your prediction.')}

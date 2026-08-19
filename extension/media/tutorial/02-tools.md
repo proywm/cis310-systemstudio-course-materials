@@ -1,11 +1,12 @@
-# Five logical groups
+# Six logical groups
 
-The SystemStudio sidebar keeps unrelated choices out of one long list:
+The SystemStudio sidebar shows one short **Start Here** path and keeps other choices in collapsed groups:
 
-1. **Course and Submission**
-2. **Digital Circuit Design**
-3. **Assembly Programming**
-4. **Environment and Setup**
-5. **Help and Tutorial**
+1. **Start Here**
+2. **Learn and Practice**
+3. **Build Digital Circuits**
+4. **Assembly Programming**
+5. **Environment and Setup**
+6. **Help and Tutorial**
 
-Start with the task you are trying to complete, then expand only that group.
+Start with the recommended five-question practice or the current Canvas task, then expand only the group you need.

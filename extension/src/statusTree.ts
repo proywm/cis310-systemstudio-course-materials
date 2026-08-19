@@ -3,8 +3,9 @@ import type { AssemblyManager } from './assemblyManager';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import type { DigitalManager } from './digitalManager';
+import type { PracticeStore } from './practiceStore';
 
-type StatusGroup = 'course' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusGroup = 'start' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
 type StatusNode = vscode.TreeItem & { groupId?: StatusGroup };
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
@@ -13,8 +14,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
   constructor(
     private readonly manager: DigitalManager,
-    private readonly assemblyManager: AssemblyManager
-  ) {}
+    private readonly assemblyManager: AssemblyManager,
+    private readonly practiceStore: PracticeStore
+  ) {
+    this.practiceSubscription = practiceStore.onDidChange(() => this.refresh());
+  }
+
+  private readonly practiceSubscription: vscode.Disposable;
 
   refresh(): void {
     this.changeEmitter.fire(undefined);
@@ -27,22 +33,65 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   async getChildren(element?: StatusNode): Promise<StatusNode[]> {
     if (!element) {
       return [
-        groupItem('course', 'Course and Submission', 'mortar-board', true),
-        groupItem('digital', 'Digital Circuit Design', 'circuit-board', true),
+        groupItem('start', 'Start Here', 'home', true),
+        groupItem('learn', 'Learn and Practice', 'mortar-board', false),
+        groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
         groupItem('assembly', 'Assembly Programming', 'terminal', false),
         groupItem('environment', 'Environment and Setup', 'tools', false),
-        groupItem('help', 'Help and Tutorial', 'question', true)
+        groupItem('help', 'Help and Tutorial', 'question', false)
       ];
     }
 
     switch (element.groupId) {
-      case 'course':
+      case 'start': {
+        const dashboard = this.practiceStore.getDashboard();
+        const nextPreparation = this.practiceStore.getLearningPath().find((module) => !module.complete);
         return [
+          describedActionItem(
+            nextPreparation ? `Prepare ${nextPreparation.lectureLabel}` : 'Review my completed preparation path',
+            nextPreparation ? 'open book · author video · 3 questions' : '13 lecture modules checked',
+            'systemstudioCis310.openPracticeCenter',
+            'book'
+          ),
+          describedActionItem(
+            dashboard.attempts > 0 ? 'Continue with 5-question practice' : 'Start a 5-question readiness check',
+            dashboard.due > 0 ? `${dashboard.due} due for review` : 'recommended · explanations included',
+            'systemstudioCis310.startQuickPractice',
+            'sparkle'
+          ),
           describedActionItem(
             'Open Canvas — submit coursework here',
             'Fall 2026 authority',
             'systemstudioCis310.openCanvas',
             'cloud'
+          ),
+          describedActionItem(
+            'Open Fall 2026 course calendar',
+            '27 M/W meetings · starts Aug 26',
+            'systemstudioCis310.openCourseCalendar',
+            'calendar'
+          )
+        ];
+      }
+      case 'learn':
+        return [
+          describedActionItem(
+            'Prepare before class',
+            'mapped open book · author videos · readiness check',
+            'systemstudioCis310.openPracticeCenter',
+            'book'
+          ),
+          describedActionItem(
+            'Practice by topic or take a quiz',
+            'short sessions · confidence check · explanations',
+            'systemstudioCis310.openPracticeCenter',
+            'beaker'
+          ),
+          describedActionItem(
+            'Review due and saved questions',
+            'spaced local review',
+            'systemstudioCis310.reviewPractice',
+            'history'
           ),
           describedActionItem(
             'Open Fall 2026 syllabus',
@@ -51,14 +100,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'file-pdf'
           ),
           describedActionItem(
-            'Open Fall 2026 course calendar',
-            '27 M/W meetings · starts Aug 26',
-            'systemstudioCis310.openCourseCalendar',
-            'calendar'
-          ),
-          describedActionItem(
             'Open bundled course-material guide',
-            '3 homework · 3 projects · 13 presentation PDFs',
+            'open-book map · 3 homework · 3 projects · 13 PDFs',
             'systemstudioCis310.openMaterialsIndex',
             'library'
           )
@@ -87,6 +130,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   }
 
   dispose(): void {
+    this.practiceSubscription.dispose();
     this.changeEmitter.dispose();
   }
 
