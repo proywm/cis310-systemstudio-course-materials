@@ -1,0 +1,109 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[letterpaper,margin=0.56in,top=0.48in,bottom=0.50in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.94]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+
+\hypersetup{
+  pdftitle={SystemStudio AI: Fall 2026 Senior Design Project Proposal},
+  pdfauthor={Probir Roy},
+  pdfsubject={A one-stop VS Code learning environment for systems programming and processor design}
+}
+
+\definecolor{UMBlue}{HTML}{00274C}
+\definecolor{Maize}{HTML}{FFCB05}
+\definecolor{SoftBlue}{HTML}{EAF2F8}
+\definecolor{DarkGray}{HTML}{333333}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.4pt}
+\setlist[itemize]{leftmargin=1.25em,itemsep=0.8pt,topsep=1.5pt,parsep=0pt,partopsep=0pt}
+\titleformat{\section}{\color{UMBlue}\bfseries\large}{}{0pt}{}[\vspace{-2pt}\color{Maize}\titlerule]
+\titlespacing*{\section}{0pt}{4.5pt}{2pt}
+\pagestyle{empty}
+
+\newcommand{\tightlabel}[1]{\textbf{\color{UMBlue}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox{UMBlue}{%
+  \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+    \vspace{4pt}
+    {\color{white}\bfseries\LARGE SystemStudio AI}\hfill
+    {\color{Maize}\bfseries FALL 2026 SENIOR DESIGN}
+
+    {\color{white}\large A One-Stop VS Code Learning Environment for Systems Programming and Processor Design}
+    \vspace{4pt}
+  }%
+}
+
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{UMBlue}}l X >{\bfseries\color{UMBlue}}l X@{}}
+Client & Probir Roy, Assistant Professor & Project period & September 2026--April 2027 \\
+Email & \href{mailto:probirr@umich.edu}{probirr@umich.edu} & Team / effort & 3--4 students; 600--800 total hours \\
+Phone & +1 313-583-6620 & Client meetings & Biweekly; virtual or in person \\
+\end{tabularx}
+
+\section*{Project Need and Goal}
+
+Students in computer organization and operating-systems courses must often learn unfamiliar tools---C and assembly toolchains, Make, Docker, QEMU/xv6, debuggers, and circuit simulators---while simultaneously learning difficult systems concepts. Recurring student feedback identifies four connected needs: reproducible environment setup, clearer transitions from concepts to implementation, smaller guided practice activities, and formative feedback early enough to support revision.
+
+The project will design, implement, and test an installable VS Code extension that serves as a single entry point for setup, coding, processor design, simulation, practice, and help. The AI component will not act as an autonomous grader or unrestricted chatbot. It will provide progressive hints grounded in instructor-approved materials and deterministic evidence from compilation, tests, and simulation traces, and it will route unresolved problems to an instructor or teaching assistant.
+
+\section*{Required Product Capabilities}
+
+\begin{minipage}[t]{0.49\linewidth}
+\begin{itemize}
+  \item \tightlabel{Guided environment setup.} Detect supported prerequisites and provision a versioned development container containing the course compiler, libraries, Make, debugger, QEMU/xv6, and testing tools. If a host prerequisite such as Docker or WSL is missing, provide a safe guided setup rather than silently modifying the operating system.
+  \item \tightlabel{Integrated systems workspace.} Let students write, build, run, test, and debug C and assembly code without manually reconstructing toolchain commands or container configuration.
+  \item \tightlabel{Visual processor designer.} Provide a focused canvas for constructing and testing a 4-bit processor from registers, multiplexers, an ALU, memories, control logic, wires, and buses. Designs must be serializable and reproducible.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\begin{itemize}
+  \item \tightlabel{Evidence engine.} Collect compiler diagnostics, unit-test results, execution traces, and processor signals; identify the first observable divergence from expected behavior; and present actionable, rubric-aligned evidence.
+  \item \tightlabel{Guided practice and AI coach.} Deliver short, Magoosh-style concept lessons, diagnostic questions, worked analogies, mastery checks, and three levels of hints. Technical advice must cite a course resource, test result, code location, or trace event.
+  \item \tightlabel{Human-help bridge.} With student approval, package the question, relevant evidence, attempted fixes, and environment details into a concise request for an instructor or TA. The system must minimize collection and external transmission of student code and identity.
+\end{itemize}
+\end{minipage}
+
+\section*{Deliverables and Acceptance Criteria}
+
+\begin{minipage}[t]{0.49\linewidth}
+\textbf{Deliverables}
+\begin{itemize}
+  \item Installable VS Code extension (VSIX) and documented source repository.
+  \item Versioned course container and setup diagnostics for Windows, macOS, and Linux, with a documented remote fallback.
+  \item One CIS~450 C/xv6 workflow and one CIS~310 4-bit processor-design workflow.
+  \item At least ten instructor-editable micro-lessons, automated checks, and progressive hint paths.
+  \item User, deployment, privacy, and maintenance documentation; automated test suite; final demonstration and evaluation report.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\textbf{Minimum acceptance criteria}
+\begin{itemize}
+  \item A new user can create and validate a course workspace through one guided workflow once the supported container runtime is present.
+  \item Reference code and processor designs compile/simulate correctly; seeded faults produce the expected evidence and hint path.
+  \item AI responses are traceable to approved materials or captured evidence, do not assign grades, and clearly escalate unsupported cases.
+  \item Faculty review and student usability testing document correctness, setup success, time to useful feedback, and remaining limitations.
+\end{itemize}
+\end{minipage}
+
+\section*{Team Roles, Schedule, and Client Commitment}
+
+The work supports an interdisciplinary team: (1) VS Code/UX, (2) containers and systems integration, (3) processor visualization and simulation, and (4) AI-assisted learning, testing, security, and evaluation. In September--October the team will refine requirements and architecture; November--December will deliver environment provisioning and code execution; January--February will add processor design and evidence-grounded tutoring; March--April will focus on integration, cross-platform testing, usability evaluation, documentation, and final delivery. The client will meet with the team at least biweekly, provide representative course materials and reference tests, answer requirements questions in a timely manner, review milestone demonstrations, and provide the required final product evaluation letter.
+
+\vfill
+\noindent\colorbox{SoftBlue}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\small\textbf{Design boundary:} The minimum product is a focused educational environment for the two reference workflows above, not a general-purpose IDE, circuit simulator, or automated grading system. Additional courses, processor widths, and instructor analytics are stretch goals after the core product is validated.}}
+
+\end{document}

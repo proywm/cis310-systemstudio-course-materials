@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://systemstudio.example/schemas/processor-design.schema.json",
+  "title": "SystemStudio AI Processor Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "title", "wordWidth", "components", "connections"],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "wordWidth": { "const": 4 },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "label", "position"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "enum": [
+              "input",
+              "output",
+              "gate",
+              "mux",
+              "register",
+              "program-counter",
+              "alu",
+              "instruction-memory",
+              "data-memory",
+              "control-unit",
+              "clock",
+              "probe"
+            ]
+          },
+          "label": { "type": "string" },
+          "position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          },
+          "parameters": { "type": "object" },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "direction", "width"],
+              "properties": {
+                "id": { "type": "string" },
+                "direction": { "enum": ["input", "output", "clock"] },
+                "width": { "type": "integer", "minimum": 1, "maximum": 16 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "from", "to", "width"],
+        "properties": {
+          "id": { "type": "string" },
+          "from": { "$ref": "#/$defs/endpoint" },
+          "to": { "$ref": "#/$defs/endpoint" },
+          "width": { "type": "integer", "minimum": 1, "maximum": 16 },
+          "label": { "type": "string" }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "coursePackId": { "type": "string" },
+        "coursePackVersion": { "type": "string" },
+        "createdWith": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["componentId", "portId"],
+      "properties": {
+        "componentId": { "type": "string" },
+        "portId": { "type": "string" }
+      }
+    }
+  }
+}
