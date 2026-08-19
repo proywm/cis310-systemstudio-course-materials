@@ -12,7 +12,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Course policies, outcomes, tools, and topic sequence | [Fall 2026 syllabus PDF](course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf) |
 | Open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
-| Exact reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
+| Verified reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
@@ -20,6 +20,8 @@ This repository is the student-facing home for the course syllabus, semester cal
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
 
 ![SystemStudio CIS 310 Learning Center showing the grouped sidebar and Read, Watch, Try three questions preparation path](docs/images/systemstudio-learning-center.svg)
+
+![SystemStudio CIS 310 self-paced tutorial showing all eight lessons at once](docs/images/systemstudio-self-paced-tutorial.svg)
 
 ## Fall 2026 calendar
 
@@ -30,7 +32,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 ## What students receive
 
 - a locally packaged Fall 2026 syllabus PDF;
-- a Read → Watch → Try 3 questions path for every lecture topic, using focused sections of David Tarnoff's required open text and official author videos;
+- a self-paced Read → Watch → Try 3 questions path for every lecture topic, separating readiness sources from additional references and requiring three distinct practice questions for completion;
 - 13 integrity-checked presentation PDFs that open inside VS Code;
 - three homework references and three processor-project references;
 - 43 short, author-written practice questions, with at least three for each of the 13 presentation resources;
@@ -42,7 +44,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - blank and assignment-specific Digital circuit creation;
 - circuit preview and deterministic testcase support;
 - a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
-- a skippable and rerunnable guided tutorial; and
+- a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial; and
 - a local helper for topic, tool, calendar, and Canvas routing.
 - a collapsible chat-style help entry, local FAQ, U-M Maizey course-tutor handoff, and structured Canvas Questions Before Class draft.
 

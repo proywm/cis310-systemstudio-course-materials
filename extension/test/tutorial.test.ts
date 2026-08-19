@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { describe, it } from 'node:test';
+import path from 'node:path';
 import {
   parseTutorialRequest,
   resumeTutorialStep,
@@ -40,5 +42,14 @@ describe('guided tutorial state', () => {
     assert.deepEqual(parseTutorialRequest({ type: 'restart' }), { type: 'restart' });
     assert.deepEqual(parseTutorialRequest({ type: 'complete' }), { type: 'complete' });
     assert.equal(parseTutorialRequest(null), undefined);
+  });
+
+  it('keeps all lessons visible and allows self-paced navigation without card completion gates', async () => {
+    const source = await readFile(path.resolve('src/tutorialPanel.ts'), 'utf8');
+    assert.match(source, /id="lessonNav"/);
+    assert.match(source, /Choose any lesson/);
+    assert.match(source, /Work in any order/);
+    assert.match(source, /next\.disabled = false/);
+    assert.doesNotMatch(source, /if \(!requirementMet\(steps\[current\]\)\) return/);
   });
 });

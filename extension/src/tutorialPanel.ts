@@ -162,7 +162,17 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
     .progress-label { display: flex; justify-content: space-between; color: var(--vscode-descriptionForeground); font-size: .82rem; margin-bottom: 7px; }
     .progress { height: 7px; border-radius: 999px; overflow: hidden; background: var(--vscode-progressBar-background, var(--vscode-panel-border)); }
     .progress > div { height: 100%; background: var(--vscode-testing-iconPassed); transition: width .2s ease; }
-    main { width: min(980px, calc(100% - 48px)); margin: 22px auto; }
+    .tutorial-body { width: min(1240px, calc(100% - 48px)); margin: 22px auto; display: grid; grid-template-columns: minmax(210px, 250px) minmax(0, 1fr); gap: 20px; align-items: start; }
+    main { min-width: 0; }
+    .lesson-nav { position: sticky; top: 16px; display: grid; gap: 7px; border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 12px; background: var(--vscode-sideBar-background); }
+    .lesson-nav h2 { margin: 0 0 4px; font-size: .98rem; }
+    .lesson-nav p { margin: 0 0 7px; color: var(--vscode-descriptionForeground); font-size: .78rem; line-height: 1.35; }
+    .lesson-link { width: 100%; display: grid; grid-template-columns: 25px minmax(0,1fr) 18px; gap: 7px; align-items: center; cursor: pointer; text-align: left; padding: 8px; color: var(--vscode-foreground); background: transparent; border: 1px solid transparent; border-radius: 5px; }
+    .lesson-link:hover, .lesson-link:focus-visible { border-color: var(--vscode-focusBorder); outline: none; }
+    .lesson-link.active { border-color: var(--vscode-focusBorder); background: var(--vscode-list-activeSelectionBackground); color: var(--vscode-list-activeSelectionForeground); }
+    .lesson-number { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); font-size: .75rem; font-weight: 700; }
+    .lesson-title { line-height: 1.25; font-size: .82rem; }
+    .lesson-state { color: var(--vscode-testing-iconPassed); text-align: center; }
     .step { display: none; }
     .step.active { display: block; animation: enter .18s ease-out; }
     @keyframes enter { from { opacity: .35; transform: translateY(5px); } }
@@ -189,6 +199,8 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
     .completion { text-align: center; padding: 42px 20px; }
     .completion .mark { font-size: 3rem; color: var(--vscode-testing-iconPassed); }
     code { font-family: var(--vscode-editor-font-family); background: var(--vscode-textCodeBlock-background); padding: 1px 4px; }
+    @media (max-width: 820px) { .tutorial-body { grid-template-columns: 1fr; } .lesson-nav { position: static; grid-template-columns: repeat(2, minmax(0,1fr)); } .lesson-nav h2, .lesson-nav p { grid-column: 1 / -1; } }
+    @media (max-width: 520px) { .lesson-nav { grid-template-columns: 1fr; } header, footer { align-items: flex-start; flex-direction: column; } }
     @media (prefers-reduced-motion: reduce) { .step.active { animation: none; } .progress > div { transition: none; } }
   </style>
 </head>
@@ -200,16 +212,22 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
   </header>
   <div class="progress-wrap">
     <div class="progress-label"><span id="stepLabel"></span><span id="requirement"></span></div>
-    <div class="progress" role="progressbar" aria-label="Tutorial progress" aria-valuemin="1" aria-valuemax="8"><div id="progressBar"></div></div>
+    <div class="progress" role="progressbar" aria-label="Current tutorial position" aria-valuemin="1" aria-valuemax="8"><div id="progressBar"></div></div>
   </div>
-  <main>
-    ${tutorialStepsHtml()}
-    <section id="completion" class="step completion" aria-labelledby="completeTitle">
-      <div class="mark">✓</div><h2 id="completeTitle">You have explored the complete student workflow</h2>
-      <p>You can return from the SystemStudio sidebar, the Command Palette, or VS Code’s Getting Started page.</p>
-      <div class="actions" style="justify-content:center"><button id="runAgain" class="primary">Run tutorial again</button><button data-action="show-tools" class="secondary">Open SystemStudio tools</button><button data-action="native-walkthrough" class="secondary">Open Getting Started</button></div>
-    </section>
-  </main>
+  <div class="tutorial-body">
+    <nav id="lessonNav" class="lesson-nav" aria-label="Tutorial lessons">
+      <h2>Choose any lesson</h2>
+      <p>Work in any order. You can leave, resume, skip a lesson, or rerun the tutorial.</p>
+    </nav>
+    <main>
+      ${tutorialStepsHtml()}
+      <section id="completion" class="step completion" aria-labelledby="completeTitle">
+        <div class="mark">✓</div><h2 id="completeTitle">You reached the end of the tutorial</h2>
+        <p>This is self-paced, so finishing does not claim that you reviewed every choice. Return to any lesson from the SystemStudio sidebar, the Command Palette, or VS Code’s Getting Started page.</p>
+        <div class="actions" style="justify-content:center"><button id="runAgain" class="primary">Run tutorial again</button><button data-action="show-tools" class="secondary">Open SystemStudio tools</button><button data-action="native-walkthrough" class="secondary">Open Getting Started</button></div>
+      </section>
+    </main>
+  </div>
   <footer id="footer">
     <button id="back" class="secondary">Back</button>
     <div class="nav"><span id="liveStatus" class="status" role="status" aria-live="polite"></span><button id="next" class="primary" disabled>Next</button></div>
@@ -229,10 +247,30 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
   const footer = document.getElementById('footer');
   const liveStatus = document.getElementById('liveStatus');
   const completion = document.getElementById('completion');
+  const lessonNav = document.getElementById('lessonNav');
+  const lessonButtons = steps.map((step, index) => {
+    const button = document.createElement('button');
+    button.className = 'lesson-link';
+    button.type = 'button';
+    button.dataset.lesson = String(index);
+    const number = document.createElement('span');
+    number.className = 'lesson-number';
+    number.textContent = String(index + 1);
+    const title = document.createElement('span');
+    title.className = 'lesson-title';
+    title.textContent = step.querySelector('h2')?.textContent || ('Lesson ' + (index + 1));
+    const state = document.createElement('span');
+    state.className = 'lesson-state';
+    state.setAttribute('aria-hidden', 'true');
+    button.append(number, title, state);
+    button.addEventListener('click', () => { current = index; render(); steps[current].querySelector('h2')?.focus(); });
+    lessonNav.append(button);
+    return button;
+  });
 
-  function requirementMet(step) {
+  function requirementMet(step, index = current) {
     const choices = [...step.querySelectorAll('[data-choice]')];
-    return step.dataset.require === 'all' ? visited[current].size === choices.length : visited[current].size > 0;
+    return step.dataset.require === 'all' ? visited[index].size === choices.length : visited[index].size > 0;
   }
   function render() {
     completion.classList.remove('active');
@@ -247,16 +285,22 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
       choice.setAttribute('aria-pressed', String(selected));
       choice.querySelector('.checked').textContent = selected ? '✓ Reviewed' : 'Click to review';
     });
+    lessonButtons.forEach((button, index) => {
+      const completeLesson = requirementMet(steps[index], index);
+      button.classList.toggle('active', index === current);
+      button.setAttribute('aria-current', index === current ? 'step' : 'false');
+      button.querySelector('.lesson-state').textContent = completeLesson ? '✓' : visited[index].size ? '•' : '';
+    });
     stepLabel.textContent = 'Step ' + (current + 1) + ' of ' + steps.length;
     requirement.textContent = step.dataset.require === 'all'
-      ? visited[current].size + ' of ' + choices.length + ' choices reviewed'
-      : complete ? 'Choice made' : 'Make one choice to continue';
+      ? visited[current].size + ' of ' + choices.length + ' choices explored · optional'
+      : complete ? 'Choice explored' : 'Explore a choice or continue when ready';
     progressBar.style.width = ((current + 1) / steps.length * 100) + '%';
     progress.setAttribute('aria-valuenow', String(current + 1));
-    next.disabled = !complete;
-    next.textContent = current === steps.length - 1 ? 'Finish tutorial' : 'Next';
+    next.disabled = false;
+    next.textContent = current === steps.length - 1 ? 'Finish tutorial' : 'Next lesson';
     back.disabled = current === 0;
-    liveStatus.textContent = complete ? 'Ready to continue' : 'Review the highlighted choice' + (step.dataset.require === 'all' ? 's' : '');
+    liveStatus.textContent = complete ? 'Lesson reviewed' : 'Self-paced: continue now or review more choices';
     vscode.postMessage({ type: 'navigate', step: current });
   }
   document.addEventListener('click', event => {
@@ -272,7 +316,6 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
     if (action) vscode.postMessage({ type: 'action', action: action.dataset.action });
   });
   next.addEventListener('click', () => {
-    if (!requirementMet(steps[current])) return;
     if (current < steps.length - 1) { current += 1; render(); steps[current].querySelector('h2').focus(); }
     else {
       steps[current].classList.remove('active'); footer.hidden = true; completion.classList.add('active');
@@ -313,7 +356,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="1" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Know where to learn and where to submit</h2>
     <p>The Fall 2026 workspace separates bundled study references from the authoritative Canvas course.</p>
-    <div class="instruction"><strong>Review all eight:</strong> each resource has one clear job, which keeps study, practice, and submission from competing for attention.</div>
+    <div class="instruction"><strong>Explore the resources you need:</strong> each has one clear job, and you can return to the others later.</div>
     <div class="choices">
       ${choice('canvas', 'Fall 2026 Canvas', 'Authoritative deadlines, grading rules, required files, announcements, and submission.')}
       ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as a packaged PDF.')}
@@ -329,7 +372,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>
     <p>Check the environment before rewriting a circuit. Digital, Java, workspace trust, and local-vs-remote GUI access are separate signals.</p>
-    <div class="instruction"><strong>Review all three:</strong> identify the evidence that distinguishes each case.</div>
+    <div class="instruction"><strong>Explore any case:</strong> identify the evidence that distinguishes it, then return for the others when relevant.</div>
     <div class="choices">
       ${choice('check', 'Run the environment check', 'Reports Digital checksum, Java version, and workspace trust without changing the machine.')}
       ${choice('install', 'Install or verify Digital', 'After consent, installs the pinned release in extension storage and verifies its checksum.')}
@@ -340,7 +383,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="3" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Bridge a concept to a circuit</h2>
     <p>Use smaller, scaffolded practice and an explicit concept-to-implementation loop for homework and projects.</p>
-    <div class="instruction"><strong>Review every stage:</strong> each should produce evidence before you continue.</div>
+    <div class="instruction"><strong>Follow or sample the stages:</strong> each should produce evidence before project work continues.</div>
     <div class="choices">
       ${choice('read', 'Read and watch before building', 'Open the mapped Tarnoff sections and author video; use the bundled PDF and matching homework/project reference after them.')}
       ${choice('predict', 'Predict a small behavior', 'Write inputs, expected outputs, states, or transitions before simulating.')}
@@ -353,7 +396,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="4" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Bridge a concept to assembly</h2>
     <p>The embedded lab uses one consistent source-level IA-32 teaching machine across Windows, macOS, Linux, and Remote SSH.</p>
-    <div class="instruction"><strong>Review all four:</strong> profile choice and observable state are part of the learning workflow.</div>
+    <div class="instruction"><strong>Explore the profile you expect to use:</strong> return later to compare the alternatives.</div>
     <div class="choices">
       ${choice('predict', 'Predict register or memory state', 'Write what should change before executing the instruction.')}
       ${choice('auto', 'Auto-detect', 'Select Irvine32 Classroom or NASM IA-32 from the source wrappers.')}
@@ -365,7 +408,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="5" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Inspect evidence, not just “it ran”</h2>
     <p>Use the evidence that fits the task. This is where tool output becomes feedback you can explain.</p>
-    <div class="instruction"><strong>Review all five:</strong> identify what each form of evidence can tell you.</div>
+    <div class="instruction"><strong>Explore the evidence relevant to your task:</strong> return later for the other forms.</div>
     <div class="choices">
       ${choice('truth', 'Truth-table or state row', 'Compare a chosen input/state with the circuit’s observed output/next state.')}
       ${choice('preview', 'Circuit preview', 'Inspect structure inside VS Code, including on Remote SSH.')}
@@ -377,7 +420,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="6" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Choose the right kind of conversation</h2>
     <p>The chat bubble separates a private local FAQ, the U-M Maizey course tutor, and a Canvas question for the instructor.</p>
-    <div class="instruction"><strong>Review every choice:</strong> use the smallest support path that fits your need.</div>
+    <div class="instruction"><strong>Explore the support path that fits today:</strong> you do not need to open every service.</div>
     <div class="choices">
       ${choice('faq', 'Local FAQ chat', 'Use recurring setup, navigation, Digital, assembly, or submission-process checklists without calling an AI service.')}
       ${choice('tutor', 'U-M Maizey AI tutor', 'Ask for one source-grounded hint, analogous example, or check of your reasoning; verify the cited source.')}
@@ -390,7 +433,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="7" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Recover, verify, and continue</h2>
     <p>Common failures have different next steps. SystemStudio points to evidence and stops safely instead of guessing.</p>
-    <div class="instruction"><strong>Review all five:</strong> know the recovery path before beginning graded work.</div>
+    <div class="instruction"><strong>Explore the recovery path you need:</strong> use the lesson list to return when a different problem occurs.</div>
     <div class="choices">
       ${choice('syntax', 'Unsupported assembly syntax', 'Use the exact source-line diagnostic and compatibility guide.')}
       ${choice('input', 'Missing virtual input', 'Add one response per line, rebuild, and step again.')}

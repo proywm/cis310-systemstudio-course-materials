@@ -588,12 +588,12 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
   },
   {
     id: 'io-status-before-data', topicId: 'memory-io', resourceId: 'lecture-08', difficulty: 'application',
-    prompt: 'In a simple polled input sequence, what should software normally do before reading the device data register?',
-    options: ['Clear all processor registers', 'Disable the memory system', 'Write the data register to cache', 'Check the status register until input is ready'],
+    prompt: 'In the mapped timer example, what should polled software repeatedly check to learn whether the compare event occurred?',
+    options: ['Every processor register', 'The memory-system clock', 'The program’s source-code length', 'The timer’s status flag'],
     correctIndex: 3,
-    hint: 'The status value tells software whether the data value is valid yet.',
-    explanation: 'Polling software repeatedly checks the device status register and reads the data register only after the ready condition is observed. Reading earlier may retrieve stale or invalid data.',
-    takeaway: 'In polled I/O, status provides the evidence that a data transfer is ready.',
+    hint: 'The example exposes completion through a value in the timer interface.',
+    explanation: 'The polling loop repeatedly reads the timer status flag. When the flag reports that the compare matched, software has evidence that the event occurred and can continue.',
+    takeaway: 'Polling repeatedly checks a device status condition until the expected event is reported.',
     sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
@@ -879,6 +879,12 @@ export function parsePracticePanelRequest(value: unknown): PracticePanelRequest 
 
 export function practiceQuestion(questionId: string): PracticeQuestion | undefined {
   return QUESTION_BY_ID.get(questionId);
+}
+
+export function attemptedPracticeQuestionsForResource(progress: PracticeProgress, resourceId: string): number {
+  return PRACTICE_QUESTIONS.filter((question) =>
+    question.resourceId === resourceId && (progress.questions[question.id]?.attempts ?? 0) > 0
+  ).length;
 }
 
 function summarizeTopic(topic: PracticeTopic, progress: PracticeProgress, now: Date): PracticeTopicSummary {

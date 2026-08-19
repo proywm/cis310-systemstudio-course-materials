@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { describe, it } from 'node:test';
+import path from 'node:path';
 import {
   PRACTICE_QUESTIONS,
   PRACTICE_TOPICS,
+  attemptedPracticeQuestionsForResource,
   buildPracticeDashboard,
   emptyPracticeProgress,
   normalizePracticeProgress,
@@ -67,6 +70,37 @@ describe('CIS 310 formative practice', () => {
     assert.equal(missed.progress.questions[question.id]!.stage, 0);
     assert.equal(missed.progress.questions[question.id]!.correctStreak, 0);
     assert.match(missed.result.reviewLabel, /Confident miss/);
+  });
+
+  it('counts distinct attempted questions for a lecture preparation check', () => {
+    const questions = PRACTICE_QUESTIONS.filter((question) => question.resourceId === 'lecture-06').slice(0, 3);
+    let progress = emptyPracticeProgress();
+    for (const question of questions) {
+      progress = recordPracticeAnswer(progress, {
+        questionId: question.id,
+        selectedIndex: question.correctIndex,
+        confidence: 'medium',
+        usedHint: false,
+        durationMs: 1_000
+      }).progress;
+    }
+    assert.equal(attemptedPracticeQuestionsForResource(progress, 'lecture-06'), 3);
+    const repeated = recordPracticeAnswer(progress, {
+      questionId: questions[0]!.id,
+      selectedIndex: questions[0]!.correctIndex,
+      confidence: 'medium',
+      usedHint: false,
+      durationMs: 1_000
+    }).progress;
+    assert.equal(attemptedPracticeQuestionsForResource(repeated, 'lecture-06'), 3);
+  });
+
+  it('labels readiness sources and avoids claiming source links open at an exact locator', async () => {
+    const source = await readFile(path.resolve('src/practicePanel.ts'), 'utf8');
+    assert.match(source, /Readiness source/);
+    assert.match(source, /Additional reference/);
+    assert.match(source, /3 distinct questions tried/);
+    assert.doesNotMatch(source, /exact supporting source/i);
   });
 
   it('builds transparent topic and confidence summaries from local attempts', () => {

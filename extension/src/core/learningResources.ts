@@ -49,6 +49,7 @@ export interface LearningPathModule extends PreClassModule {
   read: boolean;
   watched: boolean;
   practiceAttempts: number;
+  practiceQuestionsAttempted: number;
   complete: boolean;
 }
 
@@ -89,10 +90,10 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-03', lectureLabel: 'Lecture 3', title: 'Boolean Algebra and Circuit Simplification',
-    focus: 'Boolean laws, DeMorgan’s theorem, simplification, SOP, and POS forms.',
+    focus: 'Boolean laws, DeMorgan’s theorem, algebraic simplification, and canonical SOP.',
     readings: [
       { title: 'Tarnoff Chapter 5 — Boolean Algebra', focus: '§§5.1–5.7', url: chapter(5) },
-      { title: 'Tarnoff Chapter 6 — Standard Boolean Expression Formats', focus: '§§6.1–6.3: SOP, POS, and truth-table conversion', url: chapter(6) }
+      { title: 'Tarnoff Chapter 6 — Standard Boolean Expression Formats', focus: '§§6.1–6.3: SOP and truth-table conversion', url: chapter(6) }
     ],
     authorVideos: [
       { title: 'Ep 034: Basic Boolean Algebraic Simplification Examples', focus: 'Boolean laws and absorption', url: 'https://www.youtube.com/watch?v=dLIfh2wj8Dk' },
@@ -104,7 +105,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-04', lectureLabel: 'Lecture 4', title: 'Karnaugh Maps',
-    focus: 'Gray-code adjacency, valid groups, minimization, wraparound, and don’t-care conditions.',
+    focus: 'Gray-code adjacency, power-of-two groups, minimization, and wraparound.',
     readings: [
       { title: 'Tarnoff Chapter 7 — Karnaugh Maps', focus: '§§7.1–7.3: adjacency, grouping, and simplification', url: chapter(7) }
     ],
@@ -118,7 +119,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-05', lectureLabel: 'Lecture 5', title: 'Combinational Logic and Data Selection',
-    focus: 'Design process, active-low signals, decoders, multiplexers, and demultiplexers.',
+    focus: 'Present-input behavior, active-low decoders, multiplexers, and select-bit count.',
     readings: [
       { title: 'Tarnoff Chapter 5 — Boolean Algebra', focus: '§5.1: combinational logic as a function of present inputs', url: chapter(5) },
       { title: 'Tarnoff Chapter 8 — Combinational Logic Applications', focus: '§§8.3–8.6: decoders, multiplexers, and demultiplexers', url: chapter(8) }
@@ -133,7 +134,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-06', lectureLabel: 'Lecture 6', title: 'Memory Cells and Sequential Logic',
-    focus: 'Latches, flip-flops, timing, registers, counters, and finite-state behavior.',
+    focus: 'Latches, flip-flops, timing evidence, counters, and finite-state behavior.',
     readings: [
       { title: 'Tarnoff Chapter 10 — Latches', focus: '§§10.1–10.5', url: chapter(10) },
       { title: 'Tarnoff Chapter 11 — State Machines', focus: '§§11.1–11.2: state architecture, encoding, and next-state logic', url: chapter(11) }
@@ -148,7 +149,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-07', lectureLabel: 'Lecture 7', title: 'Memory Organization and Buses',
-    focus: 'Memory-device organization, buses, memory maps, address decoding, SRAM, and DRAM.',
+    focus: 'Memory-device organization, buses, address-line capacity, address decoding, and chip select.',
     readings: [
       { title: 'Tarnoff Chapter 12 — Memory Organization', focus: '§§12.2–12.3.4: device organization, buses, and address decoding', url: chapter(12) }
     ],
@@ -159,8 +160,8 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
     readinessSources: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
-    resourceId: 'lecture-08', lectureLabel: 'Lecture 8', title: 'I/O, Interrupts, and Asynchronous Programming',
-    focus: 'Peripheral interfaces, memory-mapped I/O, polling, interrupts, and asynchronous events.',
+    resourceId: 'lecture-08', lectureLabel: 'Lecture 8', title: 'Memory-Mapped I/O and Polling',
+    focus: 'Peripheral interfaces, memory-mapped device registers, status flags, and polling cost.',
     readings: [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§§15.9.1–15.9.2: device registers, memory-mapped I/O, and polling', url: chapter(15) }
     ],
@@ -200,8 +201,8 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
     readinessSources: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
-    resourceId: 'lecture-10', lectureLabel: 'Lecture 10', title: 'RTL, Arithmetic Unit, and Control Unit',
-    focus: 'Register transfers, CPU components, ALU/control interaction, and instruction execution.',
+    resourceId: 'lecture-10', lectureLabel: 'Lecture 10', title: 'CPU Components and Instruction Execution',
+    focus: 'Register, ALU, instruction-register/decoder, and control actions during instruction execution.',
     readings: [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§§15.2–15.6', url: chapter(15) }
     ],
@@ -224,8 +225,8 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
     readinessSources: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
-    resourceId: 'lecture-12', lectureLabel: 'Lecture 12', title: 'Address Spaces, x86 Registers, and Assembly',
-    focus: '80x86 registers, flags, segments, stack behavior, addressing, and assembly-language structure.',
+    resourceId: 'lecture-12', lectureLabel: 'Lecture 12', title: 'x86 Registers, Flags, Stack, and Calls',
+    focus: '80x86 data registers, EIP, flags, stack behavior, CALL, and RET.',
     readings: [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§15.2.5: stack organization', url: chapter(15) },
       { title: 'Tarnoff Chapter 16 — Intel 80x86 Processor', focus: '§§16.2.1–16.2.3: registers, instruction pointer, stack pointer, and flags', url: chapter(16) },
@@ -285,6 +286,10 @@ export function togglePreparation(
 
 export function preparationModule(resourceId: string): PreClassModule | undefined {
   return MODULE_BY_ID.get(resourceId);
+}
+
+export function preparationModuleComplete(read: boolean, watched: boolean, attemptedQuestions: number): boolean {
+  return read && watched && attemptedQuestions >= 3;
 }
 
 export function preparationUrl(resourceId: string, target: PreparationTarget, sourceIndex = 0): string | undefined {

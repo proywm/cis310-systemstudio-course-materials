@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for pre-class open-book preparation, official author videos, short formative practice, local learning progress, the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
+This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for self-paced pre-class open-book preparation, official author videos, short formative practice, local learning progress, the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a self-paced tutorial, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 The [Reading–Video–Practice Alignment Audit](CONTENT_ALIGNMENT_AUDIT.md) records how every readiness prompt and practice question was verified against exact book sections and actual video content.
 
@@ -30,7 +30,7 @@ The [Reading–Video–Practice Alignment Audit](CONTENT_ALIGNMENT_AUDIT.md) rec
 - a starter-workspace generator with one upstream half-adder orientation example, an empty `circuits/work/` area, and assembly guides;
 - an explicit **Irvine32 Classroom (MASM)** profile and a **NASM IA-32** profile on one no-setup, source-level embedded machine, with build, step, run, reset, registers, flags, memory, stack, virtual-console input, output, and trace views;
 - Irvine-style input/output, display, string, random, and macro helpers needed by introductory activities, plus starter programs and an explicit boundary separating the classroom profiles from full native toolchains; and
-- a skippable, resumable, rerunnable tutorial built around recurring student concerns: setup-vs-work diagnosis, concept-to-implementation scaffolding, evidence inspection, submission clarity, and safer help-seeking;
+- a self-paced, skippable, resumable, and rerunnable eight-lesson tutorial with a visible lesson navigator, free lesson selection, and guidance for setup-vs-work diagnosis, concept-to-implementation scaffolding, evidence inspection, submission clarity, and safer help-seeking;
 - a keyboard-accessible collapsible chat entry, local FAQ for topic/tool/submission routing, U-M Maizey course-tutor handoff, and structured Questions Before Class draft; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
@@ -81,7 +81,7 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 4. Open the **Fall 2026 course calendar** to see all 27 Monday/Wednesday meetings; export all-day placeholders or enter a confirmed Canvas time for timed events.
 5. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) to confirm the current task, deadline, class details, and required files.
 6. Open **Lessons and Assignments** and select one of the 13 bundled presentation PDFs, three homework references, or three project references after completing the related reading.
-7. Use **Learn and Practice** for the complete book/video map, a short topic session, a 10-question quiz, or review of due and saved questions. State confidence before seeing feedback, then use the explanation, exact mapped book section and author video, and related lecture.
+7. Use **Learn and Practice** for the complete book/video map, a short topic session, a 10-question quiz, or review of due and saved questions. State confidence before seeing feedback, then use the explanation, visibly labeled mapped book/video focus, and related lecture.
 8. Run **CIS 310: Check Environment** before changing circuit work in response to a tool failure.
 9. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
 10. Predict one behavior, then use preview/tests as evidence before integrating a larger component.

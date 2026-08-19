@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 open-book preparation, practice, course materials, managed Digital circuits, and embedded IA-32 assembly inside Visual Studio Code.",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
   <title id="title">SystemStudio CIS 310 Learning Center interface</title>
-  <desc id="description">A Visual Studio Code-style interface showing the grouped CIS 310 sidebar and a Read, Watch, Try three questions pre-class module.</desc>
+  <desc id="description">A Visual Studio Code-style interface showing the grouped CIS 310 sidebar and a self-paced Read, Watch, Try three questions pre-class module with readiness sources identified.</desc>
   <defs>
     <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#173a57"/>
@@ -39,7 +39,7 @@
   <rect x="350" y="44" width="1090" height="796" fill="#1e1e1e"/>
   <text x="392" y="91" fill="#8c8c8c" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">FALL 2026 · PREPARATION AND FORMATIVE PRACTICE</text>
   <text x="392" y="128" fill="#f2f2f2" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="650">CIS 310 Learning</text>
-  <text x="392" y="155" fill="#b6b6b6" font-family="Segoe UI, Arial, sans-serif" font-size="15">Read → watch → retrieve → explain → review. One small next step at a time.</text>
+  <text x="392" y="155" fill="#b6b6b6" font-family="Segoe UI, Arial, sans-serif" font-size="15">Read → watch → retrieve → explain → review. A self-paced path you can leave and resume.</text>
   <rect x="1204" y="86" width="194" height="34" rx="17" fill="none" stroke="#73c991"/>
   <text x="1301" y="108" text-anchor="middle" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="12">Private on this device · not graded</text>
 
@@ -50,21 +50,21 @@
 
   <rect x="422" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="450" cy="354" r="15" fill="#0e639c"/><text x="450" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">1</text>
-  <text x="477" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Read the open book</text>
-  <text x="444" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 1 · §§1.2–1.7</text>
-  <text x="444" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 2 · §2.7</text>
-  <text x="444" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 15 · §§15.1–15.4</text>
+  <text x="477" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Read for readiness</text>
+  <text x="444" y="394" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="13">Readiness · Chapter 1 · §§1.2–1.7</text>
+  <text x="444" y="416" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="13">Readiness · Chapter 2 · §2.7</text>
+  <text x="444" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Additional · Chapter 15 · §§15.1–15.4</text>
   <rect x="444" y="455" width="116" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="502" y="477" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open readings</text>
-  <text x="444" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark all readings completed</text>
+  <text x="444" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark reading step completed</text>
 
   <rect x="746" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="774" cy="354" r="15" fill="#0e639c"/><text x="774" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">2</text>
-  <text x="801" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Watch the author</text>
-  <text x="768" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 001: Digital Signal</text>
-  <text x="768" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 006: Hexadecimal</text>
-  <text x="768" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 079: CPU Architecture</text>
+  <text x="801" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Watch for readiness</text>
+  <text x="768" y="394" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="13">Readiness · Ep 001: Digital Signal</text>
+  <text x="768" y="416" fill="#73c991" font-family="Segoe UI, Arial, sans-serif" font-size="13">Readiness · Ep 006: Hexadecimal</text>
+  <text x="768" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Additional · Ep 079: CPU Architecture</text>
   <rect x="768" y="455" width="142" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="839" y="477" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open 3 videos</text>
-  <text x="768" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark all videos completed</text>
+  <text x="768" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark video step completed</text>
 
   <rect x="1070" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="1098" cy="354" r="15" fill="#0e639c"/><text x="1098" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">3</text>
@@ -72,12 +72,12 @@
   <text x="1092" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Can I convert a value between</text>
   <text x="1092" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">binary and hexadecimal?</text>
   <rect x="1092" y="443" width="132" height="34" rx="5" fill="#0e639c"/><text x="1158" y="465" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Try 3 questions</text>
-  <text x="1092" y="511" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">0 local attempts so far</text>
+  <text x="1092" y="511" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">0 of 3 distinct questions tried</text>
 
   <rect x="392" y="614" width="1006" height="142" rx="10" fill="#252526" stroke="#474747"/>
   <text x="418" y="651" fill="#f0f0f0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="650">Practice and review</text>
   <text x="418" y="679" fill="#b8b8b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Start with a short mixed session. Explanations connect back to the book, author video, and lecture.</text>
   <rect x="418" y="702" width="192" height="36" rx="5" fill="#0e639c"/><text x="514" y="725" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Start 5-question practice</text>
   <rect x="622" y="702" width="178" height="36" rx="5" fill="#3a3d41"/><text x="711" y="725" text-anchor="middle" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="12">Take a 10-question quiz</text>
-  <text x="1398" y="814" text-anchor="end" fill="#787878" font-family="Segoe UI, Arial, sans-serif" font-size="11">Interface overview · v0.9.0</text>
+  <text x="1398" y="814" text-anchor="end" fill="#787878" font-family="Segoe UI, Arial, sans-serif" font-size="11">Interface overview · v0.10.3</text>
 </svg>

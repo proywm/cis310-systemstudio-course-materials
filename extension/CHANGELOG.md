@@ -1,9 +1,17 @@
 # Change Log
 
+## 0.10.3
+
+- Rebuilt the guided tutorial as a visible eight-lesson self-paced path with free lesson selection, skipping, resume, and rerun controls.
+- Required three distinct readiness questions before a preparation module is checked; repeated answers no longer complete the module.
+- Distinguished readiness sources from additional references and made each mapped source focus visible instead of implying an exact PDF page or video timestamp.
+- Replaced the one partially inferred I/O item with the directly supported timer-status polling example and narrowed module focus statements to verified source coverage.
+- Added a completed-path dashboard state, safer partial-session exit, and screen-transition focus handling based on an independent blind-student review.
+
 ## 0.10.2
 
 - Verified every lecture-readiness prompt and all 43 practice questions against exact Tarnoff open-book sections and actual author-video content.
-- Added explicit reading/video source maps with automated bounds and completeness tests, and made feedback open the exact supporting source for each question.
+- Added explicit reading/video source maps with automated bounds and completeness tests, and made feedback open the supporting source mapped to each question.
 - Corrected the hexadecimal, adder, I/O, CPU, pipeline, and assembly source assignments; replaced questions that went beyond the assigned materials.
 - Expanded the preparation path to show every targeted author video and added a maintainable content-alignment audit.
 

@@ -20,16 +20,16 @@ These findings inform the design; they do not imply that version 0.9.0 has alrea
 
 ## Student-centered practice patterns
 
-The design combines established student-support patterns: a clean starting point, short text and video lessons, customizable practice, different feedback timing for guided practice and quizzes, answer explanations, related lessons, saved questions, distributed review, a study sequence, descriptive progress evidence, and a visible help path. Each pattern is implemented specifically for CIS 310 materials and evaluated against learning-science evidence and student needs.
+The design combines established student-support patterns: a clean starting point, bounded reading targets, readiness-tagged author videos, customizable practice, different feedback timing for guided practice and quizzes, answer explanations, related lessons, saved questions, distributed review, a study sequence, descriptive progress evidence, and a visible help path. Each pattern is implemented specifically for CIS 310 materials and evaluated against learning-science evidence and student needs.
 
 | Observed pattern | CIS 310 adaptation | Intended student benefit |
 |---|---|---|
 | Simple dashboard and personalized suggestions | One expanded **Start Here** group and the next incomplete lecture preparation | Less scanning and less uncertainty about where to begin |
-| Video lessons and study schedule | A 13-module **Read → Watch → Try 3 questions** path, ordered by the course sequence | Make pre-class preparation concrete and keep the required text ahead of the slides |
+| Video lessons and study schedule | A self-paced 13-module **Read → Watch → Try 3 questions** path with readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
 | Lesson library | Focused Tarnoff chapter sections, targeted official author videos, and the packaged lecture for every topic | Let a student move among primary explanation, audiovisual reinforcement, and class framing |
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
-| Explanations and related lessons | Original text explanation, one-sentence takeaway, exact mapped open-book section, exact mapped official author video, and packaged lecture | Connect an answer to the underlying concept without claiming a bespoke video explanation for every question |
+| Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
@@ -39,14 +39,14 @@ The extension does not guarantee an exam score, grade increase, mastery, or lear
 
 ## Open-book and author-video pathway
 
-The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*. Each of the 13 presentation resources maps to one or two focused chapter readings, one video from Tarnoff's official Intermation channel or ETSU OER series, one readiness prompt, and exactly three related retrieval questions. This changes the default sequence from “open the slides” to:
+The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*. Each of the 13 presentation resources maps to focused chapter readings, one or more videos from Tarnoff's official Intermation channel or ETSU OER series, one readiness prompt, and a bank of at least three related retrieval questions. A module session draws three distinct questions from that bank. This changes the default sequence from “open the slides” to:
 
-1. **Read:** open the assigned book chapter/sections and self-mark completion;
-2. **Watch:** use the targeted author videos as second explanations and self-mark completion;
+1. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
+2. **Watch:** begin with the author videos tagged for readiness, use the others as additional explanations, and self-mark the video step;
 3. **Retrieve:** answer three mapped questions without reopening the source; and
 4. **Bring uncertainty:** take one unresolved point or confident miss to class or to the instructor.
 
-The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The packaged lecture PDFs remain local and no Google Drive link is used.
+The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. The packaged lecture PDFs remain local and no Google Drive link is used.
 
 ## Learning-science rationale
 
@@ -62,7 +62,7 @@ The implemented scheduler and recommendation weights are conservative instructio
 ## Cognitive-overhead decisions
 
 - Only **Start Here** is expanded by default; specialized tools remain grouped and collapsed.
-- The primary action is the next incomplete Read → Watch → Try module; a five-question recommended session is the second action and customization is secondary.
+- The primary action is the next incomplete Read → Watch → Try module; completion requires reading and video self-checks plus three distinct questions, while a five-question recommended session is the second action and customization is secondary.
 - Questions appear one at a time with one required choice and one confidence choice.
 - Explanations use a stable structure: outcome, explanation, takeaway, related lesson, optional reflection, next.
 - Setup, Digital, assembly, learning, and help are separate groups so a tool failure is not mistaken for a content failure.

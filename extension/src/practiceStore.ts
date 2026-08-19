@@ -3,6 +3,7 @@ import {
   PRE_CLASS_MODULES,
   emptyPreparationProgress,
   normalizePreparationProgress,
+  preparationModuleComplete,
   togglePreparation,
   type LearningPathModule,
   type PreparationField,
@@ -10,6 +11,7 @@ import {
 } from './core/learningResources';
 import {
   buildPracticeDashboard,
+  attemptedPracticeQuestionsForResource,
   emptyPracticeProgress,
   normalizePracticeProgress,
   practiceQuestion,
@@ -55,9 +57,17 @@ export class PracticeStore implements vscode.Disposable {
       const practiceAttempts = Object.entries(practice.questions)
         .filter(([questionId]) => practiceQuestion(questionId)?.resourceId === module.resourceId)
         .reduce((sum, [, progress]) => sum + progress.attempts, 0);
+      const practiceQuestionsAttempted = attemptedPracticeQuestionsForResource(practice, module.resourceId);
       const read = state?.read ?? false;
       const watched = state?.watched ?? false;
-      return { ...module, read, watched, practiceAttempts, complete: read && watched && practiceAttempts > 0 };
+      return {
+        ...module,
+        read,
+        watched,
+        practiceAttempts,
+        practiceQuestionsAttempted,
+        complete: preparationModuleComplete(read, watched, practiceQuestionsAttempted)
+      };
     });
   }
 

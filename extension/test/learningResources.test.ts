@@ -8,6 +8,7 @@ import {
   emptyPreparationProgress,
   normalizePreparationProgress,
   preparationModule,
+  preparationModuleComplete,
   preparationUrl,
   togglePreparation
 } from '../src/core/learningResources';
@@ -71,6 +72,14 @@ describe('CIS 310 pre-class learning path', () => {
     assert.equal(preparationUrl('../bad', 'reading'), undefined);
     assert.equal(preparationUrl(first.resourceId, 'reading', 99), undefined);
     assert.equal(preparationUrl(first.resourceId, 'video', 99), undefined);
+  });
+
+  it('requires three distinct attempted questions before a preparation module is complete', () => {
+    assert.equal(preparationModuleComplete(true, true, 1), false);
+    assert.equal(preparationModuleComplete(true, true, 2), false);
+    assert.equal(preparationModuleComplete(true, true, 3), true);
+    assert.equal(preparationModuleComplete(false, true, 3), false);
+    assert.equal(preparationModuleComplete(true, false, 3), false);
   });
 
   it('normalizes and toggles self-reported preparation progress without preserving unknown modules', () => {

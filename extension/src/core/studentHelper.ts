@@ -99,7 +99,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Prepare with the open book before using the slides',
       paragraphs: [
         'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and the targeted official author videos needed for its questions.',
-        'Use the short Read → Watch → Try 3 questions path before class. The lecture PDF then becomes a guide for discussion instead of the only source you study.'
+        'Use the self-paced Read → Watch → Try 3 questions path before class. Begin with readiness-tagged sources; the lecture PDF then becomes a guide for discussion instead of the only source you study.'
       ],
       checklist: [
         'Open the next preparation module and read only its mapped chapter or sections.',

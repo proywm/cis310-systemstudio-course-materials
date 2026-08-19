@@ -1,4 +1,4 @@
-export const TUTORIAL_VERSION = 6;
+export const TUTORIAL_VERSION = 7;
 
 export const TUTORIAL_STEP_IDS = [
   'choose-environment',
