@@ -26,6 +26,12 @@ describe('guided tutorial state', () => {
     assert.deepEqual(parseTutorialRequest({ type: 'action', action: 'open-canvas' }), {
       type: 'action', action: 'open-canvas'
     });
+    assert.deepEqual(parseTutorialRequest({ type: 'action', action: 'open-ai-tutor' }), {
+      type: 'action', action: 'open-ai-tutor'
+    });
+    assert.deepEqual(parseTutorialRequest({ type: 'action', action: 'ask-before-class' }), {
+      type: 'action', action: 'ask-before-class'
+    });
     assert.equal(parseTutorialRequest({ type: 'action', action: 'workbench.action.terminal.kill' }), undefined);
   });
 

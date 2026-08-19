@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.10.0
+
+- Added a keyboard-accessible collapsible chat-style help entry to the Learning Center and redesigned the Help Center around three explicit paths: local FAQ, U-M Maizey, and Questions Before Class.
+- Added a U-M Maizey course-tutor handoff that uses students' U-M/Canvas authentication and does not embed a faculty LLM key in the extension.
+- Added a structured pre-class question composer with lecture topic, current understanding, point of confusion, prior attempt/evidence, and named or Canvas-enabled anonymous intent.
+- Kept Canvas in control of identity and posting: SystemStudio copies the draft and opens the configured discussion; it does not claim anonymity or store a Canvas token.
+- Expanded the local FAQ from aggregate prior CIS 310 concerns, including hidden Canvas items, submission confirmation/file types, multiple Digital files, nested clock analysis errors, and escalation when stuck.
+- Added an instructor-ready Maizey system prompt with source citations, one-hint-at-a-time tutoring, prediction/check-for-understanding, graded-work boundaries, uncertainty disclosure, and human escalation.
+- Documented U-M AI access, privacy/cost boundaries, the Magoosh feature adaptation, learning evidence, Canvas OAuth/LTI requirements, and instructor release steps.
+
 ## 0.9.0
 
 - Reorganized the activity bar around one expanded **Start Here** path to reduce scanning and choice overload.

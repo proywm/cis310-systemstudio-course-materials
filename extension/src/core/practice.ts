@@ -135,6 +135,7 @@ export type PracticePanelRequest =
   | { type: 'open-resource'; resourceId: string }
   | { type: 'open-preparation'; resourceId: string; target: 'reading' | 'video' | 'lecture' | 'book-home' | 'author-channel' | 'oer-series'; readingIndex: number }
   | { type: 'toggle-preparation'; resourceId: string; field: 'read' | 'watched' }
+  | { type: 'open-help'; destination: 'faq' | 'ai-tutor' | 'before-class' }
   | { type: 'home' }
   | { type: 'reset' };
 
@@ -820,6 +821,9 @@ export function parsePracticePanelRequest(value: unknown): PracticePanelRequest 
   if (value.type === 'toggle-preparation' && typeof value.resourceId === 'string' && RESOURCE_IDS.has(value.resourceId)
     && (value.field === 'read' || value.field === 'watched')) {
     return { type: 'toggle-preparation', resourceId: value.resourceId, field: value.field };
+  }
+  if (value.type === 'open-help' && (value.destination === 'faq' || value.destination === 'ai-tutor' || value.destination === 'before-class')) {
+    return { type: 'open-help', destination: value.destination };
   }
   if (value.type === 'ready' || value.type === 'next' || value.type === 'home' || value.type === 'reset') return { type: value.type };
   return undefined;

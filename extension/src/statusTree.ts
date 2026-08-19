@@ -38,7 +38,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
         groupItem('assembly', 'Assembly Programming', 'terminal', false),
         groupItem('environment', 'Environment and Setup', 'tools', false),
-        groupItem('help', 'Help and Tutorial', 'question', false)
+        groupItem('help', 'Tutor, Questions, and Help', 'comment-discussion', false)
       ];
     }
 
@@ -115,8 +115,20 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       case 'help':
         return [
           describedActionItem(
-            'Ask the SystemStudio Helper',
-            'topics · tools · Canvas routing',
+            'Open U-M Maizey AI course tutor',
+            'Canvas · U-M login · course-grounded',
+            'systemstudioCis310.openAiTutor',
+            'sparkle'
+          ),
+          describedActionItem(
+            'Ask a question before class',
+            'named or Canvas-enabled anonymous post',
+            'systemstudioCis310.openPreClassQuestion',
+            'send'
+          ),
+          describedActionItem(
+            'Open local FAQ chat',
+            'private · topics · tools · Canvas routing',
             'systemstudioCis310.openStudentHelper',
             'comment-discussion'
           ),

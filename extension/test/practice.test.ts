@@ -155,6 +155,10 @@ describe('CIS 310 formative practice', () => {
     assert.deepEqual(parsePracticePanelRequest({
       type: 'toggle-preparation', resourceId: 'lecture-01', field: 'watched'
     }), { type: 'toggle-preparation', resourceId: 'lecture-01', field: 'watched' });
+    assert.deepEqual(parsePracticePanelRequest({
+      type: 'open-help', destination: 'ai-tutor'
+    }), { type: 'open-help', destination: 'ai-tutor' });
+    assert.equal(parsePracticePanelRequest({ type: 'open-help', destination: 'external-command' }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'start', mode: 'practice', focus: 'recommended', length: 100 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'start', mode: 'practice', focus: 'recommended', resourceId: '../bad', length: 3 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'open-preparation', resourceId: 'lecture-01', target: 'reading', readingIndex: 9 }), undefined);

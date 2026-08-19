@@ -16,6 +16,7 @@ import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
+import { PreClassQuestionPanel } from './preClassQuestionPanel';
 import { StatusTreeProvider } from './statusTree';
 import { StudentHelperPanel } from './studentHelperPanel';
 import { TutorialPanel } from './tutorialPanel';
@@ -144,6 +145,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
       await StudentHelperPanel.show(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async () => {
+      const configured = vscode.workspace.getConfiguration('systemstudioCis310')
+        .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
+      const uri = safeUmTutorUri(configured) ?? vscode.Uri.parse(DEFAULT_CANVAS_COURSE);
+      if (!safeUmTutorUri(configured)) {
+        await vscode.window.showWarningMessage(
+          'The configured U-M AI tutor URL is invalid. Opening the Fall 2026 Canvas course instead.'
+        );
+      } else if (uri.toString().replace(/\/$/, '') === DEFAULT_CANVAS_COURSE) {
+        await vscode.window.showInformationMessage(
+          'The exact CIS 310 Maizey link has not been configured yet. Canvas will open; choose U-M Maizey in the course navigation. The instructor can copy the direct tutor link into the SystemStudio setting.'
+        );
+      }
+      await vscode.env.openExternal(uri);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openPreClassQuestion', async () => {
+      PreClassQuestionPanel.show(context);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials);
@@ -642,6 +661,21 @@ function safeHttpsUri(value: string): vscode.Uri | undefined {
   try {
     const parsed = new URL(value);
     return parsed.protocol === 'https:' ? vscode.Uri.parse(parsed.toString()) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function safeUmTutorUri(value: string): vscode.Uri | undefined {
+  try {
+    const parsed = new URL(value);
+    const allowedHosts = new Set(['canvas.umd.umich.edu', 'maizey.umich.edu']);
+    if (parsed.protocol !== 'https:' || !allowedHosts.has(parsed.hostname)) {
+      return undefined;
+    }
+    parsed.username = '';
+    parsed.password = '';
+    return vscode.Uri.parse(parsed.toString());
   } catch {
     return undefined;
   }

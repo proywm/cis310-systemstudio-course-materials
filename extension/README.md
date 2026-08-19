@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for pre-class open-book preparation, official author videos, short formative practice, local learning progress, the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, and a local evidence-and-routing helper.
+This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for pre-class open-book preparation, official author videos, short formative practice, local learning progress, the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 **Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
 
@@ -29,7 +29,7 @@ This is the active Fall 2026 CIS 310 student extension. It gives students one VS
 - an explicit **Irvine32 Classroom (MASM)** profile and a **NASM IA-32** profile on one no-setup, source-level embedded machine, with build, step, run, reset, registers, flags, memory, stack, virtual-console input, output, and trace views;
 - Irvine-style input/output, display, string, random, and macro helpers needed by introductory activities, plus starter programs and an explicit boundary separating the classroom profiles from full native toolchains; and
 - a skippable, resumable, rerunnable tutorial built around recurring student concerns: setup-vs-work diagnosis, concept-to-implementation scaffolding, evidence inspection, submission clarity, and safer help-seeking;
-- a local Student Helper for topic, tool, deadline/submission, and confusion routing, with quick prompts and evidence-building checklists; and
+- a keyboard-accessible collapsible chat entry, local FAQ for topic/tool/submission routing, U-M Maizey course-tutor handoff, and structured Questions Before Class draft; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
 The delivery workspace is Fall 2026. [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission. The syllabus and all 13 presentations are embedded as SHA-256-verified PDFs, so students do not need an external document-hosting account. The required Tarnoff readings and companion videos use fixed links to the author's official ETSU/YouTube sources; no Google Drive is used. No ALU, register-file, or processor solution is bundled.
@@ -84,7 +84,7 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 9. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
 10. Predict one behavior, then use preview/tests as evidence before integrating a larger component.
 11. Use **Open in Digital** for graphical editing on local desktop VS Code.
-12. Ask the local Student Helper when the topic, calendar, tool, submission path, or expected-vs-observed result is unclear.
+12. Open the chat-style help bubble: use the local FAQ for routing, U-M Maizey in Canvas for a source-grounded conversational hint, or **Ask a Question Before Class** to prepare a named or Canvas-enabled anonymous discussion post.
 13. Submit the required deliverables through Canvas and confirm that Canvas recorded the submission.
 
 For assembly, select **Create Irvine32 / NASM assembly lab**, open `assembly/irvine32/AddTwo.asm`, and select **Open assembly lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. Use **Build**, **Step**, **Run**, and **Rebuild / Reset** beside the editor while inspecting registers, flags, stack, data, virtual-console input, output, and the execution trace. `assembly/irvine32/ConsoleInput.asm` demonstrates `ReadInt` and `ReadString`; `assembly/nasm-ia32/LoopSum.asm` demonstrates the alternate NASM source profile. Read the two assembly guides before using a file that depends on a full native assembler or OS runtime.
@@ -115,7 +115,9 @@ See [LEARNING_DESIGN.md](LEARNING_DESIGN.md) for the usability audit, research b
 | `CIS 310: Start 5-Question Practice` | Starts the recommended short practice session |
 | `CIS 310: Review Due or Saved Questions` | Opens due review first, then saved or recommended practice when nothing is due |
 | `CIS 310: Start or Rerun Guided Tutorial` | Walks through required student choices; can be skipped, resumed, or rerun |
-| `CIS 310: Ask the SystemStudio Helper` | Routes topic, tool, deadline/submission, and confusion questions to local evidence and actions |
+| `CIS 310: Open Local FAQ Chat` | Routes topic, tool, deadline/submission, and confusion questions to local evidence and actions without calling an AI service |
+| `CIS 310: Open U-M Maizey AI Course Tutor` | Opens the U-M-authenticated, course-grounded tutor in Canvas without a faculty key in the extension |
+| `CIS 310: Ask a Question Before Class` | Structures and copies a question, then opens the configured Canvas discussion for named or Canvas-enabled anonymous posting |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page for requirements, deadlines, and submission |
 | `CIS 310: Open Fall 2026 Syllabus` | Opens the locally packaged syllabus PDF inside VS Code |
 | `CIS 310: Open Fall 2026 Course Calendar` | Shows all verified Monday/Wednesday meetings and official term milestones |
@@ -181,6 +183,6 @@ The automated check covers the 27-meeting calendar and `.ics` export, syllabus/a
 - Learning Center checkmarks and results are local, self-reported formative evidence, not grades, mastery certification, accommodations, or a substitute for instructor feedback;
 - the syllabus intentionally leaves class time/location, office hours, updated Irvine edition/access instructions, grading weights, detailed deadlines, and the final-exam slot for instructor confirmation rather than inferring them;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;
-- the local helper is a deterministic evidence-and-routing assistant, not a generative AI coach, grader, Canvas integration, or source of current deadlines;
-- the extension opens Canvas but does not read or submit Canvas coursework; and
+- the local FAQ is a deterministic evidence-and-routing assistant; optional generative tutoring happens only after the student opens U-M Maizey in Canvas;
+- the extension opens Canvas but does not read or submit Canvas coursework, and direct discussion posting would require an institution-approved Canvas OAuth/LTI integration; and
 - graphical editing occurs in the managed native Digital window, not inside a webview.

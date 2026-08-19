@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice and local learning progress.
+This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -13,6 +13,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
+| AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
@@ -42,6 +43,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
 - a skippable and rerunnable guided tutorial; and
 - a local helper for topic, tool, calendar, and Canvas routing.
+- a collapsible chat-style help entry, local FAQ, U-M Maizey course-tutor handoff, and structured Canvas Questions Before Class draft.
 
 No external document-hosting account is required to open the packaged syllabus or presentations. The required Tarnoff book and companion videos open from the author's official ETSU/YouTube sources; the extension does not redistribute them or use Google Drive.
 
@@ -68,7 +70,7 @@ SECURITY.md                     Security and privacy reporting
 
 ## Help and privacy
 
-The extension does not transmit helper conversations, reading/video checkmarks, practice history, student code, circuit files, grades, or telemetry to an AI service. Learning history is stored locally in VS Code and can be reset by the student. External book/video links have their own privacy practices. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
+The local FAQ does not transmit conversations, reading/video checkmarks, practice history, student code, circuit files, grades, or telemetry to an AI service. Learning history is stored locally in VS Code and can be reset by the student. Opening U-M Maizey or Canvas leaves VS Code and is governed by U-M's service notices. The extension contains no shared faculty LLM key or Canvas token. External book/video links have their own privacy practices. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
 
 For a course requirement or deadline, check Canvas first. For a technical question, include what you expected, what happened, the exact evidence, and what you already tried.
 

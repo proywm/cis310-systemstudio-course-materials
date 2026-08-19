@@ -8,6 +8,16 @@
 - In the SystemStudio sidebar, select **Open Fall 2026 course calendar** to see every Monday/Wednesday meeting and the official holiday, recess, study-day, and examination periods. The extension can export these as `.ics` events without guessing the class time.
 - Use [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for live course details and submission.
 
+## Questions, AI tutor, and help before class
+
+Open the collapsible chat bubble in the Learning Center or **Tutor, Questions, and Help** in the sidebar:
+
+- **Local FAQ chat** answers recurring setup, Digital, assembly, navigation, and submission-process questions without calling an AI service. The complete [CIS 310 FAQ](support/FAQ.md) contains the same support boundaries.
+- **U-M Maizey AI course tutor** opens the course-grounded tutor in Canvas using your U-M login. Ask for one hint, a smaller analogous example, or a check of your reasoning; verify its answer against the cited course source.
+- **Ask a Question Before Class** structures a complex concept request, copies it, and opens the Canvas discussion so the instructor can adjust the next lecture. Canvas—not the extension—controls whether the final post is named or anonymous.
+
+Do not include passwords, access tokens, private grades, medical details, or another student's work in a chat or discussion. The AI tutor may be inaccurate and cannot grant extensions, decide grades, or replace current Canvas instructions.
+
 ## Practice and track your learning
 
 Open **Start Here → Prepare Lecture 1** for the next short pre-class module. Each module follows **Read → Watch → Try 3 questions**. The reading is a focused section of David Tarnoff's free *Computer Organization and Design Fundamentals*; the video comes from Tarnoff's official channel or ETSU OER series. Under **Learn and Practice**, you can also select one of six topics, take a 10-question quiz, or review questions that are due or saved. Practice mode gives feedback after each question; quiz mode gives feedback at the end. Choose a confidence level before submitting, then use the explanation, mapped reading, author video, and packaged lecture.

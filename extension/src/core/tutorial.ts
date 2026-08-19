@@ -1,4 +1,4 @@
-export const TUTORIAL_VERSION = 5;
+export const TUTORIAL_VERSION = 6;
 
 export const TUTORIAL_STEP_IDS = [
   'choose-environment',
@@ -26,6 +26,8 @@ export type TutorialAction =
   | 'open-calendar'
   | 'open-syllabus'
   | 'open-helper'
+  | 'open-ai-tutor'
+  | 'ask-before-class'
   | 'open-learning'
   | 'practice-now'
   | 'check-digital'
@@ -50,6 +52,8 @@ const TUTORIAL_ACTIONS = new Set<TutorialAction>([
   'open-calendar',
   'open-syllabus',
   'open-helper',
+  'open-ai-tutor',
+  'ask-before-class',
   'open-learning',
   'practice-now',
   'check-digital',

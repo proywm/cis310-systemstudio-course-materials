@@ -47,10 +47,25 @@ describe('student helper', () => {
     assert.ok(reply.actions.some((action) => action.id === 'check-environment'));
   });
 
+  it('routes AI tutoring to U-M Maizey without claiming the local FAQ is AI', () => {
+    const reply = answerStudentQuestion('What is the AI tutor?');
+    assert.match(JSON.stringify(reply), /U-M Maizey/);
+    assert.ok(reply.actions.some((action) => action.id === 'open-ai-tutor'));
+  });
+
+  it('answers recurring circuit-save and nested-clock questions specifically', () => {
+    const saveReply = answerStudentQuestion('How do I save multiple Digital circuits without overwriting?');
+    assert.match(saveReply.title, /separate Digital file/);
+    const clockReply = answerStudentQuestion('Digital processor analysis says a flip-flop must be connected to the clock');
+    assert.match(JSON.stringify(clockReply), /nested subcircuit/);
+    assert.ok(clockReply.actions.some((action) => action.id === 'ask-before-class'));
+  });
+
   it('accepts only bounded questions and allowlisted actions', () => {
     assert.deepEqual(parseStudentHelperRequest({ type: 'ask', question: '  help  ' }), { type: 'ask', question: 'help' });
     assert.equal((parseStudentHelperRequest({ type: 'ask', question: 'x'.repeat(3_000) }) as { question: string }).question.length, 2_000);
     assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'open-canvas' }), { type: 'action', action: 'open-canvas' });
+    assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'ask-before-class' }), { type: 'action', action: 'ask-before-class' });
     assert.equal(parseStudentHelperRequest({ type: 'action', action: 'workbench.action.terminal.kill' }), undefined);
   });
 });

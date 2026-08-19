@@ -33,7 +33,7 @@ Official Magoosh product and onboarding material emphasizes a clean interface, v
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
-| “Ask an Expert” support | Local deterministic Student Helper, optional error reflection, and a structured human-help checklist | Turn confusion into a specific next step or an actionable instructor/tutor question without implying live expert staffing |
+| “Ask an Expert” support | Local deterministic FAQ chat, U-M Maizey course-tutor handoff, optional error reflection, and a structured Canvas Questions Before Class draft | Turn confusion into a specific next step, a source-grounded tutor dialogue, or an actionable instructor question without implying live expert staffing |
 
 Magoosh's commercial score-improvement guarantee is intentionally **not** adapted: a course tool cannot responsibly guarantee an exam score, grade increase, or learning outcome. The extension also excludes estimated course scores, peer comparison, competitive ranking, mandatory streaks, cloud accounts, and automated deadline reminders. Those features can introduce false precision, anxiety, privacy costs, or another source of course deadlines. Canvas remains the only authority for deadlines, grades, and submission.
 
@@ -73,6 +73,8 @@ The implemented scheduler and recommendation weights are conservative instructio
 ## Progress model and privacy
 
 Progress is stored in VS Code's local extension storage. The record contains self-reported reading/video completion, question-level attempt counts, correctness, confidence, hint use, review date, saved state, optional reflection categories, and a bounded recent-attempt log. It is not transmitted to Canvas, the instructor, an AI provider, or an analytics service. Students can reset it from the dashboard.
+
+The chat-style help entry does not change this boundary. Local FAQ questions are processed in the extension and are not retained. Selecting U-M Maizey or the Canvas question queue opens a U-M service outside the local extension boundary; its U-M privacy notice and course rules apply. The extension does not contain a faculty LLM credential, Canvas token, or automatic posting authority.
 
 The dashboard is descriptive. Accuracy means correct responses divided by local attempts. Coverage means unique questions encountered. Practice days count local calendar dates with an attempt. Topic labels summarize those same attempts. None is a grade, accommodation decision, mastery estimate, or prediction of future performance.
 

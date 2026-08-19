@@ -126,6 +126,8 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'open-calendar': 'systemstudioCis310.openCourseCalendar',
     'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-helper': 'systemstudioCis310.openStudentHelper',
+    'open-ai-tutor': 'systemstudioCis310.openAiTutor',
+    'ask-before-class': 'systemstudioCis310.openPreClassQuestion',
     'open-learning': 'systemstudioCis310.openPracticeCenter',
     'practice-now': 'systemstudioCis310.startQuickPractice',
     'check-digital': 'systemstudioCis310.checkEnvironment',
@@ -373,17 +375,17 @@ function tutorialStepsHtml(): string {
     </div>
   </div></section>
   <section class="step" data-step="6" data-require="all"><div class="focus-card">
-    <h2 tabindex="-1">Ask for help safely and specifically</h2>
-    <p>The local helper supports private help-seeking and routes questions without sending course data to an external AI service.</p>
-    <div class="instruction"><strong>Review every prompt:</strong> these turn “I’m stuck” into an answerable question.</div>
+    <h2 tabindex="-1">Choose the right kind of conversation</h2>
+    <p>The chat bubble separates a private local FAQ, the U-M Maizey course tutor, and a Canvas question for the instructor.</p>
+    <div class="instruction"><strong>Review every choice:</strong> use the smallest support path that fits your need.</div>
     <div class="choices">
-      ${choice('expected', 'Expected', 'What output, state, register value, or requirement did you expect?')}
-      ${choice('observed', 'Observed', 'What happened instead?')}
-      ${choice('evidence', 'Evidence', 'Give the exact line, diagnostic, truth-table row, trace value, or screenshot location.')}
-      ${choice('attempt', 'Attempt', 'What one change did you try, and what changed afterward?')}
-      ${choice('privacy', 'Privacy and escalation', 'Do not paste credentials, private grades, or another student’s work; contact the instructor when needed.')}
+      ${choice('faq', 'Local FAQ chat', 'Use recurring setup, navigation, Digital, assembly, or submission-process checklists without calling an AI service.')}
+      ${choice('tutor', 'U-M Maizey AI tutor', 'Ask for one source-grounded hint, analogous example, or check of your reasoning; verify the cited source.')}
+      ${choice('before', 'Questions Before Class', 'Send a complex concept or unclear decision point early so the instructor can adapt the next lecture.')}
+      ${choice('anonymous', 'Canvas controls anonymity', 'Choose anonymous only when the Canvas discussion displays that option; SystemStudio cannot promise anonymity.')}
+      ${choice('evidence', 'Make the question answerable', 'Include expected, observed, exact evidence, and what you already tried—never credentials, private grades, or another student’s work.')}
     </div>
-    <div class="actions"><button data-action="open-helper" class="primary">Open the Student Helper</button></div>
+    <div class="actions"><button data-action="open-helper" class="primary">Open local FAQ chat</button><button data-action="open-ai-tutor" class="secondary">Open U-M Maizey</button><button data-action="ask-before-class" class="secondary">Ask before class</button></div>
   </div></section>
   <section class="step" data-step="7" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Recover, verify, and continue</h2>

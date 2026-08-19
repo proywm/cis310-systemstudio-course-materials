@@ -16,6 +16,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 - 43 formative practice questions, with at least three mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
+- an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
 - local files for every student-facing document---no external document-hosting account is needed.
 
 ## Student workflow
@@ -28,6 +29,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 6. Predict a small result before building or running.
 7. Create and test the circuit or assembly artifact incrementally.
 8. Submit every required file in Canvas and confirm the submission receipt.
+9. Use the local FAQ for recurring questions, U-M Maizey for source-grounded conversational help, or **Ask a Question Before Class** when the instructor should address an issue in the next meeting.
 
 Learning Center reading/video checkmarks and practice progress stay on the student's machine. They are ungraded and self-reported, do not predict a course grade or certify mastery, and can be reset from the dashboard.
 
