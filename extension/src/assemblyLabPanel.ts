@@ -1,14 +1,16 @@
 import { randomBytes } from 'node:crypto';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type { AssemblyManager } from './assemblyManager';
-import type { MachineSnapshot } from './core/embeddedAssembly';
+import type { AssemblyExecutionOptions, AssemblyManager } from './assemblyManager';
+import type { AssemblyProfile, MachineSnapshot } from './core/embeddedAssembly';
 
 type AssemblyAction = 'assemble' | 'reset' | 'step' | 'run';
 
 export class AssemblyLabPanel implements vscode.Disposable {
   private static readonly panels = new Map<string, AssemblyLabPanel>();
   private readonly disposables: vscode.Disposable[] = [];
+  private profile: AssemblyProfile = 'auto';
+  private input = '';
 
   static async show(
     context: vscode.ExtensionContext,
@@ -43,9 +45,11 @@ export class AssemblyLabPanel implements vscode.Disposable {
     this.panel.onDidDispose(() => this.dispose(), undefined, this.disposables);
     this.panel.webview.onDidReceiveMessage(
       async (message: unknown) => {
-        const action = actionFromMessage(message);
-        if (action) {
-          await this.perform(action);
+        const request = requestFromMessage(message);
+        if (request) {
+          this.profile = request.profile;
+          this.input = request.input;
+          await this.perform(request.action, request);
         }
       },
       undefined,
@@ -62,22 +66,26 @@ export class AssemblyLabPanel implements vscode.Disposable {
     }
   }
 
-  private async perform(action: AssemblyAction): Promise<void> {
+  private async perform(action: AssemblyAction, options: AssemblyExecutionOptions = {}): Promise<void> {
+    const executionOptions: AssemblyExecutionOptions = {
+      profile: options.profile ?? this.profile,
+      input: options.input ?? this.input
+    };
     await this.panel.webview.postMessage({ type: 'busy', action });
     try {
       let snapshot: MachineSnapshot;
       switch (action) {
         case 'assemble':
-          snapshot = await this.manager.assemble(this.uri);
+          snapshot = await this.manager.assemble(this.uri, executionOptions);
           break;
         case 'reset':
-          snapshot = await this.manager.reset(this.uri);
+          snapshot = await this.manager.reset(this.uri, executionOptions);
           break;
         case 'step':
-          snapshot = await this.manager.step(this.uri);
+          snapshot = await this.manager.step(this.uri, executionOptions);
           break;
         case 'run':
-          snapshot = await this.manager.run(this.uri);
+          snapshot = await this.manager.run(this.uri, 10_000, executionOptions);
           break;
       }
       await this.panel.webview.postMessage({
@@ -127,7 +135,11 @@ export class AssemblyLabPanel implements vscode.Disposable {
     p { margin: 4px 0; line-height: 1.45; }
     .subtle { color: var(--vscode-descriptionForeground); }
     .badge { display: inline-block; padding: 3px 8px; border: 1px solid var(--vscode-testing-iconPassed); border-radius: 999px; color: var(--vscode-testing-iconPassed); font-size: .78rem; }
-    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+    .controls { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; margin: 16px 0; }
+    .field { display: grid; gap: 4px; }
+    label { color: var(--vscode-descriptionForeground); font-size: .8rem; }
+    select, textarea { box-sizing: border-box; color: var(--vscode-input-foreground); background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, transparent); padding: 6px 8px; font-family: var(--vscode-font-family); }
+    textarea { width: 100%; min-height: 76px; resize: vertical; font-family: var(--vscode-editor-font-family); }
     button { color: var(--vscode-button-foreground); background: var(--vscode-button-background); border: 0; border-radius: 2px; padding: 7px 13px; cursor: pointer; }
     button:hover { background: var(--vscode-button-hoverBackground); }
     button.secondary { color: var(--vscode-button-secondaryForeground); background: var(--vscode-button-secondaryBackground); }
@@ -152,17 +164,30 @@ export class AssemblyLabPanel implements vscode.Disposable {
 <body>
   <header>
     <div>
-      <h1>Embedded IA-32 Assembly Lab</h1>
+      <h1>Embedded Irvine32 / IA-32 Assembly Lab</h1>
       <p id="filename" class="subtle">Loading source…</p>
     </div>
-    <div><span class="badge">No setup • no Docker • runs locally</span></div>
+    <div><span class="badge">No Visual Studio • no Docker • every OS</span></div>
   </header>
   <div class="controls" role="toolbar" aria-label="Assembly controls">
-    <button data-action="assemble">Assemble</button>
+    <div class="field">
+      <label for="profile">Environment profile</label>
+      <select id="profile">
+        <option value="auto">Auto-detect</option>
+        <option value="irvine32">Irvine32 Classroom (MASM)</option>
+        <option value="nasm-ia32">NASM IA-32</option>
+      </select>
+    </div>
+    <button data-action="assemble">Build</button>
     <button data-action="step">Step</button>
     <button data-action="run">Run</button>
-    <button class="secondary" data-action="reset">Reset</button>
+    <button class="secondary" data-action="reset">Rebuild / Reset</button>
   </div>
+  <section class="wide">
+    <h2>Virtual console input</h2>
+    <textarea id="consoleInput" aria-label="Virtual console input" placeholder="Enter one ReadInt/ReadString value per line, or characters for ReadChar…"></textarea>
+    <p class="subtle">Input is isolated in memory. Changing it starts a fresh build on the next action.</p>
+  </section>
   <div id="message" class="message" role="status">Preparing the embedded engine…</div>
   <div class="grid">
     <section class="wide current">
@@ -178,6 +203,8 @@ export class AssemblyLabPanel implements vscode.Disposable {
       <div id="flags" class="flags"></div>
       <h2 style="margin-top:18px">Program output</h2>
       <pre id="output">(none)</pre>
+      <h2 style="margin-top:18px">Input remaining</h2>
+      <pre id="inputRemaining">(none)</pre>
     </section>
     <section>
       <h2>Stack (top eight DWORDs)</h2>
@@ -193,18 +220,24 @@ export class AssemblyLabPanel implements vscode.Disposable {
     </section>
     <section class="wide">
       <h2>Compatibility boundary</h2>
-      <p class="subtle">This is a source-level educational IA-32 interpreter for the documented CIS 310 MASM/NASM subset. EIP uses synthetic teaching addresses. It does not emit PE/ELF object files or replace full Microsoft MASM, NASM, Windows APIs, Irvine binaries, x87, SIMD, or operating-system calls.</p>
+      <p class="subtle">Irvine32 Classroom is a clean-room source-level compatibility profile; it does not copy Visual Studio, ml.exe, or the book library. EIP uses synthetic teaching addresses. The lab does not emit PE/ELF files or replace complete MASM/NASM, Windows APIs, x87, SIMD, or operating-system behavior.</p>
     </section>
   </div>
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
     const buttons = [...document.querySelectorAll('button[data-action]')];
+    const profile = document.getElementById('profile');
+    const consoleInput = document.getElementById('consoleInput');
     const message = document.getElementById('message');
     const hex = (value, digits = 8) => '0x' + (value >>> 0).toString(16).toUpperCase().padStart(digits, '0');
     const signed = value => value > 0x7fffffff ? value - 0x100000000 : value;
     const cell = text => { const td = document.createElement('td'); td.textContent = String(text); return td; };
     const row = values => { const tr = document.createElement('tr'); values.forEach(value => tr.appendChild(cell(value))); return tr; };
-    buttons.forEach(button => button.addEventListener('click', () => vscode.postMessage({ action: button.dataset.action })));
+    buttons.forEach(button => button.addEventListener('click', () => vscode.postMessage({
+      action: button.dataset.action,
+      profile: profile.value,
+      input: consoleInput.value
+    })));
     window.addEventListener('message', event => {
       const payload = event.data;
       if (payload.type === 'busy') {
@@ -221,7 +254,9 @@ export class AssemblyLabPanel implements vscode.Disposable {
       }
       if (payload.type !== 'state') return;
       const state = payload.state;
-      document.getElementById('filename').textContent = payload.fileName + ' • ' + state.dialect.toUpperCase() + ' teaching subset';
+      const profileLabel = state.profile === 'irvine32' ? 'Irvine32 Classroom (MASM)'
+        : state.profile === 'nasm-ia32' ? 'NASM IA-32' : 'Generic IA-32';
+      document.getElementById('filename').textContent = payload.fileName + ' • ' + profileLabel;
       message.className = 'message';
       message.textContent = state.halted
         ? 'Stopped after ' + state.steps + ' step(s): ' + (state.reason || 'program complete')
@@ -239,6 +274,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
         return span;
       }));
       document.getElementById('output').textContent = state.output || '(none)';
+      document.getElementById('inputRemaining').textContent = state.inputRemaining || '(none)';
       const stack = document.getElementById('stack');
       stack.replaceChildren(...state.stack.map(item => row([hex(item.address), hex(item.value)])));
       if (state.stack.length === 0) stack.appendChild(row(['(empty)', '—']));
@@ -255,12 +291,21 @@ export class AssemblyLabPanel implements vscode.Disposable {
   }
 }
 
-function actionFromMessage(message: unknown): AssemblyAction | undefined {
+interface AssemblyRequest extends AssemblyExecutionOptions {
+  action: AssemblyAction;
+  profile: AssemblyProfile;
+  input: string;
+}
+
+function requestFromMessage(message: unknown): AssemblyRequest | undefined {
   if (typeof message !== 'object' || message === null || !('action' in message)) {
     return undefined;
   }
-  const action = (message as { action?: unknown }).action;
-  return action === 'assemble' || action === 'reset' || action === 'step' || action === 'run'
-    ? action
-    : undefined;
+  const request = message as { action?: unknown; profile?: unknown; input?: unknown };
+  const action = request.action;
+  const profile = request.profile;
+  if (action !== 'assemble' && action !== 'reset' && action !== 'step' && action !== 'run') return undefined;
+  if (profile !== 'auto' && profile !== 'irvine32' && profile !== 'nasm-ia32') return undefined;
+  if (typeof request.input !== 'string' || request.input.length > 64 * 1024) return undefined;
+  return { action, profile, input: request.input };
 }

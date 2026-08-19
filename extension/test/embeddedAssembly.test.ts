@@ -33,6 +33,7 @@ END main
     const machine = new EmbeddedX86Machine(assembleEmbeddedX86(source));
     const snapshot = machine.run();
     assert.equal(snapshot.dialect, 'masm');
+    assert.equal(snapshot.profile, 'irvine32');
     assert.equal(snapshot.registers.EAX, 0x50000);
     assert.match(snapshot.output, /EAX=0x00050000/);
     assert.equal(snapshot.halted, true);
@@ -55,6 +56,7 @@ _start:
 `;
     const snapshot = new EmbeddedX86Machine(assembleEmbeddedX86(source)).run();
     assert.equal(snapshot.dialect, 'nasm');
+    assert.equal(snapshot.profile, 'nasm-ia32');
     assert.equal(snapshot.registers.EAX, 0x1207);
     assert.equal(snapshot.registers.EBX, 0x1207);
   });
@@ -107,6 +109,134 @@ END main
     assert.equal(snapshot.data[0]?.name, 'message');
   });
 
+  it('runs the Visual Studio AddTwo shape with PROTO and INVOKE', () => {
+    const source = `
+TITLE Add Two Integers
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+.code
+main PROC
+    mov eax,5
+    add eax,6
+    call DumpRegs
+    invoke ExitProcess,0
+main ENDP
+END main
+`;
+    const program = assembleEmbeddedX86(source, { profile: 'irvine32' });
+    const snapshot = new EmbeddedX86Machine(program).run();
+    assert.equal(program.profile, 'irvine32');
+    assert.equal(program.dialect, 'masm');
+    assert.match(snapshot.output, /EAX=0x0000000B/);
+    assert.match(snapshot.reason ?? '', /ExitProcess\(0\)/);
+  });
+
+  it('uses virtual console input for Irvine ReadInt and ReadString', () => {
+    const source = `
+.386
+INCLUDE Irvine32.inc
+BUFFER_SIZE = 20
+.data?
+nameBuffer BYTE BUFFER_SIZE + 1 DUP(?)
+.code
+main PROC
+    call ReadInt
+    call WriteInt
+    call Crlf
+    mov edx, OFFSET nameBuffer
+    mov ecx, BUFFER_SIZE
+    call ReadString
+    mov edx, OFFSET nameBuffer
+    call WriteString
+    exit
+main ENDP
+END main
+`;
+    const snapshot = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source, { profile: 'irvine32' }),
+      { input: '-42\nAda Lovelace\n' }
+    ).run();
+    assert.equal(snapshot.output, '-42\nAda Lovelace');
+    assert.equal(snapshot.registers.EAX, 12);
+    assert.equal(snapshot.inputRemaining, '');
+  });
+
+  it('reports invalid ReadInt input through OF for Irvine-style branching', () => {
+    const source = `
+.code
+main PROC
+    call ReadInt
+    jo invalid
+    mov ebx, 0
+    exit
+invalid:
+    mov ebx, 1
+    exit
+main ENDP
+END main
+`;
+    const snapshot = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source, { profile: 'irvine32' }),
+      { input: 'not-a-number\n' }
+    ).run();
+    assert.equal(snapshot.flags.OF, true);
+    assert.equal(snapshot.registers.EBX, 1);
+    assert.match(snapshot.output, /Invalid signed integer input/);
+  });
+
+  it('formats Irvine hexadecimal, binary, memory dump, and macros', () => {
+    const source = `
+.data
+values BYTE 1, 2, 0ABh
+message BYTE "done",0
+.code
+main PROC
+    mWrite "hex="
+    mov eax, 2Ah
+    call WriteHex
+    mWrite ", bin="
+    mov ebx, 1
+    call WriteBinB
+    call Crlf
+    mov esi, OFFSET values
+    mov ecx, LENGTHOF values
+    mov ebx, TYPE values
+    call DumpMem
+    mWriteString message
+    mWriteLn
+    exit
+main ENDP
+END main
+`;
+    const snapshot = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source, { profile: 'irvine32' })
+    ).run();
+    assert.match(snapshot.output, /^hex=0000002A, bin=0010 1010\n/);
+    assert.match(snapshot.output, /01 02 AB/);
+    assert.match(snapshot.output, /done\n$/);
+  });
+
+  it('keeps RandomRange deterministic for repeatable classroom runs', () => {
+    const source = `
+main:
+    mov eax, 10
+    call RandomRange
+    hlt
+`;
+    const program = assembleEmbeddedX86(source, { profile: 'irvine32' });
+    const first = new EmbeddedX86Machine(program, { randomSeed: 310 }).run();
+    const second = new EmbeddedX86Machine(program, { randomSeed: 310 }).run();
+    assert.equal(first.registers.EAX, second.registers.EAX);
+    assert.ok(first.registers.EAX < 10);
+  });
+
+  it('explains when an Irvine input procedure has no virtual console input', () => {
+    const machine = new EmbeddedX86Machine(assembleEmbeddedX86('main:\n call ReadInt\n hlt\n', { profile: 'irvine32' }));
+    assert.throws(() => machine.run(), /ReadInt needs console input/);
+  });
+
   it('reports unsupported syntax with the source line', () => {
     assert.throws(
       () => assembleEmbeddedX86('start:\n    fldpi\n    hlt\n'),
@@ -144,9 +274,31 @@ END main
     const masm = new EmbeddedX86Machine(assembleEmbeddedX86(starter('add-two.asm'))).run();
     const nasm = new EmbeddedX86Machine(assembleEmbeddedX86(starter('loop-sum.asm'))).run();
     assert.equal(masm.registers.EAX, 0x50000);
-    assert.match(masm.output, /CIS 310 sum: 0x00050000/);
+    assert.match(masm.output, /CIS 310 sum: 00050000/);
     assert.equal(nasm.registers.EAX, 30);
     assert.equal(nasm.output, '30\n');
     assert.ok(nasm.trace.length > 0);
+  });
+
+  it('executes the profiled v0.6 starters shipped in the VSIX', () => {
+    const source = (directory: string, name: string) => readFileSync(
+      path.join(process.cwd(), 'assembly-starter', directory, name),
+      'utf8'
+    );
+    const addTwo = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('irvine32', 'AddTwo.asm'), { profile: 'irvine32' })
+    ).run();
+    const consoleInput = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('irvine32', 'ConsoleInput.asm'), { profile: 'irvine32' }),
+      { input: '-42\nAda Lovelace\n' }
+    ).run();
+    const nasm = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('nasm-ia32', 'LoopSum.asm'), { profile: 'nasm-ia32' })
+    ).run();
+
+    assert.match(addTwo.output, /EAX=0x0000002A/);
+    assert.match(consoleInput.output, /You entered -42; name=Ada Lovelace/);
+    assert.equal(consoleInput.inputRemaining, '');
+    assert.equal(nasm.output, '30\n');
   });
 });

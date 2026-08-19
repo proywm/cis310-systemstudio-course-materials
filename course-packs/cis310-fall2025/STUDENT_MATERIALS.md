@@ -45,6 +45,6 @@
 
 ## Assembly programming
 
-Use **CIS 310: Create Embedded Assembly Lab**, open `assembly/embedded/add-two.asm`, and choose **Open Embedded Assembly Lab**. The same source-level IA-32 teaching engine runs on Windows, Linux, macOS, and Remote SSH without Docker, Visual Studio, NASM, a linker, administrator access, or another download.
+Use **CIS 310: Create Embedded Assembly Lab**, open `assembly/irvine32/AddTwo.asm`, and choose **Open Embedded Assembly Lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. The same source-level IA-32 teaching engine runs on Windows, Linux, macOS, and Remote SSH without Docker, Visual Studio, NASM, a linker, administrator access, or another download.
 
-The lab lets you assemble, step, run, and reset while observing registers, flags, data, stack, output, and the recent instruction trace. It recognizes common course MASM wrappers and a documented NASM-style 32-bit subset. Read `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, macros, or arbitrary external libraries.
+The lab lets you build, step, run, and reset while observing registers, flags, data, stack, virtual-console input, output, and the recent instruction trace. Try `assembly/irvine32/ConsoleInput.asm` with one response per input line, or switch to `assembly/nasm-ia32/LoopSum.asm`. Read `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, the complete macro language, or arbitrary external libraries.

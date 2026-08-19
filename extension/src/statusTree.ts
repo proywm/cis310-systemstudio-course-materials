@@ -84,14 +84,14 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       vscode.TreeItemCollapsibleState.None
     );
     assemblyStatus.iconPath = new vscode.ThemeIcon(assembly.embeddedReady ? 'verified-filled' : 'terminal');
-    assemblyStatus.description = 'MASM/NASM IA-32 teaching subset';
+    assemblyStatus.description = 'Irvine32 Classroom + NASM IA-32';
     assemblyStatus.tooltip = assembly.detail;
     assemblyStatus.command = {
       command: 'systemstudioCis310.checkAssemblyEnvironment',
       title: 'Check embedded assembly engine'
     };
     const createAssembly = actionItem(
-      'Create embedded assembly lab',
+      'Create Irvine32 / NASM assembly lab',
       'systemstudioCis310.createAssemblyLab',
       'terminal-bash'
     );

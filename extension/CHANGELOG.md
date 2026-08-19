@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.6.0
+
+- Added an explicit Irvine32 Classroom profile alongside NASM IA-32 and auto-detection; the selected profile changes accepted source syntax, not the host toolchain.
+- Added virtual console input and classroom implementations of `ReadInt`, `ReadDec`, `ReadHex`, `ReadChar`, `ReadKey`, and `ReadString`.
+- Expanded Irvine-style compatibility with `DumpMem`, binary/hex display variants, string length, deterministic random calls, `mWrite` macros, and documented console-call behavior.
+- Added Visual Studio-shaped `AddTwo.asm`, interactive console, and NASM loop starters, plus an Irvine32 profile guide.
+- Kept the default cross-platform path fully embedded: no Docker, Visual Studio, `ml.exe`, Irvine binary, NASM package, linker, or administrator access is required or bundled.
+- Added automated coverage for profiles, official introductory program shape, input/flag contracts, formatting, macros, deterministic random behavior, input failures, and every new starter.
+
 ## 0.5.0
 
 - Replaced the Docker/NASM container workflow with an original, extension-native IA-32 teaching interpreter that requires no external toolchain or administrator setup.

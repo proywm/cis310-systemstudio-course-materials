@@ -21,8 +21,8 @@ This is the accelerated CIS 310 implementation track. It gives students one VS C
 - rendered, student-facing previews for the course guide and assignments rather than raw Markdown source;
 - local, SHA-256-verified assignment references copied into generated starter workspaces;
 - a starter-workspace generator with one upstream half-adder orientation example, an empty `circuits/work/` area, and assembly guides;
-- MASM/NASM IA-32 highlighting plus a no-setup, source-level embedded assembly engine with assemble, step, run, reset, registers, flags, memory, stack, output, and trace views;
-- starter programs and an explicit compatibility guide separating the classroom subset from full native MASM/NASM toolchains; and
+- an explicit **Irvine32 Classroom (MASM)** profile and a **NASM IA-32** profile on one no-setup, source-level embedded machine, with build, step, run, reset, registers, flags, memory, stack, virtual-console input, output, and trace views;
+- Irvine-style input/output, display, string, random, and macro helpers needed by introductory activities, plus starter programs and an explicit boundary separating the classroom profiles from full native toolchains; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
 
 The course pack is an instructor-review reference imported from Fall 2025. Historical dates, grading policies, and submission rules are not authoritative. All 13 presentations are bundled as SHA-256-verified offline PDFs; their private Drive URLs remain provenance metadata and are not opened by the extension. No ALU, register-file, or processor solution is bundled.
@@ -39,9 +39,9 @@ Reimplementing Digital’s canvas as a webview is not part of this accelerated M
 
 ## Assembly compatibility boundary
 
-The **Embedded Assembly Lab** is original extension code: a bounded, source-level IA-32 teaching interpreter. It recognizes the common MASM wrappers used in CIS 310 (`.386`, `.model flat,stdcall`, `.stack`, `.data`, `.code`, `PROC`/`ENDP`, `INVOKE ExitProcess`, `EXIT`) and a documented NASM-style 32-bit subset. It executes no native student code and needs no Docker, assembler, linker, SDK, administrator access, or network connection.
+The **Embedded Assembly Lab** is original extension code: a bounded, source-level IA-32 teaching interpreter. Students select **Irvine32 Classroom (MASM)**, **NASM IA-32**, or **Auto-detect**; that choice controls source compatibility, not a platform-dependent installer. The Irvine32 profile recognizes the common wrappers used in CIS 310 (`.386`, `.model flat,stdcall`, `.stack`, `.data`, `.code`, `PROC`/`ENDP`, `INVOKE ExitProcess`, `EXIT`) and implements a documented set of common classroom calls such as `DumpRegs`, `ReadInt`, `ReadString`, `WriteInt`, `WriteString`, and `RandomRange`. It executes no native student code and needs no Docker, Visual Studio, assembler, linker, SDK, administrator access, or network connection.
 
-It is not full `ml.exe` or NASM. It does not emit PE/ELF objects, reproduce an OS ABI, load external Irvine binaries, or implement every instruction, directive, macro, x87, or SIMD feature. EIP uses synthetic teaching addresses rather than encoded instruction lengths. Activities requiring exact binaries, operating-system calls, external libraries, or unsupported syntax still need the instructor-approved native toolchain. See `assembly/COMPATIBILITY.md` in a generated lab.
+It is not Visual Studio, `ml.exe`, the Irvine32 binary library, or full NASM. It does not emit PE/ELF objects, reproduce an OS ABI, load external binaries, or implement every instruction, directive, macro, x87, or SIMD feature. EIP uses synthetic teaching addresses rather than encoded instruction lengths. Activities requiring exact binaries, operating-system calls, external libraries, or unsupported syntax still need the instructor-approved native toolchain. See `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md` in a generated lab.
 
 ## Student installation
 
@@ -76,7 +76,7 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 8. Use **Open in Digital** for graphical editing and interactive simulation.
 9. Save in Digital, return to VS Code, refresh the preview, and rerun tests.
 
-For assembly, select **Create embedded assembly lab**, open `assembly/embedded/add-two.asm`, and select **Open assembly lab**. Use **Assemble**, **Step**, **Run**, and **Reset** beside the editor while inspecting registers, flags, stack, data, output, and the execution trace. Read `assembly/COMPATIBILITY.md` before using a file that depends on a full native assembler or OS runtime.
+For assembly, select **Create Irvine32 / NASM assembly lab**, open `assembly/irvine32/AddTwo.asm`, and select **Open assembly lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. Use **Build**, **Step**, **Run**, and **Rebuild / Reset** beside the editor while inspecting registers, flags, stack, data, virtual-console input, output, and the execution trace. `assembly/irvine32/ConsoleInput.asm` demonstrates `ReadInt` and `ReadString`; `assembly/nasm-ia32/LoopSum.asm` demonstrates the alternate NASM source profile. Read the two assembly guides before using a file that depends on a full native assembler or OS runtime.
 
 Course guides and assignments open as rendered documents. Instructors and developers can use **Open With → Text Editor** when they intentionally need to inspect or edit the Markdown source.
 
@@ -95,12 +95,12 @@ Course guides and assignments open as rendered documents. Instructors and develo
 | `CIS 310: Browse Presentations` | Opens one of 13 bundled, integrity-checked PDF presentations |
 | `CIS 310: Browse Assignments` | Opens one of four packaged, integrity-checked assignment references |
 | `CIS 310: Open Course-Material Guide` | Opens the local lecture-to-assignment map and release warning |
-| `CIS 310: Create Embedded Assembly Lab` | Adds original MASM-style and NASM-style IA-32 starter programs and the compatibility guide |
+| `CIS 310: Create Embedded Assembly Lab` | Adds Irvine32 Classroom and NASM IA-32 starter programs and the compatibility guides |
 | `CIS 310: Check Embedded Assembly Engine` | Confirms the bundled, no-prerequisite execution model |
 | `CIS 310: Open Embedded Assembly Lab` | Opens the side-by-side machine-state interface for a `.asm` file |
 | `CIS 310: Run Embedded Assembly` | Runs the current file with a 10,000-instruction safety bound |
 | `CIS 310: Step Embedded Assembly` | Executes one source instruction and reveals the next source line |
-| `CIS 310: Reset Embedded Assembly` | Restores the initial register, flag, data, stack, and output state |
+| `CIS 310: Reset Embedded Assembly` | Restores the initial register, flag, data, stack, virtual-input, and output state |
 | `CIS 310: Open Assembly Compatibility Guide` | Documents the supported classroom subset and exact-toolchain boundary |
 
 ## Where Digital is installed
@@ -130,13 +130,13 @@ npm run check
 
 Press `F5` from this folder in VS Code after running `npm run compile`, or install the packaged VSIX.
 
-The automated check covers manifest validation, assignment and presentation integrity, circuit-starter metadata, blank-circuit structure, embedded MASM/NASM parsing and execution, arithmetic flags, registers, memory, calls/returns, runtime helpers, diagnostics, infinite-loop bounds, safe ZIP paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor content review, packaged-PDF rendering review, Windows/Linux/macOS UI smoke tests, and accessibility validation.
+The automated check covers manifest validation, assignment and presentation integrity, circuit-starter metadata, blank-circuit structure, the Visual Studio-style AddTwo source shape, profiled MASM/NASM parsing and execution, Irvine virtual-console input and flags, arithmetic, registers, memory, calls/returns, runtime helpers, diagnostics, infinite-loop bounds, all shipped starters, safe ZIP paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor content review, packaged-PDF rendering review, Windows/Linux/macOS UI smoke tests, and accessibility validation.
 
 ## Current limitations
 
 - the native Java GUI cannot open on a Remote SSH host without a graphical display, although materials, starter generation, previews, and headless tests remain available;
 - Java must already be available or configured;
-- embedded assembly covers a documented IA-32 teaching subset rather than full MASM/NASM, binary generation, OS APIs, or arbitrary Irvine libraries;
+- embedded assembly covers documented Irvine32 Classroom and NASM IA-32 teaching subsets rather than full MASM/NASM, binary generation, OS APIs, or arbitrary Irvine procedures/libraries;
 - presentations are bundled as PDFs for offline use, but still require instructor content and accessibility review;
 - packaged assignments retain historical wording and are reference material until the instructor approves a student release;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;

@@ -95,3 +95,11 @@
 **Decision:** Replace the Docker/NASM execution path with an original TypeScript IA-32 teaching interpreter bundled in the extension. Support the documented course subset of register, memory, integer, flags, branch, loop, stack, and procedure behaviors; recognize common MASM/Irvine classroom wrappers and a NASM-style IA-32 form; provide assemble/run/step/reset and visible machine state. Use a fixed 1 MiB memory model, line-numbered diagnostics, bounded output, and a 10,000-instruction run limit. Do not invoke a shell or host toolchain. Label the interface as a teaching subset and keep exact object-file, ABI, API, macro, and unsupported-instruction work outside the claim.
 
 **Rationale:** The course emphasizes IA-32 registers, EFLAGS, memory, stack, and execution observation, while the container pilot introduced a Docker prerequisite and changed the examples to x86-64 Linux. A source-level model removes the cross-platform installation barrier and more directly targets the shared learning concepts. It cannot replace production MASM/NASM, so that boundary is visible in the lab and compatibility guide.
+
+## ADR-013: Add a clean-room Irvine32 Classroom profile; keep Docker optional and out of the default
+
+**Status:** Accepted and implemented August 2026
+
+**Decision:** Provide explicit Irvine32 Classroom (MASM), NASM IA-32, and auto-detect choices on the embedded engine. Extend the Irvine32 profile with selected console input/output, display, string, random, and macro behaviors used in introductory exercises. Take all input through an in-memory virtual console and keep execution deterministic and process-free. Do not bundle Visual Studio, Microsoft assemblers, Irvine binaries/examples, or a Docker image. Treat any future exact-binary/container backend as a separately approved optional mode, not as an automatic fallback selected from the student's operating system.
+
+**Rationale:** Students need a recognizable path from the book's Visual Studio/Irvine syntax to observable registers and flags, but Windows-native installation is not a common denominator for macOS and Linux. Docker does not eliminate prerequisites and a Linux container cannot reproduce Win32 library/API behavior. A clean-room profile preserves the relevant learning workflow on every extension host while making the compatibility and redistribution boundaries explicit.

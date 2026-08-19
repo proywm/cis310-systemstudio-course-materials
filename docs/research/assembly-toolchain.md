@@ -12,18 +12,20 @@ Those concepts are portable; the exact production toolchain is not. Microsoft MA
 
 ## Selected common ground
 
-SystemStudio v0.5.0 replaces the earlier container pilot with an original, source-level IA-32 teaching interpreter embedded in the extension. The common ground is the processor-learning layer:
+SystemStudio v0.6.0 builds on the original, source-level IA-32 teaching interpreter that replaced the earlier container pilot. It gives students two explicit source profiles—**Irvine32 Classroom (MASM)** and **NASM IA-32**—on the same embedded machine. The common ground is the processor-learning layer:
 
 - 32-bit general registers and 8-/16-bit aliases;
 - CF, PF, ZF, SF, and OF;
 - little-endian byte/word/doubleword data;
 - effective addresses, stack behavior, procedures, arithmetic, logic, shifts, comparisons, branches, and loops;
-- common MASM classroom wrappers and Irvine-style display helpers; and
+- common MASM classroom wrappers and a selected Irvine-style procedure/macro surface, including virtual console input; and
 - a NASM-style IA-32 form for the same supported concepts.
 
-The lab provides **Assemble**, **Step**, **Run**, and **Reset** in a side-by-side webview. It displays registers, signed/unsigned/hex values, flags, declared data, the top of the stack, program output, the next source instruction, and a recent execution trace. Compile and runtime failures become VS Code diagnostics on the source line.
+The lab provides **Build**, **Step**, **Run**, and **Rebuild / Reset** in a side-by-side webview. It displays registers, signed/unsigned/hex values, flags, declared data, the top of the stack, virtual console input, program output, the next source instruction, and a recent execution trace. Compile and runtime failures become VS Code diagnostics on the source line.
 
-## Why embedding removes laptop setup overhead
+The Irvine32 Classroom profile accepts the instructional source shape shown by the official Visual Studio setup material: `.386`, `.model flat,stdcall`, `.stack`, a 32-bit `ExitProcess PROTO`, `PROC`/`ENDP`, and `INVOKE ExitProcess`. It implements selected procedure contracts at the register/memory level rather than loading the Irvine binary. For example, `ReadString` uses EDX as the buffer address and ECX as the maximum character count, while `ReadInt` exposes invalid input through OF. `Random32` and `RandomRange` are intentionally deterministic in this classroom engine so demonstrations and tests can be repeated.
+
+## Why embedding—not Docker—is the default
 
 The interpreter is TypeScript bundled in the VSIX. It does not start a child process, execute native student code, invoke a shell, download a compiler, or access the network. Consequently, the same source-level model runs wherever the extension host runs:
 
@@ -32,7 +34,11 @@ The interpreter is TypeScript bundled in the VSIX. It does not start a child pro
 - no Docker daemon, Visual Studio workload, NASM package, linker, VM, or administrator action is required; and
 - restricted workspaces can use the bounded interpreter because it has no host-execution path.
 
-This is a stronger common setup baseline than the earlier `linux/amd64` Docker pilot, while aligning more closely with the IA-32 register material used in the course.
+This is a stronger common setup baseline than the earlier `linux/amd64` Docker pilot, while aligning more closely with the IA-32 register material used in the course. A Linux container would provide Linux/NASM behavior, not the Win32 MASM/Irvine workflow. A Windows-container path would still require a compatible Windows host, Hyper-V/container setup, and eligible Windows editions; it would not become the common Mac/Linux path. Docker could be evaluated later as an optional exact-binary backend for a separately scoped activity, but it is neither included nor required in v0.6.0.
+
+## Redistribution decision
+
+The extension does not bundle Microsoft `ml.exe`, Visual Studio components, Irvine library files, or the Irvine example archive. Microsoft permits redistribution only for files identified in its redistribution lists; the assembler is not treated here as a redistributable extension asset. The upstream Irvine material remains the author's property and is used only as behavioral/documentation reference. SystemStudio therefore ships original starter programs and an original clean-room teaching implementation with an explicit compatibility label.
 
 ## Safety and determinism
 
@@ -52,7 +58,7 @@ The instructor-approved native environment remains necessary when the learning o
 
 ## Implemented and verified behaviors
 
-Automated tests execute an Irvine-style MASM AddTwo program, NASM bracketed memory, register aliases, flags, loops, calls/returns, stack operations, data inspection, output helpers, unsupported-syntax diagnostics, and the infinite-loop bound. The two shipped starters are also executed during release verification. TypeScript type checking, the complete extension test suite, bundling, VSIX packaging, and installation are release gates.
+Automated tests execute the introductory Visual Studio-shaped AddTwo source, explicit/automatic profiles, Irvine virtual input and error flags, `ReadString` memory writes, display formatting, macros, memory dumps, deterministic random range, NASM bracketed memory, register aliases, flags, loops, calls/returns, stack operations, unsupported-syntax diagnostics, and the infinite-loop bound. Every shipped starter is executed during release verification. TypeScript type checking, the complete extension test suite, bundling, VSIX packaging, and installation are release gates.
 
 Cross-platform consistency here is an architectural property of a pure extension-level interpreter, not yet evidence that the interface improves learning. A classroom pilot and pre/post/assignment evaluation remain necessary for that claim.
 
@@ -61,4 +67,7 @@ Cross-platform consistency here is an architectural property of a pure extension
 - [Intel 64 and IA-32 Architectures Software Developer Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 - [Microsoft Macro Assembler documentation](https://learn.microsoft.com/en-us/cpp/assembler/masm/masm?view=msvc-170)
 - [Microsoft MASM `INVOKE` directive](https://learn.microsoft.com/en-us/cpp/assembler/masm/invoke?view=msvc-170)
+- [Irvine official Visual Studio 2019 setup and introductory program](https://asmirvine.com/gettingStartedVS2019/index.htm)
+- [Microsoft Visual Studio redistribution guidance](https://learn.microsoft.com/en-us/visualstudio/releases/2026/redistribution)
+- [Microsoft Windows container requirements](https://learn.microsoft.com/en-us/virtualization/windowscontainers/quick-start/set-up-environment)
 - [NASM language and effective-address documentation](https://www.nasm.us/doc/nasm03.html)

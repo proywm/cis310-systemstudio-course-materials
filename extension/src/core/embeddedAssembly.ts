@@ -1,4 +1,15 @@
 export type AssemblyDialect = 'masm' | 'nasm' | 'common';
+export type AssemblyProfile = 'auto' | 'irvine32' | 'nasm-ia32';
+export type ResolvedAssemblyProfile = 'irvine32' | 'nasm-ia32' | 'generic-ia32';
+
+export interface AssemblyOptions {
+  profile?: AssemblyProfile;
+}
+
+export interface MachineOptions {
+  input?: string;
+  randomSeed?: number;
+}
 
 export interface AssemblyDiagnostic {
   line: number;
@@ -21,6 +32,7 @@ export interface DataSymbol {
 
 export interface EmbeddedProgram {
   dialect: AssemblyDialect;
+  profile: ResolvedAssemblyProfile;
   instructions: EmbeddedInstruction[];
   labels: Map<string, number>;
   dataSymbols: Map<string, DataSymbol>;
@@ -39,6 +51,7 @@ export interface MachineFlags {
 
 export interface MachineSnapshot {
   dialect: AssemblyDialect;
+  profile: ResolvedAssemblyProfile;
   registers: Record<BaseRegister, number>;
   flags: MachineFlags;
   currentLine?: number;
@@ -47,6 +60,7 @@ export interface MachineSnapshot {
   reason?: string;
   steps: number;
   output: string;
+  inputRemaining: string;
   trace: Array<{ line: number; source: string }>;
   stack: Array<{ address: number; value: number }>;
   data: Array<{ name: string; address: number; size: number; value: number }>;
@@ -87,6 +101,7 @@ const DATA_BASE = 0x1000;
 const STACK_TOP = 0xf0000;
 const CODE_BASE = 0x00401000;
 const MAX_STRING_OUTPUT = 4096;
+const DEFAULT_RANDOM_SEED = 0x310c1a55;
 const BASE_REGISTERS: BaseRegister[] = ['EAX', 'EBX', 'ECX', 'EDX', 'ESI', 'EDI', 'EBP', 'ESP', 'EIP'];
 
 const REGISTER_DESCRIPTORS = new Map<string, RegisterDescriptor>([
@@ -119,12 +134,22 @@ const SUPPORTED_OPCODES = new Set([
   'mov', 'movzx', 'movsx', 'lea', 'xchg', 'push', 'pop', 'pushad', 'popad', 'pushfd', 'popfd',
   'add', 'adc', 'sub', 'sbb', 'inc', 'dec', 'neg', 'cmp', 'mul', 'imul', 'div', 'idiv',
   'and', 'or', 'xor', 'not', 'test', 'shl', 'sal', 'shr', 'sar', 'jmp', 'call', 'ret', 'loop',
-  'nop', 'hlt', 'exit', 'invoke', 'clc', 'stc', 'cmc', 'cdq', 'leave', 'int',
+  'rol', 'ror', 'nop', 'hlt', 'exit', 'invoke', 'clc', 'stc', 'cmc', 'cdq', 'leave', 'int',
+  'mwrite', 'mwriteln', 'mwritestring',
   ...CONDITIONAL_JUMPS
 ]);
 
-export function assembleEmbeddedX86(source: string): EmbeddedProgram {
-  const dialect = detectDialect(source);
+export function assembleEmbeddedX86(source: string, options: AssemblyOptions = {}): EmbeddedProgram {
+  const requestedProfile = options.profile ?? 'auto';
+  const detectedDialect = detectDialect(source);
+  const dialect: AssemblyDialect = requestedProfile === 'irvine32'
+    ? 'masm'
+    : requestedProfile === 'nasm-ia32' ? 'nasm' : detectedDialect;
+  const profile: ResolvedAssemblyProfile = requestedProfile === 'irvine32'
+    ? 'irvine32'
+    : requestedProfile === 'nasm-ia32'
+      ? 'nasm-ia32'
+      : detectedDialect === 'masm' ? 'irvine32' : detectedDialect === 'nasm' ? 'nasm-ia32' : 'generic-ia32';
   const instructions: EmbeddedInstruction[] = [];
   const labels = new Map<string, number>();
   const dataSymbols = new Map<string, DataSymbol>();
@@ -144,7 +169,7 @@ export function assembleEmbeddedX86(source: string): EmbeddedProgram {
       continue;
     }
 
-    if (/^\.data\b/i.test(line) || /^section\s+\.?(?:data|rodata)\b/i.test(line)) {
+    if (/^(?:\.data\?|\.data\b)/i.test(line) || /^section\s+\.?(?:data|rodata)\b/i.test(line)) {
       section = 'data';
       continue;
     }
@@ -152,7 +177,10 @@ export function assembleEmbeddedX86(source: string): EmbeddedProgram {
       section = 'code';
       continue;
     }
-    if (/^(?:\.386|\.model\b.*|\.stack\b.*|bits\s+32|global\b.*|extern\b.*|include\b.*|title\b.*|\.const\b.*)$/i.test(line)) {
+    if (/^(?:\.386|\.486|\.586|\.686|\.xmm|\.model\b.*|\.stack\b.*|bits\s+32|global\b.*|extern\b.*|include\b.*|includelib\b.*|title\b.*|option\b.*|\.const\b.*)$/i.test(line)) {
+      continue;
+    }
+    if (/^[A-Za-z_.$?@][\w.$?@]*\s+proto\b.*$/i.test(line)) {
       continue;
     }
     const endMatch = /^end(?:\s+([A-Za-z_.$?@][\w.$?@]*))?\s*$/i.exec(line);
@@ -199,6 +227,22 @@ export function assembleEmbeddedX86(source: string): EmbeddedProgram {
           sectionBase: DATA_BASE
         });
         constants.set(normalizeName(equMatch[1]!), value >>> 0);
+      } catch (error) {
+        diagnostics.push({ line: lineNumber, message: errorText(error) });
+      }
+      continue;
+    }
+    const assignmentMatch = /^([A-Za-z_.$?@][\w.$?@]*)\s*=\s*(.+)$/i.exec(line);
+    if (assignmentMatch) {
+      try {
+        const value = evaluateExpression(assignmentMatch[2]!, {
+          constants,
+          dataSymbols,
+          labels,
+          currentAddress: dataAddress,
+          sectionBase: DATA_BASE
+        });
+        constants.set(normalizeName(assignmentMatch[1]!), value >>> 0);
       } catch (error) {
         diagnostics.push({ line: lineNumber, message: errorText(error) });
       }
@@ -275,6 +319,7 @@ export function assembleEmbeddedX86(source: string): EmbeddedProgram {
 
   return {
     dialect,
+    profile,
     instructions,
     labels,
     dataSymbols,
@@ -294,9 +339,14 @@ export class EmbeddedX86Machine {
   private stepCount = 0;
   private outputText = '';
   private readonly executionTrace: Array<{ line: number; source: string }> = [];
+  private readonly inputText: string;
+  private inputOffset = 0;
+  private randomState: number;
 
-  constructor(readonly program: EmbeddedProgram) {
+  constructor(readonly program: EmbeddedProgram, options: MachineOptions = {}) {
     this.memory = program.memoryImage.slice();
+    this.inputText = options.input ?? '';
+    this.randomState = (options.randomSeed ?? DEFAULT_RANDOM_SEED) >>> 0;
     this.instructionIndex = program.entryPoint;
     this.registers.ESP = STACK_TOP;
     this.registers.EBP = STACK_TOP;
@@ -365,6 +415,7 @@ export class EmbeddedX86Machine {
     }));
     return {
       dialect: this.program.dialect,
+      profile: this.program.profile,
       registers: { ...this.registers },
       flags: { ...this.flags },
       currentLine: current?.line,
@@ -373,6 +424,7 @@ export class EmbeddedX86Machine {
       reason: this.haltReason,
       steps: this.stepCount,
       output: this.outputText,
+      inputRemaining: this.inputText.slice(this.inputOffset),
       trace: this.executionTrace.map((entry) => ({ ...entry })),
       stack,
       data
@@ -547,6 +599,34 @@ export class EmbeddedX86Machine {
         this.writeOperand(dest, value, line);
         break;
       }
+      case 'rol':
+      case 'ror': {
+        requireCount(2);
+        const dest = destination();
+        const count = source(1, 8).read() % dest.width;
+        if (count > 0) {
+          const width = BigInt(dest.width);
+          const value = BigInt(unsignedValue(dest.read(), dest.width));
+          const mask = (1n << width) - 1n;
+          const shift = BigInt(count);
+          const rotated = opcode === 'rol'
+            ? ((value << shift) | (value >> (width - shift))) & mask
+            : ((value >> shift) | (value << (width - shift))) & mask;
+          const result = Number(rotated);
+          this.flags.CF = opcode === 'rol'
+            ? (result & 1) !== 0
+            : ((result >>> (dest.width - 1)) & 1) !== 0;
+          if (count === 1) {
+            const mostSignificant = ((result >>> (dest.width - 1)) & 1) !== 0;
+            const nextSignificant = ((result >>> (dest.width - 2)) & 1) !== 0;
+            this.flags.OF = opcode === 'rol'
+              ? mostSignificant !== this.flags.CF
+              : mostSignificant !== nextSignificant;
+          }
+          this.writeOperand(dest, result, line);
+        }
+        break;
+      }
       case 'imul': {
         requireCount([1, 2]);
         if (operands.length === 2) {
@@ -613,6 +693,23 @@ export class EmbeddedX86Machine {
         } else if (!this.executeRuntimeCall(target, line)) {
           throw new AssemblyRuntimeError(line, `Embedded runtime procedure “${operands[0]}” is not supported.`);
         }
+        break;
+      }
+      case 'mwrite':
+      case 'mwriteln': {
+        requireCount(opcode === 'mwrite' ? 1 : [0, 1]);
+        if (operands[0]) {
+          this.outputText += this.macroText(operands[0], line);
+        }
+        if (opcode === 'mwriteln') {
+          this.outputText += '\n';
+        }
+        break;
+      }
+      case 'mwritestring': {
+        requireCount(1);
+        const address = this.immediate(operands[0]!, line);
+        this.outputText += this.readZeroTerminatedString(address, line);
         break;
       }
       case 'int': {
@@ -916,13 +1013,22 @@ export class EmbeddedX86Machine {
         this.outputText += this.formatRegisterDump();
         return true;
       case 'writeint':
-        this.outputText += String(signedValue(this.registers.EAX, 32));
+        this.outputText += formatSignedIrvine(this.registers.EAX);
         return true;
       case 'writedec':
         this.outputText += String(this.registers.EAX >>> 0);
         return true;
       case 'writehex':
-        this.outputText += formatHex(this.registers.EAX, 32);
+        this.outputText += formatIrvineHex(this.registers.EAX, 4);
+        return true;
+      case 'writehexb':
+        this.outputText += formatIrvineHex(this.registers.EAX, this.irvineUnitSize(line));
+        return true;
+      case 'writebin':
+        this.outputText += formatIrvineBinary(this.registers.EAX, 4);
+        return true;
+      case 'writebinb':
+        this.outputText += formatIrvineBinary(this.registers.EAX, this.irvineUnitSize(line));
         return true;
       case 'writechar':
         this.outputText += String.fromCharCode(this.registers.EAX & 0xff);
@@ -933,12 +1039,161 @@ export class EmbeddedX86Machine {
       case 'crlf':
         this.outputText += '\n';
         return true;
+      case 'readint': {
+        const input = this.consumeLine(line, 'ReadInt');
+        const parsed = parseIrvineInteger(input, true, 10);
+        if (parsed === undefined) {
+          this.registers.EAX = 0;
+          this.flags.OF = true;
+          this.flags.SF = false;
+          this.outputText += 'Invalid signed integer input.\n';
+        } else {
+          this.registers.EAX = parsed >>> 0;
+          this.flags.OF = false;
+          this.flags.SF = parsed < 0;
+        }
+        return true;
+      }
+      case 'readdec': {
+        const input = this.consumeLine(line, 'ReadDec');
+        const parsed = parseIrvineInteger(input, false, 10);
+        this.registers.EAX = parsed === undefined ? 0 : parsed >>> 0;
+        this.flags.CF = parsed === undefined;
+        this.flags.SF = (this.registers.EAX & 0x80000000) !== 0;
+        return true;
+      }
+      case 'readhex': {
+        const input = this.consumeLine(line, 'ReadHex');
+        const parsed = parseIrvineInteger(input, false, 16);
+        this.registers.EAX = parsed === undefined ? 0 : parsed >>> 0;
+        return true;
+      }
+      case 'readchar': {
+        this.writeRegister(REGISTER_DESCRIPTORS.get('al')!, this.consumeCharacter(line, 'ReadChar').charCodeAt(0));
+        return true;
+      }
+      case 'readkey': {
+        if (this.inputOffset >= this.inputText.length) {
+          this.flags.ZF = true;
+        } else {
+          this.writeRegister(REGISTER_DESCRIPTORS.get('al')!, this.inputText.charCodeAt(this.inputOffset));
+          this.inputOffset += 1;
+          this.flags.ZF = false;
+          this.writeRegister(REGISTER_DESCRIPTORS.get('ah')!, 0);
+          this.registers.EDX = this.registers.EAX & 0xff;
+          this.registers.EBX = 0;
+        }
+        return true;
+      }
+      case 'readstring': {
+        const input = this.consumeLine(line, 'ReadString').slice(0, this.registers.ECX >>> 0);
+        this.writeAsciiString(this.registers.EDX, input, line);
+        this.registers.EAX = input.length >>> 0;
+        return true;
+      }
+      case 'dumpmem':
+        this.outputText += this.formatMemoryDump(line);
+        return true;
+      case 'random32':
+        this.registers.EAX = this.nextRandom();
+        return true;
+      case 'randomrange': {
+        const range = this.registers.EAX >>> 0;
+        if (range === 0) throw new AssemblyRuntimeError(line, 'RandomRange requires EAX greater than zero.');
+        this.registers.EAX = this.nextRandom() % range;
+        return true;
+      }
+      case 'randomize':
+        this.randomState = DEFAULT_RANDOM_SEED;
+        return true;
+      case 'clrscr':
+        this.outputText = '';
+        return true;
+      case 'waitmsg':
+        this.outputText += 'Press any key to continue . . .';
+        this.consumeCharacter(line, 'WaitMsg');
+        return true;
+      case 'delay':
+      case 'gotoxy':
+      case 'settextcolor':
+        return true;
+      case 'strlength':
+      case 'str_length':
+        this.registers.EAX = this.readZeroTerminatedString(this.registers.EDX, line).length >>> 0;
+        return true;
       case 'exitprocess':
         this.halt(`ExitProcess(${this.registers.EAX >>> 0}).`);
         return true;
       default:
         return false;
     }
+  }
+
+  private macroText(operand: string, line: number): string {
+    const trimmed = operand.trim();
+    if (/^(['"]).*\1$/s.test(trimmed)) {
+      return decodeQuoted(trimmed);
+    }
+    return this.readZeroTerminatedString(this.immediate(trimmed.replace(/^offset\s+/i, ''), line), line);
+  }
+
+  private consumeLine(line: number, procedure: string): string {
+    if (this.inputOffset >= this.inputText.length) {
+      throw new AssemblyRuntimeError(line, `${procedure} needs console input. Add input in the Assembly Lab and Build / Reset.`);
+    }
+    const end = this.inputText.indexOf('\n', this.inputOffset);
+    const value = this.inputText.slice(this.inputOffset, end < 0 ? this.inputText.length : end).replace(/\r$/, '');
+    this.inputOffset = end < 0 ? this.inputText.length : end + 1;
+    return value;
+  }
+
+  private consumeCharacter(line: number, procedure: string): string {
+    if (this.inputOffset >= this.inputText.length) {
+      throw new AssemblyRuntimeError(line, `${procedure} needs console input. Add input in the Assembly Lab and Build / Reset.`);
+    }
+    const character = this.inputText[this.inputOffset]!;
+    this.inputOffset += 1;
+    return character;
+  }
+
+  private writeAsciiString(address: number, value: string, line: number): void {
+    if (value.length > MAX_STRING_OUTPUT) {
+      throw new AssemblyRuntimeError(line, `ReadString input exceeds ${MAX_STRING_OUTPUT} bytes.`);
+    }
+    this.assertMemory(address, 8);
+    this.assertMemory(address + value.length, 8);
+    for (let index = 0; index < value.length; index += 1) {
+      this.memory[address + index] = value.charCodeAt(index) & 0xff;
+    }
+    this.memory[address + value.length] = 0;
+  }
+
+  private irvineUnitSize(line: number): 1 | 2 | 4 {
+    const size = this.registers.EBX >>> 0;
+    if (size !== 1 && size !== 2 && size !== 4) {
+      throw new AssemblyRuntimeError(line, 'EBX must contain a unit size of 1, 2, or 4.');
+    }
+    return size;
+  }
+
+  private formatMemoryDump(line: number): string {
+    const unitSize = this.irvineUnitSize(line);
+    const count = this.registers.ECX >>> 0;
+    if (count > 1024) throw new AssemblyRuntimeError(line, 'DumpMem is limited to 1,024 units.');
+    const values: string[] = [];
+    for (let index = 0; index < count; index += 1) {
+      values.push(formatIrvineHex(this.readMemory(this.registers.ESI + index * unitSize, unitSize * 8 as 8 | 16 | 32), unitSize));
+    }
+    return `Dump of offset ${formatIrvineHex(this.registers.ESI, 4)}\n-------------------------------\n${values.join(' ')}\n`;
+  }
+
+  private nextRandom(): number {
+    let value = this.randomState || DEFAULT_RANDOM_SEED;
+    value ^= value << 13;
+    value ^= value >>> 17;
+    value ^= value << 5;
+    this.randomState = value >>> 0;
+    return this.randomState;
   }
 
   private readZeroTerminatedString(address: number, line: number): string {
@@ -1062,7 +1317,7 @@ function evaluateExpression(expression: string, context: ExpressionContext): num
 }
 
 function tokenizeExpression(expression: string): string[] {
-  const cleaned = expression.replace(/^offset\s+/i, '').replace(/^rel\s+/i, '');
+  const cleaned = expression.replace(/^(?:offset|addr|rel)\s+/i, '');
   const tokens: string[] = [];
   let position = 0;
   while (position < cleaned.length) {
@@ -1093,9 +1348,10 @@ function parseNumericToken(token: string): number | undefined {
 function parseDataValues(text: string, width: 1 | 2 | 4, context: ExpressionContext): Uint8Array {
   const bytes: number[] = [];
   for (const item of splitOperands(text)) {
-    const duplicate = /^(\d+)\s+dup\s*\((.*)\)$/i.exec(item);
+    const duplicate = /^(.+?)\s+dup\s*\((.*)\)$/i.exec(item);
     if (duplicate) {
-      const count = Number.parseInt(duplicate[1]!, 10);
+      const count = evaluateExpression(duplicate[1]!, { ...context, currentAddress: context.currentAddress + bytes.length });
+      if (!Number.isInteger(count) || count < 0) throw new Error('DUP count must be a non-negative integer.');
       if (count > 4096) throw new Error('DUP count exceeds 4096 elements.');
       const nested = parseDataValues(duplicate[2]!, width, context);
       for (let repeat = 0; repeat < count; repeat += 1) bytes.push(...nested);
@@ -1234,6 +1490,43 @@ function parityEven(value: number): boolean {
 
 function formatHex(value: number, width: 8 | 16 | 32): string {
   return `0x${unsignedValue(value, width).toString(16).toUpperCase().padStart(width / 4, '0')}`;
+}
+
+function formatIrvineHex(value: number, bytes: 1 | 2 | 4): string {
+  return unsignedValue(value, bytes * 8 as 8 | 16 | 32).toString(16).toUpperCase().padStart(bytes * 2, '0');
+}
+
+function formatIrvineBinary(value: number, bytes: 1 | 2 | 4): string {
+  const width = bytes * 8;
+  const bits = unsignedValue(value, width as 8 | 16 | 32).toString(2).padStart(width, '0');
+  return bits.match(/.{1,4}/g)?.join(' ') ?? bits;
+}
+
+function formatSignedIrvine(value: number): string {
+  const signed = signedValue(value, 32);
+  return signed >= 0 ? `+${signed}` : String(signed);
+}
+
+function parseIrvineInteger(input: string, signed: boolean, radix: 10 | 16): number | undefined {
+  const match = radix === 16
+    ? /^([0-9a-f]{1,8})/i.exec(input)
+    : signed ? /^\s*([+-]?\d+)/.exec(input) : /^\s*(\+?\d+)/.exec(input);
+  if (!match) return undefined;
+  try {
+    const token = match[1]!;
+    const negative = token.startsWith('-');
+    const unsignedToken = token.replace(/^[+-]/, '');
+    let value = radix === 16 ? BigInt(`0x${unsignedToken}`) : BigInt(unsignedToken);
+    if (negative) value = -value;
+    if (signed) {
+      if (value < -0x80000000n || value > 0x7fffffffn) return undefined;
+      return Number(value);
+    }
+    if (value < 0n || value > 0xffffffffn) return undefined;
+    return Number(value);
+  } catch {
+    return undefined;
+  }
 }
 
 function errorText(error: unknown): string {

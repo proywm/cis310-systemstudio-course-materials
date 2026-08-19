@@ -28,7 +28,7 @@ The only simulator example retained in the generated student workspace is Digita
 
 ## Assembly boundary
 
-The reviewed course archive uses Microsoft/Irvine-style MASM conventions in its assembly material. The extension does not copy exams, quizzes, textbook slides, proprietary support libraries, or archived assembly examples from that source. Instead, it supplies an original embedded IA-32 teaching interpreter, original MASM-style and NASM-style starters, and a compatibility guide. The engine targets shared register/memory/flags/stack concepts and does not claim that source-level teaching support is interchangeable with exact object formats, APIs, calling conventions, macros, or native production tools.
+The reviewed course archive uses Microsoft/Irvine-style MASM conventions in its assembly material. The extension does not copy exams, quizzes, textbook slides, proprietary support libraries, or archived assembly examples from that source. Instead, it supplies an original embedded IA-32 teaching interpreter, explicit Irvine32 Classroom and NASM IA-32 profiles, original starters, and compatibility guides. The engine targets shared register/memory/flags/stack and introductory console-procedure concepts and does not claim that source-level teaching support is interchangeable with exact object formats, APIs, calling conventions, complete macros, or native production tools.
 
 ## Presentation boundary
 

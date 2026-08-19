@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Managed Digital circuits, embedded IA-32 assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
-  "version": "0.5.0",
+  "description": "Managed Digital circuits, embedded Irvine32/NASM IA-32 assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
+  "version": "0.6.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -24,6 +24,8 @@
     "processor",
     "circuit simulator",
     "Digital",
+    "Irvine32",
+    "MASM",
     "NASM",
     "assembly"
   ],
@@ -250,7 +252,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Install Digital, create circuits, run deterministic tests, and use the no-setup embedded assembly lab from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create New Circuit](command:systemstudioCis310.createCircuit)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)\n[Create Embedded Assembly Lab](command:systemstudioCis310.createAssemblyLab)"
+        "contents": "Install Digital, create circuits, run deterministic tests, and use the no-setup Irvine32 / NASM assembly lab from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create New Circuit](command:systemstudioCis310.createCircuit)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)\n[Create Irvine32 / NASM Assembly Lab](command:systemstudioCis310.createAssemblyLab)"
       },
       {
         "view": "systemstudioCis310.materials",

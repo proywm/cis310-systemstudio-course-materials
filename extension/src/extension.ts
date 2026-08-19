@@ -289,7 +289,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           const upgraded = await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
           const action = await vscode.window.showInformationMessage(
             upgraded.addedFiles
-              ? `Added the v0.5 embedded assembly starters without overwriting student .asm files.`
+              ? `Added the Irvine32 and NASM embedded starters without overwriting student .asm files.`
               : `The embedded assembly lab already exists at ${path.dirname(existingGuide)}.`,
             'Open Guide',
             'Open Assembly Lab'
@@ -319,7 +319,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.Uri.file(path.join(created, 'README.md'))
           );
         } else if (action === 'Open Assembly Lab') {
-          const uri = vscode.Uri.file(path.join(created, 'embedded', 'add-two.asm'));
+          const uri = vscode.Uri.file(path.join(created, 'irvine32', 'AddTwo.asm'));
           await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
           await AssemblyLabPanel.show(context, assemblyManager, uri);
         }
@@ -335,12 +335,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         'Host toolchain required: no',
         'Docker required: no',
         'Administrator access required: no',
+        'Profiles: Irvine32 Classroom (MASM) and NASM IA-32',
         'Execution model: bounded source-level IA-32 teaching interpreter',
         `Detail: ${status.detail}`
       ].join('\n'));
       output.show(true);
       await vscode.window.showInformationMessage(
-        'Embedded Assembly Lab is ready. It needs no Docker, native assembler, SDK, or administrator setup.'
+        'Irvine32 Classroom and NASM IA-32 profiles are ready. They need no Docker, native assembler, SDK, or administrator setup.'
       );
     }),
     vscode.commands.registerCommand('systemstudioCis310.openAssemblyLab', async (candidate?: vscode.Uri) => {

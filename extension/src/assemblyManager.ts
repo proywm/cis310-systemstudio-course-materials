@@ -6,8 +6,14 @@ import {
   AssemblyCompileError,
   AssemblyRuntimeError,
   EmbeddedX86Machine,
+  type AssemblyProfile,
   type MachineSnapshot
 } from './core/embeddedAssembly';
+
+export interface AssemblyExecutionOptions {
+  profile?: AssemblyProfile;
+  input?: string;
+}
 
 export interface AssemblyStatus {
   embeddedReady: true;
@@ -22,6 +28,8 @@ export interface AssemblyLabUpgrade {
 
 interface AssemblySession {
   source: string;
+  profile: AssemblyProfile;
+  input: string;
   machine: EmbeddedX86Machine;
 }
 
@@ -52,20 +60,20 @@ export class AssemblyManager implements vscode.Disposable {
     };
   }
 
-  async assemble(uri: vscode.Uri): Promise<MachineSnapshot> {
-    return this.load(uri, true);
+  async assemble(uri: vscode.Uri, options: AssemblyExecutionOptions = {}): Promise<MachineSnapshot> {
+    return this.load(uri, true, undefined, options);
   }
 
-  async reset(uri: vscode.Uri): Promise<MachineSnapshot> {
-    return this.load(uri, true);
+  async reset(uri: vscode.Uri, options: AssemblyExecutionOptions = {}): Promise<MachineSnapshot> {
+    return this.load(uri, true, undefined, options);
   }
 
-  async snapshot(uri: vscode.Uri): Promise<MachineSnapshot> {
-    return this.load(uri, false);
+  async snapshot(uri: vscode.Uri, options: AssemblyExecutionOptions = {}): Promise<MachineSnapshot> {
+    return this.load(uri, false, undefined, options);
   }
 
-  async step(uri: vscode.Uri): Promise<MachineSnapshot> {
-    const session = await this.currentSession(uri);
+  async step(uri: vscode.Uri, options: AssemblyExecutionOptions = {}): Promise<MachineSnapshot> {
+    const session = await this.currentSession(uri, options);
     try {
       const snapshot = session.machine.step();
       this.diagnostics.delete(uri);
@@ -77,8 +85,8 @@ export class AssemblyManager implements vscode.Disposable {
     }
   }
 
-  async run(uri: vscode.Uri, maxSteps = 10_000): Promise<MachineSnapshot> {
-    const session = await this.currentSession(uri);
+  async run(uri: vscode.Uri, maxSteps = 10_000, options: AssemblyExecutionOptions = {}): Promise<MachineSnapshot> {
+    const session = await this.currentSession(uri, options);
     try {
       const snapshot = session.machine.run(maxSteps);
       this.diagnostics.delete(uri);
@@ -109,22 +117,33 @@ export class AssemblyManager implements vscode.Disposable {
     return target;
   }
 
-  /** Adds v0.5 embedded assets to an older generated lab without overwriting student assembly. */
+  /** Adds current embedded assets to an older generated lab without overwriting student assembly. */
   async upgradeLab(workspaceRoot: string): Promise<AssemblyLabUpgrade> {
     const source = path.join(this.context.extensionUri.fsPath, 'assembly-starter');
     const target = path.join(workspaceRoot, 'assembly');
-    const embeddedTarget = path.join(target, 'embedded');
-    await mkdir(embeddedTarget, { recursive: true });
     let addedFiles = false;
-    for (const fileName of ['add-two.asm', 'loop-sum.asm']) {
+    const starterFiles: Array<readonly [string, string]> = [
+      ['embedded', 'add-two.asm'],
+      ['embedded', 'loop-sum.asm'],
+      ['irvine32', 'AddTwo.asm'],
+      ['irvine32', 'ConsoleInput.asm'],
+      ['nasm-ia32', 'LoopSum.asm']
+    ];
+    for (const [directory, fileName] of starterFiles) {
+      const destinationDirectory = path.join(target, directory);
+      await mkdir(destinationDirectory, { recursive: true });
       addedFiles = await copyIfMissing(
-        path.join(source, 'embedded', fileName),
-        path.join(embeddedTarget, fileName)
+        path.join(source, directory, fileName),
+        path.join(destinationDirectory, fileName)
       ) || addedFiles;
     }
     addedFiles = await copyIfMissing(
       path.join(source, 'COMPATIBILITY.md'),
       path.join(target, 'COMPATIBILITY.md')
+    ) || addedFiles;
+    addedFiles = await copyIfMissing(
+      path.join(source, 'IRVINE32_PROFILE.md'),
+      path.join(target, 'IRVINE32_PROFILE.md')
     ) || addedFiles;
 
     const guidePath = path.join(target, 'README.md');
@@ -144,13 +163,19 @@ export class AssemblyManager implements vscode.Disposable {
           await cp(path.join(source, 'README.md'), guidePath, { force: false, errorOnExist: true });
           addedFiles = true;
         }
+      } else if (!currentGuide.includes('Irvine32 Classroom profile')) {
+        resolvedGuidePath = path.join(target, 'README-v0.6.md');
+        addedFiles = await copyIfMissing(
+          path.join(source, 'README.md'),
+          resolvedGuidePath
+        ) || addedFiles;
       }
     } else {
       addedFiles = await copyIfMissing(path.join(source, 'README.md'), guidePath) || addedFiles;
     }
 
     return {
-      entryPath: path.join(embeddedTarget, 'add-two.asm'),
+      entryPath: path.join(target, 'irvine32', 'AddTwo.asm'),
       guidePath: resolvedGuidePath,
       addedFiles
     };
@@ -161,33 +186,42 @@ export class AssemblyManager implements vscode.Disposable {
     this.diagnostics.dispose();
   }
 
-  private async currentSession(uri: vscode.Uri): Promise<AssemblySession> {
+  private async currentSession(uri: vscode.Uri, options: AssemblyExecutionOptions): Promise<AssemblySession> {
     const document = await vscode.workspace.openTextDocument(uri);
     const source = document.getText();
+    const profile = options.profile ?? 'auto';
+    const input = options.input ?? '';
     const existing = this.sessions.get(uri.toString());
-    if (existing?.source === source) {
+    if (existing?.source === source && existing.profile === profile && existing.input === input) {
       return existing;
     }
-    await this.load(uri, true, document);
+    await this.load(uri, true, document, options);
     return this.sessions.get(uri.toString())!;
   }
 
-  private async load(uri: vscode.Uri, force: boolean, suppliedDocument?: vscode.TextDocument): Promise<MachineSnapshot> {
+  private async load(
+    uri: vscode.Uri,
+    force: boolean,
+    suppliedDocument?: vscode.TextDocument,
+    options: AssemblyExecutionOptions = {}
+  ): Promise<MachineSnapshot> {
     const document = suppliedDocument ?? await vscode.workspace.openTextDocument(uri);
     const source = document.getText();
+    const profile = options.profile ?? 'auto';
+    const input = options.input ?? '';
     const existing = this.sessions.get(uri.toString());
-    if (!force && existing?.source === source) {
+    if (!force && existing?.source === source && existing.profile === profile && existing.input === input) {
       return existing.machine.snapshot();
     }
 
     try {
-      const program = assembleEmbeddedX86(source);
-      const machine = new EmbeddedX86Machine(program);
-      this.sessions.set(uri.toString(), { source, machine });
+      const program = assembleEmbeddedX86(source, { profile });
+      const machine = new EmbeddedX86Machine(program, { input });
+      this.sessions.set(uri.toString(), { source, profile, input, machine });
       this.diagnostics.delete(uri);
       const snapshot = machine.snapshot();
       this.output.appendLine(
-        `Embedded assembly loaded: ${path.basename(uri.fsPath)} (${program.dialect.toUpperCase()} teaching subset, ` +
+        `Embedded assembly loaded: ${path.basename(uri.fsPath)} (${program.profile}, ` +
         `${program.instructions.length} source-level instructions)`
       );
       return snapshot;
