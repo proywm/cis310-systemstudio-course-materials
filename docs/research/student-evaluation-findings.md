@@ -118,3 +118,18 @@ The evaluations do not establish that:
 - software can correct course pacing, curriculum alignment, assignment quality, or classroom climate by itself.
 
 Those are design hypotheses or limits that must remain explicit in the proposal and evaluation plan.
+
+## Fall 2026 extension response
+
+Version 0.7 implements a bounded response to the needs above without treating an untested AI coach as the solution:
+
+| Student need | Implemented response | Remaining evaluation question |
+|---|---|---|
+| Setup uncertainty | Grouped environment check, checksum/Java/trust evidence, explicit Remote SSH guidance | Can students correctly distinguish setup faults from circuit faults? |
+| Concept-to-implementation gap | Tutorial loop from bundled concept → prediction → small build → preview/test evidence → integration | Does the loop improve transfer or only usability? |
+| Smaller scaffolded practice | Assignment-specific blank circuit actions and visible evidence checkpoints | Which tasks and hint levels are instructionally appropriate? |
+| Requirements and submission clarity | Exact Fall 2026 Canvas course link, three separate homework references, three project references, and repeated “submit in Canvas” language | Do students find and follow the authoritative requirement with fewer errors? |
+| Readability and access | Rendered assignment previews and 13 embedded offline PDFs; no presentation depends on Drive access | Are PDF rendering, navigation, and accessibility adequate on student devices? |
+| Safer help-seeking | Local conversational helper asks for expected, observed, evidence, attempt, and a specific question | Does this improve help-request quality and reduce time to useful human assistance? |
+
+The helper is intentionally deterministic and local. It does not know current deadlines, grade work, generate complete answers, transmit conversation data, or submit to Canvas. A generative coach remains a separately evaluated design hypothesis.

@@ -76,7 +76,7 @@
 
 **Status:** Accepted for pilot; implemented August 2026
 
-**Decision:** Package readable assignment references and a lecture-to-assignment map in the extension, expose the original presentations through recorded Drive links, verify local assignment hashes at activation, and label the Fall 2025 pack as requiring instructor review. Keep current Canvas instructions authoritative. Exclude exams, grades, student records, hidden tests, and completed assignment-adjacent circuits.
+**Decision:** Package readable assignment references and a lecture-to-assignment map in the extension, embed all 13 presentation PDFs for offline viewing, verify local material hashes at activation, and label the Fall 2026 workspace's imported Fall 2025 references as requiring instructor review. Keep the exact Fall 2026 Canvas course authoritative. Exclude exams, grades, student records, hidden tests, and completed assignment-adjacent circuits.
 
 **Rationale:** Students need one discoverable path from concepts to the relevant task, but archived content and private links must not be represented as a ready Fall 2026 release. Removing Digital's completed ALU example avoids giving away a design that closely overlaps the register-file/ALU project while retaining a small half-adder example for simulator orientation.
 
@@ -103,3 +103,11 @@
 **Decision:** Provide explicit Irvine32 Classroom (MASM), NASM IA-32, and auto-detect choices on the embedded engine. Extend the Irvine32 profile with selected console input/output, display, string, random, and macro behaviors used in introductory exercises. Take all input through an in-memory virtual console and keep execution deterministic and process-free. Do not bundle Visual Studio, Microsoft assemblers, Irvine binaries/examples, or a Docker image. Treat any future exact-binary/container backend as a separately approved optional mode, not as an automatic fallback selected from the student's operating system.
 
 **Rationale:** Students need a recognizable path from the book's Visual Studio/Irvine syntax to observable registers and flags, but Windows-native installation is not a common denominator for macOS and Linux. Docker does not eliminate prerequisites and a Linux container cannot reproduce Win32 library/API behavior. A clean-room profile preserves the relevant learning workflow on every extension host while making the compatibility and redistribution boundaries explicit.
+
+## ADR-014: Use a local evidence-and-routing helper before a generative coach
+
+**Status:** Accepted and implemented August 2026
+
+**Decision:** Add an extension-local conversational helper for topic routing, tool diagnosis, Canvas/submission redirection, and structured expected/observed/evidence/attempt prompts. Keep replies deterministic and disclose that it neither calls an external AI service nor knows current deadlines, grades work, or submits coursework. Route every deadline or submission question to the configured Fall 2026 Canvas course.
+
+**Rationale:** Student evaluations identify timely explanation, setup uncertainty, concept-to-implementation gaps, and lower-friction help-seeking as immediate needs. A bounded local helper addresses navigation and evidence collection without fabricating dates, transmitting student data, or claiming the reliability of an unevaluated AI coach. Generative coaching remains a separately evaluated senior-design workstream.

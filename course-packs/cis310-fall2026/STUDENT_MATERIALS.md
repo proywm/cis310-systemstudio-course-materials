@@ -1,12 +1,14 @@
-# CIS 310 Course Materials
+# CIS 310 Fall 2026 Course Materials
 
-> **Reference edition:** imported from Fall 2025. Confirm all deadlines and submission requirements in the current Canvas course. Presentations are included as offline, integrity-checked PDFs.
+> **Fall 2026 course workspace:** [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for requirements, deadlines, points, allowed collaboration, required files, and submission. **Submit every required deliverable in Canvas; SystemStudio does not submit for you.** The study references were imported from Fall 2025 and require instructor review. All 13 presentations are embedded in the extension as offline, integrity-checked PDFs—no Google Drive access is required.
 
 ## Homework
 
 | Homework | Preparation |
 |---|---|
 | [Homework 1: Logic Foundations](assignments/homework-1-logic-foundations.md) | Lectures 1--5 |
+| [Homework 2: Sequential Logic and State Machines](assignments/homework-2-sequential-logic.md) | Lecture 6 |
+| [Homework 3: Memory and Assembly Foundations](assignments/homework-3-memory-assembly.md) | Lectures 8--10 and 12 |
 
 ## Project assignments
 
@@ -16,7 +18,7 @@
 | 2 | [Register File and ALU](assignments/project-2-register-file-alu.md) | Lectures 2, 5, and 10 |
 | 3 | [Integrated 4-bit Processor](assignments/project-3-processor.md) | Lectures 5--7 and 10--12 |
 
-## Presentation sequence
+## Bundled offline presentation sequence
 
 | Lecture | Main concepts | Assignment connection | Original presentation |
 |---:|---|---|---|
@@ -41,7 +43,8 @@
 3. Build components as separate `.dig` subcircuits.
 4. Add instructor-approved `Testcase` components where provided.
 5. Run tests from VS Code after each milestone and keep the observed evidence for your report.
-6. Use the current Canvas page—not this archived pack—for deadlines, grading, and submission.
+6. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for the current requirements and due date.
+7. Submit the required files in Canvas and confirm that Canvas recorded the submission.
 
 ## Assembly programming
 

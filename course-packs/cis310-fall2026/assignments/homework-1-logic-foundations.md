@@ -1,10 +1,10 @@
-> **Imported reference material — instructor review required.** This file was imported from the private `CIS310_fall25` Drive folder. Any dates, submission systems, group rules, or point values below are historical and are not authoritative for a later term. Use the current Canvas assignment for official requirements.
+> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 >
 > Source title: `CIS310-HW-1.md`  
 > Source last modified: `2025-08-26T18:49:40.000Z`  
 > Source file: https://drive.google.com/file/d/1UXgSeFrWlH-5geCrgXQrmf4R1rfLrgxU/view
 
-# CIS310: Computer Organization and Assembly Programming - Assignment 1
+# CIS 310 Homework 1: Logic Foundations
 
 ### **Topics Covered**
 
@@ -106,7 +106,7 @@
 - **File Formats**: Submit the following:
   - Truth tables, Boolean expressions and simulation screenshots in a single PDF.
   - Logic simulation files in a github repository (https://github.com/) and provide the repo link the PDF.
-- **Deadline**: [Feb 5]
+- **Fall 2026 deadline and submission:** Open the current Homework 1 assignment in Canvas. Do not use an archived date from this reference.
 ---
 
 ### **Grading Rubric**
@@ -119,4 +119,3 @@
 | **Applications (30 Points)**    | Accurate designs and clear documentation.          | Minor issues in logic or presentation. | Circuit implemented but incomplete.   | Missing or incorrect implementations. |
 
 ---
-

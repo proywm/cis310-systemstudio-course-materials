@@ -1,4 +1,4 @@
-> **Imported reference material — instructor review required.** This file was imported from the private `CIS310_fall25` Drive folder. Any dates, submission systems, group rules, or point values below are historical and are not authoritative for a later term. Use the current Canvas assignment for official requirements.
+> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 >
 > Source title: `cis310_Assignment3.md.txt`  
 > Source last modified: `2025-08-26T18:47:17.000Z`  
@@ -125,16 +125,15 @@ By the end of this assignment, you will:
 ## 4. Submission Requirements
 
 1. **Project File:**
-   - Submit the `4bitProcessor` circuit files via a Github repository or the designated submission platform.
+   - Prepare the `4bitProcessor` circuit files and any repository link required by the current Canvas assignment.
 2. **Documentation:**
    - Provide a report detailing:
      - **Design Choices:** Explanation of how you integrated the PC, Instruction Memory, IRs, Instruction Decoder, Register File, and ALU.
      - **Control Signals:** Description of how the instruction is decoded and how control signals are generated.
      - **Testing:** Include screenshots the correct operation of each component and the full processor.
-3. **Deadline:**
-   - 04/09/2025
-4. **Group Submission:**
-   - You may work in groups of up to **three members**. Each member should submit an individual report with clearly indicated contributions.
+3. **Fall 2026 deadline and submission:** Open the current Project Assignment 3 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
+4. **Collaboration (confirm in Fall 2026 Canvas):**
+   - Follow the current Canvas rules for group size, individual work, and contribution reporting.
 
 ---
 
@@ -143,4 +142,3 @@ By the end of this assignment, you will:
 This assignment requires you to integrate several key components to build a functioning 4-bit processor. Through this project, you will gain a deeper understanding of how the PC, Instruction Memory, extended IRs, decoding logic, Register File, and ALU interact to execute a program. This foundational knowledge is critical as you move on to more advanced topics in computer architecture.
 
 **Happy Building and Good Luck!**
-

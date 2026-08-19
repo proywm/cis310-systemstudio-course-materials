@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.7.0
+
+- Reorganized the setup/tool tree into five student-centered groups instead of one flat command list.
+- Added a first-run, skippable, resumable, and rerunnable tutorial grounded in recurring student concerns and an accompanying native Getting Started walkthrough.
+- Added a local Student Helper for course-topic routing, tool diagnosis, Canvas/deadline redirection, and evidence-based help-request preparation; no conversation is sent to an external AI service.
+- Set the delivery workspace to Fall 2026 and added the exact Canvas course 552144 link as the authoritative requirements and submission destination.
+- Added Homework 2 and Homework 3 references from the instructor source folder, bringing the course pack to three homework and three project references.
+- Kept all 13 presentation PDFs embedded and checksum-verified in the extension so presentation viewing does not depend on Google Drive.
+- Removed archived dates and collaboration claims from student-facing assignment references in favor of explicit Fall 2026 Canvas verification and submission instructions.
+
 ## 0.6.0
 
 - Added an explicit Irvine32 Classroom profile alongside NASM IA-32 and auto-detection; the selected profile changes accepted source syntax, not the host toolchain.

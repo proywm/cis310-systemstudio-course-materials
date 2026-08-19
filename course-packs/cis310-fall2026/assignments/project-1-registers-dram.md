@@ -1,4 +1,4 @@
-> **Imported reference material — instructor review required.** This file was imported from the private `CIS310_fall25` Drive folder. Any dates, submission systems, group rules, or point values below are historical and are not authoritative for a later term. Use the current Canvas assignment for official requirements.
+> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 >
 > Source title: `CIS310_assignment-1-v2.md.txt`  
 > Source last modified: `2025-08-26T18:46:46.000Z`  
@@ -118,16 +118,15 @@ By the end of this assignment, you will:
 
 ### 4. Submission Requirements
 
-1. **Project File:** Submit the circuit files of your completed design using a Github repository.
+1. **Project File:** Prepare the circuit files and any repository link required by the current Canvas assignment.
 2. **Documentation:** A brief report explaining:
    - Design choices for registers and DRAM.
    - Control signals used.
    - Test results with screenshots.
-3. **Deadline:** March 14.
-4. **Group Submission:** Assignments can be completed in groups of up to **three members**. Each member must submit an individual report specifying their contributions.
+3. **Fall 2026 deadline and submission:** Open the current Project Assignment 1 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
+4. **Collaboration:** Confirm the current Fall 2026 collaboration and individual-report rules in Canvas before working with others.
 
 ---
 
 ### Conclusion
 By completing this assignment, you will develop a strong foundation in CPU design, specifically understanding how registers interact with memory. This will prepare you for more complex topics such as **ALU integration and control unit design** in future assignments.
-

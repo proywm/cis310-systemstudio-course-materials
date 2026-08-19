@@ -2,11 +2,11 @@ import * as esbuild from 'esbuild';
 import { cp, mkdir, rm } from 'node:fs/promises';
 import * as path from 'node:path';
 
-const coursePackSource = path.resolve('../course-packs/cis310-fall2025');
-const coursePackDestination = path.resolve('course-packs/cis310-fall2025');
+const coursePackSource = path.resolve('../course-packs/cis310-fall2026');
+const coursePackDestination = path.resolve('course-packs/cis310-fall2026');
 
 async function stageCoursePack() {
-  await rm(coursePackDestination, { recursive: true, force: true });
+  await rm(path.dirname(coursePackDestination), { recursive: true, force: true });
   await mkdir(path.dirname(coursePackDestination), { recursive: true });
   await cp(coursePackSource, coursePackDestination, { recursive: true });
 }

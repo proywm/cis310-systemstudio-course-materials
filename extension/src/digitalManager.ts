@@ -288,7 +288,7 @@ export class DigitalManager {
         errorOnExist: true
       });
 
-      const coursePackSource = path.join(this.context.extensionUri.fsPath, 'course-packs', 'cis310-fall2025');
+      const coursePackSource = path.join(this.context.extensionUri.fsPath, 'course-packs', 'cis310-fall2026');
       await cp(path.join(coursePackSource, 'assignments'), path.join(staging, 'course', 'assignments'), {
         recursive: true,
         force: false,
@@ -422,15 +422,16 @@ function formatBytes(bytes: number): string {
 function starterReadme(): string {
   return `# SystemStudio CIS 310 Starter\n\n` +
     `This workspace was created by the SystemStudio CIS 310 VS Code extension.\n\n` +
-    `The bundled Fall 2025 materials are reference copies that require instructor review. ` +
-    `Current Canvas instructions, deadlines, points, and submission rules are authoritative.\n\n` +
+    `This is a Fall 2026 course workspace. Bundled references imported from Fall 2025 require instructor review. ` +
+    `Current Fall 2026 Canvas instructions, deadlines, points, and submission rules are authoritative.\n\n` +
     `## Start\n\n` +
     `1. Read \`course/README.md\` and the current Canvas assignment.\n` +
     `2. Open \`circuits/reference/HalfAdder.dig\` for an analogous prerequisite example.\n` +
     `3. Use **Open With → SystemStudio Circuit Preview** for an in-editor SVG view.\n` +
     `4. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
     `5. Run **CIS 310: Open Circuit in Digital** to edit and interact with the circuit.\n` +
-    `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n\n` +
+    `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n` +
+    `7. Submit the required files through the current Fall 2026 Canvas assignment.\n\n` +
     `For assembly programming, read \`assembly/README.md\`. The embedded lab provides a source-level ` +
     `IA-32 MASM/NASM teaching subset with no Docker or native toolchain requirement.\n\n` +
     `No ALU, register-file, or processor solution is bundled. This protects the learning task while ` +

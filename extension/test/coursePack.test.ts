@@ -9,7 +9,12 @@ const validManifest = {
   schemaVersion: '0.1.0',
   id: 'cis310-test',
   version: '1.0.0',
-  course: { code: 'CIS 310', title: 'Computer Organization', sourceTerm: 'Fall 2025' },
+  course: {
+    code: 'CIS 310',
+    title: 'Computer Organization',
+    sourceTerm: 'Fall 2025',
+    deliveryTerm: 'Fall 2026'
+  },
   status: 'instructor-review-required',
   sourceFolder: 'https://drive.google.com/drive/folders/example',
   studentIndexPath: 'STUDENT_MATERIALS.md',
@@ -99,12 +104,14 @@ describe('course-material manifest', () => {
   });
 
   it('verifies every packaged course resource', async () => {
-    const packRoot = path.resolve('..', 'course-packs', 'cis310-fall2025');
+    const packRoot = path.resolve('..', 'course-packs', 'cis310-fall2026');
     const manifest = parseCourseMaterialsManifest(
       JSON.parse(await readFile(path.join(packRoot, 'materials-manifest.json'), 'utf8')) as unknown
     );
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'presentation').length, 13);
-    assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 4);
+    assert.equal(manifest.course.deliveryTerm, 'Fall 2026');
+    assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 6);
+    assert.equal(manifest.resources.filter((resource) => resource.assignmentCategory === 'homework').length, 3);
     for (const resource of manifest.resources) {
       assert.ok(resource.localPath && resource.sha256);
       const digest = await sha256File(resolveCoursePackPath(packRoot, resource.localPath));
@@ -114,7 +121,9 @@ describe('course-material manifest', () => {
       } else {
         assert.ok(resource.relatedPresentationIds?.length);
         assert.ok(resource.assignmentCategory === 'homework' || resource.assignmentCategory === 'project');
-        assert.ok(resource.circuitStarter?.fileName.endsWith('.dig'));
+        if (resource.circuitStarter) {
+          assert.ok(resource.circuitStarter.fileName.endsWith('.dig'));
+        }
       }
     }
   });

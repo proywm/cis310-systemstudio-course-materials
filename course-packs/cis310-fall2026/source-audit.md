@@ -6,14 +6,16 @@ The private Drive folder `CIS310_fall25` was treated as the bounded source set b
 
 ## Assignment selection
 
-The folder contains two distinct items numbered “1,” so both are preserved with unambiguous names:
+The folder contains two distinct items numbered “1,” and separate Homework 2 and Homework 3 files. All six assignments are preserved with unambiguous names:
 
 - `CIS310-HW-1.md` → Homework 1: Logic Foundations;
+- `CIS310_HW2_v2 (2).docx` → Homework 2: Sequential Logic and State Machines;
+- `CIS310_HW3_v1 (1).docx` → Homework 3: Memory and Assembly Foundations;
 - `CIS310_assignment-1-v2.md.txt` → Project Assignment 1: Registers and DRAM;
 - `cis310_Assignment2.md.txt` → Project Assignment 2: Register File and ALU; and
 - `cis310_Assignment3.md.txt` → Project Assignment 3: 4-bit Processor.
 
-The Markdown/text versions were selected over duplicate DOCX files for Assignments 2 and 3 because they are directly readable, versionable, and suitable for VS Code. Their source text is retained except for a clearly separated provenance/review warning added at the beginning.
+The Markdown/text versions were selected over duplicate DOCX files for the processor projects because they are directly readable and versionable. Homework 2 and Homework 3 existed only as DOCX source files; readable Markdown references were prepared from their extracted instructor text. Homework 2 diagrams are explicitly deferred to the current Canvas assignment rather than reconstructed or guessed. Every reference begins with a Fall 2026 Canvas/submission warning and preserves its source title, URL, and modification time.
 
 ## Presentation selection
 

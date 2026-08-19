@@ -1,20 +1,20 @@
-# CIS 310 Fall 2025 Reference Course Pack
+# CIS 310 Fall 2026 Course Pack
 
-This pack integrates the student-facing presentations and assignments found in Probir Roy's private Google Drive folder `CIS310_fall25`. It is a versioned reference for the SystemStudio extension and a starting point for the next course offering.
+This pack supports the Fall 2026 CIS 310 workspace. It embeds the student-facing presentations and readable assignment references found in Probir Roy's private Fall 2025 archive so students do not depend on Google Drive at runtime.
 
 ## Release status
 
-**Instructor review required. Do not treat this pack as the Fall 2026 Canvas authority.** The source files are from Fall 2025. Assignment deadlines, point totals, group rules, submission locations, external links, and presentation access permissions must be reviewed before the pack is assigned to students.
+**Instructor review required. [Fall 2026 Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative.** The source files are from Fall 2025. Assignment deadlines, point totals, group rules, required files, and submission instructions must be reviewed before release. Students submit in Canvas; the extension does not submit coursework.
 
 The extension labels this status and preserves the source titles and modification dates. It does not silently rewrite historical course policy.
 
 ## Included
 
 - 13 locally packaged, SHA-256-verified PDF presentations covering Lectures 1--12; Lecture 8 has a main deck and a detailed I/O companion PDF.
-- Four local Markdown assignment references: Logic Foundations, Registers/DRAM, Register File/ALU, and the integrated 4-bit Processor.
-- Explicit homework/project categories and safe blank-circuit starter metadata for each listed task.
+- Six local Markdown assignment references: three homework items and three processor-project milestones.
+- Explicit homework/project categories and safe blank-circuit starter metadata for circuit-design tasks.
 - A lecture-to-assignment concept map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md).
-- SHA-256 values for every locally packaged assignment.
+- SHA-256 values for every locally packaged presentation and assignment.
 
 ## Deliberately excluded
 

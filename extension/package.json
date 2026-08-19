@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Managed Digital circuits, embedded Irvine32/NASM IA-32 assembly, and course-material workflows for CIS 310 inside Visual Studio Code.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -41,6 +41,10 @@
     "onLanguage:digital-circuit",
     "onLanguage:nasm",
     "onCommand:systemstudioCis310.setupDigital",
+    "onCommand:systemstudioCis310.startTutorial",
+    "onCommand:systemstudioCis310.openGettingStarted",
+    "onCommand:systemstudioCis310.openStudentHelper",
+    "onCommand:systemstudioCis310.openCanvas",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
     "onCommand:systemstudioCis310.createCircuit",
@@ -75,6 +79,27 @@
   },
   "contributes": {
     "commands": [
+      {
+        "command": "systemstudioCis310.startTutorial",
+        "title": "CIS 310: Start or Rerun Guided Tutorial",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openGettingStarted",
+        "title": "CIS 310: Open Getting Started Walkthrough",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openStudentHelper",
+        "title": "CIS 310: Ask the SystemStudio Helper",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openCanvas",
+        "title": "CIS 310: Open Fall 2026 Canvas Course",
+        "category": "SystemStudio",
+        "icon": "$(cloud)"
+      },
       {
         "command": "systemstudioCis310.setupDigital",
         "title": "CIS 310: Install/Verify Digital Simulator",
@@ -252,11 +277,55 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Install Digital, create circuits, run deterministic tests, and use the no-setup Irvine32 / NASM assembly lab from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create New Circuit](command:systemstudioCis310.createCircuit)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)\n[Create Irvine32 / NASM Assembly Lab](command:systemstudioCis310.createAssemblyLab)"
+        "contents": "Use the grouped Fall 2026 course, Digital circuit, assembly, setup, and help workflows.\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Fall 2025 reference materials are integrated for instructor review. Current Canvas instructions remain authoritative.\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)"
+        "contents": "Fall 2026 workspace: 13 presentations are bundled as offline PDFs, with three homework and three project references. Imported Fall 2025 content requires instructor review; Canvas is authoritative.\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "systemstudioCis310.gettingStarted",
+        "title": "Get Started with SystemStudio CIS 310",
+        "description": "Learn the Fall 2026 Canvas, bundled course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
+        "steps": [
+          {
+            "id": "guidedTour",
+            "title": "Take the Clickable Guided Tour",
+            "description": "Practice task-first choices based on recurring student concerns. Skip, resume, or rerun it without automatic installation.\n[Start or rerun the guided tutorial](command:systemstudioCis310.startTutorial)",
+            "media": { "markdown": "media/tutorial/01-guided-tour.md" },
+            "completionEvents": ["onCommand:systemstudioCis310.startTutorial"]
+          },
+          {
+            "id": "tools",
+            "title": "Use the Grouped Student Workflow",
+            "description": "Open course/submission, circuit, assembly, environment, and help actions in logical groups.\n[Open SystemStudio](command:workbench.view.extension.systemstudioCis310)",
+            "media": { "markdown": "media/tutorial/02-tools.md" },
+            "completionEvents": ["onView:systemstudioCis310.explorer"]
+          },
+          {
+            "id": "materials",
+            "title": "Learn Offline; Verify and Submit in Canvas",
+            "description": "Open 13 bundled PDFs, three homework references, and three project references. Use Fall 2026 Canvas for current requirements and submission.\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
+            "media": { "markdown": "media/tutorial/03-materials.md" },
+            "completionEvents": ["onView:systemstudioCis310.materials"]
+          },
+          {
+            "id": "circuits",
+            "title": "Bridge Concepts to Circuit Evidence",
+            "description": "Check setup, predict a small behavior, create a circuit, then use preview/tests as evidence.\n[Check the environment](command:systemstudioCis310.checkEnvironment)\n[Create a circuit](command:systemstudioCis310.createCircuit)",
+            "media": { "markdown": "media/tutorial/04-circuits.md" },
+            "completionEvents": ["onCommand:systemstudioCis310.checkEnvironment"]
+          },
+          {
+            "id": "assembly",
+            "title": "Trace Assembly or Ask for Help",
+            "description": "Compare assembly profiles, predict state, then inspect registers, flags, stack, output, and trace. Ask the local helper when the next step is unclear.\n[Create the assembly lab](command:systemstudioCis310.createAssemblyLab)\n[Ask the Student Helper](command:systemstudioCis310.openStudentHelper)",
+            "media": { "markdown": "media/tutorial/05-assembly.md" },
+            "completionEvents": ["onCommand:systemstudioCis310.createAssemblyLab"]
+          }
+        ]
       }
     ],
     "menus": {
@@ -353,6 +422,11 @@
           "type": "boolean",
           "default": true,
           "description": "Prompt once to install the pinned Digital release when the extension first activates."
+        },
+        "systemstudioCis310.canvasCourseUrl": {
+          "type": "string",
+          "default": "https://canvas.umd.umich.edu/courses/552144",
+          "description": "Authoritative Fall 2026 CIS 310 Canvas course URL used for deadlines, requirements, and submission."
         }
       }
     }

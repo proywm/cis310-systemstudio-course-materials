@@ -4,8 +4,11 @@ import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import type { DigitalManager } from './digitalManager';
 
-export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-  private readonly changeEmitter = new vscode.EventEmitter<vscode.TreeItem | undefined>();
+type StatusGroup = 'course' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusNode = vscode.TreeItem & { groupId?: StatusGroup };
+
+export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
+  private readonly changeEmitter = new vscode.EventEmitter<StatusNode | undefined>();
   readonly onDidChangeTreeData = this.changeEmitter.event;
 
   constructor(
@@ -17,12 +20,66 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
     this.changeEmitter.fire(undefined);
   }
 
-  getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+  getTreeItem(element: StatusNode): vscode.TreeItem {
     return element;
   }
 
-  async getChildren(): Promise<vscode.TreeItem[]> {
-    const [status, assembly] = await Promise.all([this.manager.getStatus(), this.assemblyManager.getStatus()]);
+  async getChildren(element?: StatusNode): Promise<StatusNode[]> {
+    if (!element) {
+      return [
+        groupItem('course', 'Course and Submission', 'mortar-board', true),
+        groupItem('digital', 'Digital Circuit Design', 'circuit-board', true),
+        groupItem('assembly', 'Assembly Programming', 'terminal', false),
+        groupItem('environment', 'Environment and Setup', 'tools', false),
+        groupItem('help', 'Help and Tutorial', 'question', true)
+      ];
+    }
+
+    switch (element.groupId) {
+      case 'course':
+        return [
+          describedActionItem(
+            'Open Canvas — submit coursework here',
+            'Fall 2026 authority',
+            'systemstudioCis310.openCanvas',
+            'cloud'
+          ),
+          describedActionItem(
+            'Open bundled course-material guide',
+            '3 homework · 3 projects · 13 offline PDFs',
+            'systemstudioCis310.openMaterialsIndex',
+            'library'
+          )
+        ];
+      case 'digital':
+        return this.digitalItems();
+      case 'assembly':
+        return this.assemblyItems();
+      case 'environment':
+        return this.environmentItems();
+      case 'help':
+        return [
+          describedActionItem(
+            'Ask the SystemStudio Helper',
+            'topics · tools · Canvas routing',
+            'systemstudioCis310.openStudentHelper',
+            'comment-discussion'
+          ),
+          actionItem('Start or rerun guided tutorial', 'systemstudioCis310.startTutorial', 'lightbulb'),
+          actionItem('Open native Getting Started', 'systemstudioCis310.openGettingStarted', 'map'),
+          actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book')
+        ];
+      default:
+        return [];
+    }
+  }
+
+  dispose(): void {
+    this.changeEmitter.dispose();
+  }
+
+  private async digitalItems(): Promise<StatusNode[]> {
+    const status = await this.manager.getStatus();
     const headlessRemote = isHeadlessRemote(vscode.env.remoteName);
     const digital = new vscode.TreeItem(
       status.integrityVerified
@@ -36,13 +93,43 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       status.integrityVerified ? 'verified-filled' : status.installed ? 'error' : 'cloud-download'
     );
     digital.description = status.integrityVerified
-      ? headlessRemote ? 'preview/tests ready' : 'ready'
+      ? headlessRemote ? 'preview/tests ready; GUI local' : 'ready'
       : 'setup required';
-    digital.command = {
-      command: 'systemstudioCis310.setupDigital',
-      title: 'Install or verify Digital'
-    };
+    digital.command = { command: 'systemstudioCis310.setupDigital', title: 'Install or verify Digital' };
 
+    const open = headlessRemote
+      ? informationItem('Digital GUI: use local desktop VS Code', `${vscode.env.remoteName} has no graphical display`, 'remote')
+      : actionItem('Open an existing circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
+
+    return [
+      digital,
+      actionItem('Create a new blank Digital circuit', 'systemstudioCis310.createCircuit', 'new-file'),
+      open,
+      actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder')
+    ];
+  }
+
+  private async assemblyItems(): Promise<StatusNode[]> {
+    const assembly = await this.assemblyManager.getStatus();
+    const status = new vscode.TreeItem('Embedded IA-32 teaching lab', vscode.TreeItemCollapsibleState.None);
+    status.iconPath = new vscode.ThemeIcon(assembly.embeddedReady ? 'verified-filled' : 'terminal');
+    status.description = 'Irvine32 Classroom + NASM IA-32';
+    status.tooltip = assembly.detail;
+    status.command = {
+      command: 'systemstudioCis310.checkAssemblyEnvironment',
+      title: 'Check embedded assembly engine'
+    };
+    return [
+      status,
+      actionItem('Create Irvine32 / NASM assembly lab', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
+      actionItem('Open assembly lab', 'systemstudioCis310.openAssemblyLab', 'debug-alt'),
+      actionItem('Run assembly file', 'systemstudioCis310.runAssembly', 'run'),
+      actionItem('Open assembly compatibility guide', 'systemstudioCis310.openMasmGuide', 'book')
+    ];
+  }
+
+  private async environmentItems(): Promise<StatusNode[]> {
+    const status = await this.manager.getStatus();
     const java = new vscode.TreeItem(
       status.java.supported
         ? `Java ${status.java.version?.raw ?? ''}: ready`
@@ -53,10 +140,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
     );
     java.iconPath = new vscode.ThemeIcon(status.java.supported ? 'pass-filled' : 'warning');
     java.description = status.java.supported ? status.java.executable : `requires Java ${MINIMUM_JAVA_MAJOR}+`;
-    java.command = {
-      command: 'systemstudioCis310.checkEnvironment',
-      title: 'Check CIS 310 environment'
-    };
+    java.command = { command: 'systemstudioCis310.checkEnvironment', title: 'Check CIS 310 environment' };
 
     const trust = new vscode.TreeItem(
       vscode.workspace.isTrusted ? 'Workspace: trusted' : 'Workspace: restricted',
@@ -65,72 +149,26 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
     trust.iconPath = new vscode.ThemeIcon(vscode.workspace.isTrusted ? 'shield' : 'lock');
     trust.description = vscode.workspace.isTrusted ? 'simulation enabled' : 'execution disabled';
 
-    const starter = actionItem(
-      'Create CIS 310 starter workspace',
-      'systemstudioCis310.createStarterWorkspace',
-      'new-folder'
-    );
-    const materials = actionItem('Open course-material guide', 'systemstudioCis310.openMaterialsIndex', 'library');
-    const createCircuit = actionItem('Create a new Digital circuit', 'systemstudioCis310.createCircuit', 'new-file');
-    const open = headlessRemote
-      ? informationItem(
-          'Digital GUI: use local desktop VS Code',
-          `${vscode.env.remoteName} has no graphical display`,
-          'remote'
-        )
-      : actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
-    const assemblyStatus = new vscode.TreeItem(
-      'Embedded assembly: ready',
-      vscode.TreeItemCollapsibleState.None
-    );
-    assemblyStatus.iconPath = new vscode.ThemeIcon(assembly.embeddedReady ? 'verified-filled' : 'terminal');
-    assemblyStatus.description = 'Irvine32 Classroom + NASM IA-32';
-    assemblyStatus.tooltip = assembly.detail;
-    assemblyStatus.command = {
-      command: 'systemstudioCis310.checkAssemblyEnvironment',
-      title: 'Check embedded assembly engine'
-    };
-    const createAssembly = actionItem(
-      'Create Irvine32 / NASM assembly lab',
-      'systemstudioCis310.createAssemblyLab',
-      'terminal-bash'
-    );
-    const openAssembly = actionItem(
-      'Open assembly lab',
-      'systemstudioCis310.openAssemblyLab',
-      'debug-alt'
-    );
-    const runAssembly = actionItem(
-      'Run assembly file',
-      'systemstudioCis310.runAssembly',
-      'run'
-    );
-    const masm = actionItem('Open assembly compatibility guide', 'systemstudioCis310.openMasmGuide', 'book');
-    const docs = actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book');
-
     return [
-      digital,
+      actionItem('Run complete environment check', 'systemstudioCis310.checkEnvironment', 'pulse'),
       java,
-      trust,
-      starter,
-      materials,
-      createCircuit,
-      open,
-      assemblyStatus,
-      createAssembly,
-      openAssembly,
-      runAssembly,
-      masm,
-      docs
+      trust
     ];
-  }
-
-  dispose(): void {
-    this.changeEmitter.dispose();
   }
 }
 
-function informationItem(label: string, description: string, icon: string): vscode.TreeItem {
+function groupItem(id: StatusGroup, label: string, icon: string, expanded: boolean): StatusNode {
+  const item: StatusNode = new vscode.TreeItem(
+    label,
+    expanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed
+  );
+  item.id = `systemstudioCis310.group.${id}`;
+  item.groupId = id;
+  item.iconPath = new vscode.ThemeIcon(icon);
+  return item;
+}
+
+function informationItem(label: string, description: string, icon: string): StatusNode {
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
   item.description = description;
@@ -138,9 +176,15 @@ function informationItem(label: string, description: string, icon: string): vsco
   return item;
 }
 
-function actionItem(label: string, command: string, icon: string): vscode.TreeItem {
+function actionItem(label: string, command: string, icon: string): StatusNode {
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
   item.command = { command, title: label };
+  return item;
+}
+
+function describedActionItem(label: string, description: string, command: string, icon: string): StatusNode {
+  const item = actionItem(label, command, icon);
+  item.description = description;
   return item;
 }

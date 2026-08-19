@@ -33,6 +33,7 @@ export interface CourseMaterialsManifest {
     code: string;
     title: string;
     sourceTerm: string;
+    deliveryTerm: string;
   };
   status: 'instructor-review-required' | 'student-release';
   sourceFolder: string;
@@ -102,7 +103,8 @@ export function parseCourseMaterialsManifest(value: unknown): CourseMaterialsMan
     course: {
       code: requireString(courseValue.code, 'course.code'),
       title: requireString(courseValue.title, 'course.title'),
-      sourceTerm: requireString(courseValue.sourceTerm, 'course.sourceTerm')
+      sourceTerm: requireString(courseValue.sourceTerm, 'course.sourceTerm'),
+      deliveryTerm: requireString(courseValue.deliveryTerm, 'course.deliveryTerm')
     },
     status,
     sourceFolder: requireHttpsUrl(manifest.sourceFolder, 'sourceFolder'),

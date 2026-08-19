@@ -1,4 +1,4 @@
-> **Imported reference material — instructor review required.** This file was imported from the private `CIS310_fall25` Drive folder. Any dates, submission systems, group rules, or point values below are historical and are not authoritative for a later term. Use the current Canvas assignment for official requirements.
+> **Fall 2026 course workspace — instructor review required.** This reference was imported from the Fall 2025 archive. The current Fall 2026 Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
 >
 > Source title: `cis310_Assignment2.md.txt`  
 > Source last modified: `2025-08-26T18:47:04.000Z`  
@@ -138,7 +138,7 @@ Your ALU should implement the following operations based on the 3-bit control si
 ## 5. Submission Requirements
 
 1. **Project File**  
-   - Submit the `RegisterFile_ALU` circuit files in a Github repository (or another specified submission platform).
+   - Prepare the `RegisterFile_ALU` circuit files and any repository link required by the current Canvas assignment.
 
 2. **Documentation**  
    - A brief report explaining:
@@ -146,16 +146,14 @@ Your ALU should implement the following operations based on the 3-bit control si
      - **ALU Implementation**: How you handled add, subtract, increment, decrement, and transfer operations.  
      - **Testing**: Show input/output waveforms or screenshots demonstrating each operation.
 
-3. **Deadline**  
-   - Deadline: March 31.
+3. **Fall 2026 deadline and submission**
+   - Open the current Project Assignment 2 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
 
-4. **Group Submission**  
-   - You may work in groups of up to **three members**. Each member should submit an individual report, clearly indicating their contributions.
+4. **Collaboration (confirm in Fall 2026 Canvas)**
+   - Follow the current Canvas rules for group size, individual work, and contribution reporting.
 
 ---
 
 ## Conclusion
 
 By completing this assignment, you will deepen your understanding of **register file** architecture—where multiple registers can be read from and written to in the same cycle—and of the **ALU** that manipulates register data according to control signals. Mastery of these concepts is essential for designing more advanced CPU components, including control units, pipelines, and complex instruction sets in future projects.
-
-

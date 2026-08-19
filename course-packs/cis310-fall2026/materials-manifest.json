@@ -1,11 +1,12 @@
 {
   "schemaVersion": "0.1.0",
-  "id": "cis310-fall2025-reference",
-  "version": "0.4.0",
+  "id": "cis310-fall2026",
+  "version": "0.7.0",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
-    "sourceTerm": "Fall 2025"
+    "sourceTerm": "Fall 2025",
+    "deliveryTerm": "Fall 2026"
   },
   "status": "instructor-review-required",
   "sourceFolder": "https://drive.google.com/drive/folders/1tyJh-06nEZ9oHTYyPfnC2UQHNGXBlSiZ",
@@ -21,8 +22,6 @@
       "modifiedAt": "2025-08-26T18:47:39Z",
       "localPath": "presentations/lecture-01.pdf",
       "sha256": "fbb558c671cfa52d76fc70553b5c61b50bce2ed7262b6912e991d4b43efb8ab8",
-      "localPath": "presentations/lecture-01.pdf",
-      "sha256": "fbb558c671cfa52d76fc70553b5c61b50bce2ed7262b6912e991d4b43efb8ab8",
       "concepts": ["abstraction", "isa", "microarchitecture", "binary", "hexadecimal"],
       "relatedAssignmentIds": ["homework-01"]
     },
@@ -34,8 +33,6 @@
       "sourceTitle": "CIS310_Lec_2_v1.4 (1).pptx",
       "sourceUrl": "https://docs.google.com/presentation/d/19GzsyThmPGdYbeV0VdzohI70uxvMmdN3/edit",
       "modifiedAt": "2025-08-26T18:47:44Z",
-      "localPath": "presentations/lecture-02.pdf",
-      "sha256": "133f226ce1434b9a793210d86e6785bdcbc7736ca44d13559a5cc5caec077c03",
       "localPath": "presentations/lecture-02.pdf",
       "sha256": "133f226ce1434b9a793210d86e6785bdcbc7736ca44d13559a5cc5caec077c03",
       "concepts": ["twos-complement", "boolean-logic", "truth-tables", "full-adder"],
@@ -51,8 +48,6 @@
       "modifiedAt": "2025-08-26T18:47:47Z",
       "localPath": "presentations/lecture-03.pdf",
       "sha256": "d4ad9a604948cd9566906ae5f5f574fd3215a7b2fb2166b08a6e28ce97dd3896",
-      "localPath": "presentations/lecture-03.pdf",
-      "sha256": "d4ad9a604948cd9566906ae5f5f574fd3215a7b2fb2166b08a6e28ce97dd3896",
       "concepts": ["boolean-algebra", "simplification"],
       "relatedAssignmentIds": ["homework-01"]
     },
@@ -64,8 +59,6 @@
       "sourceTitle": "CIS310_Lec_4_v2 (1).pptx",
       "sourceUrl": "https://docs.google.com/presentation/d/1C6IuGjFVfKrO62HOdaKeHB-37SXWFnHw/edit",
       "modifiedAt": "2025-08-26T18:47:49Z",
-      "localPath": "presentations/lecture-04.pdf",
-      "sha256": "957eb63bb86eba5756747f1c8f585dabc04779cb9855f7e514e9c4cff642772d",
       "localPath": "presentations/lecture-04.pdf",
       "sha256": "957eb63bb86eba5756747f1c8f585dabc04779cb9855f7e514e9c4cff642772d",
       "concepts": ["karnaugh-maps", "minimization", "dont-care"],
@@ -81,8 +74,6 @@
       "modifiedAt": "2025-08-26T18:47:52Z",
       "localPath": "presentations/lecture-05.pdf",
       "sha256": "2824a3c32491ff756e7ef84d9b071e18148b7ccb2f605223afe411e5d3d8f899",
-      "localPath": "presentations/lecture-05.pdf",
-      "sha256": "2824a3c32491ff756e7ef84d9b071e18148b7ccb2f605223afe411e5d3d8f899",
       "concepts": ["combinational-logic", "decoder", "multiplexer", "demultiplexer"],
       "relatedAssignmentIds": ["homework-01", "project-02", "project-03"]
     },
@@ -96,10 +87,8 @@
       "modifiedAt": "2025-08-26T18:47:54Z",
       "localPath": "presentations/lecture-06.pdf",
       "sha256": "1e8cf6599887475531b82b96fe28e52b1f52a5db0241821cb7cefea72864d5fc",
-      "localPath": "presentations/lecture-06.pdf",
-      "sha256": "1e8cf6599887475531b82b96fe28e52b1f52a5db0241821cb7cefea72864d5fc",
       "concepts": ["latches", "flip-flops", "clock", "sequential-logic", "counter"],
-      "relatedAssignmentIds": ["project-01", "project-03"]
+      "relatedAssignmentIds": ["homework-02", "project-01", "project-03"]
     },
     {
       "id": "lecture-07",
@@ -109,8 +98,6 @@
       "sourceTitle": "CIS310_Lec_7_v3 (1).pptx",
       "sourceUrl": "https://docs.google.com/presentation/d/1uRrjQ007Ga_BOQyaAoD1mr0Hjm9aDcqq/edit",
       "modifiedAt": "2025-08-26T18:47:56Z",
-      "localPath": "presentations/lecture-07.pdf",
-      "sha256": "5122915853a1307f1eb70cab25d9635a67b34cb63285df4e02a3f9d8ca07b50c",
       "localPath": "presentations/lecture-07.pdf",
       "sha256": "5122915853a1307f1eb70cab25d9635a67b34cb63285df4e02a3f9d8ca07b50c",
       "concepts": ["memory-organization", "buses", "memory-map", "address-decoding"],
@@ -126,10 +113,8 @@
       "modifiedAt": "2025-08-26T18:48:02Z",
       "localPath": "presentations/lecture-08.pdf",
       "sha256": "5d149f0af8993ba9cf1d82a38e7bb7103e43384deb04e3d5e8f523e51073405c",
-      "localPath": "presentations/lecture-08.pdf",
-      "sha256": "5d149f0af8993ba9cf1d82a38e7bb7103e43384deb04e3d5e8f523e51073405c",
       "concepts": ["io", "polling", "interrupts", "asynchronous-programming"],
-      "relatedAssignmentIds": ["project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-03"]
     },
     {
       "id": "lecture-08-supplement",
@@ -141,10 +126,8 @@
       "modifiedAt": "2025-08-26T18:47:58Z",
       "localPath": "presentations/lecture-08-supplement.pdf",
       "sha256": "6da1cc4adad8df84882b20c81cd301a2fca971bc4ce9935f19c4e58398287ca1",
-      "localPath": "presentations/lecture-08-supplement.pdf",
-      "sha256": "6da1cc4adad8df84882b20c81cd301a2fca971bc4ce9935f19c4e58398287ca1",
       "concepts": ["io", "interrupts", "asynchronous-programming", "memory"],
-      "relatedAssignmentIds": ["project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-03"]
     },
     {
       "id": "lecture-09",
@@ -156,10 +139,8 @@
       "modifiedAt": "2025-08-26T18:48:02Z",
       "localPath": "presentations/lecture-09.pdf",
       "sha256": "cb4d56464b666d17017109f9344a2da39f098ceea219b724c9659b83f39f460a",
-      "localPath": "presentations/lecture-09.pdf",
-      "sha256": "cb4d56464b666d17017109f9344a2da39f098ceea219b724c9659b83f39f460a",
       "concepts": ["memory-hierarchy", "storage-latency", "ram", "cache", "locality"],
-      "relatedAssignmentIds": ["project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-03"]
     },
     {
       "id": "lecture-10",
@@ -171,10 +152,8 @@
       "modifiedAt": "2025-08-26T18:48:04Z",
       "localPath": "presentations/lecture-10.pdf",
       "sha256": "3e53000ba0b33597f35e5c6283a03b0dce6c253c9e164c7de4bac808b87eeeab",
-      "localPath": "presentations/lecture-10.pdf",
-      "sha256": "3e53000ba0b33597f35e5c6283a03b0dce6c253c9e164c7de4bac808b87eeeab",
       "concepts": ["rtl", "arithmetic-unit", "alu", "control-unit", "instruction-cycle"],
-      "relatedAssignmentIds": ["project-01", "project-02", "project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-01", "project-02", "project-03"]
     },
     {
       "id": "lecture-11",
@@ -184,8 +163,6 @@
       "sourceTitle": "CIS310_Lecture_11_pipeline (1) (3).pdf",
       "sourceUrl": "https://drive.google.com/file/d/1Q4aEQr_yyoardE_aAKrxFK0USQ7E1gB5/view",
       "modifiedAt": "2025-08-26T18:48:07Z",
-      "localPath": "presentations/lecture-11.pdf",
-      "sha256": "4746d21b1008718043f413f5797acd5c837b6c27da08c8ffb235543ecd871dbb",
       "localPath": "presentations/lecture-11.pdf",
       "sha256": "4746d21b1008718043f413f5797acd5c837b6c27da08c8ffb235543ecd871dbb",
       "concepts": ["processor-components", "pipelining"],
@@ -201,10 +178,8 @@
       "modifiedAt": "2025-08-26T18:48:09Z",
       "localPath": "presentations/lecture-12.pdf",
       "sha256": "6a1984eb9aca6a658688fcc47970f4a5a2d517754417a363fb17a6b697676ae9",
-      "localPath": "presentations/lecture-12.pdf",
-      "sha256": "6a1984eb9aca6a658688fcc47970f4a5a2d517754417a363fb17a6b697676ae9",
       "concepts": ["address-space", "memory-segments", "x86-registers", "assembly"],
-      "relatedAssignmentIds": ["project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-03"]
     },
     {
       "id": "homework-01",
@@ -216,7 +191,7 @@
       "sourceUrl": "https://drive.google.com/file/d/1UXgSeFrWlH-5geCrgXQrmf4R1rfLrgxU/view",
       "modifiedAt": "2025-08-26T18:49:40Z",
       "localPath": "assignments/homework-1-logic-foundations.md",
-      "sha256": "5f398716a65fec6def86c2cd488d99a9d987b5d525f23efad965dc9ba3041bb3",
+      "sha256": "4e13fceae94926e891814b1ffecec8b10ea08fda3cced694e2fa72de303287ad",
       "concepts": ["truth-tables", "boolean-algebra", "karnaugh-maps", "multiplier", "full-adder"],
       "circuitStarter": {
         "fileName": "logic-foundations.dig",
@@ -225,16 +200,48 @@
       "relatedPresentationIds": ["lecture-01", "lecture-02", "lecture-03", "lecture-04", "lecture-05"]
     },
     {
+      "id": "homework-02",
+      "kind": "assignment",
+      "assignmentCategory": "homework",
+      "order": 102,
+      "title": "Homework 2: Sequential Logic and State Machines",
+      "sourceTitle": "CIS310_HW2_v2 (2).docx",
+      "sourceUrl": "https://docs.google.com/document/d/1SqSvdF5-bemno36mNYnp2HGCtCaC5Lsg/edit",
+      "modifiedAt": "2025-08-26T18:46:03Z",
+      "localPath": "assignments/homework-2-sequential-logic.md",
+      "sha256": "5ebea03bca277e1a9d15d50f094e6b0838d10bae9ed4a4f00f98b1d5502c593b",
+      "concepts": ["flip-flops", "excitation-tables", "counters", "state-machines", "sequence-detectors"],
+      "circuitStarter": {
+        "fileName": "homework-2-state-machine.dig",
+        "label": "Create Homework 2 circuit"
+      },
+      "relatedPresentationIds": ["lecture-06"]
+    },
+    {
+      "id": "homework-03",
+      "kind": "assignment",
+      "assignmentCategory": "homework",
+      "order": 103,
+      "title": "Homework 3: Memory and Assembly Foundations",
+      "sourceTitle": "CIS310_HW3_v1 (1).docx",
+      "sourceUrl": "https://docs.google.com/document/d/1kmoF5mPMYp2QAsSPVJjfPTfmLBrmeO2z/edit",
+      "modifiedAt": "2025-08-26T18:47:24Z",
+      "localPath": "assignments/homework-3-memory-assembly.md",
+      "sha256": "af7df0bba21d8b52cc31a912ea8bed6a47300649b1bbf43ac3cc6131b85d7b98",
+      "concepts": ["memory-hierarchy", "instruction-cycle", "address-spaces", "x86-registers", "stack"],
+      "relatedPresentationIds": ["lecture-08", "lecture-08-supplement", "lecture-09", "lecture-10", "lecture-12"]
+    },
+    {
       "id": "project-01",
       "kind": "assignment",
       "assignmentCategory": "project",
-      "order": 102,
+      "order": 201,
       "title": "Project Assignment 1: Registers and DRAM",
       "sourceTitle": "CIS310_assignment-1-v2.md.txt",
       "sourceUrl": "https://drive.google.com/file/d/1ZI0yOCuEIvjPv6Y5V-ltrL5VtsHDXFcF/view",
       "modifiedAt": "2025-08-26T18:46:46Z",
       "localPath": "assignments/project-1-registers-dram.md",
-      "sha256": "fa67b4444e6589854b69d5a6543f468a552bcd01c785bef26cb18194b5fa6516",
+      "sha256": "8512ac39e1824341573b7658ca573c777dde7b9c23ceb30a2e0d15b7060a026d",
       "concepts": ["registers", "program-counter", "instruction-register", "dram", "data-flow"],
       "circuitStarter": {
         "fileName": "registers-dram.dig",
@@ -246,13 +253,13 @@
       "id": "project-02",
       "kind": "assignment",
       "assignmentCategory": "project",
-      "order": 103,
+      "order": 202,
       "title": "Project Assignment 2: Register File and ALU",
       "sourceTitle": "cis310_Assignment2.md.txt",
       "sourceUrl": "https://drive.google.com/file/d/1pwgoIlQBITrcq32X_G2UWC3v5N_fdMr1/view",
       "modifiedAt": "2025-08-26T18:47:04Z",
       "localPath": "assignments/project-2-register-file-alu.md",
-      "sha256": "1190a959c9173ac15ed5713054a6b9d03f4f2d4f596df0ddfaed7da99130fdeb",
+      "sha256": "b09ef40e048645f58b3bd3a5542092ba91444bcb355136dce9d770146e402696",
       "concepts": ["register-file", "multiplexer", "decoder", "alu", "microoperations"],
       "circuitStarter": {
         "fileName": "register-file-alu.dig",
@@ -264,13 +271,13 @@
       "id": "project-03",
       "kind": "assignment",
       "assignmentCategory": "project",
-      "order": 104,
+      "order": 203,
       "title": "Project Assignment 3: Integrated 4-bit Processor",
       "sourceTitle": "cis310_Assignment3.md.txt",
       "sourceUrl": "https://drive.google.com/file/d/1hWgrQOFSuGKXWa5SfC2F07ERtmIoa-K9/view",
       "modifiedAt": "2025-08-26T18:47:17Z",
       "localPath": "assignments/project-3-processor.md",
-      "sha256": "c38caacf1483424e557410e14072bd66447a5a0f151dfc5b0ca743db6abff0af",
+      "sha256": "bb7d1a3737d7d8e88ef6ea5754b28af51e57832f357ea4bf6415d53135ae88b1",
       "concepts": ["processor", "program-counter", "instruction-memory", "instruction-register", "decoder", "register-file", "alu", "control-flow"],
       "circuitStarter": {
         "fileName": "integrated-processor.dig",

@@ -10,8 +10,11 @@ import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials'
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
 import { StatusTreeProvider } from './statusTree';
+import { StudentHelperPanel } from './studentHelperPanel';
+import { TutorialPanel } from './tutorialPanel';
 
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
+const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -124,6 +127,26 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       new CircuitPreviewProvider(context, manager),
       { webviewOptions: { retainContextWhenHidden: false }, supportsMultipleEditorsPerDocument: false }
     ),
+    vscode.commands.registerCommand('systemstudioCis310.startTutorial', async () => {
+      await TutorialPanel.show(context, true);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openGettingStarted', async () => {
+      await TutorialPanel.openNativeWalkthrough();
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
+      await StudentHelperPanel.show(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openCanvas', async () => {
+      const configured = vscode.workspace.getConfiguration('systemstudioCis310')
+        .get<string>('canvasCourseUrl', DEFAULT_CANVAS_COURSE);
+      const uri = safeHttpsUri(configured) ?? vscode.Uri.parse(DEFAULT_CANVAS_COURSE);
+      if (!safeHttpsUri(configured)) {
+        await vscode.window.showWarningMessage(
+          'The configured Canvas course URL is invalid. Opening the default Fall 2026 CIS 310 course instead.'
+        );
+      }
+      await vscode.env.openExternal(uri);
+    }),
     vscode.commands.registerCommand('systemstudioCis310.setupDigital', setupDigital),
     vscode.commands.registerCommand('systemstudioCis310.checkEnvironment', async () => {
       await checkEnvironment(manager, output);
@@ -409,8 +432,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     })
   );
 
-  void updateStatus();
-  void maybePromptForInstall(context, manager, setupDigital);
+  void (async () => {
+    await updateStatus();
+    const tutorialPromptHandled = await TutorialPanel.promptOnFirstRun(context);
+    if (!tutorialPromptHandled) {
+      await maybePromptForInstall(context, manager, setupDigital);
+    }
+  })();
 }
 
 async function browseCourseMaterials(
@@ -568,6 +596,15 @@ async function showFailure(title: string, error: unknown, output: vscode.OutputC
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function safeHttpsUri(value: string): vscode.Uri | undefined {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' ? vscode.Uri.parse(parsed.toString()) : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 async function chooseWorkspaceFolder(placeHolder: string): Promise<vscode.WorkspaceFolder | undefined> {
