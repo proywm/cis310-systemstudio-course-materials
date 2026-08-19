@@ -2,60 +2,125 @@
 
 **A one-stop VS Code learning environment for systems programming and processor design**
 
-SystemStudio AI is a Fall 2026--Winter 2027 senior-design project proposed by Probir Roy at the University of Michigan-Dearborn. The product will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and an evidence-grounded AI coach in a single VS Code experience.
+This README is the project’s main entry point. Start here, then follow the document path that matches your role or question.
 
-The central design principle is simple: **the system should explain verified evidence, not invent an answer**. Compilation results, instructor-authored tests, simulator traces, rubrics, and approved course resources remain authoritative. The AI organizes and explains that evidence, offers progressive hints, and escalates uncertain cases to an instructor or teaching assistant.
+> **Document to send to the senior-design coordinator:** [SystemStudio AI Fall 2026 Senior Design Proposal (PDF)](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf)
+
+[![SystemStudio AI one-page proposal preview](docs/assets/systemstudio-ai-proposal-preview.png)](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf)
+
+*Current one-page proposal preview. Click the screenshot to open the PDF. The software UI has not yet been implemented.*
+
+## Start here
+
+| Reader or purpose | Begin with | Continue with |
+|---|---|---|
+| **Bruce / senior-design coordinator** | [One-page proposal](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf) | [Product requirements](docs/design/product-requirements.md) → [implementation roadmap](docs/planning/implementation-roadmap.md) → [evaluation plan](docs/planning/evaluation-plan.md) |
+| **Senior-design student team** | [Product requirements](docs/design/product-requirements.md) | [Course workflows](docs/design/course-workflows.md) → [system architecture](docs/design/system-architecture.md) → [implementation roadmap](docs/planning/implementation-roadmap.md) → [decision log](docs/planning/decision-log.md) |
+| **Teaching or assessment reviewer** | [Student-evaluation findings](docs/research/student-evaluation-findings.md) | [Measurement research](docs/research/measurement-literature.md) → [RQ-to-instrument matrix](docs/planning/rq-instrument-matrix.md) → [instruments](instruments/README.md) → [analysis plan](docs/planning/analysis-plan.md) |
+| **Software developer** | [Technical feasibility](docs/research/technical-feasibility.md) | [System architecture](docs/design/system-architecture.md) → [schemas](schemas/README.md) → [contribution guide](CONTRIBUTING.md) |
+| **Privacy, security, or AI-safety reviewer** | [AI safety and privacy](docs/design/ai-safety-and-privacy.md) | [Security policy](SECURITY.md) → [expert feedback rubric](instruments/expert-feedback-rubric.md) → [data dictionary](instruments/data-dictionary.md) |
+
+## Project at a glance
+
+| Item | Current definition |
+|---|---|
+| Client | Probir Roy, University of Michigan-Dearborn |
+| Project period | September 2026--April 2027 |
+| Team and effort | 3--4 interdisciplinary students; approximately 600--800 total hours |
+| Reference workflows | CIS 450 C/xv6 systems programming and CIS 310 4-bit processor design |
+| Product form | Installable VS Code extension with a versioned course environment |
+| Current status | Proposal, product specification, research base, and draft evaluation package complete; implementation not yet started |
+
+SystemStudio AI will combine reproducible environment setup, systems coding, visual processor design, automated evidence collection, guided practice, and a constrained AI coach in a single VS Code experience.
+
+The central principle is: **explain verified evidence, do not invent an answer**. Compiler output, instructor-authored tests, simulator traces, rubrics, and approved course resources remain authoritative. AI may organize and explain that evidence, offer progressive hints, and escalate uncertain cases to an instructor or teaching assistant.
 
 ## Why this project
 
-A review of written student evaluations from Fall 2019 through Winter 2026 found recurring needs in project-heavy systems courses:
+A review of written student evaluations from Fall 2019 through Winter 2026 identified recurring needs in project-heavy systems courses:
 
 - faster and more explanatory formative feedback;
 - help translating concepts into working implementations;
 - reliable setup for C, assembly, Make, Docker, QEMU/xv6, and circuit tools;
 - smaller practice activities and worked examples;
 - support when prerequisite knowledge differs across students; and
-- a clearer path for asking an instructor or TA for help.
+- a clearer route for obtaining instructor or TA help.
 
-Students also consistently valued hands-on work, group problem solving, live demonstrations, and concrete examples. SystemStudio AI is designed to extend those strengths. The evaluations do **not** establish that AI will improve learning; that is a hypothesis the project must test.
+Students also valued hands-on work, group problem solving, live demonstrations, and concrete examples. The evaluations motivate the design; they do **not** establish that AI will improve learning. That remains a hypothesis to test.
 
 ## Minimum product
 
-The eight-month minimum viable product will support two reference workflows:
+1. **CIS 450 workflow:** environment validation, build/test integration, deterministic evidence, guided practice, and progressive hints for one C/xv6 activity.
+2. **CIS 310 workflow:** structured visual design, simulation, signal traces, seeded-fault tests, guided practice, and progressive hints for one 4-bit processor activity.
+3. **Human-help bridge:** a student-controlled, redacted packet containing the question, relevant evidence, and attempted fixes.
+4. **Evaluation package:** parallel learning assignments, matched pre/post questionnaires, telemetry, blinded expert review, behavioral trust calibration, accessibility observation, and TA workload logs.
 
-1. **CIS 450:** one C/xv6 systems-programming workflow with environment validation, build/test integration, deterministic evidence, guided practice, and progressive hints.
-2. **CIS 310:** one visual 4-bit processor workflow with a structured design file, simulation, signal traces, seeded-fault tests, guided practice, and progressive hints.
+The minimum product is not a general-purpose IDE, a general-purpose circuit simulator, an autonomous grader, or an unrestricted chatbot.
 
-The minimum product is not a general-purpose IDE, a general-purpose circuit simulator, or an automated grading system.
+## Documentation branches
 
-## Repository map
+### 1. Proposal and project definition
 
-| Path | Purpose |
+- [One-page proposal PDF](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.pdf)
+- [LaTeX proposal source](proposal/SystemStudio_AI_Fall_2026_Senior_Design_Proposal.tex)
+- [Product requirements](docs/design/product-requirements.md)
+- [Implementation roadmap](docs/planning/implementation-roadmap.md)
+- [Architecture decision log](docs/planning/decision-log.md)
+
+### 2. Research foundation
+
+- [Student-evaluation findings](docs/research/student-evaluation-findings.md): recurring needs, strengths, method, and evidence limitations.
+- [Technical feasibility](docs/research/technical-feasibility.md): VS Code, containers, simulation, and AI integration.
+- [Measurement literature](docs/research/measurement-literature.md): validity, self-efficacy, usefulness, trust, workload, pre/post analysis, privacy, and institutional requirements.
+
+### 3. Product and technical design
+
+- [Course workflows](docs/design/course-workflows.md): student and instructor paths for CIS 310 and CIS 450.
+- [System architecture](docs/design/system-architecture.md): components, trust boundaries, and data flow.
+- [AI safety and privacy](docs/design/ai-safety-and-privacy.md): academic integrity, data minimization, execution safety, and escalation.
+- [Schemas index](schemas/README.md): versioned course-pack, evidence, and processor-design formats.
+- [Evidence-to-requirement traceability](docs/planning/traceability-matrix.md): student needs mapped to product requirements and validation.
+
+### 4. Evaluation design
+
+- [Evaluation plan](docs/planning/evaluation-plan.md): RQ1--RQ8, phases, metrics, and claim boundaries.
+- [RQ-to-instrument matrix](docs/planning/rq-instrument-matrix.md): primary and supporting evidence for every RQ.
+- [Pre-specified analysis plan](docs/planning/analysis-plan.md): primary outcome, comparison, models, missing data, agreement, safety gates, and reporting.
+- [Evaluation instruments index](instruments/README.md): administration and version-control requirements.
+
+### 5. Evaluation instruments
+
+- [Pre-survey](instruments/pre-survey.md) and [post-survey](instruments/post-survey.md)
+- [Questionnaire item-to-RQ map](instruments/questionnaire-item-map.md)
+- [Immediate task pulse](instruments/task-pulse.md)
+- [Student assignment blueprint](instruments/student-assignments.md) and [assignment rubric](instruments/assignment-rubric.md)
+- [Behavioral trust-calibration task](instruments/trust-calibration-task.md)
+- [Expert feedback rubric](instruments/expert-feedback-rubric.md)
+- [Instructor/TA workload log](instruments/ta-workload-log.md)
+- [Usability and accessibility protocol](instruments/usability-observation.md)
+- [Study data dictionary](instruments/data-dictionary.md)
+
+### 6. Repository governance
+
+- [Contribution guide](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+
+## Evaluation logic
+
+Different claims require different evidence:
+
+| Claim | Primary evidence |
 |---|---|
-| [`proposal/`](proposal/) | One-page LaTeX proposal and compiled PDF |
-| [`docs/research/student-evaluation-findings.md`](docs/research/student-evaluation-findings.md) | Evidence base, method, themes, and limitations |
-| [`docs/research/technical-feasibility.md`](docs/research/technical-feasibility.md) | VS Code, container, simulator, and AI integration research |
-| [`docs/research/measurement-literature.md`](docs/research/measurement-literature.md) | Research basis for surveys, learning measures, trust, workload, analysis, and ethics |
-| [`docs/design/product-requirements.md`](docs/design/product-requirements.md) | Functional and non-functional requirements |
-| [`docs/design/system-architecture.md`](docs/design/system-architecture.md) | Component model, trust boundaries, and data flow |
-| [`docs/design/course-workflows.md`](docs/design/course-workflows.md) | Student and instructor workflows for CIS 310 and CIS 450 |
-| [`docs/design/ai-safety-and-privacy.md`](docs/design/ai-safety-and-privacy.md) | Academic-integrity, privacy, security, and escalation controls |
-| [`docs/planning/evaluation-plan.md`](docs/planning/evaluation-plan.md) | Research questions, metrics, and pilot plan |
-| [`docs/planning/rq-instrument-matrix.md`](docs/planning/rq-instrument-matrix.md) | Item-level mapping from each RQ to its primary and supporting evidence |
-| [`docs/planning/analysis-plan.md`](docs/planning/analysis-plan.md) | Pre-specified outcomes, estimands, models, missing-data rules, and reporting limits |
-| [`docs/planning/implementation-roadmap.md`](docs/planning/implementation-roadmap.md) | Schedule, work allocation, risks, and definition of done |
-| [`docs/planning/traceability-matrix.md`](docs/planning/traceability-matrix.md) | Student needs mapped to requirements and validation |
-| [`schemas/`](schemas/) | Proposed versioned formats for course packs, evidence, and processor designs |
-| [`instruments/`](instruments/) | Pre/post surveys, item-to-RQ map, task pulse, assignments, rubrics, calibration task, logs, and data dictionary |
+| Student learning | Blinded score on an alternate-form near-transfer assignment with the AI coach disabled |
+| Technical accuracy | Faculty/TA review of correctness and evidence citations |
+| Useful feedback | Productive retry behavior after guidance |
+| Timeliness | Logged time to the first expert-rated useful response |
+| Human workload | Active instructor/TA minutes, including verification and rework |
+| Appropriate trust | Behavioral decisions to proceed, verify, reject, or escalate |
+| Accessibility | Setup/task completion, critical incidents, and moderated observation |
+| Safety | Offline red-team cases, expert flags, incident reports, and escalation behavior |
 
-## Project constraints
-
-- Team: 3--4 interdisciplinary students.
-- Period: September 2026 through April 2027.
-- Expected effort: approximately 600--800 total student hours.
-- Client: Probir Roy (`probirr@umich.edu`, +1 313-583-6620).
-- Meetings: at least biweekly, virtually or in person.
-- Required work: software design, programming, integration, testing, documentation, and final product evaluation.
+Survey satisfaction or confidence alone will not be used as proof of learning, accuracy, safety, or workload reduction.
 
 ## Build the proposal
 
@@ -67,8 +132,6 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error \
 
 ## Data handling
 
-This repository intentionally contains no raw course evaluations, student names, submissions, grades, or email. The research notes report aggregated themes only. Any future study involving student data must receive the appropriate institutional determination before data collection.
+This repository intentionally contains no raw course evaluations, student names, submissions, grades, email, study responses, or linkage keys. Research notes contain aggregated themes only. Any future student-data collection requires the appropriate institutional determination, approved consent/recruitment process, and approved data-management plan.
 
-## Current status
-
-The repository contains the compiled client-facing proposal, research-backed product specification, and a complete draft measurement package. The instruments still require institutional determination, expert review, cognitive testing, and piloting before use. Implementation will begin with requirements validation and a vertical prototype; no claim is made that the proposed learning benefits or feedback turnaround have already been achieved.
+The draft instruments require expert review, cognitive testing, assignment-form piloting, and protocol freezing before classroom use.
