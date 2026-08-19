@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-This is the accelerated CIS 310 implementation track. It gives students one VS Code entry point for installing, opening, previewing, and testing Digital logic circuits while the broader senior-design project continues in parallel.
+This is the accelerated CIS 310 implementation track. It gives students one VS Code entry point for installing, opening, previewing, and testing Digital logic circuits and for navigating mapped course materials while the broader senior-design project continues in parallel.
 
 ## What is implemented
 
@@ -13,8 +13,12 @@ This is the accelerated CIS 310 implementation track. It gives students one VS C
 - headless execution of embedded Digital test cases;
 - VS Code Test Explorer discovery for `.dig` files containing a `Testcase` component;
 - a CIS 310 activity-bar view showing Digital, Java, and workspace-trust status;
-- a starter-workspace generator with verified upstream half-adder and ALU examples; and
+- a Course Materials view with 13 presentation entries mapped to four assignments;
+- local, SHA-256-verified assignment references copied into generated starter workspaces;
+- a starter-workspace generator with one upstream half-adder orientation example and an empty `circuits/work/` area; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
+
+The course pack is an instructor-review reference imported from Fall 2025. Historical dates, grading policies, and submission rules are not authoritative. The presentation entries open the original private Drive sources; the instructor must replace or publish student-accessible URLs before release. No ALU, register-file, or processor solution is bundled.
 
 ## Honest integration boundary
 
@@ -49,11 +53,13 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 
 1. Run **CIS 310: Check Environment**.
 2. Run **CIS 310: Create Starter Workspace**, or open an instructor-provided workspace.
-3. Open a `.dig` file.
-4. Choose **Open With → SystemStudio Circuit Preview** for the integrated diagram view.
-5. Use **Run tests** or VS Code Test Explorer for deterministic circuit evidence.
-6. Use **Open in Digital** for graphical editing and interactive simulation.
-7. Save in Digital, return to VS Code, refresh the preview, and rerun tests.
+3. Open **Course Materials**, read the review warning, and select a presentation or assignment.
+4. Confirm the current assignment requirements and deadline in Canvas.
+5. Open a `.dig` file from `circuits/reference/`, or create your own under `circuits/work/`.
+6. Choose **Open With → SystemStudio Circuit Preview** for the integrated diagram view.
+7. Use **Run tests** or VS Code Test Explorer for deterministic circuit evidence.
+8. Use **Open in Digital** for graphical editing and interactive simulation.
+9. Save in Digital, return to VS Code, refresh the preview, and rerun tests.
 
 ## Commands
 
@@ -65,6 +71,9 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 | `CIS 310: Run Digital Circuit Tests` | Runs embedded test cases with the official headless CLI |
 | `CIS 310: Preview Digital Circuit` | Opens the in-editor SVG circuit preview |
 | `CIS 310: Create Starter Workspace` | Creates a small verified example workspace |
+| `CIS 310: Browse Presentations` | Selects from 13 mapped private-source presentation entries |
+| `CIS 310: Browse Assignments` | Opens one of four packaged, integrity-checked assignment references |
+| `CIS 310: Open Course-Material Guide` | Opens the local lecture-to-assignment map and release warning |
 
 ## Where Digital is installed
 
@@ -91,12 +100,14 @@ npm run check
 
 Press `F5` from this folder in VS Code after running `npm run compile`, or install the packaged VSIX.
 
-The automated check currently covers 13 unit tests plus bundling. A manual end-to-end smoke test has also verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires Windows/macOS and accessibility validation.
+The automated check covers manifest validation, assignment integrity, safe paths, simulator download/extraction primitives, Java parsing, process bounds, and bundling. A manual end-to-end smoke test has also verified safe extraction of the official Digital v0.31 ZIP, the pinned JAR checksum, the upstream half-adder testcase, and SVG export on Linux with Java 17. Classroom deployment still requires instructor content review, student-accessible presentation links, and Windows/macOS and accessibility validation.
 
 ## Current limitations
 
 - local desktop workspaces only; the Java GUI cannot open a remote filesystem path directly;
 - Java must already be available or configured;
+- presentation files are not embedded; the current entries open private Fall 2025 Drive sources pending instructor publication;
+- packaged assignments retain historical wording and are reference material until the instructor approves a student release;
 - only embedded Digital `Testcase` components are automatically discovered in Test Explorer;
 - no AI coach, grading, LMS integration, or student-data collection in this MVP; and
 - graphical editing occurs in the managed native Digital window, not inside a webview.

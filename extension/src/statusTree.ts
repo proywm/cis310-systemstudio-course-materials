@@ -62,10 +62,11 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<vscode.TreeIt
       'systemstudioCis310.createStarterWorkspace',
       'new-folder'
     );
+    const materials = actionItem('Open course-material guide', 'systemstudioCis310.openMaterialsIndex', 'library');
     const open = actionItem('Open circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
     const docs = actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book');
 
-    return [digital, java, trust, starter, open, docs];
+    return [digital, java, trust, starter, materials, open, docs];
   }
 
   dispose(): void {

@@ -3,15 +3,18 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
 import { StatusTreeProvider } from './statusTree';
 
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
 
-export function activate(context: vscode.ExtensionContext): void {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
   const manager = new DigitalManager(context, output);
+  const courseMaterials = await CourseMaterials.load(context);
+  const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
   const statusTree = new StatusTreeProvider(manager);
   const tests = new DigitalTestController(manager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
@@ -106,9 +109,11 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     output,
     statusTree,
+    materialsTree,
     tests,
     statusBar,
     vscode.window.registerTreeDataProvider('systemstudioCis310.explorer', statusTree),
+    vscode.window.registerTreeDataProvider('systemstudioCis310.materials', materialsTree),
     vscode.window.registerCustomEditorProvider(
       CircuitPreviewProvider.viewType,
       new CircuitPreviewProvider(context, manager),
@@ -207,6 +212,27 @@ export function activate(context: vscode.ExtensionContext): void {
         await showFailure('Could not create the starter workspace', error, output);
       }
     }),
+    vscode.commands.registerCommand('systemstudioCis310.browseLectures', async () => {
+      await browseCourseMaterials(courseMaterials, 'presentation', 'Choose a CIS 310 presentation');
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.browseAssignments', async () => {
+      await browseCourseMaterials(courseMaterials, 'assignment', 'Choose a CIS 310 assignment');
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openCourseMaterial', async (resourceId: unknown) => {
+      if (typeof resourceId !== 'string') {
+        await vscode.window.showErrorMessage('The selected course-material entry is invalid.');
+        return;
+      }
+      const resource = courseMaterials.getResource(resourceId);
+      if (!resource) {
+        await vscode.window.showErrorMessage(`Course material not found: ${resourceId}.`);
+        return;
+      }
+      await courseMaterials.openResource(resource);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openMaterialsIndex', async () => {
+      await courseMaterials.openStudentIndex();
+    }),
     vscode.commands.registerCommand('systemstudioCis310.refresh', async () => {
       statusTree.refresh();
       await tests.refresh();
@@ -225,6 +251,23 @@ export function activate(context: vscode.ExtensionContext): void {
 
   void updateStatus();
   void maybePromptForInstall(context, manager, setupDigital);
+}
+
+async function browseCourseMaterials(
+  courseMaterials: CourseMaterials,
+  kind: 'presentation' | 'assignment',
+  placeHolder: string
+): Promise<void> {
+  const entries = courseMaterials.getResources(kind).map((resource) => ({
+    label: resource.title,
+    description: kind === 'presentation' ? 'private Drive source' : 'packaged reference',
+    detail: resource.concepts.join(', '),
+    resource
+  }));
+  const selected = await vscode.window.showQuickPick(entries, { placeHolder, matchOnDescription: true, matchOnDetail: true });
+  if (selected) {
+    await courseMaterials.openResource(selected.resource);
+  }
 }
 
 export function deactivate(): void {

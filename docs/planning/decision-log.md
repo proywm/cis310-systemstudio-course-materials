@@ -71,3 +71,11 @@
 **Decision:** Provide a small VS Code extension that installs a pinned, checksum-verified Digital v0.31 release into extension global storage, integrates SVG previews and embedded testcase execution inside VS Code, and opens the native Digital editor for full circuit editing. Require Java as a visible prerequisite and do not enable Digital's remote TCP server.
 
 **Rationale:** The pilot immediately removes the separate Digital download/configuration step and provides one discoverable workflow without delaying for a complete circuit-editor reimplementation. Java Swing cannot be embedded as a native VS Code editor, so the companion window is an explicit, documented boundary. The senior-design team can continue the custom editor, guided learning, AI, accessibility, and evaluation work in parallel.
+
+## ADR-010: Integrate a review-gated course-material reference pack
+
+**Status:** Accepted for pilot; implemented August 2026
+
+**Decision:** Package readable assignment references and a lecture-to-assignment map in the extension, expose the original presentations through recorded Drive links, verify local assignment hashes at activation, and label the Fall 2025 pack as requiring instructor review. Keep current Canvas instructions authoritative. Exclude exams, grades, student records, hidden tests, and completed assignment-adjacent circuits.
+
+**Rationale:** Students need one discoverable path from concepts to the relevant task, but archived content and private links must not be represented as a ready Fall 2026 release. Removing Digital's completed ALU example avoids giving away a design that closely overlaps the register-file/ALU project while retaining a small half-adder example for simulator orientation.

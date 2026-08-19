@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "A managed Digital simulator workflow for CIS 310 inside Visual Studio Code.",
-  "version": "0.1.0",
+  "description": "A managed Digital simulator and course-material workflow for CIS 310 inside Visual Studio Code.",
+  "version": "0.2.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -31,6 +31,7 @@
   ],
   "activationEvents": [
     "onView:systemstudioCis310.explorer",
+    "onView:systemstudioCis310.materials",
     "onCustomEditor:systemstudioCis310.circuitPreview",
     "onLanguage:digital-circuit",
     "onCommand:systemstudioCis310.setupDigital",
@@ -38,7 +39,10 @@
     "onCommand:systemstudioCis310.openDigital",
     "onCommand:systemstudioCis310.testCircuit",
     "onCommand:systemstudioCis310.exportSvg",
-    "onCommand:systemstudioCis310.createStarterWorkspace"
+    "onCommand:systemstudioCis310.createStarterWorkspace",
+    "onCommand:systemstudioCis310.browseLectures",
+    "onCommand:systemstudioCis310.browseAssignments",
+    "onCommand:systemstudioCis310.openMaterialsIndex"
   ],
   "capabilities": {
     "untrustedWorkspaces": {
@@ -84,6 +88,21 @@
       {
         "command": "systemstudioCis310.createStarterWorkspace",
         "title": "CIS 310: Create Starter Workspace",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.browseLectures",
+        "title": "CIS 310: Browse Presentations",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.browseAssignments",
+        "title": "CIS 310: Browse Assignments",
+        "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openMaterialsIndex",
+        "title": "CIS 310: Open Course-Material Guide",
         "category": "SystemStudio"
       },
       {
@@ -137,6 +156,10 @@
         {
           "id": "systemstudioCis310.explorer",
           "name": "CIS 310 Setup and Tools"
+        },
+        {
+          "id": "systemstudioCis310.materials",
+          "name": "Course Materials"
         }
       ]
     },
@@ -144,6 +167,10 @@
       {
         "view": "systemstudioCis310.explorer",
         "contents": "Install Digital, create a starter circuit workspace, run deterministic tests, and open `.dig` files from VS Code.\n[Install/Verify Digital](command:systemstudioCis310.setupDigital)\n[Create Starter Workspace](command:systemstudioCis310.createStarterWorkspace)"
+      },
+      {
+        "view": "systemstudioCis310.materials",
+        "contents": "Fall 2025 reference materials are integrated for instructor review. Current Canvas instructions remain authoritative.\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)"
       }
     ],
     "menus": {
@@ -151,6 +178,11 @@
         {
           "command": "systemstudioCis310.refresh",
           "when": "view == systemstudioCis310.explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "systemstudioCis310.openMaterialsIndex",
+          "when": "view == systemstudioCis310.materials",
           "group": "navigation"
         }
       ],
@@ -208,7 +240,7 @@
     }
   },
   "scripts": {
-    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "clean": "node -e \"const fs=require('node:fs'); for (const target of ['dist','course-packs']) fs.rmSync(target,{recursive:true,force:true})\"",
     "compile": "node esbuild.mjs",
     "watch": "node esbuild.mjs --watch",
     "typecheck": "tsc --noEmit",

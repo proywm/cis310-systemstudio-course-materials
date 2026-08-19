@@ -10,6 +10,7 @@ proposal/*_preview.png
 !.env.example
 node_modules/
 dist/
+extension/course-packs/
 coverage/
 .DS_Store
 *.vsix
