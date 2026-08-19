@@ -18,9 +18,9 @@ The prior CIS 310 student-evaluation review identified recurring needs that this
 
 These findings inform the design; they do not imply that version 0.9.0 has already improved course outcomes. Classroom evaluation is still required.
 
-## Magoosh patterns adapted for CIS 310
+## Student-centered practice patterns
 
-Official Magoosh product and onboarding material emphasizes a clean interface, video lessons, customizable practice, practice-versus-quiz feedback timing, answer explanations, related lessons, flags, answer review, study schedules, dashboard progress, spaced flashcard review, and a friendly support path. SystemStudio adapts those interaction patterns to course materials rather than copying Magoosh branding, content, scoring, or proprietary behavior.
+The design combines established student-support patterns: a clean starting point, short text and video lessons, customizable practice, different feedback timing for guided practice and quizzes, answer explanations, related lessons, saved questions, distributed review, a study sequence, descriptive progress evidence, and a visible help path. Each pattern is implemented specifically for CIS 310 materials and evaluated against learning-science evidence and student needs.
 
 | Observed pattern | CIS 310 adaptation | Intended student benefit |
 |---|---|---|
@@ -33,9 +33,9 @@ Official Magoosh product and onboarding material emphasizes a clean interface, v
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
-| “Ask an Expert” support | Local deterministic FAQ chat, U-M Maizey course-tutor handoff, optional error reflection, and a structured Canvas Questions Before Class draft | Turn confusion into a specific next step, a source-grounded tutor dialogue, or an actionable instructor question without implying live expert staffing |
+| Human-help escalation | Local deterministic FAQ chat, U-M Maizey course-tutor handoff, optional error reflection, and a structured Canvas Questions Before Class draft | Turn confusion into a specific next step, a source-grounded tutor dialogue, or an actionable instructor question without implying live expert staffing |
 
-Magoosh's commercial score-improvement guarantee is intentionally **not** adapted: a course tool cannot responsibly guarantee an exam score, grade increase, or learning outcome. The extension also excludes estimated course scores, peer comparison, competitive ranking, mandatory streaks, cloud accounts, and automated deadline reminders. Those features can introduce false precision, anxiety, privacy costs, or another source of course deadlines. Canvas remains the only authority for deadlines, grades, and submission.
+The extension does not guarantee an exam score, grade increase, mastery, or learning outcome. It also excludes estimated course scores, peer comparison, competitive ranking, mandatory streaks, cloud accounts, and automated deadline reminders. Those features can introduce false precision, anxiety, privacy costs, or another source of course deadlines. Canvas remains the only authority for deadlines, grades, and submission.
 
 ## Open-book and author-video pathway
 
@@ -92,12 +92,6 @@ Before classroom release, the instructor should:
 
 ## Sources
 
-- Magoosh, [Student Onboarding and Getting Started](https://schools.magoosh.com/getting-started-with-magoosh-student-onboarding)
-- Magoosh, [Praxis Test Prep](https://praxis.magoosh.com/)
-- Magoosh, [GRE Vocabulary Flashcards](https://gre.magoosh.com/flashcards/vocabulary)
-- Magoosh, [Mobile Apps and Spaced Repetition](https://schools.magoosh.com/resource_hub/download-mobile-apps)
-- Magoosh, [ACT Apps](https://act.magoosh.com/act-apps/)
-- Magoosh, [GRE Study Plans and Guides](https://magoosh.com/gre/gre-study-plans-and-guides/)
 - David Tarnoff, [Computer Organization and Design Fundamentals](https://faculty.etsu.edu/tarnoff/138292/)
 - East Tennessee State University, [Computer Organization and Design Fundamentals OER series](https://dc.etsu.edu/computer-organization-design-oer/)
 - David Tarnoff, [Intermation author-video channel](https://www.youtube.com/@Intermation)

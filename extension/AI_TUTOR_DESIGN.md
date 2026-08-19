@@ -26,17 +26,17 @@ Evidence supports careful optimism rather than a blanket claim. A meta-analysis 
 
 U-M GPT, Gemini, and Gemini Notebook are also available to active students. They are useful alternatives for general explanation or student-controlled source notebooks, but they are not the default CIS 310 tutor because Maizey supplies the centrally configured course boundary and Canvas source connection. A commercial third-party tutor would add procurement, account, accessibility, privacy, and equity work without solving a gap that U-M already covers.
 
-## Magoosh patterns used—and limits
+## Student-support interaction patterns and limits
 
-SystemStudio adopts the useful interaction pattern shown by Magoosh: an easy-to-find chat entry, short explanations, related text/video sources, similar formative practice, targeted drills, confidence/progress evidence, and a human-help path. It does not copy Magoosh content or make a score/grade guarantee.
+SystemStudio uses an easy-to-find chat entry, short explanations, related text/video sources, similar formative practice, targeted drills, confidence/progress evidence, and a human-help path. These are course-specific learning supports, not a claim of score improvement, grade improvement, mastery, or live expert staffing.
 
 For CIS 310:
 
-- “works with you until you get it” becomes a multi-turn, one-hint-at-a-time Maizey dialogue;
+- conversational tutoring becomes a multi-turn, one-hint-at-a-time Maizey dialogue;
 - similar questions come from the instructor-reviewed local practice bank by default; dynamically generated questions must be labeled unvalidated;
 - video/text lessons use the required Tarnoff book, author videos, and packaged lectures;
 - analytics remain local, descriptive, and non-graded; and
-- “Ask an Expert” becomes the Canvas question queue and the existing human support structure.
+- human escalation uses the Canvas question queue and the existing course-support structure.
 
 ## Canvas Questions Before Class setup
 
@@ -88,7 +88,6 @@ The local FAQ converts those themes into concise checklists without including st
 - Instructure, [Canvas Discussion Topics API](https://developerdocs.instructure.com/services/canvas/resources/discussion_topics)
 - Instructure, [Canvas OAuth2 Overview](https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth)
 - Instructure, [View and Sort Discussion Replies](https://community.canvaslms.com/en/kb/articles/661292-how-do-i-view-and-sort-discussion-replies-as-a-student)
-- Magoosh, [Online Test Prep Features](https://magoosh.com/)
 - Kulik & Fletcher (2016), [Effectiveness of Intelligent Tutoring Systems](https://eric.ed.gov/?id=EJ1090502)
 - Bastani et al. (2025), [Generative AI without guardrails can harm learning](https://doi.org/10.1073/pnas.2422633122)
 - Wang et al. (2024), [Tutor CoPilot](https://arxiv.org/abs/2410.03017)

@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.10.1
+
+- Rebuilt the Fall 2026 syllabus in the current UM-Dearborn component order with verified section, meeting, office, grading, policy, calendar, and final-examination information.
+- Added the inherited assessment weights, letter-grade scale, participation and late-work rules, team limits, program goals, Food Pantry information, university-policy routing, and copyright guidance.
+- Removed named commercial-platform comparisons from course and design documentation while retaining the course-specific learning rationale.
+
 ## 0.10.0
 
 - Added a keyboard-accessible collapsible chat-style help entry to the Learning Center and redesigned the Help Center around three explicit paths: local FAQ, U-M Maizey, and Questions Before Class.
@@ -8,7 +14,7 @@
 - Kept Canvas in control of identity and posting: SystemStudio copies the draft and opens the configured discussion; it does not claim anonymity or store a Canvas token.
 - Expanded the local FAQ from aggregate prior CIS 310 concerns, including hidden Canvas items, submission confirmation/file types, multiple Digital files, nested clock analysis errors, and escalation when stuck.
 - Added an instructor-ready Maizey system prompt with source citations, one-hint-at-a-time tutoring, prediction/check-for-understanding, graded-work boundaries, uncertainty disclosure, and human escalation.
-- Documented U-M AI access, privacy/cost boundaries, the Magoosh feature adaptation, learning evidence, Canvas OAuth/LTI requirements, and instructor release steps.
+- Documented U-M AI access, privacy/cost boundaries, learning evidence, Canvas OAuth/LTI requirements, and instructor release steps.
 
 ## 0.9.0
 
