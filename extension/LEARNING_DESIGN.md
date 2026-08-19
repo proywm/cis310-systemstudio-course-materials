@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Learning Center reduces the distance between reading source material and knowing what to do next. It gives a student one recommended pre-class action, focused open-book reading, an official author video, a small amount of retrieval practice, explanatory feedback, a related packaged lecture, and a transparent path back to review. It is formative support inside the active course tool, not a gradebook, adaptive tutor, or mastery-certification system.
+The Learning Center reduces the distance between reading source material and knowing what to do next. It gives a student one recommended pre-class action, focused open-book reading, targeted official author videos, a small amount of retrieval practice, explanatory feedback, a related packaged lecture, and a transparent path back to review. It is formative support inside the active course tool, not a gradebook, adaptive tutor, or mastery-certification system.
 
 ## What the usability audit found
 
@@ -26,10 +26,10 @@ The design combines established student-support patterns: a clean starting point
 |---|---|---|
 | Simple dashboard and personalized suggestions | One expanded **Start Here** group and the next incomplete lecture preparation | Less scanning and less uncertainty about where to begin |
 | Video lessons and study schedule | A 13-module **Read → Watch → Try 3 questions** path, ordered by the course sequence | Make pre-class preparation concrete and keep the required text ahead of the slides |
-| Lesson library | Focused Tarnoff chapter sections, an official author video, and the packaged lecture for every topic | Let a student move among primary explanation, audiovisual reinforcement, and class framing |
+| Lesson library | Focused Tarnoff chapter sections, targeted official author videos, and the packaged lecture for every topic | Let a student move among primary explanation, audiovisual reinforcement, and class framing |
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
-| Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book section, official author video, and packaged lecture | Connect an answer to the underlying concept without claiming a bespoke video explanation for every question |
+| Explanations and related lessons | Original text explanation, one-sentence takeaway, exact mapped open-book section, exact mapped official author video, and packaged lecture | Connect an answer to the underlying concept without claiming a bespoke video explanation for every question |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
@@ -42,7 +42,7 @@ The extension does not guarantee an exam score, grade increase, mastery, or lear
 The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*. Each of the 13 presentation resources maps to one or two focused chapter readings, one video from Tarnoff's official Intermation channel or ETSU OER series, one readiness prompt, and exactly three related retrieval questions. This changes the default sequence from “open the slides” to:
 
 1. **Read:** open the assigned book chapter/sections and self-mark completion;
-2. **Watch:** use the author video as a second explanation and self-mark completion;
+2. **Watch:** use the targeted author videos as second explanations and self-mark completion;
 3. **Retrieve:** answer three mapped questions without reopening the source; and
 4. **Bring uncertainty:** take one unresolved point or confident miss to class or to the instructor.
 
@@ -82,7 +82,7 @@ The dashboard is descriptive. Accuracy means correct responses divided by local 
 
 Before classroom release, the instructor should:
 
-1. verify every reading section, author video, question, option, explanation, and lecture mapping against the Fall 2026 materials;
+1. verify every reading section, author video, question, option, explanation, and lecture mapping against the Fall 2026 materials, following the [content alignment audit](CONTENT_ALIGNMENT_AUDIT.md);
 2. check that no practice item exposes a graded assignment answer or hidden assessment content;
 3. run keyboard, screen-reader, contrast, zoom, and reduced-motion checks on each Learning Center screen;
 4. smoke-test the packaged VSIX on Windows, macOS, and Linux;

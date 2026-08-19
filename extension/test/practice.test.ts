@@ -153,6 +153,9 @@ describe('CIS 310 formative practice', () => {
       type: 'open-preparation', resourceId: 'lecture-01', target: 'reading', readingIndex: 1
     }), { type: 'open-preparation', resourceId: 'lecture-01', target: 'reading', readingIndex: 1 });
     assert.deepEqual(parsePracticePanelRequest({
+      type: 'open-preparation', resourceId: 'lecture-01', target: 'video', readingIndex: 2
+    }), { type: 'open-preparation', resourceId: 'lecture-01', target: 'video', readingIndex: 2 });
+    assert.deepEqual(parsePracticePanelRequest({
       type: 'toggle-preparation', resourceId: 'lecture-01', field: 'watched'
     }), { type: 'toggle-preparation', resourceId: 'lecture-01', field: 'watched' });
     assert.deepEqual(parsePracticePanelRequest({
@@ -162,6 +165,7 @@ describe('CIS 310 formative practice', () => {
     assert.equal(parsePracticePanelRequest({ type: 'start', mode: 'practice', focus: 'recommended', length: 100 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'start', mode: 'practice', focus: 'recommended', resourceId: '../bad', length: 3 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'open-preparation', resourceId: 'lecture-01', target: 'reading', readingIndex: 9 }), undefined);
+    assert.equal(parsePracticePanelRequest({ type: 'open-preparation', resourceId: 'lecture-01', target: 'video', readingIndex: 9 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'toggle-preparation', resourceId: 'lecture-01', field: 'complete' }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'answer', questionId: '../bad', selectedIndex: 0, confidence: 'high', usedHint: false, durationMs: 10 }), undefined);
     assert.equal(parsePracticePanelRequest({ type: 'open-resource', resourceId: 'https://example.com' }), undefined);

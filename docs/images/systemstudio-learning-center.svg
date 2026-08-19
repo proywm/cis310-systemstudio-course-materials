@@ -22,7 +22,7 @@
   <text x="24" y="120" fill="#e7e7e7" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600">⌄  Start Here</text>
   <rect x="15" y="138" width="320" height="54" rx="7" fill="#094771"/>
   <text x="32" y="160" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">▣  Prepare Lecture 1</text>
-  <text x="55" y="180" fill="#c7dcec" font-family="Segoe UI, Arial, sans-serif" font-size="12">open book · author video · 3 questions</text>
+  <text x="55" y="180" fill="#c7dcec" font-family="Segoe UI, Arial, sans-serif" font-size="12">open book · author videos · 3 questions</text>
   <text x="32" y="221" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">✦  Start a 5-question readiness check</text>
   <text x="55" y="241" fill="#999999" font-family="Segoe UI, Arial, sans-serif" font-size="12">recommended · explanations included</text>
   <text x="32" y="279" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">☁  Open Canvas — submit coursework here</text>
@@ -51,18 +51,20 @@
   <rect x="422" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="450" cy="354" r="15" fill="#0e639c"/><text x="450" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">1</text>
   <text x="477" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Read the open book</text>
-  <text x="444" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 1 · §§1.1–1.7</text>
-  <text x="444" y="418" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 2 · §§2.1–2.5</text>
-  <rect x="444" y="443" width="116" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="502" y="465" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open reading</text>
-  <text x="444" y="511" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark reading completed</text>
+  <text x="444" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 1 · §§1.2–1.7</text>
+  <text x="444" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 2 · §2.7</text>
+  <text x="444" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Tarnoff Chapter 15 · §§15.1–15.4</text>
+  <rect x="444" y="455" width="116" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="502" y="477" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open readings</text>
+  <text x="444" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark all readings completed</text>
 
   <rect x="746" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="774" cy="354" r="15" fill="#0e639c"/><text x="774" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">2</text>
   <text x="801" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="650">Watch the author</text>
-  <text x="768" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 006: Hexadecimal Conversion</text>
-  <text x="768" y="418" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">Official Intermation author video</text>
-  <rect x="768" y="443" width="142" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="839" y="465" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open author video</text>
-  <text x="768" y="511" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark video completed</text>
+  <text x="768" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 001: Digital Signal</text>
+  <text x="768" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 006: Hexadecimal</text>
+  <text x="768" y="438" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ep 079: CPU Architecture</text>
+  <rect x="768" y="455" width="142" height="34" rx="5" fill="none" stroke="#7a7a7a"/><text x="839" y="477" text-anchor="middle" fill="#e8e8e8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Open 3 videos</text>
+  <text x="768" y="521" fill="#c8c8c8" font-family="Segoe UI, Arial, sans-serif" font-size="12">□ Mark all videos completed</text>
 
   <rect x="1070" y="326" width="298" height="216" rx="9" fill="#242424" stroke="#4a4a4a"/>
   <circle cx="1098" cy="354" r="15" fill="#0e639c"/><text x="1098" y="360" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">3</text>

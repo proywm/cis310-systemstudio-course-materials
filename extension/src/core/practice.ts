@@ -35,6 +35,10 @@ export interface PracticeQuestion {
   hint: string;
   explanation: string;
   takeaway: string;
+  sourceMap: {
+    readingIndexes: readonly number[];
+    videoIndexes: readonly number[];
+  };
 }
 
 export interface QuestionLearningProgress {
@@ -186,29 +190,31 @@ export const PRACTICE_TOPICS: readonly PracticeTopic[] = [
     id: 'assembly',
     title: 'Address Spaces and Assembly',
     shortTitle: 'Assembly',
-    description: 'Process segments, virtual/physical memory, x86 registers, stack behavior, and tracing.',
+    description: 'x86 registers, flags, stack behavior, calls, returns, and instruction tracing.',
     resourceIds: ['lecture-12']
   }
 ] as const;
 
 export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
   {
-    id: 'arch-isa-contract', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
-    prompt: 'What does an instruction set architecture (ISA) primarily define?',
-    options: ['The physical placement of transistors', 'The source code syntax of every high-level language', 'The operations and programmer-visible behavior a processor supports', 'The speed of a specific processor model'],
+    id: 'arch-digital-signal', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
+    prompt: 'Which description best matches a digital signal?',
+    options: ['A signal that can take every value continuously', 'A signal that exists only inside a CPU', 'A signal represented with a finite set of discrete states', 'A signal that never changes with time'],
     correctIndex: 2,
-    hint: 'Think of the boundary between software and a family of processor implementations.',
-    explanation: 'An ISA specifies the programmer-visible machine contract: instructions, registers, data types, addressing behavior, and related operations. Different microarchitectures can implement the same ISA.',
-    takeaway: 'ISA is the software-visible contract; microarchitecture is one implementation of it.'
+    hint: 'Contrast discrete states with a continuously varying quantity.',
+    explanation: 'A digital signal uses a finite set of discrete states. In binary digital systems, those states are conventionally represented as 0 and 1.',
+    takeaway: 'Digital representation uses discrete states; binary systems use two states.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
-    id: 'arch-compiler-path', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
-    prompt: 'In the usual C build path shown in Lecture 1, which stage converts assembly source into object code?',
-    options: ['Preprocessor', 'Compiler', 'Assembler', 'Linker'],
+    id: 'arch-hex-group', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
+    prompt: 'Which hexadecimal digit represents the four-bit pattern 1010?',
+    options: ['8', '9', 'A', 'F'],
     correctIndex: 2,
-    hint: 'The stage name is closely related to the input language it consumes.',
-    explanation: 'The assembler translates assembly source into object code. The linker later combines object files and libraries into an executable.',
-    takeaway: 'Source passes through distinct translation stages; an object file is not yet the final linked executable.'
+    hint: 'Convert 1010₂ to decimal, then use the corresponding base-16 digit.',
+    explanation: 'The binary pattern 1010 has value 10, which is written A in hexadecimal. Each hexadecimal digit corresponds to exactly four binary bits.',
+    takeaway: 'Group binary into four-bit nibbles to convert directly to hexadecimal.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
   },
   {
     id: 'data-unsigned-range', topicId: 'architecture-data', resourceId: 'lecture-02', difficulty: 'foundation',
@@ -217,7 +223,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'Eight bits represent 2⁸ distinct patterns, starting at zero.',
     explanation: 'Eight bits provide 256 patterns. Unsigned values start at 0, so the range is 0 through 255, or 2⁸ − 1.',
-    takeaway: 'An n-bit unsigned value ranges from 0 through 2ⁿ − 1.'
+    takeaway: 'An n-bit unsigned value ranges from 0 through 2ⁿ − 1.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'data-twos-complement', topicId: 'architecture-data', resourceId: 'lecture-02', difficulty: 'application',
@@ -226,16 +233,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'Start with +5, invert all bits, then add 1.',
     explanation: '+5 is 0000 0101. Inverting gives 1111 1010; adding 1 gives 1111 1011.',
-    takeaway: 'To negate a fixed-width two’s-complement value, invert the bits and add one.'
-  },
-  {
-    id: 'data-hex-purpose', topicId: 'architecture-data', resourceId: 'lecture-02', difficulty: 'foundation',
-    prompt: 'Why is hexadecimal commonly used when inspecting binary data?',
-    options: ['It removes the need for place value', 'It stores more information than the underlying bits', 'Processors execute hex directly but not binary', 'Each hex digit compactly represents four binary bits'],
-    correctIndex: 3,
-    hint: 'Compare one base-16 digit with a fixed group of binary digits.',
-    explanation: 'One hexadecimal digit maps exactly to four bits, making long binary patterns shorter and easier to group without changing their value.',
-    takeaway: 'Hexadecimal is a compact notation for bits, not a different underlying machine representation.'
+    takeaway: 'To negate a fixed-width two’s-complement value, invert the bits and add one.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
   },
   {
     id: 'logic-sop-row', topicId: 'combinational-logic', resourceId: 'lecture-03', difficulty: 'foundation',
@@ -244,7 +243,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'SOP ORs together minterms that make the function true.',
     explanation: 'Each output-1 row becomes a minterm (a product of input literals), and the minterms are ORed together.',
-    takeaway: 'Canonical SOP is built from the truth-table rows where the function is 1.'
+    takeaway: 'Canonical SOP is built from the truth-table rows where the function is 1.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
   },
   {
     id: 'logic-absorption', topicId: 'combinational-logic', resourceId: 'lecture-03', difficulty: 'application',
@@ -253,7 +253,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'If A is already true, the second term cannot add a new true case.',
     explanation: 'By the absorption law, A + A·B = A. The A·B term is already covered whenever A is 1.',
-    takeaway: 'Absorption removes a term whose true cases are already included by another term.'
+    takeaway: 'Absorption removes a term whose true cases are already included by another term.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
+  },
+  {
+    id: 'logic-demorgan', topicId: 'combinational-logic', resourceId: 'lecture-03', difficulty: 'application',
+    prompt: 'According to DeMorgan’s theorem, which expression equals the complement of A·B?',
+    options: ['A·B', 'A + B', 'A̅·B̅', 'A̅ + B̅'],
+    correctIndex: 3,
+    hint: 'When the outer complement crosses the AND operator, the operator changes.',
+    explanation: 'DeMorgan’s theorem changes the complemented AND to an OR of the complemented inputs: (A·B)̅ = A̅ + B̅.',
+    takeaway: 'Push a complement through an expression by swapping AND/OR and complementing each input.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [2] }
   },
   {
     id: 'logic-kmap-adjacency', topicId: 'combinational-logic', resourceId: 'lecture-04', difficulty: 'foundation',
@@ -262,7 +273,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'Simplification relies on one variable changing while the others stay fixed.',
     explanation: 'Gray-code ordering makes neighboring cells differ by one variable. Grouping neighbors then eliminates the changing variable from the product term.',
-    takeaway: 'K-map adjacency represents a one-bit change, including wraparound at the edges.'
+    takeaway: 'K-map adjacency represents a one-bit change, including wraparound at the edges.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'logic-kmap-group', topicId: 'combinational-logic', resourceId: 'lecture-04', difficulty: 'application',
@@ -271,7 +283,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'A larger group has more variables changing within it.',
     explanation: 'The largest valid power-of-two group eliminates the most changing variables and therefore produces a term with fewer literals.',
-    takeaway: 'Prefer large valid groups while still covering every required 1-cell.'
+    takeaway: 'Prefer large valid groups while still covering every required 1-cell.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
     id: 'logic-combinational-state', topicId: 'combinational-logic', resourceId: 'lecture-05', difficulty: 'foundation',
@@ -280,7 +293,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'Ask whether past input history is needed to determine the output.',
     explanation: 'A combinational circuit’s output is a direct function of its current inputs. Sequential circuits include state, so past events can affect the current output.',
-    takeaway: 'Combinational logic has no stored state or feedback-dependent history.'
+    takeaway: 'Combinational logic has no stored state or feedback-dependent history.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'logic-decoder', topicId: 'combinational-logic', resourceId: 'lecture-05', difficulty: 'foundation',
@@ -289,7 +303,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'The input is interpreted as an index.',
     explanation: 'A 2-bit input has four possible values. A 2-to-4 decoder activates the corresponding one of four outputs.',
-    takeaway: 'A decoder turns a binary selection value into a one-of-many activation pattern.'
+    takeaway: 'A decoder turns a binary selection value into a one-of-many activation pattern.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
   },
   {
     id: 'logic-mux', topicId: 'combinational-logic', resourceId: 'lecture-05', difficulty: 'application',
@@ -298,16 +313,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'How many binary patterns are needed to choose among four inputs?',
     explanation: 'Two select bits provide four selection patterns: 00, 01, 10, and 11.',
-    takeaway: 'Selecting among 2ⁿ inputs requires n select bits.'
+    takeaway: 'Selecting among 2ⁿ inputs requires n select bits.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [2] }
   },
   {
-    id: 'logic-full-adder-carry', topicId: 'combinational-logic', resourceId: 'lecture-03', difficulty: 'application',
+    id: 'logic-full-adder-carry', topicId: 'architecture-data', resourceId: 'lecture-02', difficulty: 'application',
     prompt: 'For a full adder with A=1, B=1, and Cin=0, what are Sum and Cout?',
     options: ['Sum=0, Cout=1', 'Sum=1, Cout=0', 'Sum=1, Cout=1', 'Sum=0, Cout=0'],
     correctIndex: 0,
     hint: 'Add the three one-bit values as an ordinary binary number.',
     explanation: '1 + 1 + 0 equals binary 10, so the sum bit is 0 and the carry-out bit is 1.',
-    takeaway: 'A full adder returns the low result bit as Sum and the high result bit as Cout.'
+    takeaway: 'A full adder returns the low result bit as Sum and the high result bit as Cout.',
+    sourceMap: { readingIndexes: [2], videoIndexes: [2] }
   },
   {
     id: 'seq-why-clock', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'foundation',
@@ -316,7 +333,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'The clock is about timing, not the value being stored.',
     explanation: 'The clock coordinates state transitions so registers and flip-flops update at defined events, usually an edge.',
-    takeaway: 'A synchronous clock establishes when state changes are allowed to occur.'
+    takeaway: 'A synchronous clock establishes when state changes are allowed to occur.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'seq-d-flipflop', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'foundation',
@@ -325,7 +343,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'The device is named for the data input it samples.',
     explanation: 'At the active edge, a D flip-flop samples D and stores that value as its next Q state.',
-    takeaway: 'For a D flip-flop, the characteristic relation is Q(next)=D at the active edge.'
+    takeaway: 'For a D flip-flop, the characteristic relation is Q(next)=D at the active edge.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'seq-state-bits-19', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'application',
@@ -334,7 +353,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'Find the smallest n for which 2ⁿ is at least 19.',
     explanation: 'Four bits encode only 16 states, while five bits encode up to 32 states. Therefore five state bits are required.',
-    takeaway: 'The minimum state-bit count is the smallest n satisfying 2ⁿ ≥ number of states.'
+    takeaway: 'The minimum state-bit count is the smallest n satisfying 2ⁿ ≥ number of states.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [2] }
   },
   {
     id: 'seq-counter-width', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'foundation',
@@ -343,16 +363,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'Each added state bit doubles the number of possible patterns.',
     explanation: 'Five bits have 2⁵ = 32 distinct patterns, from 00000 through 11111.',
-    takeaway: 'An n-bit binary counter has 2ⁿ distinct states.'
+    takeaway: 'An n-bit binary counter has 2ⁿ distinct states.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
-    id: 'seq-fsm-debug', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'application',
-    prompt: 'What is the most useful first artifact when debugging a finite-state machine?',
-    options: ['A list of wire colors', 'A larger clock frequency', 'An expected present-state/input/next-state table', 'A screenshot without signal labels'],
+    id: 'seq-next-state-inputs', topicId: 'sequential-logic', resourceId: 'lecture-06', difficulty: 'application',
+    prompt: 'In a synchronous state machine, what information normally feeds the next-state logic?',
+    options: ['Only the clock frequency', 'Only the output labels', 'The current state and external inputs', 'The wire colors and gate count'],
     correctIndex: 2,
-    hint: 'You need explicit expected behavior to compare with the observed transition.',
-    explanation: 'A state-transition table makes the expected next state explicit for each relevant present-state/input case, giving you testable evidence.',
-    takeaway: 'Predict transitions in a table before changing the circuit.'
+    hint: 'The next state depends on where the machine is now and what it observes.',
+    explanation: 'The combinational next-state logic uses the current state bits and relevant external inputs to determine the state value loaded at the next active clock event.',
+    takeaway: 'Next-state logic computes a future state from current state and inputs.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [2] }
   },
   {
     id: 'memory-address-lines', topicId: 'memory-io', resourceId: 'lecture-07', difficulty: 'application',
@@ -361,7 +383,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'Find n such that 2ⁿ equals the number of locations.',
     explanation: 'Four address bits produce 16 distinct addresses, from 0000 through 1111.',
-    takeaway: 'n address bits directly select up to 2ⁿ locations.'
+    takeaway: 'n address bits directly select up to 2ⁿ locations.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'memory-address-decoder', topicId: 'memory-io', resourceId: 'lecture-07', difficulty: 'foundation',
@@ -370,16 +393,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'Several devices may share a bus, but only one should respond to a given range.',
     explanation: 'Address-decoding logic recognizes address patterns and activates the appropriate memory device or location.',
-    takeaway: 'Address decoding maps an address value or range to the component that should respond.'
+    takeaway: 'Address decoding maps an address value or range to the component that should respond.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'io-device-registers', topicId: 'memory-io', resourceId: 'lecture-08', difficulty: 'foundation',
-    prompt: 'Which set matches the canonical device-interface registers discussed in Lecture 8?',
-    options: ['Status, command, and data', 'Stack, base, and instruction', 'Read, decode, and execute', 'Cache, DRAM, and disk'],
+    prompt: 'Which set matches the device-interface registers described in the assigned material?',
+    options: ['Status, configuration/control, and data', 'Stack, base, and instruction', 'Read, decode, and execute', 'Cache, DRAM, and disk'],
     correctIndex: 0,
-    hint: 'One reports readiness, one requests an action, and one carries the value.',
-    explanation: 'The canonical interface exposes a status register, a command register, and a data register for host/device coordination.',
-    takeaway: 'Status reports state, command requests work, and data transfers the payload.'
+    hint: 'One reports readiness, one configures or controls operation, and one carries the value.',
+    explanation: 'The assigned examples use status, configuration/control, and data registers for host/device coordination. Exact names vary by device.',
+    takeaway: 'Status reports state, configuration/control sets behavior, and data carries the payload.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
     id: 'io-polling-cost', topicId: 'memory-io', resourceId: 'lecture-08', difficulty: 'application',
@@ -388,7 +413,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'Consider what the processor does while the device remains busy.',
     explanation: 'Busy-wait polling repeatedly consumes processor time checking device status. Interrupts can allow other work until the device signals completion.',
-    takeaway: 'Polling trades implementation simplicity for potentially wasted CPU time.'
+    takeaway: 'Polling trades implementation simplicity for potentially wasted CPU time.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
     id: 'io-interrupt-purpose', topicId: 'memory-io', resourceId: 'lecture-08-supplement', difficulty: 'foundation',
@@ -397,7 +423,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'Think of a notification instead of repeatedly checking for an event.',
     explanation: 'With interrupts, the CPU can execute other work and respond when the device raises an interrupt, instead of continuously checking status.',
-    takeaway: 'Interrupts provide event-driven notification; they do not make the device itself faster.'
+    takeaway: 'Interrupts provide event-driven notification; they do not make the device itself faster.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
   },
   {
     id: 'memory-hierarchy-goal', topicId: 'memory-io', resourceId: 'lecture-09', difficulty: 'foundation',
@@ -406,7 +433,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'No single storage technology optimizes speed, capacity, and cost simultaneously.',
     explanation: 'A hierarchy combines small fast levels near the processor with progressively larger, slower, and cheaper levels to approximate both speed and capacity goals.',
-    takeaway: 'Memory hierarchies exploit differing latency, capacity, and cost characteristics.'
+    takeaway: 'Memory hierarchies exploit differing latency, capacity, and cost characteristics.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'memory-locality', topicId: 'memory-io', resourceId: 'lecture-09', difficulty: 'application',
@@ -415,25 +443,28 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'The program reuses recent data and accesses nearby addresses.',
     explanation: 'Repeated use of the same data shows temporal locality; walking nearby array elements shows spatial locality. Caches are designed to exploit both.',
-    takeaway: 'Locality makes recently used and nearby data good candidates for fast storage.'
+    takeaway: 'Locality makes recently used and nearby data good candidates for fast storage.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
-    id: 'memory-disk-latency', topicId: 'memory-io', resourceId: 'lecture-09', difficulty: 'foundation',
-    prompt: 'After a hard-drive head reaches the correct track, what delay waits for the desired sector to rotate under the head?',
-    options: ['Seek time', 'Rotational latency', 'Decode time', 'Cache hit time'],
+    id: 'memory-cache-miss', topicId: 'memory-io', resourceId: 'lecture-09', difficulty: 'foundation',
+    prompt: 'What happens on a cache miss in the basic cache model?',
+    options: ['The processor permanently deletes the requested address', 'A block containing the requested item is fetched from a lower level', 'Every cache entry becomes a register', 'The requested data is assumed to be zero'],
     correctIndex: 1,
-    hint: 'The remaining mechanical motion is rotation, not head movement between tracks.',
-    explanation: 'Seek time moves the head to the track. Rotational latency then waits for the platter to bring the target sector under the head.',
-    takeaway: 'Seek and rotational latency describe different mechanical parts of disk access.'
+    hint: 'The requested item was not found at the fast level, so another level must supply it.',
+    explanation: 'On a cache miss, the system obtains a block containing the requested item from the next lower level and places it in the cache before completing the access.',
+    takeaway: 'A miss brings a block from a lower level; a hit finds the item in the cache.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
-    id: 'cpu-register-transfer', topicId: 'processor', resourceId: 'lecture-10', difficulty: 'foundation',
-    prompt: 'In register-transfer notation, what does R2 ← R1 mean?',
-    options: ['Add R1 and R2', 'Copy the contents of R1 into R2', 'Clear both registers', 'Store the address of R2 in R1'],
+    id: 'cpu-alu-role', topicId: 'processor', resourceId: 'lecture-10', difficulty: 'foundation',
+    prompt: 'What is the arithmetic logic unit (ALU) responsible for in the CPU model?',
+    options: ['Storing the complete program permanently', 'Performing selected arithmetic and logical operations on data', 'Generating the external system clock', 'Replacing the instruction register'],
     correctIndex: 1,
-    hint: 'The arrow points toward the destination receiving a value.',
-    explanation: 'R2 ← R1 specifies a transfer in which R2 is the destination and receives the current value from R1.',
-    takeaway: 'In RTL, the left side is the destination and the right side supplies the value.'
+    hint: 'The control unit selects the operation; this component performs it.',
+    explanation: 'The ALU performs selected arithmetic and logical operations on operand data. Control signals choose the operation and coordinate movement of the result.',
+    takeaway: 'The ALU performs data operations; the control unit coordinates them.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'cpu-control-unit', topicId: 'processor', resourceId: 'lecture-10', difficulty: 'foundation',
@@ -442,7 +473,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'The datapath performs operations; another component tells it which operation to perform and when.',
     explanation: 'The control unit interprets instruction/state information and issues control signals that coordinate registers, the ALU, memory, and other datapath elements.',
-    takeaway: 'The datapath performs data operations; control orchestrates those operations.'
+    takeaway: 'The datapath performs data operations; control orchestrates those operations.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'cpu-instruction-register', topicId: 'processor', resourceId: 'lecture-10', difficulty: 'foundation',
@@ -451,16 +483,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'It provides a stable instruction value while control logic examines its fields.',
     explanation: 'The instruction register holds the current fetched instruction so the decoder and control logic can use it during execution.',
-    takeaway: 'The IR holds the current instruction; instruction memory holds the program.'
+    takeaway: 'The IR holds the current instruction; instruction memory holds the program.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
-    id: 'pipeline-clock', topicId: 'processor', resourceId: 'lecture-11', difficulty: 'application',
-    prompt: 'In a synchronous pipeline, what primarily constrains the minimum clock period?',
-    options: ['The fastest stage only', 'The slowest stage path plus register overhead', 'The number of source-code lines', 'The total disk capacity'],
+    id: 'pipeline-cycle-count', topicId: 'processor', resourceId: 'lecture-11', difficulty: 'application',
+    prompt: 'In the assigned three-stage pipeline model, how many cycles are needed to complete five instructions?',
+    options: ['5 cycles', '7 cycles', '10 cycles', '15 cycles'],
     correctIndex: 1,
-    hint: 'Every stage must finish before its result is captured at the next edge.',
-    explanation: 'The clock period must allow the slowest pipeline stage path, along with pipeline-register timing overhead, to complete safely.',
-    takeaway: 'Pipelining overlaps work, but the slowest stage limits the clock rate.'
+    hint: 'The assigned model needs two cycles to fill, then completes one instruction per cycle.',
+    explanation: 'For the assigned three-stage model, the chapter and video use 2 + number of instructions. Five instructions therefore require 2 + 5 = 7 cycles.',
+    takeaway: 'After a three-stage pipeline fills, it can complete one instruction per cycle in the ideal model.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'pipeline-benefit', topicId: 'processor', resourceId: 'lecture-11', difficulty: 'foundation',
@@ -469,25 +503,28 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'Several instructions can occupy different stages at the same time.',
     explanation: 'Pipelining overlaps the stages of different instructions. Its central benefit is improved throughput, not necessarily lower latency for one instruction.',
-    takeaway: 'Pipelining targets instruction throughput by overlapping stage work.'
+    takeaway: 'Pipelining targets instruction throughput by overlapping stage work.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
-    id: 'asm-virtual-physical', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'foundation',
-    prompt: 'What is the relationship between a process virtual address and physical memory?',
-    options: ['They are always the same numeric address', 'The operating system and hardware map virtual addresses to physical memory', 'Virtual addresses exist only in source code comments', 'Physical memory is private to one instruction'],
+    id: 'asm-register-halves', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'foundation',
+    prompt: 'Which pair names the low and high 8-bit portions of the 16-bit AX register?',
+    options: ['EBX and EAX', 'AL and AH', 'EIP and ESP', 'ZF and CF'],
     correctIndex: 1,
-    hint: 'Each process sees an address space that must be translated to actual RAM locations.',
-    explanation: 'A process uses virtual addresses. The operating system and memory-management hardware maintain mappings to physical memory.',
-    takeaway: 'Virtual address spaces provide each process an abstraction over physical memory.'
+    hint: 'The suffixes identify the low and high byte of AX.',
+    explanation: 'AL is the low-order byte of AX and AH is the high-order byte. Together they form the 16-bit AX portion of EAX.',
+    takeaway: 'AX is divided into AH and AL; EAX contains the wider 32-bit register.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [0] }
   },
   {
-    id: 'asm-segments', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'foundation',
-    prompt: 'Which process segment normally stores dynamically allocated memory such as memory returned by malloc?',
-    options: ['Code/text', 'Heap', 'Stack', 'Instruction register'],
+    id: 'asm-stack-pointer', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'foundation',
+    prompt: 'What does ESP identify in the assigned 32-bit x86 model?',
+    options: ['The current arithmetic result', 'The current top of the stack', 'The next cache replacement', 'The instruction opcode'],
     correctIndex: 1,
-    hint: 'This segment commonly grows as the program requests dynamic storage.',
-    explanation: 'The heap is used for dynamically allocated memory. The stack commonly holds call frames, parameters, local values, and return information.',
-    takeaway: 'Heap supports dynamic allocation; stack supports structured call execution.'
+    hint: 'Its name is the extended stack pointer.',
+    explanation: 'ESP holds the address associated with the current top of the stack. Stack operations and procedure calls update it as values are pushed and removed.',
+    takeaway: 'ESP tracks the top of the 32-bit x86 stack.',
+    sourceMap: { readingIndexes: [0, 1], videoIndexes: [1] }
   },
   {
     id: 'asm-eip', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'foundation',
@@ -496,7 +533,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'Its expanded name is the extended instruction pointer.',
     explanation: 'EIP is the instruction pointer for 32-bit x86 execution. Control-flow instructions change it to alter which instruction executes next.',
-    takeaway: 'EIP tracks instruction flow; branches, calls, and returns update it.'
+    takeaway: 'EIP tracks instruction flow; branches, calls, and returns update it.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [0] }
   },
   {
     id: 'asm-stack-call', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'application',
@@ -505,25 +543,28 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'RET needs to know where execution should continue.',
     explanation: 'CALL saves the return address on the stack before transferring control. RET later uses that address to resume the caller.',
-    takeaway: 'CALL and RET use the stack to preserve and restore control flow.'
+    takeaway: 'CALL and RET use the stack to preserve and restore control flow.',
+    sourceMap: { readingIndexes: [2], videoIndexes: [2] }
   },
   {
-    id: 'asm-trace-evidence', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'application',
-    prompt: 'Before stepping an ADD instruction in the embedded assembly lab, which practice best supports debugging?',
-    options: ['Predict the destination value and relevant flags, then compare with the trace', 'Run repeatedly without recording the input state', 'Change several instructions at once', 'Assume no output means the instruction was correct'],
+    id: 'asm-zero-flag', topicId: 'assembly', resourceId: 'lecture-12', difficulty: 'application',
+    prompt: 'When does an arithmetic or logical operation set the x86 zero flag (ZF)?',
+    options: ['When the operation result is zero', 'Whenever EIP changes', 'Only when the stack is empty', 'Whenever the result is negative'],
     correctIndex: 0,
-    hint: 'Debugging needs a specific expected result and observable evidence.',
-    explanation: 'A prediction makes the test falsifiable. After stepping, compare the destination register and relevant flags with that prediction before editing code.',
-    takeaway: 'Predict → step → inspect evidence → explain the difference.'
+    hint: 'The flag name describes the property of the result it records.',
+    explanation: 'ZF is set when the result produced by the relevant arithmetic or logical operation is zero; otherwise it is cleared.',
+    takeaway: 'ZF records whether the most recent relevant result was zero.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [3] }
   },
   {
-    id: 'arch-microarchitecture', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
-    prompt: 'Which statement best describes a processor microarchitecture?',
-    options: ['A particular internal organization used to implement an ISA', 'The syntax rules of a high-level language', 'A list of files produced by a linker', 'The physical address of every instruction'],
+    id: 'arch-instruction-decoder', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
+    prompt: 'Which CPU component interprets the operation encoded in the fetched instruction?',
+    options: ['Instruction decoder', 'Data bus', 'Clock oscillator', 'Cache block'],
     correctIndex: 0,
-    hint: 'The same software-visible instruction set can be built in more than one internal way.',
-    explanation: 'A microarchitecture is a particular internal design—datapath, control, pipelines, caches, and related structures—that implements an ISA. Multiple microarchitectures can share one ISA.',
-    takeaway: 'The ISA says what software can observe; microarchitecture says how one processor implements it.'
+    hint: 'The instruction register holds the instruction; another component examines its fields.',
+    explanation: 'The instruction decoder examines the fetched instruction and identifies the operation and operand-related control needs for execution.',
+    takeaway: 'The instruction register holds the instruction; the decoder interprets it.',
+    sourceMap: { readingIndexes: [2], videoIndexes: [2] }
   },
   {
     id: 'logic-kmap-wraparound', topicId: 'combinational-logic', resourceId: 'lecture-04', difficulty: 'application',
@@ -532,7 +573,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'Compare the column labels at the two outer edges.',
     explanation: 'The outer Gray-code columns differ in only one bit, so the map wraps around and those edge cells are logically adjacent. A valid group must still be rectangular and power-of-two sized.',
-    takeaway: 'K-map adjacency wraps across opposing edges because Gray-code labels still differ by one bit.'
+    takeaway: 'K-map adjacency wraps across opposing edges because Gray-code labels still differ by one bit.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [2] }
   },
   {
     id: 'memory-device-capacity', topicId: 'memory-io', resourceId: 'lecture-07', difficulty: 'application',
@@ -541,7 +583,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 2,
     hint: 'Address lines determine the number of locations; data width determines bits per location.',
     explanation: 'Ten address lines select 2¹⁰ = 1024 locations. An 8-bit data width means each selected location stores eight bits, so the organization is 1024 × 8.',
-    takeaway: 'Memory organization is number of addressable locations × bits stored per location.'
+    takeaway: 'Memory organization is number of addressable locations × bits stored per location.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   },
   {
     id: 'io-status-before-data', topicId: 'memory-io', resourceId: 'lecture-08', difficulty: 'application',
@@ -550,7 +593,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 3,
     hint: 'The status value tells software whether the data value is valid yet.',
     explanation: 'Polling software repeatedly checks the device status register and reads the data register only after the ready condition is observed. Reading earlier may retrieve stale or invalid data.',
-    takeaway: 'In polled I/O, status provides the evidence that a data transfer is ready.'
+    takeaway: 'In polled I/O, status provides the evidence that a data transfer is ready.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [1] }
   },
   {
     id: 'io-memory-mapped-access', topicId: 'memory-io', resourceId: 'lecture-08-supplement', difficulty: 'foundation',
@@ -559,7 +603,8 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 0,
     hint: 'The device interface shares the processor’s address space.',
     explanation: 'With memory-mapped I/O, device registers are assigned addresses in the processor’s address space, so ordinary load/store-style accesses can communicate with them.',
-    takeaway: 'Memory-mapped I/O places device registers in the address space seen by the processor.'
+    takeaway: 'Memory-mapped I/O places device registers in the address space seen by the processor.',
+    sourceMap: { readingIndexes: [0, 1], videoIndexes: [0] }
   },
   {
     id: 'io-dma-purpose', topicId: 'memory-io', resourceId: 'lecture-08-supplement', difficulty: 'application',
@@ -568,16 +613,18 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     correctIndex: 1,
     hint: 'Compare moving every item through CPU instructions with configuring one block transfer.',
     explanation: 'After the CPU configures a DMA operation, the controller can move a block between the device and memory without the CPU executing an instruction for every transferred item.',
-    takeaway: 'DMA reduces per-item CPU work for block transfers; the CPU still configures and coordinates the operation.'
+    takeaway: 'DMA reduces per-item CPU work for block transfers; the CPU still configures and coordinates the operation.',
+    sourceMap: { readingIndexes: [1], videoIndexes: [2] }
   },
   {
-    id: 'pipeline-data-hazard', topicId: 'processor', resourceId: 'lecture-11', difficulty: 'application',
-    prompt: 'Instruction B needs a register value that instruction A has not yet produced. What pipeline problem is this?',
-    options: ['A capacity miss', 'A hexadecimal conversion', 'A data hazard', 'A memory-map decoder'],
+    id: 'pipeline-branch-flush', topicId: 'processor', resourceId: 'lecture-11', difficulty: 'application',
+    prompt: 'Why may a taken branch require unfinished instructions in a simple pipeline to be discarded?',
+    options: ['The cache permanently loses all instructions', 'The ALU can execute only hexadecimal values', 'Those instructions were fetched from the wrong sequential path', 'Every taken branch ends the program'],
     correctIndex: 2,
-    hint: 'The second instruction depends on data from the first.',
-    explanation: 'This read-after-write dependency is a data hazard. A pipeline may use forwarding, a stall, or another scheduling mechanism to preserve the required value relationship.',
-    takeaway: 'A data hazard occurs when overlapping instructions have an unresolved data dependency.'
+    hint: 'The fetch stage may continue before the processor knows the branch destination.',
+    explanation: 'Before the branch decision is known, the pipeline may fetch instructions from the next sequential addresses. If the branch is taken, that work is on the wrong path and must be flushed.',
+    takeaway: 'A taken branch can invalidate speculatively fetched sequential-path work.',
+    sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   }
 ] as const;
 
@@ -816,6 +863,7 @@ export function parsePracticePanelRequest(value: unknown): PracticePanelRequest 
     const readingIndex = value.readingIndex === undefined ? 0 : Number(value.readingIndex);
     if (!Number.isInteger(readingIndex) || readingIndex < 0) return undefined;
     if (value.target === 'reading' && !preparationModule(value.resourceId)?.readings[readingIndex]) return undefined;
+    if (value.target === 'video' && !preparationModule(value.resourceId)?.authorVideos[readingIndex]) return undefined;
     return { type: 'open-preparation', resourceId: value.resourceId, target: value.target as 'reading' | 'video' | 'lecture' | 'book-home' | 'author-channel' | 'oer-series', readingIndex };
   }
   if (value.type === 'toggle-preparation' && typeof value.resourceId === 'string' && RESOURCE_IDS.has(value.resourceId)

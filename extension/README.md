@@ -2,6 +2,8 @@
 
 This is the active Fall 2026 CIS 310 student extension. It gives students one VS Code entry point for pre-class open-book preparation, official author videos, short formative practice, local learning progress, the packaged syllabus, course calendar, Canvas routing, embedded course materials, Digital logic circuits, an embedded IA-32 assembly lab, a task-first tutorial, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
+The [Reading–Video–Practice Alignment Audit](CONTENT_ALIGNMENT_AUDIT.md) records how every readiness prompt and practice question was verified against exact book sections and actual video content.
+
 **Remote SSH is not required.** Students should use ordinary local desktop VS Code for the complete workflow, including Digital's graphical editor. Remote SSH is only an optional fallback for course materials, starter generation, previews, and headless tests.
 
 ## What is implemented
@@ -73,13 +75,13 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 
 ## Student workflow
 
-1. Open **Start Here** and complete the next pre-class module: read the focused open-book sections, watch the mapped author video, then try three readiness questions. Each step is skippable.
+1. Open **Start Here** and complete the next pre-class module: read the focused open-book sections, watch the targeted author videos, then try three readiness questions. Each step is skippable.
 2. Start or skip the guided tutorial; rerun it later from **Help and Tutorial**.
 3. Open the packaged **Fall 2026 syllabus** and review any fields still marked for instructor confirmation.
 4. Open the **Fall 2026 course calendar** to see all 27 Monday/Wednesday meetings; export all-day placeholders or enter a confirmed Canvas time for timed events.
 5. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) to confirm the current task, deadline, class details, and required files.
 6. Open **Lessons and Assignments** and select one of the 13 bundled presentation PDFs, three homework references, or three project references after completing the related reading.
-7. Use **Learn and Practice** for the complete book/video map, a short topic session, a 10-question quiz, or review of due and saved questions. State confidence before seeing feedback, then use the explanation, mapped book section, author video, and related lecture.
+7. Use **Learn and Practice** for the complete book/video map, a short topic session, a 10-question quiz, or review of due and saved questions. State confidence before seeing feedback, then use the explanation, exact mapped book section and author video, and related lecture.
 8. Run **CIS 310: Check Environment** before changing circuit work in response to a tool failure.
 9. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
 10. Predict one behavior, then use preview/tests as evidence before integrating a larger component.
@@ -96,7 +98,7 @@ Course guides and assignments open as rendered documents. Instructors and develo
 The Learning Center is a low-stakes study loop, not another graded course destination. A student can:
 
 1. move through all 13 lecture modules using **Read → Watch → Try 3 questions**;
-2. open focused chapters of David Tarnoff's *Computer Organization and Design Fundamentals* and one official author video per lecture;
+2. open focused chapters of David Tarnoff's *Computer Organization and Design Fundamentals* and the targeted official author videos needed for each lecture;
 3. take a five-question recommended session, review due/saved items, choose one of six topics, or take a 10-question quiz;
 4. make one choice at a time and record low, medium, or high confidence before submitting;
 5. request a hint in practice mode, then read an explanation, a concise takeaway, and open the mapped book, video, or packaged lecture;

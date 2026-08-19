@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.10.2
+
+- Verified every lecture-readiness prompt and all 43 practice questions against exact Tarnoff open-book sections and actual author-video content.
+- Added explicit reading/video source maps with automated bounds and completeness tests, and made feedback open the exact supporting source for each question.
+- Corrected the hexadecimal, adder, I/O, CPU, pipeline, and assembly source assignments; replaced questions that went beyond the assigned materials.
+- Expanded the preparation path to show every targeted author video and added a maintainable content-alignment audit.
+
 ## 0.10.1
 
 - Rebuilt the Fall 2026 syllabus in the current UM-Dearborn component order with verified section, meeting, office, grading, policy, calendar, and final-examination information.

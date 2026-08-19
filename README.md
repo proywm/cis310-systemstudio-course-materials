@@ -12,6 +12,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Course policies, outcomes, tools, and topic sequence | [Fall 2026 syllabus PDF](course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf) |
 | Open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
+| Exact reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |

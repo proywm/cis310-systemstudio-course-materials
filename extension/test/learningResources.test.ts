@@ -14,7 +14,7 @@ import {
 import { PRACTICE_QUESTIONS } from '../src/core/practice';
 
 describe('CIS 310 pre-class learning path', () => {
-  it('maps every presentation resource to official readings, an author video, and three or more questions', () => {
+  it('maps every readiness prompt and practice question to bounded official readings and author videos', () => {
     assert.equal(PRE_CLASS_MODULES.length, 13);
     assert.equal(new Set(PRE_CLASS_MODULES.map((module) => module.resourceId)).size, 13);
     const questionResources = new Set(PRACTICE_QUESTIONS.map((question) => question.resourceId));
@@ -22,17 +22,39 @@ describe('CIS 310 pre-class learning path', () => {
     for (const module of PRE_CLASS_MODULES) {
       assert.ok(questionResources.has(module.resourceId), `missing practice for ${module.resourceId}`);
       assert.ok(module.readings.length >= 1);
+      assert.ok(module.authorVideos.length >= 1);
       assert.ok(module.focus.length > 20);
       assert.ok(module.readinessPrompt.endsWith('?'));
       assert.ok(PRACTICE_QUESTIONS.filter((question) => question.resourceId === module.resourceId).length >= 3);
       for (const reading of module.readings) {
         assert.match(reading.url, /^https:\/\/faculty\.etsu\.edu\/tarnoff\//);
       }
-      assert.ok(
-        module.authorVideo.url.startsWith('https://www.youtube.com/watch?v=')
-          || module.authorVideo.url.startsWith(TARNOFF_OER_SERIES),
-        `unexpected video source for ${module.resourceId}`
-      );
+      for (const video of module.authorVideos) {
+        assert.ok(
+          video.url.startsWith('https://www.youtube.com/watch?v=')
+            || video.url.startsWith(TARNOFF_OER_SERIES),
+          `unexpected video source for ${module.resourceId}`
+        );
+        assert.ok(video.focus.length > 10, `missing video focus for ${module.resourceId}`);
+      }
+      assert.ok(module.readinessSources.readingIndexes.length >= 1, `readiness lacks reading for ${module.resourceId}`);
+      assert.ok(module.readinessSources.videoIndexes.length >= 1, `readiness lacks video for ${module.resourceId}`);
+      for (const index of module.readinessSources.readingIndexes) {
+        assert.ok(module.readings[index], `readiness reading ${index} is invalid for ${module.resourceId}`);
+      }
+      for (const index of module.readinessSources.videoIndexes) {
+        assert.ok(module.authorVideos[index], `readiness video ${index} is invalid for ${module.resourceId}`);
+      }
+      for (const question of PRACTICE_QUESTIONS.filter((item) => item.resourceId === module.resourceId)) {
+        assert.ok(question.sourceMap.readingIndexes.length >= 1, `${question.id} lacks a reading`);
+        assert.ok(question.sourceMap.videoIndexes.length >= 1, `${question.id} lacks a video`);
+        for (const index of question.sourceMap.readingIndexes) {
+          assert.ok(module.readings[index], `${question.id} reading ${index} is invalid`);
+        }
+        for (const index of question.sourceMap.videoIndexes) {
+          assert.ok(module.authorVideos[index], `${question.id} video ${index} is invalid`);
+        }
+      }
     }
   });
 
@@ -40,13 +62,15 @@ describe('CIS 310 pre-class learning path', () => {
     const first = PRE_CLASS_MODULES[0]!;
     assert.equal(preparationModule(first.resourceId), first);
     assert.equal(preparationUrl(first.resourceId, 'reading'), first.readings[0]!.url);
-    assert.equal(preparationUrl(first.resourceId, 'video'), first.authorVideo.url);
+    assert.equal(preparationUrl(first.resourceId, 'video'), first.authorVideos[0]!.url);
+    assert.equal(preparationUrl(first.resourceId, 'video', 1), first.authorVideos[1]!.url);
     assert.equal(preparationUrl(first.resourceId, 'book-home'), TARNOFF_BOOK_HOME);
     assert.equal(preparationUrl(first.resourceId, 'author-channel'), TARNOFF_AUTHOR_CHANNEL);
     assert.equal(preparationUrl(first.resourceId, 'oer-series'), TARNOFF_OER_SERIES);
     assert.equal(preparationUrl(first.resourceId, 'lecture'), undefined);
     assert.equal(preparationUrl('../bad', 'reading'), undefined);
     assert.equal(preparationUrl(first.resourceId, 'reading', 99), undefined);
+    assert.equal(preparationUrl(first.resourceId, 'video', 99), undefined);
   });
 
   it('normalizes and toggles self-reported preparation progress without preserving unknown modules', () => {
