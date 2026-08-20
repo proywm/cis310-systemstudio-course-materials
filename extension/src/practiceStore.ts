@@ -10,6 +10,12 @@ import {
   type PreparationProgress
 } from './core/learningResources';
 import {
+  GUIDED_LABS,
+  GUIDED_LAB_PROGRESS_KEY,
+  emptyGuidedLabProgress,
+  normalizeGuidedLabProgress
+} from './core/guidedLabs';
+import {
   buildPracticeDashboard,
   attemptedPracticeQuestionsForResource,
   emptyPracticeProgress,
@@ -52,6 +58,7 @@ export class PracticeStore implements vscode.Disposable {
   getLearningPath(): LearningPathModule[] {
     const preparation = this.getPreparation();
     const practice = this.getProgress();
+    const guided = normalizeGuidedLabProgress(this.state.get<unknown>(GUIDED_LAB_PROGRESS_KEY));
     return PRE_CLASS_MODULES.map((module) => {
       const state = preparation.modules[module.resourceId];
       const practiceAttempts = Object.entries(practice.questions)
@@ -60,13 +67,24 @@ export class PracticeStore implements vscode.Disposable {
       const practiceQuestionsAttempted = attemptedPracticeQuestionsForResource(practice, module.resourceId);
       const read = state?.read ?? false;
       const watched = state?.watched ?? false;
+      const labs = GUIDED_LABS.filter((lab) => lab.resourceId === module.resourceId);
+      const completedLabs = labs.filter((lab) =>
+        lab.steps.every((step) => guided.labs[lab.id]?.completedStepIds.includes(step.id))
+      );
+      const requiredLabs = labs.filter((lab) => lab.requiredForModule);
+      const completedRequiredLabs = requiredLabs.filter((lab) => completedLabs.some((item) => item.id === lab.id));
+      const handsOnComplete = completedRequiredLabs.length === requiredLabs.length;
       return {
         ...module,
         read,
         watched,
         practiceAttempts,
         practiceQuestionsAttempted,
-        complete: preparationModuleComplete(read, watched, practiceQuestionsAttempted)
+        handsOnRequired: requiredLabs.length > 0,
+        handsOnComplete,
+        handsOnCompletedLabs: completedRequiredLabs.length,
+        handsOnTotalLabs: requiredLabs.length,
+        complete: preparationModuleComplete(read, watched, practiceQuestionsAttempted) && handsOnComplete
       };
     });
   }
@@ -100,8 +118,13 @@ export class PracticeStore implements vscode.Disposable {
   async reset(): Promise<void> {
     await Promise.all([
       this.state.update(PRACTICE_PROGRESS_KEY, emptyPracticeProgress()),
-      this.state.update(PREPARATION_PROGRESS_KEY, emptyPreparationProgress())
+      this.state.update(PREPARATION_PROGRESS_KEY, emptyPreparationProgress()),
+      this.state.update(GUIDED_LAB_PROGRESS_KEY, emptyGuidedLabProgress())
     ]);
+    this.changeEmitter.fire();
+  }
+
+  notifyExternalProgressChange(): void {
     this.changeEmitter.fire();
   }
 

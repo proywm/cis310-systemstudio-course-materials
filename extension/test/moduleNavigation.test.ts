@@ -12,6 +12,10 @@ function learningPath(): LearningPathModule[] {
     watched: index === 0,
     practiceAttempts: index === 0 ? 3 : 0,
     practiceQuestionsAttempted: index === 0 ? 3 : 0,
+    handsOnRequired: false,
+    handsOnComplete: true,
+    handsOnCompletedLabs: 0,
+    handsOnTotalLabs: 0,
     complete: index === 0
   }));
 }

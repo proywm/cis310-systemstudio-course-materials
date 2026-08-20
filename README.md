@@ -19,9 +19,11 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
 
-![SystemStudio CIS 310 Learning Center showing all 13 course modules and the Read, Watch, Try three questions preparation path](docs/images/systemstudio-learning-center.svg)
+![SystemStudio CIS 310 Learning Center showing all 13 course modules and the Read, Watch, eight-question practice, and hands-on preparation path](docs/images/systemstudio-learning-center.svg)
 
 ![SystemStudio CIS 310 self-paced tutorial showing all eight lessons at once](docs/images/systemstudio-self-paced-tutorial.svg)
+
+![The complete upstream Digital half-adder running through the in-tab noVNC transport, with a simulation input sent and the original menus, gates, wires, and indicators visible](docs/images/systemstudio-full-digital-embedded.png)
 
 ## Fall 2026 calendar
 
@@ -33,18 +35,18 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 
 - a locally packaged Fall 2026 syllabus PDF;
 - an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their reading, video, lecture, readiness-practice, and guided-lab links;
-- a self-paced Read → Watch → Try 3 questions path for every lecture topic, separating readiness sources from additional references and requiring three distinct practice questions for completion;
+- a self-paced Read → Watch → Practice → Build/trace path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
 - 13 integrity-checked presentation PDFs that open inside VS Code;
 - three homework references and three processor-project references;
-- 43 short, author-written practice questions, with at least three for each of the 13 presentation resources;
+- 104 short, evidence-mapped practice questions—exactly eight for each of the 13 presentation resources—with Bloom-level labels and full explanation/justification;
 - five-question recommended sessions, topic practice, and 10-question quiz mode;
 - explanations, related-lesson links, confidence checks, saved questions, and spaced review;
 - a local learning dashboard that reports practice evidence without estimating a grade or claiming mastery;
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
-- the complete upstream Digital v0.31 editor and simulator, streamed into VS Code on supported headless Linux hosts or opened in its native desktop window;
-- six lecture-mapped guided circuit builds, including a step-by-step half adder, with fresh non-overwriting files and local checklist progress;
+- the complete upstream Digital v0.31 editor and simulator, streamed into a VS Code tab from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS, with the native window retained only as an explicit fallback;
+- seven lecture-mapped guided circuit builds, including a step-by-step half adder and K-map implementation, with fresh non-overwriting files and local checklist progress;
 - circuit preview and deterministic testcase support;
 - actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
 - five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
@@ -65,7 +67,7 @@ code --install-extension systemstudio-cis310.vsix
 
 Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open the **SystemStudio CIS 310** activity-bar view, and start the guided tutorial.
 
-Java 8 or newer is required for Full Digital. The extension can privately prepare Xvfb/x11vnc on Debian/Ubuntu headless hosts. Real NASM requires NASM and GNU `ld`; the Debian/Ubuntu NASM package can be installed privately after confirmation. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The trace tutor has no external toolchain requirement but is explicitly not an assembler.
+Java 8 or newer is required for Full Digital on Linux and for native fallback/CLI use. On Windows/macOS, Docker Desktop supplies the pinned Java/X11 runtime used to embed upstream Digital in a VS Code tab. The extension can privately prepare Xvfb/x11vnc on Debian/Ubuntu headless hosts. Real NASM requires NASM and GNU `ld`; the Debian/Ubuntu NASM package can be installed privately after confirmation. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The trace tutor has no external toolchain requirement but is explicitly not an assembler.
 
 ## Repository layout
 

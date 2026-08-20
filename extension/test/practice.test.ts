@@ -15,10 +15,11 @@ import {
   selectPracticeQuestions,
   toggleSavedQuestion
 } from '../src/core/practice';
+import { MODULE_CONFIDENCE_QUESTION_TARGET } from '../src/core/learningResources';
 
 describe('CIS 310 formative practice', () => {
   it('ships a valid question bank covering every course topic and lecture', () => {
-    assert.ok(PRACTICE_QUESTIONS.length >= 39);
+    assert.equal(PRACTICE_QUESTIONS.length, 13 * MODULE_CONFIDENCE_QUESTION_TARGET);
     assert.equal(new Set(PRACTICE_QUESTIONS.map((question) => question.id)).size, PRACTICE_QUESTIONS.length);
     const coveredTopics = new Set(PRACTICE_QUESTIONS.map((question) => question.topicId));
     const coveredResources = new Set(PRACTICE_QUESTIONS.map((question) => question.resourceId));
@@ -33,13 +34,31 @@ describe('CIS 310 formative practice', () => {
       assert.ok(question.correctIndex >= 0 && question.correctIndex < question.options.length);
       assert.ok(question.explanation.length > 30);
       assert.ok(question.takeaway.length > 10);
+      assert.ok(['remember', 'understand', 'apply', 'analyze', 'evaluate'].includes(question.bloomLevel));
+      assert.ok(
+        question.sourceMap.readingIndexes.length > 0
+          || question.sourceMap.videoIndexes.length > 0
+          || (question.sourceMap.lectureSlides?.length ?? 0) > 0,
+        `${question.id} lacks mapped evidence`
+      );
     }
     assert.deepEqual(
       PRACTICE_QUESTIONS.reduce<number[]>((counts, question) => {
         counts[question.correctIndex] = (counts[question.correctIndex] ?? 0) + 1;
         return counts;
       }, []),
-      [11, 11, 11, 10]
+      [26, 26, 26, 26]
+    );
+    for (const resourceId of coveredResources) {
+      assert.equal(
+        PRACTICE_QUESTIONS.filter((question) => question.resourceId === resourceId).length,
+        MODULE_CONFIDENCE_QUESTION_TARGET,
+        `${resourceId} does not have a complete confidence set`
+      );
+    }
+    assert.deepEqual(
+      new Set(PRACTICE_QUESTIONS.map((question) => question.bloomLevel)),
+      new Set(['remember', 'understand', 'apply', 'analyze', 'evaluate'])
     );
   });
 
@@ -99,7 +118,8 @@ describe('CIS 310 formative practice', () => {
     const source = await readFile(path.resolve('src/practicePanel.ts'), 'utf8');
     assert.match(source, /Readiness source/);
     assert.match(source, /Additional reference/);
-    assert.match(source, /3 distinct questions tried/);
+    assert.match(source, /Five distinct questions establish readiness/);
+    assert.match(source, /Explanation and justification/);
     assert.doesNotMatch(source, /exact supporting source/i);
   });
 

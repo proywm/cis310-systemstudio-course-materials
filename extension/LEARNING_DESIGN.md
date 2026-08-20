@@ -25,13 +25,13 @@ The design combines established student-support patterns: a clean starting point
 | Observed pattern | CIS 310 adaptation | Intended student benefit |
 |---|---|---|
 | Simple dashboard and personalized suggestions | One expanded **Start Here** group and the next incomplete lecture preparation | Less scanning and less uncertainty about where to begin |
-| Video lessons and study schedule | A self-paced 13-module **Read → Watch → Try 3 questions** path with readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
+| Video lessons and study schedule | A self-paced 13-module **Read → Watch → Practice 8 questions → Build/trace** path, with transcript-checked readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
 | Lesson library | Focused Tarnoff chapter sections, targeted official author videos, and the packaged lecture for every topic | Let a student move among primary explanation, audiovisual reinforcement, and class framing |
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
 | Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
-| Guided deliberate practice | Six circuit builds and five assembly traces, each mapped to the lecture sources and structured as predict → construct/step → inspect → explain | Bridge declarative lecture knowledge to visible signal or machine-state evidence without supplying a graded artifact |
-| Full circuit construction | The complete upstream Digital application, transported into VS Code on supported headless Linux hosts or opened natively on desktop hosts | Preserve the authentic component library, interaction model, file behavior, simulation, and dialogs instead of teaching a reduced substitute |
+| Guided deliberate practice | Seven circuit builds and five assembly traces, each mapped to lecture sources and structured as predict → construct/step → inspect → explain; required work is visible within its module | Bridge declarative lecture knowledge to visible signal or machine-state evidence without supplying a graded artifact |
+| Full circuit construction | The complete upstream Digital application, transported into VS Code from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS; native launch is an explicit fallback | Preserve the authentic component library, interaction model, file behavior, simulation, and dialogs instead of teaching a reduced substitute |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
@@ -41,12 +41,13 @@ The extension does not guarantee an exam score, grade increase, mastery, or lear
 
 ## Open-book and author-video pathway
 
-The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*. Each of the 13 presentation resources maps to focused chapter readings, one or more videos from Tarnoff's official Intermation channel or ETSU OER series, one readiness prompt, and a bank of at least three related retrieval questions. A module session draws three distinct questions from that bank. This changes the default sequence from “open the slides” to:
+The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*, supplemented only where the course presentation needs a directly aligned open source (OSTEP for I/O devices and address spaces). Each of the 13 presentation resources maps to focused readings, one or more transcript-checked videos from Tarnoff's official Intermation channel or ETSU OER series, the packaged lecture PDF, one readiness prompt, exactly eight related questions, and hands-on work where appropriate. Five distinct questions establish the readiness checkpoint; all eight form the confidence set. This changes the default sequence from “open the slides” to:
 
 1. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
 2. **Watch:** begin with the author videos tagged for readiness, use the others as additional explanations, and self-mark the video step;
-3. **Retrieve:** answer three mapped questions without reopening the source; and
-4. **Bring uncertainty:** take one unresolved point or confident miss to class or to the instructor.
+3. **Retrieve:** answer five mapped questions without reopening the source, then continue to eight for broader confidence-building practice;
+4. **Build/trace:** construct and test the mapped circuit or inspect instruction-by-instruction machine state where the topic supports authentic hands-on work; and
+5. **Bring uncertainty:** take one unresolved point or confident miss to class or to the instructor.
 
 The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. The packaged lecture PDFs remain local and no Google Drive link is used.
 
@@ -64,8 +65,8 @@ The implemented scheduler and recommendation weights are conservative instructio
 
 ## Cognitive-overhead decisions
 
-- Only **Start Here** is expanded by default; specialized tools remain grouped and collapsed.
-- The primary action is the next incomplete Read → Watch → Try module; completion requires reading and video self-checks plus three distinct questions, while a five-question recommended session is the second action and customization is secondary.
+- **Course Modules** keeps all 13 module titles visible; only the selected/next module needs to be expanded. Specialized tools remain grouped and collapsed.
+- The primary action is the next incomplete Read → Watch → Practice → Build/trace module; readiness requires reading and video self-checks plus five distinct questions, and module completion also includes required hands-on work. All eight questions remain available as the confidence set.
 - Questions appear one at a time with one required choice and one confidence choice.
 - Explanations use a stable structure: outcome, explanation, takeaway, related lesson, optional reflection, next.
 - Full Digital setup, real assembly execution, the non-assembler trace tutor, learning, and help are separately labeled so an environment failure is not mistaken for a concept failure.

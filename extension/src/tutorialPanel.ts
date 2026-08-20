@@ -369,7 +369,7 @@ function tutorialStepsHtml(): string {
       ${choice('presentations', '13 bundled presentations', 'Local, integrity-checked PDFs open inside VS Code without an external document-hosting account.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
-      ${choice('practice', 'CIS 310 Learning', 'Read → Watch → Try 3 questions, custom practice, quiz mode, confidence checks, explanations, and local spaced review.')}
+      ${choice('practice', 'CIS 310 Learning', 'Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
     <div class="actions"><button data-action="open-learning" class="primary">Open Read → Watch → Practice path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
@@ -380,7 +380,7 @@ function tutorialStepsHtml(): string {
     <div class="choices">
       ${choice('check', 'Run the environment check', 'Reports Digital checksum, Java version, and workspace trust without changing the machine.')}
       ${choice('install', 'Install or verify Digital', 'After consent, installs the pinned release in extension storage and verifies its checksum.')}
-      ${choice('remote', 'Recognize the display modes', 'Both modes run upstream Digital: streamed inside VS Code on supported headless Linux, or in its native desktop window.')}
+      ${choice('remote', 'Recognize the display modes', 'The default is upstream Digital embedded in the VS Code tab: a private Linux display locally/over SSH, or an extension-managed Docker Desktop runtime on Windows/macOS. Native Digital is an explicit fallback.')}
     </div>
     <div class="actions"><button data-action="check-digital" class="secondary">Try: Check environment</button><button data-action="setup-digital" class="secondary">Try: Install / verify</button></div>
   </div></section>

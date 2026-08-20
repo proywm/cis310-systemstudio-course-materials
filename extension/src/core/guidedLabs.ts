@@ -1,4 +1,5 @@
 export const GUIDED_LAB_PROGRESS_VERSION = 1;
+export const GUIDED_LAB_PROGRESS_KEY = 'guidedLabs.progress.v1';
 
 export type GuidedLabKind = 'circuit' | 'assembly';
 
@@ -26,6 +27,7 @@ export interface GuidedLab {
   title: string;
   lectureLabel: string;
   resourceId: string;
+  requiredForModule: boolean;
   sourceReadingIndex: number;
   sourceVideoIndex: number;
   purpose: string;
@@ -54,6 +56,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'circuit-boolean-path', kind: 'circuit', title: 'Boolean path from expression to gates',
     lectureLabel: 'Lecture 3', resourceId: 'lecture-03', sourceReadingIndex: 0, sourceVideoIndex: 0,
+    requiredForModule: true,
     purpose: 'Turn a small Boolean expression into a testable gate network before using K-maps or larger components.',
     boundary: 'This practice expression is deliberately different from the current homework expressions.',
     artifact: { kind: 'circuit', fileName: 'guided-boolean-path.dig' },
@@ -70,6 +73,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'circuit-half-adder', kind: 'circuit', title: 'Build and verify a half adder',
     lectureLabel: 'Lecture 2', resourceId: 'lecture-02', sourceReadingIndex: 2, sourceVideoIndex: 2,
+    requiredForModule: true,
     purpose: 'Connect one-bit binary addition to separate Sum and Carry signals before attempting a full or multi-bit adder.',
     boundary: 'This prerequisite half-adder lab does not provide the full-adder or four-bit-adder required by Homework 1.',
     artifact: { kind: 'circuit', fileName: 'guided-half-adder.dig' },
@@ -84,8 +88,26 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     reflection: 'What additional input and logic would a full adder need, without drawing the full assignment solution?'
   },
   {
+    id: 'circuit-kmap-implementation', kind: 'circuit', title: 'Implement and verify a minimized K-map function',
+    lectureLabel: 'Lecture 4', resourceId: 'lecture-04', sourceReadingIndex: 0, sourceVideoIndex: 1,
+    requiredForModule: true,
+    purpose: 'Connect a legal K-map grouping to a smaller gate implementation and verify that simplification preserved every truth-table row.',
+    boundary: 'The practice function F(A,B,C)=Σm(1,3,5,7) is fixed here and is not a current homework or project function.',
+    artifact: { kind: 'circuit', fileName: 'guided-kmap-implementation.dig' },
+    steps: [
+      circuitStep('map', 'Complete the K-map before building', 'Place 1s at minterms 1, 3, 5, and 7 using Gray-code column order. Identify the largest legal group and write the resulting term.', 'A four-cell group and the prediction F=C.'),
+      circuitStep('table', 'Write the verification table', 'List all eight A,B,C input combinations and predict F from both the minterm list and the simplified expression.', 'Eight paired predictions with no disagreement.'),
+      circuitStep('interface', 'Create and label the interface', 'Create inputs A, B, C and output F in Full Digital. Keep all three inputs visible even when the minimized circuit does not need every signal.', 'A clearly labeled three-input interface.'),
+      circuitStep('build', 'Build the minimized circuit', 'Implement the term produced by the K-map rather than rebuilding four separate minterms. Connect the result to F.', 'A circuit whose structure matches the minimized expression.'),
+      circuitStep('test', 'Simulate every row', 'Toggle all eight input combinations and record observed F beside both predictions. Repair any mismatch before marking the step complete.', 'Eight observed values matching the truth table.'),
+      circuitStep('compare', 'Compare implementations', 'Estimate the gates and gate inputs required by canonical SOP versus the minimized implementation, then explain why A and B disappear.', 'A cost comparison and a constant-variable explanation tied to the K-map group.')
+    ],
+    reflection: 'Which evidence proves the smaller circuit is equivalent rather than merely plausible?'
+  },
+  {
     id: 'circuit-mux', kind: 'circuit', title: 'Build a 2-to-1 data selector',
     lectureLabel: 'Lecture 5', resourceId: 'lecture-05', sourceReadingIndex: 1, sourceVideoIndex: 2,
+    requiredForModule: true,
     purpose: 'Make selection behavior visible before multiplexers are used inside registers, buses, and an ALU.',
     boundary: 'The lab uses one-bit inputs and does not construct the project register-file read ports.',
     artifact: { kind: 'circuit', fileName: 'guided-2to1-selector.dig' },
@@ -102,6 +124,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'circuit-state-bit', kind: 'circuit', title: 'Observe one stored state bit',
     lectureLabel: 'Lecture 6', resourceId: 'lecture-06', sourceReadingIndex: 0, sourceVideoIndex: 0,
+    requiredForModule: true,
     purpose: 'Separate data, clock, and stored output before building counters or multi-bit registers.',
     boundary: 'This single-bit observation lab is smaller than Homework 2 and the project register components.',
     artifact: { kind: 'circuit', fileName: 'guided-state-bit.dig' },
@@ -118,6 +141,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'circuit-address-decoder', kind: 'circuit', title: 'Explore a 2-to-4 address decoder',
     lectureLabel: 'Lecture 7', resourceId: 'lecture-07', sourceReadingIndex: 0, sourceVideoIndex: 0,
+    requiredForModule: true,
     purpose: 'Relate address bits to one selected device or location before integrating memory.',
     boundary: 'This uses four visible output indicators and does not implement project DRAM or a processor memory system.',
     artifact: { kind: 'circuit', fileName: 'guided-address-decoder.dig' },
@@ -134,6 +158,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'circuit-alu-slice', kind: 'circuit', title: 'Build a small arithmetic/logic selector',
     lectureLabel: 'Lecture 10', resourceId: 'lecture-10', sourceReadingIndex: 0, sourceVideoIndex: 0,
+    requiredForModule: true,
     purpose: 'See how an operation selector chooses between independently verified arithmetic and logic paths.',
     boundary: 'This one-bit ADD/XOR selector is an analogous practice component, not the multi-operation ALU required by Project 2.',
     artifact: { kind: 'circuit', fileName: 'guided-alu-slice.dig' },
@@ -150,6 +175,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'assembly-register-arithmetic', kind: 'assembly', title: 'Trace register arithmetic',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
+    requiredForModule: true,
     purpose: 'Connect MOV and ADD source statements to EAX and arithmetic flags.',
     boundary: 'The bundled example uses original constants and is not a solution to Homework 3.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/AddTwo.asm', profile: 'irvine32' },
@@ -166,6 +192,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'assembly-flags-branch', kind: 'assembly', title: 'Compare, inspect flags, and branch',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 3,
+    requiredForModule: false,
     purpose: 'Observe how CMP updates flags and a conditional jump changes EIP.',
     boundary: 'The example is a standalone signed-comparison trace, not submitted assignment code.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/FlagsBranch.asm', profile: 'irvine32' },
@@ -182,6 +209,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'assembly-memory-loop', kind: 'assembly', title: 'Walk an array with a counted loop',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
+    requiredForModule: false,
     purpose: 'Connect ESI addresses, ECX loop count, memory values, and an EAX accumulator.',
     boundary: 'The NASM example sums a fixed original array and does not answer a current homework prompt.',
     artifact: { kind: 'assembly', relativePath: 'nasm-ia32/LoopSum.asm', profile: 'nasm-ia32' },
@@ -198,6 +226,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'assembly-stack-call', kind: 'assembly', title: 'Trace a call and stack frame',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 2,
+    requiredForModule: false,
     purpose: 'Observe CALL, a saved register, a frame pointer, RET, and restoration of ESP.',
     boundary: 'The small procedure is an original trace example, not a project implementation.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/StackCall.asm', profile: 'irvine32' },
@@ -214,6 +243,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
   {
     id: 'assembly-console-input', kind: 'assembly', title: 'Use virtual console input safely',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 0,
+    requiredForModule: false,
     purpose: 'Trace Irvine-style input contracts without OS-specific setup or a shared instructor credential.',
     boundary: 'Input remains in the bounded trace-tutor model and the example is not a submitted program.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/ConsoleInput.asm', profile: 'irvine32' },

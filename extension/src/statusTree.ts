@@ -62,7 +62,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         return [
           describedActionItem(
             nextPreparation ? `Prepare ${nextPreparation.lectureLabel}` : 'Review my completed preparation path',
-            nextPreparation ? 'open book · author video · 3 questions' : '13 lecture modules checked',
+            nextPreparation ? 'open book · author video · 8-question bank · hands-on where assigned' : '13 lecture modules checked',
             'systemstudioCis310.openPracticeCenter',
             'book'
           ),
@@ -104,7 +104,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Build with guided labs',
-            '6 circuits · 5 assembly traces · self-paced',
+            '7 circuits · 5 assembly traces · self-paced',
             'systemstudioCis310.openGuidedLabs',
             'tools'
           ),
@@ -222,16 +222,23 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
   private async environmentItems(): Promise<StatusNode[]> {
     const status = await this.manager.getStatus();
+    const containerPlatform = process.platform === 'win32' || process.platform === 'darwin';
     const java = new vscode.TreeItem(
       status.java.supported
         ? `Java ${status.java.version?.raw ?? ''}: ready`
         : status.java.available
           ? `Java ${status.java.version?.raw ?? 'unknown'}: unsupported`
-          : 'Java: not found',
+          : containerPlatform
+            ? 'Host Java: not found (embedded Digital still available)'
+            : 'Java: not found',
       vscode.TreeItemCollapsibleState.None
     );
-    java.iconPath = new vscode.ThemeIcon(status.java.supported ? 'pass-filled' : 'warning');
-    java.description = status.java.supported ? status.java.executable : `requires Java ${MINIMUM_JAVA_MAJOR}+`;
+    java.iconPath = new vscode.ThemeIcon(status.java.supported ? 'pass-filled' : containerPlatform ? 'info' : 'warning');
+    java.description = status.java.supported
+      ? status.java.executable
+      : containerPlatform
+        ? 'container supplies Java · host Java for CLI/fallback'
+        : `requires Java ${MINIMUM_JAVA_MAJOR}+`;
     java.command = { command: 'systemstudioCis310.checkEnvironment', title: 'Check CIS 310 environment' };
 
     const trust = new vscode.TreeItem(

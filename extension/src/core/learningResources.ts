@@ -2,6 +2,9 @@ export const PREPARATION_PROGRESS_VERSION = 1;
 export const TARNOFF_BOOK_HOME = 'https://faculty.etsu.edu/tarnoff/138292/';
 export const TARNOFF_AUTHOR_CHANNEL = 'https://www.youtube.com/@Intermation';
 export const TARNOFF_OER_SERIES = 'https://dc.etsu.edu/computer-organization-design-oer/';
+export const OSTEP_ADDRESS_SPACES = 'https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf';
+export const MODULE_READINESS_QUESTION_TARGET = 5;
+export const MODULE_CONFIDENCE_QUESTION_TARGET = 8;
 
 export type PreparationField = 'read' | 'watched';
 export type PreparationTarget = 'reading' | 'video' | 'lecture' | 'book-home' | 'author-channel' | 'oer-series';
@@ -50,6 +53,10 @@ export interface LearningPathModule extends PreClassModule {
   watched: boolean;
   practiceAttempts: number;
   practiceQuestionsAttempted: number;
+  handsOnRequired: boolean;
+  handsOnComplete: boolean;
+  handsOnCompletedLabs: number;
+  handsOnTotalLabs: number;
   complete: boolean;
 }
 
@@ -58,19 +65,18 @@ const chapter = (number: number): string => `https://faculty.etsu.edu/tarnoff/nt
 export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   {
     resourceId: 'lecture-01', lectureLabel: 'Lecture 1', title: 'Introduction and Data Representation',
-    focus: 'Why hardware matters; digital signals; binary and hexadecimal representation.',
+    focus: 'How source code reaches hardware; abstraction; digital representation; binary and hexadecimal.',
     readings: [
-      { title: 'Tarnoff Chapter 1 — Digital Signals and Systems', focus: '§§1.2–1.7: digital signals and binary states', url: chapter(1) },
-      { title: 'Tarnoff Chapter 2 — Numbering Systems', focus: '§2.7: hexadecimal and binary grouping', url: chapter(2) },
-      { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§§15.1–15.4: architecture and CPU components', url: chapter(15) }
+      { title: 'Tarnoff Chapter 1 — Digital Signals and Systems', focus: '§§1.1–1.5: why hardware matters and discrete digital representation', url: chapter(1) },
+      { title: 'Tarnoff Chapter 2 — Numbering Systems', focus: '§§2.1–2.4 and §2.7: binary place value, conversion, and hexadecimal grouping', url: chapter(2) }
     ],
     authorVideos: [
-      { title: 'Ep 001: Pulse Trains and the Digital Signal', focus: 'Digital states and pulse trains', url: 'https://www.youtube.com/watch?v=2jfoLxQXq3Y' },
-      { title: 'Ep 006: Hexadecimal Conversion', focus: 'Four-bit binary groups and hexadecimal', url: 'https://www.youtube.com/watch?v=HoZ8_UIziX8' },
-      { title: 'Ep 079: Basic CPU Architecture and Instruction Execution', focus: 'CPU components and instruction decoding', url: 'https://www.youtube.com/watch?v=YNAcQ-uVM7Y' }
+      { title: 'Ep 001: Pulse Trains and the Digital Signal', focus: 'Optional signal vocabulary: levels, edges, pulse width, and period', url: 'https://www.youtube.com/watch?v=2jfoLxQXq3Y' },
+      { title: 'Ep 004: Binary to Decimal Conversion', focus: 'Readiness: binary place value and conversion', url: 'https://www.youtube.com/watch?v=hBdGOb8w4DA' },
+      { title: 'Ep 006: Hexadecimal Conversion', focus: 'Readiness: four-bit binary groups and hexadecimal', url: 'https://www.youtube.com/watch?v=HoZ8_UIziX8' }
     ],
-    readinessPrompt: 'Can I identify a digital signal and convert a short value between binary and hexadecimal?',
-    readinessSources: { readingIndexes: [0, 1], videoIndexes: [0, 1] }
+    readinessPrompt: 'Can I trace the source-to-hardware abstraction and convert short values among binary, decimal, and hexadecimal?',
+    readinessSources: { readingIndexes: [0, 1], videoIndexes: [1, 2] }
   },
   {
     resourceId: 'lecture-02', lectureLabel: 'Lecture 2', title: 'Signed Data, Boolean Logic, and Adders',
@@ -78,12 +84,15 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
     readings: [
       { title: 'Tarnoff Chapter 2 — Numbering Systems', focus: '§§2.3–2.5: unsigned binary range and conversion', url: chapter(2) },
       { title: 'Tarnoff Chapter 3 — Binary Math and Signed Representations', focus: '§§3.1–3.3', url: chapter(3) },
-      { title: 'Tarnoff Chapter 8 — Combinational Logic Applications', focus: '§8.1: half adders and full adders', url: chapter(8) }
+      { title: 'Tarnoff Chapter 8 — Combinational Logic Applications', focus: '§8.1: half adders and full adders', url: chapter(8) },
+      { title: 'Tarnoff Chapter 5 — Boolean Algebra', focus: '§§5.2–5.3: gate symbols, Boolean expressions, and truth tables', url: chapter(5) }
     ],
     authorVideos: [
       { title: 'Ep 004: Binary to Decimal Conversion', focus: 'Unsigned range and place value', url: 'https://www.youtube.com/watch?v=hBdGOb8w4DA' },
       { title: 'Ep 014: Two’s Complement Notation Example and Shortcut', focus: 'Fixed-width negative values', url: 'https://www.youtube.com/watch?v=Ix8mP_xneFc' },
-      { title: 'Ep 012: Binary Addition and Subtraction', focus: 'Sum and carry in binary addition', url: 'https://www.youtube.com/watch?v=YyxlNN8l0zw' }
+      { title: 'Ep 012: Binary Addition and Subtraction', focus: 'Sum and carry in binary addition', url: 'https://www.youtube.com/watch?v=YyxlNN8l0zw' },
+      { title: 'Episode 4.01: Intro to Logic Gates (ETSU OER video and transcript)', focus: 'AND, OR, XOR, and inverter behavior', url: 'https://dc.etsu.edu/computer-organization-design-oer/29/' },
+      { title: 'Episode 4.02: Truth Tables (ETSU OER video and transcript)', focus: 'Truth tables and evidence for logical equivalence', url: 'https://dc.etsu.edu/computer-organization-design-oer/30/' }
     ],
     readinessPrompt: 'Can I represent a negative fixed-width value and predict the sum and carry of a one-bit addition?',
     readinessSources: { readingIndexes: [1, 2], videoIndexes: [1, 2] }
@@ -161,20 +170,22 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-08', lectureLabel: 'Lecture 8', title: 'Memory-Mapped I/O and Polling',
-    focus: 'Peripheral interfaces, memory-mapped device registers, status flags, and polling cost.',
+    focus: 'Peripheral interfaces, memory-mapped device registers, polling, interrupts, and asynchronous I/O at an introductory level.',
     readings: [
-      { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§§15.9.1–15.9.2: device registers, memory-mapped I/O, and polling', url: chapter(15) }
+      { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§§15.9.1–15.9.3: device registers, memory-mapped I/O, polling, and interrupts', url: chapter(15) },
+      { title: 'OSTEP — I/O Devices', focus: '§36: canonical device interface/protocol, polling, interrupts, and DMA', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/file-devices.pdf' }
     ],
     authorVideos: [
       { title: 'Ep 086: Introduction to Input/Output', focus: 'I/O interfaces and memory-mapped devices', url: 'https://www.youtube.com/watch?v=nnO2OfSTVbA' },
-      { title: 'Ep 087: Using Polled I/O with a Memory-Mapped Device', focus: 'Status checks, configuration/control, and data transfer', url: 'https://www.youtube.com/watch?v=xNH1e5snIEY' }
+      { title: 'Ep 087: Using Polled I/O with a Memory-Mapped Device', focus: 'Status checks, configuration/control, and data transfer', url: 'https://www.youtube.com/watch?v=xNH1e5snIEY' },
+      { title: 'Ep 088: Introduction to Interrupts', focus: 'Event-driven device notification and CPU work overlap', url: 'https://www.youtube.com/watch?v=dDA3PUr16As' }
     ],
     readinessPrompt: 'Can I explain what a status register communicates and why polling can waste processor time?',
-    readinessSources: { readingIndexes: [0], videoIndexes: [1] }
+    readinessSources: { readingIndexes: [0, 1], videoIndexes: [1, 2] }
   },
   {
     resourceId: 'lecture-08-supplement', lectureLabel: 'Lecture 8 supplement', title: 'Detailed I/O and Memory',
-    focus: 'Memory-mapped devices, polling evidence, interrupt setup, and I/O data movement.',
+    focus: 'Selected foundations only: memory-mapped devices, polling evidence, interrupt setup, DMA, and volatile versus persistent memory. Advanced protocols, priority inversion, cache coherence, and emerging-memory slides are enrichment.',
     readings: [
       { title: 'Tarnoff Chapter 12 — Memory Organization', focus: '§12.4 memory-mapped I/O', url: chapter(12) },
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§15.9.1–15.9.4', url: chapter(15) }
@@ -214,7 +225,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-11', lectureLabel: 'Lecture 11', title: 'Processor Pipelining',
-    focus: 'Fetch/decode/execute overlap, throughput, stage timing, and control-flow disruption.',
+    focus: 'Core slides 1–44: stage overlap, throughput, clock timing, and structural/data/control hazards. Slides 45–58 on multiple issue and speculation are optional enrichment.',
     readings: [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§15.8 pipelined architectures', url: chapter(15) }
     ],
@@ -226,11 +237,12 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
   },
   {
     resourceId: 'lecture-12', lectureLabel: 'Lecture 12', title: 'x86 Registers, Flags, Stack, and Calls',
-    focus: '80x86 data registers, EIP, flags, stack behavior, CALL, and RET.',
+    focus: 'Process address spaces, virtual-to-physical mapping, program segments, x86 registers, EIP, flags, stack behavior, CALL, and RET.',
     readings: [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§15.2.5: stack organization', url: chapter(15) },
       { title: 'Tarnoff Chapter 16 — Intel 80x86 Processor', focus: '§§16.2.1–16.2.3: registers, instruction pointer, stack pointer, and flags', url: chapter(16) },
-      { title: 'Tarnoff Chapter 17 — Intel 80x86 Assembly Language', focus: '§§17.4.1–17.4.3: control flow, CALL, and RET', url: chapter(17) }
+      { title: 'Tarnoff Chapter 17 — Intel 80x86 Assembly Language', focus: '§§17.1–17.4.3: source translation, data transfer, control flow, CALL, and RET', url: chapter(17) },
+      { title: 'OSTEP — The Abstraction: Address Spaces', focus: '§13: process address space, code, static data, heap, stack, and memory virtualization', url: OSTEP_ADDRESS_SPACES }
     ],
     authorVideos: [
       { title: 'Ep 080: Data Registers and the Program Counter', focus: 'EAX subregisters and EIP', url: 'https://www.youtube.com/watch?v=th8FnKQNIYE' },
@@ -289,7 +301,7 @@ export function preparationModule(resourceId: string): PreClassModule | undefine
 }
 
 export function preparationModuleComplete(read: boolean, watched: boolean, attemptedQuestions: number): boolean {
-  return read && watched && attemptedQuestions >= 3;
+  return read && watched && attemptedQuestions >= MODULE_READINESS_QUESTION_TARGET;
 }
 
 export function preparationUrl(resourceId: string, target: PreparationTarget, sourceIndex = 0): string | undefined {

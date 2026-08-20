@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.13.0
+
+- Expanded the evidence-mapped practice bank from 43 to 104 questions: exactly eight per module, a five-question readiness checkpoint, balanced answer positions, Bloom-level labels from Remember through Evaluate, and explanation/justification with reading, video, and lecture-slide evidence.
+- Moved the prerequisite-heavy CPU architecture/instruction-execution video out of Module 1 and retained it with the later CPU module after transcript review; added direct open readings/videos where the prior source set did not sufficiently cover logic/truth tables, I/O, or address spaces.
+- Integrated required circuit or assembly activities into the corresponding module status and added a K-map-to-Digital construction lab. Create-level outcomes now live in authentic hands-on work rather than multiple-choice claims.
+- Added an extension-managed Docker Desktop runtime on Windows/macOS that runs the unmodified upstream Digital application and streams it into the VS Code tab. Linux retains its private X11/noVNC path; native Digital is an explicit fallback.
+- Updated the module dashboard, course map, FAQ, screenshot, learning-design rationale, and content-alignment audit for the eight-question and hands-on workflow.
+
 ## 0.12.0
 
 - Added an expanded **Course Modules** sidebar section that keeps all 13 sequential modules visible, with completed-module count and per-module progress.

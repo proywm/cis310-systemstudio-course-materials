@@ -1,5 +1,6 @@
 import { preparationModule } from './learningResources';
 import { guidedLab } from './guidedLabs';
+import { EXPANDED_PRACTICE_QUESTIONS } from './expandedPracticeQuestions';
 
 export const PRACTICE_PROGRESS_VERSION = 1;
 
@@ -16,6 +17,7 @@ export type PracticeFocus = 'recommended' | 'due' | 'saved' | 'all';
 export type PracticeConfidence = 'low' | 'medium' | 'high';
 export type PracticeReflection = 'concept' | 'careless' | 'guessed' | 'need-help';
 export type PracticeDifficulty = 'foundation' | 'application';
+export type PracticeBloomLevel = 'remember' | 'understand' | 'apply' | 'analyze' | 'evaluate';
 
 export interface PracticeTopic {
   id: PracticeTopicId;
@@ -30,6 +32,7 @@ export interface PracticeQuestion {
   topicId: PracticeTopicId;
   resourceId: string;
   difficulty: PracticeDifficulty;
+  bloomLevel: PracticeBloomLevel;
   prompt: string;
   options: readonly string[];
   correctIndex: number;
@@ -39,8 +42,13 @@ export interface PracticeQuestion {
   sourceMap: {
     readingIndexes: readonly number[];
     videoIndexes: readonly number[];
+    lectureSlides?: readonly number[];
   };
 }
+
+export type PracticeQuestionSeed = Omit<PracticeQuestion, 'bloomLevel'> & {
+  bloomLevel?: PracticeBloomLevel;
+};
 
 export interface QuestionLearningProgress {
   attempts: number;
@@ -197,7 +205,7 @@ export const PRACTICE_TOPICS: readonly PracticeTopic[] = [
   }
 ] as const;
 
-export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
+const BASE_PRACTICE_QUESTIONS: readonly PracticeQuestionSeed[] = [
   {
     id: 'arch-digital-signal', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
     prompt: 'Which description best matches a digital signal?',
@@ -216,7 +224,7 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     hint: 'Convert 1010₂ to decimal, then use the corresponding base-16 digit.',
     explanation: 'The binary pattern 1010 has value 10, which is written A in hexadecimal. Each hexadecimal digit corresponds to exactly four binary bits.',
     takeaway: 'Group binary into four-bit nibbles to convert directly to hexadecimal.',
-    sourceMap: { readingIndexes: [1], videoIndexes: [1] }
+    sourceMap: { readingIndexes: [1], videoIndexes: [2] }
   },
   {
     id: 'data-unsigned-range', topicId: 'architecture-data', resourceId: 'lecture-02', difficulty: 'foundation',
@@ -559,14 +567,14 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     sourceMap: { readingIndexes: [1], videoIndexes: [3] }
   },
   {
-    id: 'arch-instruction-decoder', topicId: 'architecture-data', resourceId: 'lecture-01', difficulty: 'foundation',
+    id: 'arch-instruction-decoder', topicId: 'processor', resourceId: 'lecture-10', difficulty: 'foundation',
     prompt: 'Which CPU component interprets the operation encoded in the fetched instruction?',
     options: ['Instruction decoder', 'Data bus', 'Clock oscillator', 'Cache block'],
     correctIndex: 0,
     hint: 'The instruction register holds the instruction; another component examines its fields.',
     explanation: 'The instruction decoder examines the fetched instruction and identifies the operation and operand-related control needs for execution.',
     takeaway: 'The instruction register holds the instruction; the decoder interprets it.',
-    sourceMap: { readingIndexes: [2], videoIndexes: [2] }
+    sourceMap: { readingIndexes: [0], videoIndexes: [0], lectureSlides: [7, 9, 25] }
   },
   {
     id: 'logic-kmap-wraparound', topicId: 'combinational-logic', resourceId: 'lecture-04', difficulty: 'application',
@@ -629,6 +637,29 @@ export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
     sourceMap: { readingIndexes: [0], videoIndexes: [0] }
   }
 ] as const;
+
+const UNBALANCED_PRACTICE_QUESTIONS: readonly PracticeQuestion[] = [
+  ...BASE_PRACTICE_QUESTIONS.map((question): PracticeQuestion => ({
+    ...question,
+    bloomLevel: question.bloomLevel ?? (question.difficulty === 'foundation' ? 'understand' : 'apply')
+  })),
+  ...EXPANDED_PRACTICE_QUESTIONS
+] as const;
+
+// Rotate answer positions deterministically so a learner cannot exploit an
+// authoring-order pattern. The question meaning and distractors are unchanged.
+export const PRACTICE_QUESTIONS: readonly PracticeQuestion[] = UNBALANCED_PRACTICE_QUESTIONS.map(
+  (question, index): PracticeQuestion => {
+    const desiredCorrectIndex = index % question.options.length;
+    const shift = (question.correctIndex - desiredCorrectIndex + question.options.length) % question.options.length;
+    if (shift === 0) return question;
+    return {
+      ...question,
+      options: [...question.options.slice(shift), ...question.options.slice(0, shift)],
+      correctIndex: (question.correctIndex - shift + question.options.length) % question.options.length
+    };
+  }
+);
 
 const QUESTION_BY_ID = new Map(PRACTICE_QUESTIONS.map((question) => [question.id, question]));
 const TOPIC_IDS = new Set(PRACTICE_TOPICS.map((topic) => topic.id));

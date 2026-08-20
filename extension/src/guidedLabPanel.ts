@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import * as vscode from 'vscode';
 import {
   GUIDED_LABS,
+  GUIDED_LAB_PROGRESS_KEY,
   guidedLab,
   normalizeGuidedLabProgress,
   parseGuidedLabRequest,
@@ -10,15 +11,14 @@ import {
   type GuidedLabProgress
 } from './core/guidedLabs';
 import { preparationModule, preparationUrl } from './core/learningResources';
-
-const PROGRESS_KEY = 'guidedLabs.progress.v1';
+import type { PracticeStore } from './practiceStore';
 
 export class GuidedLabPanel implements vscode.Disposable {
   private static current: GuidedLabPanel | undefined;
   private readonly disposables: vscode.Disposable[] = [];
   private progress: GuidedLabProgress;
 
-  static async show(context: vscode.ExtensionContext, initialLabId?: string): Promise<void> {
+  static async show(context: vscode.ExtensionContext, practiceStore: PracticeStore, initialLabId?: string): Promise<void> {
     const initialLab = initialLabId ? guidedLab(initialLabId) : undefined;
     if (GuidedLabPanel.current) {
       GuidedLabPanel.current.panel.reveal(vscode.ViewColumn.One, false);
@@ -27,13 +27,17 @@ export class GuidedLabPanel implements vscode.Disposable {
       }
       return;
     }
-    GuidedLabPanel.current = new GuidedLabPanel(context, initialLab?.id);
+    GuidedLabPanel.current = new GuidedLabPanel(context, practiceStore, initialLab?.id);
   }
 
   private readonly panel: vscode.WebviewPanel;
 
-  private constructor(private readonly context: vscode.ExtensionContext, initialLabId?: string) {
-    this.progress = normalizeGuidedLabProgress(context.globalState.get(PROGRESS_KEY));
+  private constructor(
+    private readonly context: vscode.ExtensionContext,
+    private readonly practiceStore: PracticeStore,
+    initialLabId?: string
+  ) {
+    this.progress = normalizeGuidedLabProgress(context.globalState.get(GUIDED_LAB_PROGRESS_KEY));
     this.panel = vscode.window.createWebviewPanel(
       'systemstudioCis310.guidedLabs',
       'CIS 310 Hands-on Lab Center',
@@ -82,7 +86,8 @@ export class GuidedLabPanel implements vscode.Disposable {
   }
 
   private async saveAndPostProgress(): Promise<void> {
-    await this.context.globalState.update(PROGRESS_KEY, this.progress);
+    await this.context.globalState.update(GUIDED_LAB_PROGRESS_KEY, this.progress);
+    this.practiceStore.notifyExternalProgressChange();
     await this.panel.webview.postMessage({ type: 'progress', progress: this.progress });
   }
 

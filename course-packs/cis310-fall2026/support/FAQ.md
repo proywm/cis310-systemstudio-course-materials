@@ -4,7 +4,7 @@ These answers address recurring, anonymized themes in prior CIS 310 student ques
 
 ## Where do I begin?
 
-Open **Start Here** in SystemStudio. Complete the next **Read → Watch → Try 3 questions** module, then open the matching Canvas module for current instructions. Use the packaged lecture as the instructor's framing, not as a replacement for the required open book.
+Open **Course Modules** in SystemStudio. Complete the next **Read → Watch → Practice → Build/trace** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's framing, not as a replacement for the required open book.
 
 ## I cannot see an assignment, lecture video, or final-demonstration instructions in Canvas.
 
@@ -36,7 +36,7 @@ Yes. Expand the matching **Course Modules** entry and choose its build activity,
 
 ## Is the circuit editor a simplified copy of Digital?
 
-No. SystemStudio runs the unmodified upstream Digital v0.31 application. On supported headless Linux/Remote SSH hosts, it transports Digital’s real Swing desktop into the VS Code tab. Windows and macOS use Digital’s native desktop window. The read-only preview is generated separately by Digital’s official exporter.
+No. SystemStudio runs the unmodified upstream Digital v0.31 application. Linux/Remote SSH hosts transport Digital’s real Swing desktop into the VS Code tab; Windows and macOS stream the same application from an extension-managed Docker Desktop container. The native desktop window is an explicit fallback. The read-only preview is generated separately by Digital’s official exporter.
 
 The transported desktop is a graphical canvas: it forwards keyboard and pointer input but does not expose component-level Swing semantics to a VS Code screen reader. It is not a screen-reader-equivalent circuit editor. If this creates an access barrier, contact the instructor promptly for an accessible alternative and evaluate native Digital with the assistive technology available on your platform.
 

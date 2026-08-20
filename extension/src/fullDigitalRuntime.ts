@@ -14,12 +14,15 @@ import { createVncWebSocketBridge } from './core/vncWebSocketBridge';
 const DISPLAY_WIDTH = 1440;
 const DISPLAY_HEIGHT = 900;
 const START_TIMEOUT_MS = 15_000;
+const CONTAINER_START_TIMEOUT_MS = 60_000;
+const CONTAINER_IMAGE = 'systemstudio-cis310-full-digital:0.31';
 
 export interface FullDigitalSession {
   readonly id: string;
   readonly circuitPath: string;
   readonly websocketUri: vscode.Uri;
   readonly display: string;
+  readonly transport: 'local-linux' | 'docker';
   readonly digital: ChildProcess;
 }
 
@@ -31,17 +34,21 @@ interface DisplayTools {
 }
 
 interface OwnedSession extends FullDigitalSession {
-  xvfb: ChildProcess;
-  vnc: ChildProcess;
+  xvfb?: ChildProcess;
+  vnc?: ChildProcess;
+  containerName?: string;
+  dockerExecutable?: string;
   bridge: HttpServer;
   sockets: Set<WebSocket>;
 }
 
 /**
  * Runs the unmodified upstream Digital Swing application on a private X11
- * display and transports that display to a VS Code webview with VNC. The
- * circuit editor itself is Digital; SystemStudio does not reinterpret the
- * circuit model or replace Digital controls.
+ * display and transports that display to a VS Code webview with VNC. Linux
+ * uses host/private display tools; Windows and macOS use an extension-managed
+ * Docker Desktop image containing Java and those display tools. The circuit
+ * editor itself is Digital; SystemStudio does not reinterpret the circuit
+ * model or replace Digital controls.
  */
 export class FullDigitalRuntime implements vscode.Disposable {
   private readonly sessions = new Map<string, Promise<OwnedSession>>();
@@ -54,12 +61,12 @@ export class FullDigitalRuntime implements vscode.Disposable {
   ) {}
 
   get supported(): boolean {
-    return process.platform === 'linux';
+    return process.platform === 'linux' || process.platform === 'win32' || process.platform === 'darwin';
   }
 
   async open(circuitPath: string): Promise<FullDigitalSession> {
     if (!this.supported) {
-      throw new Error('The in-editor Full Digital desktop currently supports Linux extension hosts. Use the native Digital window on Windows or macOS.');
+      throw new Error('The in-editor Full Digital desktop requires a desktop Linux, Windows, or macOS extension host.');
     }
     if (this.disposed) throw new Error('The Full Digital runtime has already stopped.');
     const key = path.resolve(circuitPath);
@@ -96,6 +103,12 @@ export class FullDigitalRuntime implements vscode.Disposable {
   }
 
   private async start(circuitPath: string): Promise<OwnedSession> {
+    return process.platform === 'linux'
+      ? this.startLinux(circuitPath)
+      : this.startContainer(circuitPath);
+  }
+
+  private async startLinux(circuitPath: string): Promise<OwnedSession> {
     await access(circuitPath, fsConstants.R_OK | fsConstants.W_OK);
     const tools = await this.ensureDisplayTools();
     const displayNumber = await availableDisplayNumber();
@@ -156,6 +169,7 @@ export class FullDigitalRuntime implements vscode.Disposable {
         circuitPath,
         websocketUri,
         display,
+        transport: 'local-linux',
         digital,
         xvfb,
         vnc,
@@ -184,6 +198,119 @@ export class FullDigitalRuntime implements vscode.Disposable {
       terminate(xvfb);
       throw error;
     }
+  }
+
+  private async startContainer(circuitPath: string): Promise<OwnedSession> {
+    await access(circuitPath, fsConstants.R_OK | fsConstants.W_OK);
+    const docker = await this.ensureContainerImage();
+    const vncPort = await availableTcpPort();
+    const token = randomBytes(24).toString('hex');
+    const containerName = `systemstudio-digital-${randomBytes(8).toString('hex')}`;
+    const circuitDirectory = path.dirname(circuitPath);
+    const circuitName = path.basename(circuitPath);
+    const args = [
+      'run', '--rm', '--name', containerName,
+      '--cap-drop=ALL', '--security-opt', 'no-new-privileges',
+      '--pids-limit', '256', '--memory', '1g',
+      '--tmpfs', '/tmp:rw,noexec,nosuid,size=256m',
+      '--tmpfs', '/home/digital:rw,nosuid,size=64m',
+      '-p', `127.0.0.1:${vncPort}:5900`,
+      '-v', `${this.digitalManager.digitalHome}:/opt/digital:ro`,
+      '-v', `${circuitDirectory}:/workspace:rw`,
+      CONTAINER_IMAGE,
+      `/workspace/${circuitName}`
+    ];
+    const container = spawn(docker, args, {
+      shell: false,
+      windowsHide: true,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    logProcess(container, 'Full Digital container', this.output);
+
+    let bridge: HttpServer | undefined;
+    try {
+      await waitForSpawn(container, 'Docker');
+      await waitForTcp(vncPort, container, CONTAINER_START_TIMEOUT_MS, 'Full Digital container');
+      const proxy = await createVncWebSocketBridge(vncPort, token, this.output);
+      bridge = proxy.server;
+      const tunnel = await vscode.env.asExternalUri(vscode.Uri.parse(`http://127.0.0.1:${proxy.port}/${token}`));
+      const websocketUri = tunnel.with({ scheme: tunnel.scheme === 'https' ? 'wss' : 'ws' });
+      const id = randomBytes(12).toString('hex');
+      const session: OwnedSession = {
+        id,
+        circuitPath,
+        websocketUri,
+        display: 'container desktop',
+        transport: 'docker',
+        digital: container,
+        containerName,
+        dockerExecutable: docker,
+        bridge,
+        sockets: proxy.sockets
+      };
+      this.registerExitCleanup(session);
+      this.output.appendLine(`Full Digital session ${id} ready in extension-managed container ${containerName}.`);
+      return session;
+    } catch (error) {
+      if (bridge) await closeServer(bridge);
+      terminate(container);
+      await removeContainer(docker, containerName);
+      throw error;
+    }
+  }
+
+  private registerExitCleanup(session: OwnedSession): void {
+    session.digital.once('exit', () => {
+      const current = this.sessions.get(session.circuitPath);
+      if (current) {
+        void current.then(async (resolved) => {
+          if (resolved.id === session.id) {
+            this.sessions.delete(session.circuitPath);
+            await stopSession(resolved, false);
+          }
+        }, () => undefined);
+      }
+    });
+  }
+
+  private async ensureContainerImage(): Promise<string> {
+    const docker = await findExecutable('docker');
+    if (!docker) {
+      throw new Error('Embedded Full Digital on Windows/macOS requires Docker Desktop. Install and start Docker Desktop, then reopen the circuit. Native Digital remains available as an explicit fallback.');
+    }
+    const server = await runProcess(docker, ['version', '--format', '{{.Server.Version}}'], {
+      timeoutMs: 20_000,
+      maxOutputBytes: 256 * 1024
+    });
+    if (server.code !== 0 || server.timedOut) {
+      throw new Error(`Docker Desktop is installed but its engine is not ready. Start Docker Desktop and retry.\n${server.stderr || server.stdout}`);
+    }
+    const existing = await runProcess(docker, ['image', 'inspect', CONTAINER_IMAGE], {
+      timeoutMs: 20_000,
+      maxOutputBytes: 256 * 1024
+    });
+    if (existing.code === 0) return docker;
+
+    const buildContext = vscode.Uri.joinPath(this.context.extensionUri, 'media', 'full-digital-container').fsPath;
+    await access(path.join(buildContext, 'Dockerfile'), fsConstants.R_OK);
+    await vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: 'Preparing embedded Full Digital (one-time container setup)',
+        cancellable: false
+      },
+      async (progress) => {
+        progress.report({ message: 'Building the pinned Java/X11 runtime with Docker Desktop…' });
+        const build = await runProcess(docker, ['build', '--pull', '-t', CONTAINER_IMAGE, buildContext], {
+          timeoutMs: 10 * 60_000,
+          maxOutputBytes: 4 * 1024 * 1024
+        });
+        if (build.code !== 0 || build.timedOut) {
+          throw new Error(`Could not build the Full Digital container.\n${build.stderr || build.stdout}`);
+        }
+      }
+    );
+    return docker;
   }
 
   private async ensureDisplayTools(): Promise<DisplayTools> {
@@ -277,8 +404,19 @@ async function stopSession(session: OwnedSession, stopDigital = true): Promise<v
   for (const socket of session.sockets) socket.close();
   await closeServer(session.bridge);
   if (stopDigital) terminate(session.digital);
-  terminate(session.vnc);
-  terminate(session.xvfb);
+  if (session.vnc) terminate(session.vnc);
+  if (session.xvfb) terminate(session.xvfb);
+  if (session.containerName && session.dockerExecutable) {
+    await removeContainer(session.dockerExecutable, session.containerName);
+  }
+}
+
+async function removeContainer(docker: string, name: string): Promise<void> {
+  try {
+    await runProcess(docker, ['rm', '-f', name], { timeoutMs: 15_000, maxOutputBytes: 128 * 1024 });
+  } catch {
+    // The --rm container may already have stopped and removed itself.
+  }
 }
 
 function terminate(child: ChildProcess): void {
@@ -292,6 +430,14 @@ function closeServer(server: HttpServer): Promise<void> {
 function logProcess(child: ChildProcess, label: string, output: vscode.OutputChannel): void {
   child.stdout?.on('data', (chunk) => output.appendLine(`[${label}] ${String(chunk).trimEnd()}`));
   child.stderr?.on('data', (chunk) => output.appendLine(`[${label}] ${String(chunk).trimEnd()}`));
+}
+
+function waitForSpawn(child: ChildProcess, label: string): Promise<void> {
+  if (child.pid) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    child.once('spawn', resolve);
+    child.once('error', (error) => reject(new Error(`${label} could not start: ${error.message}`)));
+  });
 }
 
 async function availableDisplayNumber(): Promise<number> {
@@ -328,10 +474,10 @@ async function waitForPath(target: string, process: ChildProcess, timeoutMs: num
   throw new Error(`Timed out waiting for the private X11 display (${target}).`);
 }
 
-async function waitForTcp(port: number, process: ChildProcess, timeoutMs: number): Promise<void> {
+async function waitForTcp(port: number, process: ChildProcess, timeoutMs: number, label = 'x11vnc'): Promise<void> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    if (process.exitCode !== null) throw new Error('x11vnc exited before accepting connections.');
+    if (process.exitCode !== null) throw new Error(`${label} exited before accepting connections.`);
     const connected = await new Promise<boolean>((resolve) => {
       const socket = createConnection({ host: '127.0.0.1', port });
       socket.once('connect', () => { socket.destroy(); resolve(true); });
@@ -341,15 +487,18 @@ async function waitForTcp(port: number, process: ChildProcess, timeoutMs: number
     if (connected) return;
     await delay(100);
   }
-  throw new Error(`Timed out waiting for x11vnc on port ${port}.`);
+  throw new Error(`Timed out waiting for ${label} on port ${port}.`);
 }
 
 async function findExecutable(name: string): Promise<string | undefined> {
   if (name.includes(path.sep)) return await executable(name) ? name : undefined;
   const candidates = (process.env.PATH ?? '').split(path.delimiter).filter(Boolean);
   for (const directory of candidates) {
-    const candidate = path.join(directory, name);
-    if (await executable(candidate)) return candidate;
+    const names = process.platform === 'win32' && !path.extname(name) ? [`${name}.exe`, `${name}.cmd`, name] : [name];
+    for (const executableName of names) {
+      const candidate = path.join(directory, executableName);
+      if (await executable(candidate)) return candidate;
+    }
   }
   return undefined;
 }

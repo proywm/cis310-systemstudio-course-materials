@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   PRE_CLASS_MODULES,
+  MODULE_CONFIDENCE_QUESTION_TARGET,
+  MODULE_READINESS_QUESTION_TARGET,
   TARNOFF_AUTHOR_CHANNEL,
   TARNOFF_BOOK_HOME,
   TARNOFF_OER_SERIES,
@@ -26,9 +28,13 @@ describe('CIS 310 pre-class learning path', () => {
       assert.ok(module.authorVideos.length >= 1);
       assert.ok(module.focus.length > 20);
       assert.ok(module.readinessPrompt.endsWith('?'));
-      assert.ok(PRACTICE_QUESTIONS.filter((question) => question.resourceId === module.resourceId).length >= 3);
+      assert.equal(PRACTICE_QUESTIONS.filter((question) => question.resourceId === module.resourceId).length, MODULE_CONFIDENCE_QUESTION_TARGET);
       for (const reading of module.readings) {
-        assert.match(reading.url, /^https:\/\/faculty\.etsu\.edu\/tarnoff\//);
+        assert.ok(
+          reading.url.startsWith('https://faculty.etsu.edu/tarnoff/')
+            || reading.url.startsWith('https://pages.cs.wisc.edu/~remzi/OSTEP/'),
+          `unexpected reading source for ${module.resourceId}`
+        );
       }
       for (const video of module.authorVideos) {
         assert.ok(
@@ -47,8 +53,12 @@ describe('CIS 310 pre-class learning path', () => {
         assert.ok(module.authorVideos[index], `readiness video ${index} is invalid for ${module.resourceId}`);
       }
       for (const question of PRACTICE_QUESTIONS.filter((item) => item.resourceId === module.resourceId)) {
-        assert.ok(question.sourceMap.readingIndexes.length >= 1, `${question.id} lacks a reading`);
-        assert.ok(question.sourceMap.videoIndexes.length >= 1, `${question.id} lacks a video`);
+        assert.ok(
+          question.sourceMap.readingIndexes.length > 0
+            || question.sourceMap.videoIndexes.length > 0
+            || (question.sourceMap.lectureSlides?.length ?? 0) > 0,
+          `${question.id} lacks mapped reading, video, or lecture-slide evidence`
+        );
         for (const index of question.sourceMap.readingIndexes) {
           assert.ok(module.readings[index], `${question.id} reading ${index} is invalid`);
         }
@@ -74,12 +84,11 @@ describe('CIS 310 pre-class learning path', () => {
     assert.equal(preparationUrl(first.resourceId, 'video', 99), undefined);
   });
 
-  it('requires three distinct attempted questions before a preparation module is complete', () => {
-    assert.equal(preparationModuleComplete(true, true, 1), false);
-    assert.equal(preparationModuleComplete(true, true, 2), false);
-    assert.equal(preparationModuleComplete(true, true, 3), true);
-    assert.equal(preparationModuleComplete(false, true, 3), false);
-    assert.equal(preparationModuleComplete(true, false, 3), false);
+  it('requires five distinct attempted questions before a preparation module is ready', () => {
+    assert.equal(preparationModuleComplete(true, true, MODULE_READINESS_QUESTION_TARGET - 1), false);
+    assert.equal(preparationModuleComplete(true, true, MODULE_READINESS_QUESTION_TARGET), true);
+    assert.equal(preparationModuleComplete(false, true, MODULE_READINESS_QUESTION_TARGET), false);
+    assert.equal(preparationModuleComplete(true, false, MODULE_READINESS_QUESTION_TARGET), false);
   });
 
   it('normalizes and toggles self-reported preparation progress without preserving unknown modules', () => {

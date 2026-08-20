@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -577,11 +577,12 @@
   },
   "scripts": {
     "clean": "node -e \"const fs=require('node:fs'); for (const target of ['dist','course-packs']) fs.rmSync(target,{recursive:true,force:true})\"",
+    "stage-course-pack": "node scripts/stage-course-pack.mjs",
     "compile": "node esbuild.mjs",
     "watch": "node esbuild.mjs --watch",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/**/*.test.ts",
-    "check": "npm run typecheck && npm test && npm run compile",
+    "check": "npm run stage-course-pack && npm run typecheck && npm test && npm run compile",
     "package": "npm run check && vsce package --out systemstudio-cis310.vsix",
     "vscode:prepublish": "npm run compile"
   },

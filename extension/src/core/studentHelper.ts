@@ -146,7 +146,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Prepare with the open book before using the slides',
       paragraphs: [
         'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and the targeted official author videos needed for its questions.',
-        'Use the self-paced Read → Watch → Try 3 questions path before class. Begin with readiness-tagged sources; the lecture PDF then becomes a guide for discussion instead of the only source you study.'
+        'Use the self-paced Read → Watch → Practice → Build/trace path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture slides.'
       ],
       checklist: [
         'Open the next preparation module and read only its mapped chapter or sections.',
@@ -263,12 +263,12 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Separate an environment problem from a circuit problem',
       paragraphs: [
         'Run the environment check first. Digital needs the pinned simulator and Java 8 or newer; the extension can install and verify Digital in its own storage.',
-        'SystemStudio uses the complete upstream Digital application. On supported headless Linux/Remote SSH hosts, its real Swing desktop is transported into the VS Code tab; desktop Windows/macOS use Digital’s native window. Java and the managed Digital JAR are required.'
+        'SystemStudio uses the complete upstream Digital application. Linux/Remote SSH hosts transport its real Swing desktop into the VS Code tab; Windows and macOS run that same upstream application in an extension-managed Docker Desktop container and stream it into the tab. The native window is an explicit fallback, not the default.'
       ],
       checklist: [
         'Check Digital checksum, Java version, and workspace trust.',
         'Open a small blank circuit in Full Digital and confirm that its original menus and component library are visible.',
-        'On a headless Linux host, allow SystemStudio to prepare the private X/VNC display; otherwise use the native desktop window.'
+        'On Linux, allow SystemStudio to prepare the private X/VNC display. On Windows/macOS, start Docker Desktop for the one-time embedded-runtime build; use the native desktop fallback only if the container cannot start.'
       ],
       actions: [
         { id: 'check-environment', label: 'Check environment' },

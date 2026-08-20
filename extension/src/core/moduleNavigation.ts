@@ -1,5 +1,9 @@
 import { GUIDED_LABS } from './guidedLabs';
-import type { LearningPathModule } from './learningResources';
+import {
+  MODULE_CONFIDENCE_QUESTION_TARGET,
+  MODULE_READINESS_QUESTION_TARGET,
+  type LearningPathModule
+} from './learningResources';
 
 export type ModuleNavigationItemKind =
   | 'reading'
@@ -80,14 +84,16 @@ export function buildCourseModuleNavigation(
       },
       {
         kind: 'practice',
-        label: 'Try the 3-question readiness check',
-        description: `${Math.min(module.practiceQuestionsAttempted, 3)}/3 distinct questions tried`,
+        label: `Practice the ${MODULE_CONFIDENCE_QUESTION_TARGET}-question confidence set`,
+        description: `${Math.min(module.practiceQuestionsAttempted, MODULE_CONFIDENCE_QUESTION_TARGET)}/${MODULE_CONFIDENCE_QUESTION_TARGET} tried · readiness after ${MODULE_READINESS_QUESTION_TARGET}`,
         resourceId: module.resourceId
       },
       ...GUIDED_LABS.filter((lab) => lab.resourceId === module.resourceId).map((lab): ModuleNavigationItem => ({
         kind: 'lab',
         label: `${lab.kind === 'circuit' ? 'Build' : 'Trace'}: ${lab.title}`,
-        description: 'guided · formative · self-paced',
+        description: lab.requiredForModule
+          ? `${module.handsOnComplete ? 'completed · ' : ''}required hands-on · guided · self-paced`
+          : 'optional extension · guided · self-paced',
         resourceId: module.resourceId,
         labId: lab.id
       }))
@@ -96,7 +102,8 @@ export function buildCourseModuleNavigation(
 }
 
 function moduleStatus(module: LearningPathModule): string {
-  return `read ${module.read ? '✓' : '○'} · video ${module.watched ? '✓' : '○'} · questions ${Math.min(module.practiceQuestionsAttempted, 3)}/3`;
+  const handsOn = module.handsOnRequired ? ` · hands-on ${module.handsOnComplete ? '✓' : '○'}` : '';
+  return `read ${module.read ? '✓' : '○'} · video ${module.watched ? '✓' : '○'} · questions ${Math.min(module.practiceQuestionsAttempted, MODULE_CONFIDENCE_QUESTION_TARGET)}/${MODULE_CONFIDENCE_QUESTION_TARGET}${handsOn}`;
 }
 
 function sourceDescription(readinessIndexes: readonly number[], index: number, focus: string): string {

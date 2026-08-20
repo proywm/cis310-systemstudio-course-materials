@@ -7,7 +7,12 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedLab } from './core/guidedLabs';
-import { preparationModule, preparationUrl, type PreparationField } from './core/learningResources';
+import {
+  MODULE_CONFIDENCE_QUESTION_TARGET,
+  preparationModule,
+  preparationUrl,
+  type PreparationField
+} from './core/learningResources';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import {
   CourseCalendarPanel,
@@ -29,6 +34,7 @@ import { TutorialPanel } from './tutorialPanel';
 
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
 const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
+const EMBEDDED_CONTAINER_PLATFORM = process.platform === 'win32' || process.platform === 'darwin';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -47,15 +53,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   const updateStatus = async (): Promise<void> => {
     const status = await manager.getStatus();
-    if (status.integrityVerified && status.java.supported) {
+    if (status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM)) {
       statusBar.text = `$(circuit-board) CIS 310: Digital ${status.version}`;
-      statusBar.tooltip = 'Digital is installed and Java is ready.';
+      statusBar.tooltip = status.java.supported
+        ? 'Digital is installed and host Java is ready.'
+        : 'Digital is installed; the embedded Docker Desktop runtime supplies Java.';
       statusBar.backgroundColor = undefined;
     } else {
       statusBar.text = '$(warning) CIS 310: setup required';
       statusBar.tooltip = !status.integrityVerified
         ? `Install Digital ${status.version}`
-        : `Java ${MINIMUM_JAVA_MAJOR}+ is required`;
+        : `Java ${MINIMUM_JAVA_MAJOR}+ is required on this host`;
       statusBar.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
     }
   };
@@ -65,15 +73,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (existing.integrityVerified) {
       const action = await vscode.window.showInformationMessage(
         `Digital ${existing.version} is installed and its checksum is valid.`,
-        'Verify Java',
+        'Verify host Java',
         'Reinstall'
       );
-      if (action === 'Verify Java') {
+      if (action === 'Verify host Java') {
         await checkEnvironment(manager, output);
-        return existing.java.supported;
+        return existing.java.supported || EMBEDDED_CONTAINER_PLATFORM;
       }
       if (action !== 'Reinstall') {
-        return existing.java.supported;
+        return existing.java.supported || EMBEDDED_CONTAINER_PLATFORM;
       }
     }
 
@@ -102,7 +110,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         (progress, token) => manager.install(progress, token)
       );
       const status = await manager.getStatus();
-      if (!status.java.supported) {
+      if (!status.java.supported && EMBEDDED_CONTAINER_PLATFORM) {
+        await vscode.window.showInformationMessage(
+          `Digital ${DIGITAL_RELEASE.displayVersion} is installed. The embedded Docker Desktop runtime supplies Java; host Java is needed only for native fallback and CLI tools.`
+        );
+      } else if (!status.java.supported) {
         const action = await vscode.window.showWarningMessage(
           `Digital is installed, but Java ${MINIMUM_JAVA_MAJOR}+ was not found.`,
           'Download Java',
@@ -121,7 +133,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       statusTree.refresh();
       await tests.refresh();
       await updateStatus();
-      return status.integrityVerified && status.java.supported;
+      return status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM);
     } catch (error) {
       output.appendLine(errorMessage(error));
       output.show(true);
@@ -147,7 +159,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         context,
         manager,
         fullDigitalRuntime,
-        () => ensureReady(manager, output, setupDigital),
+        () => ensureReady(manager, output, setupDigital, EMBEDDED_CONTAINER_PLATFORM),
         output
       ),
       { webviewOptions: { retainContextWhenHidden: true }, supportsMultipleEditorsPerDocument: false }
@@ -232,11 +244,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         return;
       }
       await PracticePanel.show(context, practiceStore, courseMaterials, {
-        mode: 'practice', focus: 'recommended', resourceId, length: 3
+        mode: 'practice', focus: 'recommended', resourceId, length: MODULE_CONFIDENCE_QUESTION_TARGET
       });
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabs', async (labId?: unknown) => {
-      await GuidedLabPanel.show(context, typeof labId === 'string' ? labId : undefined);
+      await GuidedLabPanel.show(context, practiceStore, typeof labId === 'string' ? labId : undefined);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabArtifact', async (labId: unknown) => {
       const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
@@ -700,13 +712,18 @@ async function checkEnvironment(manager: DigitalManager, output: vscode.OutputCh
     `Java available: ${status.java.available ? 'yes' : 'no'}`,
     `Java version: ${status.java.version?.raw ?? 'not detected'}`,
     `Java supported: ${status.java.supported ? 'yes' : `no (requires ${MINIMUM_JAVA_MAJOR}+)`}`,
+    `Embedded Docker runtime: ${EMBEDDED_CONTAINER_PLATFORM ? 'used for in-tab Digital; supplies Java' : 'not used on this platform'}`,
     `Workspace trusted: ${vscode.workspace.isTrusted ? 'yes' : 'no'}`
   ];
   output.appendLine(lines.join('\n'));
   output.show(true);
 
-  if (status.integrityVerified && status.java.supported) {
-    await vscode.window.showInformationMessage(`CIS 310 environment ready: Digital ${status.version}, Java ${status.java.version?.raw}.`);
+  if (status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM)) {
+    await vscode.window.showInformationMessage(
+      status.java.supported
+        ? `CIS 310 environment ready: Digital ${status.version}, Java ${status.java.version?.raw}.`
+        : `Digital ${status.version} is ready for the embedded Docker Desktop runtime. Host Java is still needed for native fallback and CLI tools.`
+    );
     return;
   }
   const action = await vscode.window.showWarningMessage(
@@ -723,13 +740,16 @@ async function checkEnvironment(manager: DigitalManager, output: vscode.OutputCh
 async function ensureReady(
   manager: DigitalManager,
   output: vscode.OutputChannel,
-  setup: () => Promise<boolean>
+  setup: () => Promise<boolean>,
+  containerProvidesJava = false
 ): Promise<boolean> {
-  const status = await manager.getStatus();
+  let status = await manager.getStatus();
   if (!status.integrityVerified) {
-    return setup();
+    await setup();
+    status = await manager.getStatus();
+    if (!status.integrityVerified) return false;
   }
-  if (!status.java.supported) {
+  if (!status.java.supported && !containerProvidesJava) {
     await checkEnvironment(manager, output);
     return false;
   }

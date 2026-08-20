@@ -37,7 +37,7 @@ describe('student helper', () => {
     const reply = answerStudentQuestion('What should I read and watch before class?');
     const text = JSON.stringify(reply);
     assert.match(text, /David Tarnoff/);
-    assert.match(text, /Read → Watch → Try 3 questions/);
+    assert.match(text, /Read → Watch → Practice → Build\/trace/);
     assert.ok(reply.actions.some((action) => action.id === 'open-learning'));
   });
 

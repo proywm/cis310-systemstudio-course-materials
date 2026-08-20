@@ -14,8 +14,8 @@ import {
 import { preparationModule } from '../src/core/learningResources';
 
 describe('guided circuit and assembly labs', () => {
-  it('maps six circuit builds and five assembly traces to verified lecture sources', async () => {
-    assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'circuit').length, 6);
+  it('maps seven circuit builds and five assembly traces to verified lecture sources', async () => {
+    assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'circuit').length, 7);
     assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'assembly').length, 5);
     assert.equal(new Set(GUIDED_LABS.map((lab) => lab.id)).size, GUIDED_LABS.length);
     for (const lab of GUIDED_LABS) {
@@ -26,6 +26,7 @@ describe('guided circuit and assembly labs', () => {
       assert.ok(lab.steps.length >= 6, `insufficient walkthrough steps for ${lab.id}`);
       assert.equal(new Set(lab.steps.map((step) => step.id)).size, lab.steps.length);
       assert.ok(lab.steps.every((step) => step.instruction.length > 25 && step.evidence.length > 15));
+      assert.equal(typeof lab.requiredForModule, 'boolean');
       if (lab.artifact.kind === 'circuit') {
         assert.match(lab.artifact.fileName, /^[a-z0-9][a-z0-9-]*\.dig$/);
       } else {

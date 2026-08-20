@@ -87,10 +87,12 @@ async function main(): Promise<void> {
     if (!address || typeof address === 'string') throw new Error('Could not allocate the smoke-test web port.');
 
     await rm(options.screenshot, { force: true });
-    const firefox = spawn(options.firefox, [
-      '--headless', '--window-size=1440,900', '--screenshot', options.screenshot,
-      `http://127.0.0.1:${address.port}/`
-    ], { stdio: 'inherit', shell: false });
+    const browserUrl = `http://127.0.0.1:${address.port}/`;
+    const chromiumStyle = /(?:chromium|chrome|headless_shell)/i.test(path.basename(options.firefox));
+    const browserArguments = chromiumStyle
+      ? ['--headless', '--no-sandbox', '--window-size=1440,900', `--screenshot=${options.screenshot}`, browserUrl]
+      : ['--headless', '--window-size=1440,900', '--screenshot', options.screenshot, browserUrl];
+    const firefox = spawn(options.firefox, browserArguments, { stdio: 'inherit', shell: false });
     const firefoxCode = await childExit(firefox);
     if (firefoxCode !== 0) throw new Error(`Firefox screenshot exited with code ${firefoxCode}.`);
     const screenshot = await stat(options.screenshot);

@@ -29,6 +29,20 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, 'media', 'vendor', 'novnc')]
     };
+    panel.webview.onDidReceiveMessage(async (message: unknown) => {
+      const action = webviewAction(message);
+      if (action === 'stop') {
+        await this.runtime.disposeSession(document.uri.fsPath);
+        panel.webview.html = messageHtml(
+          panel.webview,
+          'Full Digital stopped',
+          'Reopen this .dig file to start a new simulator session.'
+        );
+      } else if (action === 'native') {
+        await this.runtime.disposeSession(document.uri.fsPath);
+        await this.openNative(document.uri, panel);
+      }
+    });
     panel.webview.html = messageHtml(
       panel.webview,
       'Starting Full Digital…',
@@ -60,24 +74,10 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
     try {
       const session = await this.runtime.open(document.uri.fsPath);
       panel.webview.html = desktopHtml(this.context, panel.webview, session);
-      panel.webview.onDidReceiveMessage(async (message: unknown) => {
-        const action = webviewAction(message);
-        if (action === 'stop') {
-          await this.runtime.disposeSession(document.uri.fsPath);
-          panel.webview.html = messageHtml(
-            panel.webview,
-            'Full Digital stopped',
-            'Reopen this .dig file to start a new simulator session.'
-          );
-        } else if (action === 'native') {
-          await this.runtime.disposeSession(document.uri.fsPath);
-          await this.openNative(document.uri, panel);
-        }
-      });
     } catch (error) {
       const detail = errorText(error);
       this.output.appendLine(`Full Digital editor failed: ${detail}`);
-      panel.webview.html = messageHtml(panel.webview, 'Full Digital could not start', detail);
+      panel.webview.html = messageHtml(panel.webview, 'Embedded Full Digital could not start', detail, true);
       await vscode.window.showErrorMessage(`Full Digital could not start: ${detail}`);
     }
   }
@@ -106,7 +106,7 @@ function desktopHtml(
     vscode.Uri.joinPath(context.extensionUri, 'media', 'vendor', 'novnc', 'core', 'rfb.js')
   );
   const websocket = JSON.stringify(session.websocketUri.toString(true));
-  const nativeButton = hasGraphicalDesktop()
+  const nativeButton = canOpenNativeWindow()
     ? '<button id="native" title="Stop the streamed session and open upstream Digital on this host display">Native window</button>'
     : '';
   return `<!doctype html>
@@ -134,7 +134,7 @@ function desktopHtml(
 </head>
 <body>
   <header>
-    <strong>Full Digital ${escapeHtml(session.display)}</strong>
+    <strong>Full Digital · ${session.transport === 'docker' ? 'embedded container' : escapeHtml(session.display)}</strong>
     <span id="status" role="status">Connecting to the unmodified Digital application…</span>
     <button id="accessibility" aria-expanded="false" aria-controls="accessibility-note">Accessibility</button>
     ${nativeButton}
@@ -192,9 +192,15 @@ function desktopHtml(
 </html>`;
 }
 
-function messageHtml(webview: vscode.Webview, title: string, detail: string): string {
+function messageHtml(webview: vscode.Webview, title: string, detail: string, offerNativeFallback = false): string {
   const nonce = randomBytes(16).toString('base64');
-  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}';"><style nonce="${nonce}">body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font-family:var(--vscode-font-family)}h1{font-size:1.35rem}p{line-height:1.55;max-width:760px;color:var(--vscode-descriptionForeground)}</style></head><body><h1>${escapeHtml(title)}</h1><p>${escapeHtml(detail)}</p></body></html>`;
+  const button = offerNativeFallback && canOpenNativeWindow()
+    ? '<button id="native">Open native Digital instead</button>'
+    : '';
+  const script = button
+    ? `<script nonce="${nonce}">const vscode=acquireVsCodeApi();document.getElementById('native').addEventListener('click',()=>vscode.postMessage({action:'native'}));</script>`
+    : '';
+  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';"><style nonce="${nonce}">body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font-family:var(--vscode-font-family)}h1{font-size:1.35rem}p{line-height:1.55;max-width:760px;color:var(--vscode-descriptionForeground)}button{font:inherit;color:var(--vscode-button-foreground);background:var(--vscode-button-background);border:0;border-radius:3px;padding:8px 12px;cursor:pointer}</style></head><body><h1>${escapeHtml(title)}</h1><p>${escapeHtml(detail)}</p>${button}${script}</body></html>`;
 }
 
 function webviewAction(message: unknown): 'stop' | 'native' | undefined {
@@ -203,8 +209,8 @@ function webviewAction(message: unknown): 'stop' | 'native' | undefined {
   return action === 'stop' || action === 'native' ? action : undefined;
 }
 
-function hasGraphicalDesktop(): boolean {
-  return Boolean(process.env.DISPLAY || process.env.WAYLAND_DISPLAY);
+function canOpenNativeWindow(): boolean {
+  return process.platform === 'win32' || process.platform === 'darwin' || Boolean(process.env.DISPLAY || process.env.WAYLAND_DISPLAY);
 }
 
 function escapeHtml(value: string): string {

@@ -9,7 +9,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 ## Included
 
 - one SHA-256-verified Fall 2026 syllabus PDF;
-- a 13-topic Read → Watch → Try 3 questions path mapped to David Tarnoff's required open text and official author videos;
+- a 13-module Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, lecture PDFs, and hands-on work;
 - 13 SHA-256-verified presentation PDFs covering Lectures 1--12, including the Lecture 8 companion;
 - three homework study references;
 - three processor-project study and implementation references;
@@ -22,7 +22,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 ## Student workflow
 
-1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Read → Watch → Try 3 questions preparation path before class.
+1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
 2. Open the syllabus and course calendar from the SystemStudio sidebar.
 3. Use the presentation and assignment reference after the mapped open-book reading, not as a substitute for it.
 4. Open the matching Canvas assignment and confirm its current requirements.
@@ -36,7 +36,7 @@ Learning Center reading/video checkmarks, guided-lab checkmarks, and practice pr
 
 ## Circuit tool
 
-SystemStudio runs the complete upstream Digital v0.31 application rather than a reduced circuit renderer. Supported headless Linux hosts stream the real Swing desktop into VS Code; Windows/macOS use Digital’s native window. The separate preview and testcase commands also use Digital’s official exporter and CLI.
+SystemStudio runs the complete upstream Digital v0.31 application rather than a reduced circuit renderer. Linux hosts stream its real Swing desktop into VS Code; Windows/macOS stream the same application from an extension-managed Docker Desktop container. Native Digital is an explicit fallback. The separate preview and testcase commands also use Digital’s official exporter and CLI.
 
 ## Assembly boundary
 

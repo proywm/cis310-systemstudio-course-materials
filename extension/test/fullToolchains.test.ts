@@ -21,6 +21,18 @@ describe('full Digital and real assembly declarations', () => {
     assert.match(rfb, /sendCtrlAltDel/);
   });
 
+  it('ships a cross-platform container runtime for embedding upstream Digital on Windows and macOS', () => {
+    const runtime = readFileSync(path.join(root, 'src', 'fullDigitalRuntime.ts'), 'utf8');
+    const dockerfile = readFileSync(path.join(root, 'media', 'full-digital-container', 'Dockerfile'), 'utf8');
+    const entrypoint = readFileSync(path.join(root, 'media', 'full-digital-container', 'entrypoint.sh'), 'utf8');
+    assert.match(runtime, /process\.platform === 'win32'/);
+    assert.match(runtime, /process\.platform === 'darwin'/);
+    assert.match(runtime, /127\.0\.0\.1:\$\{vncPort\}:5900/);
+    assert.match(runtime, /--cap-drop=ALL/);
+    assert.match(dockerfile, /eclipse-temurin:17\.0\.16_8-jre-jammy/);
+    assert.match(entrypoint, /-jar \/opt\/digital\/Digital\.jar/);
+  });
+
   it('ships a NASM source that must assemble and execute as real ELF32 machine code', () => {
     const source = readFileSync(
       path.join(root, 'assembly-starter', 'real-toolchains', 'nasm-linux', 'LoopSum.asm'),
