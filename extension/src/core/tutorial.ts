@@ -34,6 +34,7 @@ export type TutorialAction =
   | 'open-guided-labs'
   | 'open-half-adder-lab'
   | 'open-assembly-guided-labs'
+  | 'open-search-guided-lab'
   | 'check-digital'
   | 'setup-digital'
   | 'create-circuit'
@@ -64,6 +65,7 @@ const TUTORIAL_ACTIONS = new Set<TutorialAction>([
   'open-guided-labs',
   'open-half-adder-lab',
   'open-assembly-guided-labs',
+  'open-search-guided-lab',
   'check-digital',
   'setup-digital',
   'create-circuit',

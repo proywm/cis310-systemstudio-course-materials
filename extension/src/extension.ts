@@ -7,7 +7,7 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { circuitTutorPrompt } from './core/circuitPreflight';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
-import { guidedLab } from './core/guidedLabs';
+import { guidedAssemblyTutorPrompt, guidedLab } from './core/guidedLabs';
 import { lessonTutorPrompt } from './core/lessonNarratives';
 import {
   MODULE_CONFIDENCE_QUESTION_TARGET,
@@ -326,6 +326,40 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await AssemblyLabPanel.show(context, assemblyManager, uri, 'assemble');
       } catch (error) {
         await showFailure('Could not open the guided assembly lab', error, output);
+      }
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openGuidedLabRealArtifact', async (labId: unknown, artifactId: unknown) => {
+      const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
+      const artifact = lab?.artifact.kind === 'assembly' && typeof artifactId === 'string'
+        ? lab.artifact.realArtifacts?.find((candidate) => candidate.id === artifactId)
+        : undefined;
+      if (!lab || !artifact) {
+        await vscode.window.showErrorMessage('The selected real-toolchain lab source is invalid.');
+        return;
+      }
+      const workspaceFolder = await chooseWorkspaceFolder(`Choose a workspace for “${lab.title}”`);
+      if (!workspaceFolder) {
+        await vscode.window.showErrorMessage('Open a local folder before preparing the assembly source.');
+        return;
+      }
+      try {
+        const guide = path.join(workspaceFolder.uri.fsPath, 'assembly', 'README.md');
+        let assemblyLabExists = false;
+        try {
+          await access(guide);
+          assemblyLabExists = true;
+        } catch {
+          assemblyLabExists = false;
+        }
+        if (assemblyLabExists) await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
+        else await assemblyManager.createLab(workspaceFolder.uri.fsPath);
+        const target = path.join(workspaceFolder.uri.fsPath, 'assembly', ...artifact.relativePath.split('/'));
+        await access(target);
+        const uri = vscode.Uri.file(target);
+        await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
+        await vscode.commands.executeCommand('systemstudioCis310.buildRunAssembly', uri);
+      } catch (error) {
+        await showFailure('Could not build and run the guided assembly source', error, output);
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.startQuickPractice', async () => {
@@ -896,6 +930,9 @@ function contextualTutorPrompt(value: unknown): string | undefined {
   if (typeof candidate.circuitPreflightId === 'string') {
     const mode = candidate.tutorMode === 'failed-preflight' ? 'failed-preflight' : 'design';
     return circuitTutorPrompt(candidate.circuitPreflightId, mode);
+  }
+  if (typeof candidate.guidedAssemblyLabId === 'string') {
+    return guidedAssemblyTutorPrompt(candidate.guidedAssemblyLabId);
   }
   if (typeof candidate.resourceId !== 'string'
     || typeof candidate.promptIndex !== 'number'

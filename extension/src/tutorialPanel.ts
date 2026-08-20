@@ -134,6 +134,7 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'open-guided-labs': { id: 'systemstudioCis310.openGuidedLabs' },
     'open-half-adder-lab': { id: 'systemstudioCis310.openGuidedLabs', args: ['circuit-half-adder'] },
     'open-assembly-guided-labs': { id: 'systemstudioCis310.openGuidedLabs', args: ['assembly-register-arithmetic'] },
+    'open-search-guided-lab': { id: 'systemstudioCis310.openGuidedLabs', args: ['assembly-linear-search'] },
     'check-digital': { id: 'systemstudioCis310.checkEnvironment' },
     'setup-digital': { id: 'systemstudioCis310.setupDigital' },
     'create-circuit': { id: 'systemstudioCis310.createCircuit' },
@@ -402,7 +403,7 @@ function tutorialStepsHtml(): string {
   <section class="step" data-step="4" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Bridge a concept to assembly</h2>
     <p>Use the real-toolchain command for assembler, linker, executable, and program-output evidence. Use the separately labeled Instruction Trace Tutor only for prediction and visualization; loading there does not prove that MASM or NASM accepts the file.</p>
-    <div class="instruction"><strong>Begin with register arithmetic:</strong> then continue with flags/branches, an array loop, a stack frame, or virtual console input.</div>
+    <div class="instruction"><strong>Begin with register arithmetic:</strong> then progress to flags/branches, an array loop, a stack frame, input, linear search, and iterative or recursive binary search.</div>
     <div class="choices">
       ${choice('predict', 'Predict register or memory state', 'Write what should change before executing the instruction.')}
       ${choice('arithmetic', 'Register arithmetic', 'Step MOV and ADD; compare EAX and flags with a line-by-line prediction.')}
@@ -410,9 +411,10 @@ function tutorialStepsHtml(): string {
       ${choice('memory', 'Array and counted loop', 'Observe ESI addresses, ECX, memory values, and the EAX accumulator.')}
       ${choice('stack', 'CALL, stack frame, and RET', 'Watch ESP, EBP, the return address, preserved EBX, and returned EAX.')}
       ${choice('input', 'Virtual console input', 'Trace procedure register contracts and a controlled invalid-input path.')}
+      ${choice('search', 'Search algorithms', 'Predict and test found, absent, and boundary cases for linear search and iterative/recursive binary search; compare time and stack behavior.')}
       ${choice('real', 'Real assembler and executable', 'Build actual NASM/ELF32 code, or exact Microsoft MASM/Irvine32 when the Windows toolchain is configured.')}
     </div>
-    <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Start the register-arithmetic trace</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
+    <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Start the register-arithmetic trace</button><button data-action="open-search-guided-lab" class="secondary">Start the search walkthrough</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
   </div></section>
   <section class="step" data-step="5" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Inspect evidence, not just “it ran”</h2>

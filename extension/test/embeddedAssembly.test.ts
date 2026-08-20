@@ -290,6 +290,15 @@ END main
     const nasm = new EmbeddedX86Machine(
       assembleEmbeddedX86(source('nasm-ia32', 'LoopSum.asm'), { profile: 'nasm-ia32' })
     ).run();
+    const linearSearch = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'LinearSearch.asm'), { profile: 'irvine32' })
+    ).run();
+    const binaryIterative = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'BinarySearchIterative.asm'), { profile: 'irvine32' })
+    ).run();
+    const binaryRecursive = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'BinarySearchRecursive.asm'), { profile: 'irvine32' })
+    ).run();
 
     assert.match(addTwo.output, /EAX=0x0000002A/);
     assert.match(consoleInput.output, /You entered -42; name=Ada Lovelace/);
@@ -298,5 +307,30 @@ END main
     assert.equal(stackCall.registers.EAX, 42);
     assert.equal(stackCall.registers.EBX, 32);
     assert.equal(nasm.output, '30\n');
+    assert.equal(linearSearch.registers.EAX, 3);
+    assert.equal(binaryIterative.registers.EAX, 4);
+    assert.equal(binaryRecursive.registers.EAX, 4);
+  });
+
+  it('trace-tests search found, absent, first, and last cases', () => {
+    const searchSource = (name: string) => readFileSync(
+      path.join(process.cwd(), 'assembly-starter', 'real-toolchains', 'masm-irvine', name),
+      'utf8'
+    );
+    const run = (source: string) => new EmbeddedX86Machine(
+      assembleEmbeddedX86(source, { profile: 'irvine32' })
+    ).run().registers.EAX;
+
+    const linear = searchSource('LinearSearch.asm');
+    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 4')), 0);
+    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 3')), 4);
+    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 99')), 0xffffffff);
+
+    for (const name of ['BinarySearchIterative.asm', 'BinarySearchRecursive.asm']) {
+      const binary = searchSource(name);
+      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 3')), 0, `${name} first`);
+      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 44')), 6, `${name} last`);
+      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 20')), 0xffffffff, `${name} absent`);
+    }
   });
 });

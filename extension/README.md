@@ -57,7 +57,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 - a manual grade estimate using student-entered Canvas scores, published 15/65/20 weights, two-lowest participation-item drops, retained earned/possible point aggregation, and syllabus letter boundaries—visually separated from official instructor evaluation in Canvas;
 - opt-in local Canvas `.ics` import and a 27-meeting missed-class recovery route to the mapped accessible lesson;
 - 27-meeting Monday/Wednesday Fall 2026 calendar with confirmed 10:00–11:45 a.m., ELB 1329 `.ics` events;
-- seven guided circuit builds and five assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation;
+- seven guided circuit builds and eight assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation; the search labs also open retained real NASM/Linux and MASM/Irvine32 sources;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
 - local FAQ routing, attempt-first AI tutor guardrails, and Canvas Questions Before Class support; and
 - no Google Drive dependency for the packaged syllabus, presentations, or assignments.

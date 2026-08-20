@@ -130,7 +130,13 @@ export class AssemblyManager implements vscode.Disposable {
       ['irvine32', 'StackCall.asm'],
       ['nasm-ia32', 'LoopSum.asm'],
       ['real-toolchains/nasm-linux', 'LoopSum.asm'],
-      ['real-toolchains/masm-irvine', 'AddTwo.asm']
+      ['real-toolchains/masm-irvine', 'AddTwo.asm'],
+      ['real-toolchains/nasm-linux', 'LinearSearch.asm'],
+      ['real-toolchains/nasm-linux', 'BinarySearchIterative.asm'],
+      ['real-toolchains/nasm-linux', 'BinarySearchRecursive.asm'],
+      ['real-toolchains/masm-irvine', 'LinearSearch.asm'],
+      ['real-toolchains/masm-irvine', 'BinarySearchIterative.asm'],
+      ['real-toolchains/masm-irvine', 'BinarySearchRecursive.asm']
     ];
     for (const [directory, fileName] of starterFiles) {
       const destinationDirectory = path.join(target, directory);

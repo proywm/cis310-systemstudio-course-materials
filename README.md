@@ -58,7 +58,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - seven lecture-mapped guided circuit builds, including a step-by-step half adder and K-map implementation, with fresh non-overwriting files and local checklist progress;
 - circuit preview, embedded-test support, and local public preflight suites for the 4-bit register/PC/data memory, 8-bit instruction register/memory, 4×4 register file, all 2,048 ALU input combinations, and a 25-vector cumulative processor program;
 - actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
-- five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
+- eight lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, virtual input, linear search, and iterative/recursive binary search;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
 - an attempt-first AI learning-coach checkpoint, circuit-specific design/debugging prompt after public preflights, and graded-work boundary before the U-M Maizey handoff; and

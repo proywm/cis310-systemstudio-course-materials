@@ -1,4 +1,4 @@
-<!-- systemstudio-assembly-compatibility: 0.11 -->
+<!-- systemstudio-assembly-compatibility: 0.12 -->
 # Assembly Toolchain and Trace-Tutor Boundary
 
 ## Real toolchains
@@ -24,6 +24,12 @@ The separate tutor is a bounded source-level visualization. It can illustrate co
 Its displayed EIP values are synthetic teaching positions. Its virtual input/output and procedure helpers are pedagogical models rather than Windows or Linux runtime behavior. A file loading in the tutor is not evidence that an external assembler accepts it.
 
 Open a formative source with **CIS 310: Open Instruction Trace Tutor**. Use **Build and run real code** from that panel when exact behavior is needed.
+
+## Search examples and expected evidence
+
+`LinearSearch.asm`, `BinarySearchIterative.asm`, and `BinarySearchRecursive.asm` are retained in both real-toolchain directories. The NASM/Linux versions are self-checking executables: success requires correct first, middle/final, and absent results. The MASM/Irvine32 versions return the located zero-based index in `EAX` or `-1` when absent and expose it with `DumpRegs`.
+
+The extension can trace the MASM/Irvine versions on any supported VS Code host. Exact MASM assembly/link/run verification still requires Microsoft `ml.exe` and `link.exe` on Windows; the trace tutor is never substituted for that release check.
 
 References:
 

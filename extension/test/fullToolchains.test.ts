@@ -68,11 +68,11 @@ describe('full Digital and real assembly declarations', () => {
     assert.match(editor, /screen-reader-equivalent circuit editor/);
   });
 
-  it('archives pre-0.11 assembly guides during a safe workspace upgrade', () => {
+  it('archives pre-0.12 assembly guides during a safe workspace upgrade', () => {
     const upgrader = readFileSync(path.join(root, 'src', 'core', 'assemblyGuideUpgrade.ts'), 'utf8');
-    assert.match(upgrader, /systemstudio-assembly-guide: 0\.11/);
-    assert.match(upgrader, /COMPATIBILITY-pre-0\.11\.md/);
-    assert.match(upgrader, /IRVINE32_PROFILE-pre-0\.11\.md/);
+    assert.match(upgrader, /systemstudio-assembly-guide: 0\.12/);
+    assert.match(upgrader, /COMPATIBILITY-pre-0\.12\.md/);
+    assert.match(upgrader, /IRVINE32_PROFILE-pre-0\.12\.md/);
     assert.match(upgrader, /await rename\(destination, archived\)/);
   });
 });

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.19.0
+
+- Added prediction-first linear-search, iterative binary-search, and recursive binary-search walkthroughs with explicit return-to-Canvas steps.
+- Retained inspectable MASM/Irvine32 and NASM/ELF32 sources for all three algorithms; the Linux programs self-check first, middle/final, and absent cases.
+- Added direct search-walkthrough actions to Homework 3, the cumulative final-presentation plan, and the self-paced tutorial.
+- Added attempt-first AI tutor prompts that request the learner’s expected/observed evidence and prohibit program completion or submission-ready code.
+- Upgraded generated assembly workspaces without overwriting student `.asm` files and preserved the strict trace-tutor versus real-toolchain boundary.
+
 ## 0.18.0
 
 - Replaced the ambiguous four-nibble/16-bit processor handout with one validated architecture: an 8-bit instruction word and instruction memory with a 4-bit PC, register file, ALU, and data memory.

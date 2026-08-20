@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -19,9 +19,9 @@
       "title": "CIS 310 Fall 2026 Syllabus",
       "sourceTitle": "CIS 310 Fall 2026 accessible HTML syllabus",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.html",
-      "modifiedAt": "2026-08-20T16:48:08Z",
+      "modifiedAt": "2026-08-20T20:09:44Z",
       "localPath": "syllabus/CIS310_Fall_2026_Syllabus.html",
-      "sha256": "7c18fecbf9ccab63596a5d7590783599a4c9758312f0dbbb2d66a583ecc694d1",
+      "sha256": "472616e8a273bd06f80ae2fa57b2b17dd14e4615bca006b835815e7a4487bb33",
       "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
     },
     {
@@ -237,9 +237,9 @@
       "title": "Homework 3: Memory and Assembly Foundations",
       "sourceTitle": "CIS310_HW3_v1 (1).docx",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/homework-3-memory-assembly.md",
-      "modifiedAt": "2025-08-26T18:47:24Z",
+      "modifiedAt": "2026-08-20T20:09:44Z",
       "localPath": "assignments/homework-3-memory-assembly.md",
-      "sha256": "a767a17c5aeb5a3f70c1c6f8877d03dc3c661ae2aec24cb2a5a02df630f1f413",
+      "sha256": "29dd2c8568eedf8108a539110b4fe5e7e70515ddb3e66765c97ee6911c6b00a7",
       "concepts": ["memory-hierarchy", "instruction-cycle", "address-spaces", "x86-registers", "stack"],
       "relatedPresentationIds": ["lecture-08", "lecture-08-supplement", "lecture-09", "lecture-10", "lecture-12"]
     },

@@ -163,7 +163,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Build with guided labs',
-            '7 circuits · 5 assembly traces · self-paced',
+            '7 circuits · 8 assembly traces · self-paced',
             'systemstudioCis310.openGuidedLabs',
             'tools'
           ),

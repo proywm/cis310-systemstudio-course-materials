@@ -1,4 +1,4 @@
-<!-- systemstudio-irvine-guide: 0.11 -->
+<!-- systemstudio-irvine-guide: 0.12 -->
 # Exact Microsoft MASM and Irvine32 Setup
 
 The exact course toolchain requires Windows, Microsoft’s 32-bit `ml.exe`, Microsoft `link.exe`, and Kip Irvine’s official 32-bit library. SystemStudio does not call any other engine “MASM.”

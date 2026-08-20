@@ -413,6 +413,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       checklist: [
         'For executable evidence, use Build and Run with Real Assembly Toolchain and inspect the assembler, linker, output, and exit status.',
         'For a prediction exercise, open the Instruction Trace Tutor and watch registers, flags, stack, memory, output, and control flow.',
+        'For search practice, use the linear-search walkthrough before iterative and recursive binary search; test first, middle/final, and absent values.',
         'Never treat a trace-tutor load as proof that external MASM or NASM accepts the source.'
       ],
       actions: [

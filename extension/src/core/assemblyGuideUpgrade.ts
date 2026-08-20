@@ -2,9 +2,9 @@ import { access, cp, readFile, rename } from 'node:fs/promises';
 import * as path from 'node:path';
 
 const GUIDES: Array<readonly [string, string, string]> = [
-  ['README.md', 'systemstudio-assembly-guide: 0.11', 'README-pre-0.11.md'],
-  ['COMPATIBILITY.md', 'systemstudio-assembly-compatibility: 0.11', 'COMPATIBILITY-pre-0.11.md'],
-  ['IRVINE32_PROFILE.md', 'systemstudio-irvine-guide: 0.11', 'IRVINE32_PROFILE-pre-0.11.md']
+  ['README.md', 'systemstudio-assembly-guide: 0.12', 'README-pre-0.12.md'],
+  ['COMPATIBILITY.md', 'systemstudio-assembly-compatibility: 0.12', 'COMPATIBILITY-pre-0.12.md'],
+  ['IRVINE32_PROFILE.md', 'systemstudio-irvine-guide: 0.12', 'IRVINE32_PROFILE-pre-0.12.md']
 ];
 
 /** Archives stale generated guides and installs current ones without touching assembly sources. */

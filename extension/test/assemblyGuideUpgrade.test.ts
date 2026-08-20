@@ -5,7 +5,7 @@ import * as path from 'node:path';
 import { describe, it } from 'node:test';
 import { installCurrentAssemblyGuides } from '../src/core/assemblyGuideUpgrade';
 
-describe('pre-0.11 assembly-workspace migration', () => {
+describe('pre-0.12 assembly-workspace migration', () => {
   it('archives all stale guides, installs current guides, and preserves student source', async () => {
     const temporary = await mkdtemp(path.join(os.tmpdir(), 'systemstudio-assembly-upgrade-'));
     const target = path.join(temporary, 'assembly');
@@ -19,12 +19,12 @@ describe('pre-0.11 assembly-workspace migration', () => {
     try {
       const changed = await installCurrentAssemblyGuides(path.resolve('assembly-starter'), target);
       assert.equal(changed, true);
-      assert.match(await readFile(path.join(target, 'README.md'), 'utf8'), /systemstudio-assembly-guide: 0\.11/);
-      assert.match(await readFile(path.join(target, 'COMPATIBILITY.md'), 'utf8'), /systemstudio-assembly-compatibility: 0\.11/);
-      assert.match(await readFile(path.join(target, 'IRVINE32_PROFILE.md'), 'utf8'), /systemstudio-irvine-guide: 0\.11/);
-      assert.match(await readFile(path.join(target, 'README-pre-0.11.md'), 'utf8'), /Embedded Assembly Lab/);
-      assert.match(await readFile(path.join(target, 'COMPATIBILITY-pre-0.11.md'), 'utf8'), /Portable embedded subset/);
-      assert.match(await readFile(path.join(target, 'IRVINE32_PROFILE-pre-0.11.md'), 'utf8'), /Classroom profile/);
+      assert.match(await readFile(path.join(target, 'README.md'), 'utf8'), /systemstudio-assembly-guide: 0\.12/);
+      assert.match(await readFile(path.join(target, 'COMPATIBILITY.md'), 'utf8'), /systemstudio-assembly-compatibility: 0\.12/);
+      assert.match(await readFile(path.join(target, 'IRVINE32_PROFILE.md'), 'utf8'), /systemstudio-irvine-guide: 0\.12/);
+      assert.match(await readFile(path.join(target, 'README-pre-0.12.md'), 'utf8'), /Embedded Assembly Lab/);
+      assert.match(await readFile(path.join(target, 'COMPATIBILITY-pre-0.12.md'), 'utf8'), /Portable embedded subset/);
+      assert.match(await readFile(path.join(target, 'IRVINE32_PROFILE-pre-0.12.md'), 'utf8'), /Classroom profile/);
       assert.equal(await readFile(studentSource, 'utf8'), 'mov eax, 42\n');
       assert.equal(await installCurrentAssemblyGuides(path.resolve('assembly-starter'), target), false);
     } finally {

@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, assignment-to-final-presentation progression, Full Digital, and real assembly toolchain routing.",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
