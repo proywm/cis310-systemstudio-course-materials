@@ -366,7 +366,7 @@ function tutorialStepsHtml(): string {
       ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as a packaged PDF.')}
       ${choice('calendar', 'Monday/Wednesday calendar', '27 verified regular meetings starting August 26, with holidays and recess identified.')}
       ${choice('openbook', 'Required open book and author videos', 'Focused Tarnoff chapters and official author videos come before the related class and slides.')}
-      ${choice('presentations', '13 lessons and presentations', 'Each responsive HTML lesson explains the visual PDF with objectives, examples, self-checks, and source-bounded tutor prompts.')}
+      ${choice('presentations', '13 accessible HTML lectures', 'Each primary lecture provides objectives, explanations, examples, self-checks, and source-bounded tutor prompts; the legacy PDF is an optional visual archive.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
       ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}

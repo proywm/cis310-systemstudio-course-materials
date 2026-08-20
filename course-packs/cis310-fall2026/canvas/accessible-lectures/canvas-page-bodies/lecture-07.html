@@ -1,0 +1,99 @@
+<!-- Canvas Page title: Lecture 7: Memory Organization and Buses — Accessible Lecture -->
+<p><strong>Module 7 of 13</strong></p>
+<p><strong>Overview:</strong> This lesson scales stored bits into an addressable memory device. It explains rows and word width, address decoding, data/address/control buses, chip select, memory maps, and how a full processor address is divided between device selection and location selection.</p>
+
+<h2>Scope and boundaries</h2>
+<p>The guided two-to-four decoder teaches device selection but does not build the project memory subsystem.</p>
+
+<h2>Learning objectives</h2>
+<p>After studying this page and attempting its examples, you should be able to:</p>
+<ul>
+<li>Relate address-line count to the number of addressable locations.</li>
+<li>Distinguish address, data, and control signals during a memory transfer.</li>
+<li>Explain read enable, write enable, and chip select, including active-low notation.</li>
+<li>Divide an address into device-select bits and within-device address bits.</li>
+</ul>
+
+<h2>Key terms in plain language</h2>
+<dl>
+<dt><strong>Memory word</strong></dt>
+<dd>The fixed-width group of bits stored at one addressable location.</dd>
+<dt><strong>Address bus</strong></dt>
+<dd>Processor-controlled lines that identify the location or device involved in a transfer.</dd>
+<dt><strong>Data bus</strong></dt>
+<dd>Lines carrying the value being read from or written to memory.</dd>
+<dt><strong>Chip select</strong></dt>
+<dd>A control signal that enables one memory device to respond while other devices remain idle.</dd>
+</dl>
+
+<h2>Rows, columns, and decoding</h2>
+<p>A memory device can be pictured as an array. Each row is one addressable location, and the number of columns is the number of bits stored in that location. An address decoder converts the binary address into one selected row while leaving the others inactive.</p>
+<p>With m address lines, a device can select 2 to the power m locations. Data width is a separate quantity: a memory with ten address lines and eight data lines has 1,024 locations, each holding eight bits.</p>
+
+
+<h2>One transfer uses three signal groups</h2>
+<p>The address bus states where the transfer occurs. The data bus carries the value. Control lines state what operation is requested and whether the device should participate. The lecture’s memory interface uses active-low read enable, write enable, and chip select signals, so an asserted signal is represented by 0.</p>
+<p>For a read, the processor selects the device and location, asserts read, and receives data. For a write, it selects the device and location, supplies data, and asserts write. Conflicting read and write requests must be avoided.</p>
+
+
+<h2>Memory maps and address decoding</h2>
+<p>A processor’s memory space contains every address it can generate. A memory map assigns ranges of that space to memory devices, code, data, or other components. Address decoding ensures that only the device assigned to the current range responds.</p>
+<p>When a small device occupies part of a larger address space, low-order address bits commonly choose a location inside the device while high-order bits decide whether that device is selected. The range boundaries follow from the fixed high-order pattern and all possible low-order values.</p>
+
+
+<h2>Worked examples</h2>
+<h3>Example 1: Find device capacity from signal widths</h3>
+<p>A memory has 12 address lines and 16 data lines.</p>
+<ol>
+<li>Twelve address lines select 2 to the power 12, or 4,096, locations.</li>
+<li>Sixteen data lines make each location 16 bits wide.</li>
+<li>Total data capacity is 4,096 times 16 bits, or 65,536 bits.</li>
+</ol>
+<p><strong>Conclusion:</strong> Address width determines location count; data width determines bits per location.</p>
+
+<h3>Example 2: Separate device and local address bits</h3>
+<p>A processor has a 16-bit address and a selected device contains 1,024 locations.</p>
+<ol>
+<li>1,024 equals 2 to the power 10, so ten low-order bits select a location.</li>
+<li>The remaining six high-order bits can participate in device selection.</li>
+<li>Holding those six bits fixed defines one aligned 1,024-address range.</li>
+</ol>
+<p><strong>Conclusion:</strong> The same address simultaneously selects a device range and a row within that device.</p>
+
+<h2>Check your understanding</h2>
+<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<ol>
+<li>What does each of the address, data, and control buses contribute to a write?</li>
+<li>How many locations can nine address lines select?</li>
+<li>Why should only one device’s output drive a shared data bus during a read?</li>
+</ol>
+<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+
+<h2>Apply the concept hands-on</h2>
+<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<ul>
+<li><strong>Required circuit activity:</strong> Explore a 2-to-4 address decoder. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+</ul>
+
+<h2>Ask the approved U-M course tutor</h2>
+<p>Attempt the concept first. If you still need help, copy one prompt into the U-M course tutor. Ask for one hint or analogous example at a time, verify the response against the mapped sources, and do not request completed graded work.</p>
+<ol>
+<li>Give me new address-line and data-line widths and ask me to compute locations and total bits.</li>
+<li>Describe a memory read in scrambled steps and ask me to place address, control, and data actions in order.</li>
+<li>Help me reason about high and low address bits for an analogous device without solving my project address map.</li>
+</ol>
+
+<h2>Mapped readings and videos</h2>
+<h3>Readings</h3>
+<ul>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch12_v02.pdf">Open reading 1: Tarnoff Chapter 12 — Memory Organization</a>. Focus: §§12.2–12.3.4: device organization, buses, and address decoding</li>
+</ul>
+<h3>Author videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=3By4tx4grSk">Open author video 1: Ep 068: Organization of a Simple Memory Device</a>. Focus: Address lines, data width, decoders, and chip select</li>
+</ul>
+
+<h2>Source evidence and format note</h2>
+<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 7 PDF, slides 9–26.</p>
+<p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
+<p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>

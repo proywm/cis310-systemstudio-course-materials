@@ -46,15 +46,15 @@ export function buildCourseModuleNavigation(
     description: module.complete
       ? 'complete'
       : `${module.resourceId === nextResourceId ? 'next · ' : ''}${moduleStatus(module)}`,
-    tooltip: `${module.lectureLabel}\n${module.focus}\nIncludes an accessible HTML explanation paired with the visual PDF.\nReadiness question: ${module.readinessPrompt}`,
+    tooltip: `${module.lectureLabel}\n${module.focus}\nUses a primary accessible HTML lecture with an optional visual PDF archive.\nReadiness question: ${module.readinessPrompt}`,
     complete: module.complete,
     next: module.resourceId === nextResourceId,
     expanded: false,
     items: [
       {
         kind: 'lesson',
-        label: 'Study the accessible lesson text',
-        description: 'learning objectives · plain-language explanations · worked examples · AI tutor prompts',
+        label: 'Open the accessible HTML lecture',
+        description: 'primary format · objectives · explanations · examples · tutor prompts',
         resourceId: module.resourceId
       },
       ...module.readings.map((reading, sourceIndex): ModuleNavigationItem => ({
@@ -85,8 +85,8 @@ export function buildCourseModuleNavigation(
       },
       {
         kind: 'lecture',
-        label: `Open ${module.lectureLabel} presentation`,
-        description: 'paired visual PDF · accessible HTML lesson listed above',
+        label: `Open optional ${module.lectureLabel} visual PDF archive`,
+        description: 'legacy visual reference · HTML lecture listed above is primary',
         resourceId: module.resourceId
       },
       {

@@ -41,7 +41,7 @@ The extension does not guarantee an exam score, grade increase, mastery, or lear
 
 ## Open-book and author-video pathway
 
-The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*, supplemented only where the course presentation needs a directly aligned open source (OSTEP for I/O devices and address spaces). Each of the 13 presentation resources maps to a novice-facing HTML lesson, focused readings, one or more transcript-checked videos from Tarnoff's official Intermation channel or ETSU OER series, the paired visual lecture PDF, one readiness prompt, exactly eight related questions, and hands-on work where appropriate. Five distinct questions establish the readiness checkpoint; all eight form the confidence set. This changes the default sequence from “open the slides” to:
+The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*, supplemented only where the course presentation needs a directly aligned open source (OSTEP for I/O devices and address spaces). Each of the 13 presentation resources maps to a novice-facing primary HTML lecture, focused readings, one or more transcript-checked videos from Tarnoff's official Intermation channel or ETSU OER series, an optional visual PDF archive, one readiness prompt, exactly eight related questions, and hands-on work where appropriate. Five distinct questions establish the readiness checkpoint; all eight form the confidence set. This changes the default sequence from “open the slides” to:
 
 1. **Study the accessible lesson:** use the direct HTML explanation, objectives, key terms, worked examples, and self-check prompts; open the paired PDF when its visual framing helps;
 2. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
@@ -50,7 +50,7 @@ The required open text is David Tarnoff's *Computer Organization and Design Fund
 5. **Build/trace:** construct and test the mapped circuit or inspect instruction-by-instruction machine state where the topic supports authentic hands-on work; and
 6. **Bring uncertainty:** use an attempt-first lesson tutor prompt, or take one unresolved point or confident miss to class or to the instructor.
 
-The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. The packaged lecture PDFs remain local and no Google Drive link is used.
+The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. Primary HTML lectures and optional PDF archives remain local, and no Google Drive link is used.
 
 ## Learning-science rationale
 

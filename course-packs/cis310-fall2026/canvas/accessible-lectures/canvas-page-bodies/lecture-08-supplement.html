@@ -1,0 +1,98 @@
+<!-- Canvas Page title: Lecture 8 supplement: Detailed I/O and Memory — Accessible Lecture -->
+<p><strong>Module 9 of 13</strong></p>
+<p><strong>Overview:</strong> This supplemental lesson consolidates the system path among CPU, memory, and I/O. Its required core is intentionally narrow: register-level I/O, interrupts, DMA, safe shared-state reasoning, and the difference between volatile and persistent memory. Protocol details and emerging technologies are enrichment.</p>
+
+<h2>Scope and boundaries</h2>
+<p>Slides on protocol electrical details, priority inversion, cache coherence, advanced allocation, and emerging memory are labeled enrichment rather than readiness content.</p>
+
+<h2>Learning objectives</h2>
+<p>After studying this page and attempting its examples, you should be able to:</p>
+<ul>
+<li>Trace one register-level or memory-mapped I/O interaction through CPU, bus, and device.</li>
+<li>Explain what an interrupt handler should do and why it should remain short.</li>
+<li>Describe how DMA reduces per-item processor work for a block transfer.</li>
+<li>Select volatile or persistent storage from a retention requirement.</li>
+</ul>
+
+<h2>Key terms in plain language</h2>
+<dl>
+<dt><strong>Direct memory access (DMA)</strong></dt>
+<dd>Hardware-supported block transfer between a device and memory after processor setup.</dd>
+<dt><strong>Volatile memory</strong></dt>
+<dd>Storage such as SRAM or DRAM that loses contents when power is removed.</dd>
+<dt><strong>Persistent memory</strong></dt>
+<dd>Storage such as flash or EEPROM that retains contents without power.</dd>
+<dt><strong>volatile qualifier</strong></dt>
+<dd>A language-level indication that an access is observable and may change outside ordinary program flow; it is not a lock or atomicity guarantee.</dd>
+</dl>
+
+<h2>Register-level control and abstraction</h2>
+<p>A device may expose registers directly on a bus, while a driver or API provides a more portable interface. The lower level gives precise control; the higher level hides device-specific addresses and bit patterns. Both describe the same interaction at different abstraction levels.</p>
+<p>Common serial protocols such as SPI, I2C, UART, and CAN are shown as enrichment examples. Their electrical signaling and detailed transaction formats are not readiness requirements in this module.</p>
+
+
+<h2>Interrupt discipline and shared state</h2>
+<p>An interrupt causes the processor to suspend ordinary execution, save enough context, and run a handler chosen through an interrupt mechanism. A handler should finish urgent device work quickly and defer longer processing so that other events and application work are not delayed.</p>
+<p>A variable shared with an ISR may need volatile access semantics so the compiler does not treat it as unchanging. However, volatile does not make a multi-step update atomic and does not prevent races. Synchronization and data-width guarantees are separate concerns.</p>
+
+
+<h2>DMA and memory choice</h2>
+<p>For a block transfer, the processor can configure a DMA controller with source, destination, and length, then do other work while the controller moves data. Completion still requires coordination, commonly through status or an interrupt. DMA reduces repeated processor copy operations; it does not remove setup or correctness requirements.</p>
+<p>Use volatile storage for active code and working data when power is available. Use persistent storage for firmware, configuration, or logs that must survive power loss. Practical design also considers speed, capacity, power, cost, and write endurance.</p>
+
+
+<h2>Worked examples</h2>
+<h3>Example 1: Plan a DMA input transfer</h3>
+<p>A device will deliver a 4 KiB block into memory.</p>
+<ol>
+<li>The processor configures the device and DMA destination/length.</li>
+<li>The DMA controller performs the repeated transfers.</li>
+<li>The processor runs other work during transfer.</li>
+<li>A completion event causes software to verify status and consume the buffer.</li>
+</ol>
+<p><strong>Conclusion:</strong> DMA changes who performs bulk movement, while the processor remains responsible for setup and completion handling.</p>
+
+<h3>Example 2: Choose storage for two data types</h3>
+<p>A sensor has a temporary sample buffer and a calibration value that must survive power loss.</p>
+<ol>
+<li>The active sample buffer needs fast runtime access, so volatile RAM is suitable.</li>
+<li>The calibration value needs retention, so flash or EEPROM is suitable.</li>
+<li>If the calibration changes often, write endurance must also be considered.</li>
+</ol>
+<p><strong>Conclusion:</strong> Retention is the first distinction, followed by performance and endurance tradeoffs.</p>
+
+<h2>Check your understanding</h2>
+<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<ol>
+<li>What work remains for the processor when DMA moves the data?</li>
+<li>What does volatile fail to guarantee for a shared variable?</li>
+<li>Which memory characteristics matter beyond whether power is retained?</li>
+</ol>
+<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+
+
+<h2>Ask the approved U-M course tutor</h2>
+<p>Attempt the concept first. If you still need help, copy one prompt into the U-M course tutor. Ask for one hint or analogous example at a time, verify the response against the mapped sources, and do not request completed graded work.</p>
+<ol>
+<li>Ask me to trace CPU, DMA, memory, and device responsibilities in a new block-transfer scenario.</li>
+<li>Give me a shared ISR variable scenario and help me separate visibility from atomicity.</li>
+<li>Give me three data-retention requirements and ask me to choose volatile or persistent storage with reasons.</li>
+</ol>
+
+<h2>Mapped readings and videos</h2>
+<h3>Readings</h3>
+<ul>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch12_v02.pdf">Open reading 1: Tarnoff Chapter 12 — Memory Organization</a>. Focus: §12.4 memory-mapped I/O</li>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch15_v02.pdf">Open reading 2: Tarnoff Chapter 15 — Introduction to Processor Architecture</a>. Focus: §15.9.1–15.9.4</li>
+</ul>
+<h3>Author videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=xNH1e5snIEY">Open author video 1: Ep 087: Using Polled I/O with a Memory-Mapped Device</a>. Focus: Address, status, and data-transfer trace</li>
+<li><a href="https://www.youtube.com/watch?v=dDA3PUr16As">Open author video 2: Ep 088: Introduction to Interrupts</a>. Focus: Event-driven device notification</li>
+<li><a href="https://www.youtube.com/watch?v=M16l_ymlfcs">Open author video 3: Introduction to Direct Memory Access (DMA)</a>. Focus: Block transfers with reduced CPU involvement</li>
+</ul>
+
+<h2>Source evidence and format note</h2>
+<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 8 supplement PDF, core slides 3–6, 8–10, 12–21, 25–30, and 39–42.</p>
+<p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
+<p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>

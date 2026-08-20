@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Active Fall 2026 CIS 310 learning materials with accessible lesson text, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
-  "version": "0.14.0",
+  "description": "Active Fall 2026 CIS 310 learning materials with primary accessible HTML lectures, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
+  "version": "0.15.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -122,7 +122,7 @@
       },
       {
         "command": "systemstudioCis310.openLessonText",
-        "title": "CIS 310: Open Accessible Lesson Text",
+        "title": "CIS 310: Open Accessible HTML Lecture",
         "category": "SystemStudio",
         "icon": "$(book-open)"
       },
@@ -382,7 +382,7 @@
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Active Fall 2026 lessons and assignments: every lecture has a responsive HTML lesson, mapped open-book reading, official author video, visual PDF, and readiness practice; three homework and three project references are also packaged. Canvas is authoritative for current requirements and submission.\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+        "contents": "Active Fall 2026 lessons and assignments: every lecture has a primary accessible HTML page, mapped open-book reading, official author video, readiness practice, hands-on work where appropriate, and an optional visual PDF archive; three homework and three project references are also packaged. Canvas is authoritative for current requirements and submission.\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
       }
     ],
     "walkthroughs": [
@@ -416,7 +416,7 @@
           {
             "id": "materials",
             "title": "Read Before Class; Verify and Submit in Canvas",
-            "description": "Use the mapped required open-book sections and official author videos before the 13 bundled lecture PDFs. The syllabus, calendar, presentations, three homework references, and three project references are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
+            "description": "Begin with the 13 primary accessible HTML lectures, then use the mapped required open-book sections, official author videos, questions, and hands-on work. Optional visual PDF archives, the syllabus, calendar, three homework references, and three project references are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
             "media": {
               "markdown": "media/tutorial/03-materials.md"
             },
@@ -584,12 +584,13 @@
   },
   "scripts": {
     "clean": "node -e \"const fs=require('node:fs'); for (const target of ['dist','course-packs']) fs.rmSync(target,{recursive:true,force:true})\"",
+    "export:canvas": "tsx scripts/export-canvas-lessons.ts",
     "stage-course-pack": "node scripts/stage-course-pack.mjs",
     "compile": "node esbuild.mjs",
     "watch": "node esbuild.mjs --watch",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/**/*.test.ts",
-    "check": "npm run stage-course-pack && npm run typecheck && npm test && npm run compile",
+    "check": "npm run export:canvas && npm run stage-course-pack && npm run typecheck && npm test && npm run compile",
     "package": "npm run check && vsce package --out systemstudio-cis310.vsix",
     "vscode:prepublish": "npm run compile"
   },

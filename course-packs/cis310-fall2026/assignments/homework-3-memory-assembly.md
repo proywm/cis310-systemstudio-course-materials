@@ -22,7 +22,7 @@ Review Lectures 8--10 and 12 on I/O, the memory hierarchy, the instruction cycle
 
 ## Suggested SystemStudio workflow
 
-1. Open the mapped bundled lecture PDF and identify the relevant diagram or trace.
+1. Open the mapped accessible HTML lecture and identify the relevant concept or trace; use the optional visual PDF archive only when its diagram helps.
 2. Explain the concept in your own words before writing the final response.
 3. For instruction or register questions, use the Instruction Trace Tutor for prediction practice; use the real assembly-toolchain command when the result depends on actual syntax, linking, encoded code, or executable behavior.
 4. Compare your explanation with the visible register, flag, stack, output, and instruction-trace evidence.

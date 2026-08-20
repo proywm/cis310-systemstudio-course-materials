@@ -8,7 +8,7 @@ Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson �
 
 ## Where is the text alternative to a presentation?
 
-Expand the lecture under **Course Modules** and choose **Study the accessible lesson text**, or open **Course Materials → Accessible lesson texts**. Each responsive HTML lesson provides objectives, key terms, direct explanations, worked examples, self-checks, source evidence, and previous/next navigation. The presentation PDF remains available as a paired visual resource; SystemStudio does not claim that the original PDF is independently remediated.
+Expand the lecture under **Course Modules** and choose **Open accessible HTML lecture**, or open **Course Materials → Accessible HTML lectures — primary**. Each responsive page provides objectives, key terms, direct explanations, worked examples, self-checks, source evidence, and previous/next navigation. The untagged presentation PDF remains available only as an optional visual archive; SystemStudio does not claim that it is independently remediated.
 
 If a diagram, circuit, equation, video, or simulator interaction is still inaccessible, identify the lecture and item and contact the instructor promptly for an equivalent format or activity. The streamed Digital canvas is specifically disclosed as graphical and is not a screen-reader-equivalent circuit editor.
 

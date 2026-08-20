@@ -15,7 +15,7 @@ This document records design evidence and known boundaries. It is not a certific
 
 ## Accessible lesson alternative
 
-Each of the 13 visual lecture PDFs now has a substantial HTML lesson in the extension. Each lesson includes:
+Each of the 13 visual lecture PDFs now has a substantial HTML lecture in the extension and a Canvas-ready export. The HTML is the primary lecture format; each page includes:
 
 - one page title (`h1`) followed by sequential `h2` and `h3` headings;
 - a concise overview, measurable learning objectives, and plain-language definitions;
@@ -25,7 +25,9 @@ Each of the 13 visual lecture PDFs now has a substantial HTML lesson in the exte
 - descriptive controls for the presentation, each reading, each video, practice, and mapped hands-on work; and
 - an exact presentation slide range plus a scope boundary so the alternative does not silently add unsupported material.
 
-The HTML alternative is intentionally not another PDF. It reflows at narrow widths and zoom, uses a readable line length, inherits the student's VS Code theme, and contains machine-readable text.
+The HTML lecture is intentionally not another PDF. It reflows at narrow widths and zoom, uses a readable line length, inherits the student's VS Code theme, and contains machine-readable text. The generated Canvas body begins at `h2` because Canvas supplies the page-title `h1`; it includes no script, stylesheet, image, iframe, or layout table. A standalone version includes a language declaration, one `h1`, a skip link, and previous/next navigation.
+
+The deterministic Canvas bundle is generated with `npm run export:canvas`. Its manifest records SHA-256 values for all 13 Canvas bodies and standalone documents. Generation and automated structural checks do not replace Panorama, screen-reader, keyboard, zoom/reflow, or instructor content review before publication.
 
 ## Interface measures
 
@@ -45,7 +47,7 @@ Tutor buttons do not send course or student data to an instructor-owned model. T
 
 ## Known boundaries and required follow-up
 
-- The existing presentation PDFs have not been certified as tagged, correctly ordered, or independently WCAG-conformant. The HTML lesson is the accessible alternative. The original PowerPoint sources should still be checked with Microsoft Accessibility Checker and the Canvas copies with Panorama.
+- The existing presentation PDFs are untagged and have not been certified as correctly ordered or independently WCAG-conformant. They are optional visual archives, not the primary lecture format. If the original PowerPoint sources become available, check them with Microsoft Accessibility Checker; review every Canvas HTML page with Panorama.
 - Each assigned video still requires accurate synchronized captions and a reviewed transcript. A video's presence in the content map does not certify its captions.
 - The complete Digital application is a streamed upstream Swing desktop. Its pixel canvas does not expose equivalent screen-reader semantics through noVNC. The textual circuit lessons, predictions, signal tables, and instructor accommodation process remain necessary alternatives; the extension explicitly discloses this limitation.
 - U-M Maizey, Canvas, YouTube, the open textbook site, Docker Desktop, and upstream Digital are external products with their own accessibility status.

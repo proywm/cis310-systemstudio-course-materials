@@ -13,7 +13,7 @@ type LessonPanelRequest =
   | { action: 'lab'; labId: string }
   | { action: 'tutor'; promptIndex: number };
 
-/** Accessible HTML alternative to the visual lecture PDF sequence. */
+/** Primary accessible HTML lecture paired with the optional visual PDF archive. */
 export class LessonTextPanel {
   private static current: LessonTextPanel | undefined;
 
@@ -34,7 +34,7 @@ export class LessonTextPanel {
     }
     const panel = vscode.window.createWebviewPanel(
       'systemstudioCis310.lessonText',
-      `${lesson.lectureLabel} · Accessible lesson text`,
+      `${lesson.lectureLabel} · Accessible HTML lecture`,
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true }
     );
@@ -59,7 +59,7 @@ export class LessonTextPanel {
     const lesson = lessonNarrative(resourceId);
     if (!lesson) return;
     this.resourceId = resourceId;
-    this.panel.title = `${lesson.lectureLabel} · Accessible lesson text`;
+    this.panel.title = `${lesson.lectureLabel} · Accessible HTML lecture`;
     this.panel.webview.html = renderLessonHtml(lesson);
   }
 
@@ -138,7 +138,7 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';">
-  <title>${escapeHtml(lesson.lectureLabel)}: ${escapeHtml(lesson.title)} — accessible lesson text</title>
+  <title>${escapeHtml(lesson.lectureLabel)}: ${escapeHtml(lesson.title)} — accessible HTML lecture</title>
   <style nonce="${nonce}">
     :root { color-scheme: light dark; }
     * { box-sizing: border-box; }
@@ -180,7 +180,7 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
 <body>
   <a class="skip-link" href="#lesson-main">Skip to lesson content</a>
   <header>
-    <p class="eyebrow">Module ${currentIndex + 1} of ${LESSON_NARRATIVES.length} · Accessible HTML lesson</p>
+    <p class="eyebrow">Module ${currentIndex + 1} of ${LESSON_NARRATIVES.length} · Accessible HTML lecture</p>
     <h1>${escapeHtml(lesson.lectureLabel)}: ${escapeHtml(lesson.title)}</h1>
     <p class="summary">${escapeHtml(lesson.overview)}</p>
     <nav aria-label="Lesson navigation">
@@ -230,9 +230,9 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     <section class="sources" aria-labelledby="sources-heading">
       <h2 id="sources-heading">Source basis and further study</h2>
       <p><strong>Presentation evidence:</strong> ${escapeHtml(lesson.slideEvidence)}</p>
-      <p class="source-note">This text is an accessible explanatory alternative, not a claim that the original PDF itself has been remediated. Open the named sources to verify details.</p>
+      <p class="source-note">This HTML lecture is the primary format designed for digital accessibility. The optional visual PDF archive is not represented as independently remediated. Open the named sources to verify details.</p>
       <div class="actions">
-        ${actionButton('presentation', `Open ${lesson.lectureLabel} presentation PDF`)}
+        ${actionButton('presentation', `Open optional ${lesson.lectureLabel} visual PDF archive`)}
         ${sourceButtons}
       </div>
     </section>

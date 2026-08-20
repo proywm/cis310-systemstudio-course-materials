@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages the syllabus, calendar, accessible lesson texts, presentations, assignment references, open-book/video preparation path, formative practice, guided labs, local FAQ, U-M Maizey handoff, and Canvas question workflow.
+SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages the syllabus, calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, local FAQ, U-M Maizey handoff, and Canvas question workflow.
 
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
@@ -38,7 +38,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 ## Main student workflow
 
 1. Open **SystemStudio CIS 310 → Start Here**.
-2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Accessible lesson → Read → Watch → Visual PDF → Practice 8 questions → guided activity** sequence. Five distinct questions form the readiness checkpoint; all eight form the confidence set.
+2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Accessible HTML lecture → Read → Watch → Practice 8 questions → guided activity** sequence plus an optional visual PDF archive. Five distinct questions form the readiness checkpoint; all eight form the confidence set.
 3. Check Canvas for live requirements and submission.
 4. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
 5. For assembly, choose **Build and Run with Real Assembly Toolchain** for executable evidence. Use **Instruction Trace Tutor** only for prediction practice.
@@ -46,10 +46,10 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 
 ## Included learning features
 
-- an always-visible, sequential 13-module sidebar outline with direct navigation to a novice-facing responsive HTML lesson, focused open-textbook reading, official author video, paired visual PDF, readiness check, and mapped guided lab;
-- 13 evidence-bounded lesson texts with objectives, definitions, explanations, worked examples, self-checks, presentation evidence, and attempt-first AI tutor prompts;
+- an always-visible, sequential 13-module sidebar outline with direct navigation to a novice-facing accessible HTML lecture, focused open-textbook reading, official author video, readiness check, mapped guided lab, and optional visual PDF archive;
+- 13 evidence-bounded HTML lectures with objectives, definitions, explanations, worked examples, self-checks, presentation evidence, and attempt-first AI tutor prompts;
 - 104 evidence-mapped questions—eight per module—with a five-question readiness checkpoint, Bloom-level labels, quiz mode, confidence checks, explanation/justification, and spaced local review;
-- 13 packaged presentation PDFs, three homework references, and three processor-project references;
+- 13 packaged legacy presentation PDFs retained as optional visual archives, three homework references, and three processor-project references;
 - 27-meeting Monday/Wednesday Fall 2026 calendar with `.ics` export;
 - seven guided circuit builds and five assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;

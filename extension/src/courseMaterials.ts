@@ -109,12 +109,12 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
         `${element.lesson.lectureLabel}: ${element.lesson.title}`,
         vscode.TreeItemCollapsibleState.None
       );
-      item.description = 'accessible HTML · examples · tutor prompts';
+      item.description = 'primary HTML lecture · examples · tutor prompts';
       item.tooltip = `${element.lesson.overview}\n${element.lesson.slideEvidence}`;
       item.iconPath = new vscode.ThemeIcon('book-open');
       item.command = {
         command: 'systemstudioCis310.openLessonText',
-        title: 'Open accessible lesson text',
+        title: 'Open accessible HTML lecture',
         arguments: [element.lesson.resourceId]
       };
       return item;
@@ -123,12 +123,12 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     item.description = element.resource.kind === 'syllabus'
       ? 'Fall 2026 PDF · Canvas current'
       : element.resource.kind === 'presentation'
-        ? 'visual PDF · paired accessible lesson'
+        ? 'optional visual PDF archive · HTML lecture is primary'
         : 'packaged reference';
     item.tooltip = element.resource.kind === 'syllabus'
       ? 'Active Fall 2026 syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission.'
       : element.resource.kind === 'presentation'
-      ? `${element.resource.sourceTitle}\nVisual PDF reference paired with a responsive HTML lesson text. The PDF is not represented as independently remediated.`
+      ? `${element.resource.sourceTitle}\nOptional visual PDF archive paired with a primary responsive HTML lecture. The PDF is not represented as independently remediated.`
       : `${element.resource.sourceTitle}\nUse this study reference with the current Canvas assignment.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(
@@ -151,8 +151,8 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
         { type: 'notice' },
         { type: 'practice' },
         { type: 'section', section: 'syllabus', label: `Syllabus (${this.materials.getResources('syllabus').length})` },
-        { type: 'section', section: 'lesson', label: `Accessible lesson texts (${LESSON_NARRATIVES.length})` },
-        { type: 'section', section: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
+        { type: 'section', section: 'lesson', label: `Accessible HTML lectures (${LESSON_NARRATIVES.length}) — primary` },
+        { type: 'section', section: 'presentation', label: `Visual PDF archives (${this.materials.getResources('presentation').length}) — optional` },
         { type: 'section', section: 'homework', label: `Homework (${this.materials.getAssignments('homework').length})` },
         { type: 'section', section: 'project', label: `Project Assignments (${this.materials.getAssignments('project').length})` }
       ];

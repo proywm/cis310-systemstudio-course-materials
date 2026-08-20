@@ -1,6 +1,6 @@
 # CIS 310 Fall 2026 Course Pack
 
-This is the active student course pack for Fall 2026 CIS 310. It is packaged with the SystemStudio VS Code extension so the syllabus, accessible lesson texts, presentations, and assignment references open locally, while focused readings and official author videos open from the required book's authoritative sources.
+This is the active student course pack for Fall 2026 CIS 310. It is packaged with the SystemStudio VS Code extension so the syllabus, primary accessible HTML lectures, optional PDF archives, and assignment references open locally, while focused readings and official author videos open from the required book's authoritative sources.
 
 ## Course authority
 
@@ -9,9 +9,10 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 ## Included
 
 - one SHA-256-verified Fall 2026 syllabus PDF;
-- a 13-module Accessible lesson → Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, lecture PDFs, and hands-on work;
-- 13 responsive HTML lesson texts with objectives, definitions, explanations, examples, self-checks, source evidence, and lesson-specific tutor prompts;
-- 13 SHA-256-verified presentation PDFs covering Lectures 1--12, including the Lecture 8 companion;
+- a 13-module Accessible HTML lecture → Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, legacy slide evidence, and hands-on work;
+- 13 responsive HTML lectures with objectives, definitions, explanations, examples, self-checks, source evidence, and lesson-specific tutor prompts;
+- a Canvas publication bundle at [`canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip`](canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip), containing 13 Canvas-safe bodies, 13 standalone pages, a page map, and a validation manifest;
+- 13 SHA-256-verified legacy presentation PDFs covering Lectures 1--12, including the Lecture 8 companion, retained as optional visual archives;
 - three homework study references;
 - three processor-project study and implementation references;
 - 104 formative practice questions, exactly eight mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
@@ -23,9 +24,9 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 ## Student workflow
 
-1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Accessible lesson → Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
+1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Accessible HTML lecture → Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
 2. Open the syllabus and course calendar from the SystemStudio sidebar.
-3. Use the presentation and assignment reference after the mapped open-book reading, not as a substitute for it.
+3. Use the optional visual PDF archive only when its diagrams help; the accessible HTML lecture is the primary lecture format.
 4. Open the matching Canvas assignment and confirm its current requirements.
 5. Use topic practice, quiz mode, or due/saved review when a concept needs another retrieval attempt.
 6. Open a mapped guided lab when available, predict a small result, and inspect the requested evidence before marking a checkpoint.

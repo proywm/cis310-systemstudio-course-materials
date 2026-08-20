@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 3: Boolean Algebra and Circuit Simplification — Accessible Lecture</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    html { font-size: 100%; }
+    body { max-width: 76ch; margin: 0 auto; padding: 1rem; font: 1rem/1.65 system-ui, sans-serif; color: CanvasText; background: Canvas; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+    h2 { margin-top: 2.25rem; }
+    h3 { margin-top: 1.5rem; }
+    a { color: LinkText; text-decoration-thickness: .12em; text-underline-offset: .15em; }
+    a:focus-visible { outline: .2rem solid Highlight; outline-offset: .2rem; }
+    .skip-link { position: absolute; left: -10000px; top: auto; }
+    .skip-link:focus { left: 1rem; top: 1rem; padding: .5rem; color: ButtonText; background: ButtonFace; }
+    nav { display: flex; flex-wrap: wrap; gap: 1rem; padding-block: 1rem; border-block: .0625rem solid GrayText; }
+    dt { margin-top: .75rem; }
+    dd { margin-left: 1.25rem; }
+    li + li { margin-top: .4rem; }
+    @media (max-width: 32rem) { body { padding: .75rem; } nav { display: block; } nav a { display: block; margin-block: .75rem; } }
+    @media (forced-colors: active) { a:focus-visible { outline-color: Highlight; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lecture-content">Skip to lecture content</a>
+  <header>
+    <h1>Lecture 3: Boolean Algebra and Circuit Simplification — Accessible Lecture</h1>
+    <nav aria-label="Lecture navigation">
+      <a href="lecture-02.html">Previous lecture: Signed Data, Boolean Logic, and Adders</a>
+<a href="lecture-04.html">Next lecture: Karnaugh Maps</a>
+    </nav>
+  </header>
+  <main id="lecture-content" tabindex="-1">
+<!-- Canvas Page title: Lecture 3: Boolean Algebra and Circuit Simplification — Accessible Lecture -->
+<p><strong>Module 3 of 13</strong></p>
+<p><strong>Overview:</strong> This lesson turns truth-table behavior into structured Boolean expressions and shows how algebraic laws can reduce an expression without changing its function. Every simplification should name a law and be checked against the original behavior.</p>
+
+<h2>Scope and boundaries</h2>
+<p>Examples use new expressions and explain the method; they do not simplify current homework expressions.</p>
+
+<h2>Learning objectives</h2>
+<p>After studying this page and attempting its examples, you should be able to:</p>
+<ul>
+<li>Recognize sum-of-products (SOP) and product-of-sums (POS) form.</li>
+<li>Construct canonical SOP terms from truth-table rows where the output is 1.</li>
+<li>Use complement, identity, distributive, and DeMorgan laws in an explicit sequence.</li>
+<li>Verify that a simplified expression remains equivalent to the original.</li>
+</ul>
+
+<h2>Key terms in plain language</h2>
+<dl>
+<dt><strong>Literal</strong></dt>
+<dd>A Boolean variable or its complement, such as A or NOT A.</dd>
+<dt><strong>Product term</strong></dt>
+<dd>Literals combined by AND.</dd>
+<dt><strong>Sum-of-products (SOP)</strong></dt>
+<dd>One or more product terms combined by OR.</dd>
+<dt><strong>Equivalent functions</strong></dt>
+<dd>Expressions that produce the same output for every possible input row.</dd>
+</dl>
+
+<h2>From truth-table rows to expressions</h2>
+<p>For canonical SOP, use each row whose output is 1. Within that row, write a product containing every input: use the uncomplemented variable when its row value is 1 and the complemented variable when its row value is 0. OR all resulting minterms together.</p>
+<p>For canonical POS, begin with output-0 rows and form sum terms. SOP and POS are structured descriptions of the same function; they are not automatically minimal.</p>
+
+
+<h2>Simplification is an equivalence argument</h2>
+<p>Boolean algebra laws permit one expression to be replaced by an equivalent expression. For example, AB plus A times NOT B can be factored as A times the quantity B plus NOT B. The complement law makes that quantity 1, and the identity law leaves A.</p>
+<p>DeMorgan’s theorem requires two changes together: complement every operand and swap AND with OR. Moving a complement bar inward without changing the operator produces a different function.</p>
+
+
+<h2>Why simpler circuits matter</h2>
+<p>A simpler expression may require fewer gates, fewer gate inputs, fewer logic levels, and fewer connections. These changes can reduce cost and delay. The slide deck also names fan-in, fan-out, interconnection complexity, and hazards as design considerations; minimization is therefore about an implementation, not just shorter notation.</p>
+<p>A final truth-table comparison is a strong finite check: for three inputs, evaluate all eight rows and confirm that original and simplified outputs match.</p>
+
+
+<h2>Worked examples</h2>
+<h3>Example 1: Create one canonical minterm</h3>
+<p>A truth-table output is 1 for A equal to 0, B equal to 1, and C equal to 0.</p>
+<ol>
+<li>A is 0, so use NOT A.</li>
+<li>B is 1, so use B.</li>
+<li>C is 0, so use NOT C.</li>
+<li>AND the three literals.</li>
+</ol>
+<p><strong>Conclusion:</strong> The minterm is (NOT A) AND B AND (NOT C), true for exactly that input row.</p>
+
+<h3>Example 2: Simplify AB plus A(NOT B)</h3>
+<p>The two terms share A.</p>
+<ol>
+<li>Factor A to obtain A times (B plus NOT B).</li>
+<li>Use the complement law: B plus NOT B equals 1.</li>
+<li>Use the identity law: A times 1 equals A.</li>
+</ol>
+<p><strong>Conclusion:</strong> The simpler expression A has the same truth table as the original expression.</p>
+
+<h2>Check your understanding</h2>
+<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<ol>
+<li>Why must a canonical minterm contain every input variable?</li>
+<li>What two changes occur when DeMorgan’s theorem moves a complement inward?</li>
+<li>What evidence would convince you that a simplification is correct?</li>
+</ol>
+<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+
+<h2>Apply the concept hands-on</h2>
+<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<ul>
+<li><strong>Required circuit activity:</strong> Boolean path from expression to gates. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+</ul>
+
+<h2>Ask the approved U-M course tutor</h2>
+<p>Attempt the concept first. If you still need help, copy one prompt into the U-M course tutor. Ask for one hint or analogous example at a time, verify the response against the mapped sources, and do not request completed graded work.</p>
+<ol>
+<li>Give me a three-input truth-table row and ask me to construct its canonical SOP minterm.</li>
+<li>Show me one Boolean simplification step at a time and require me to name the law before continuing.</li>
+<li>Give me two small expressions and help me design a truth-table equivalence check without answering it first.</li>
+</ol>
+
+<h2>Mapped readings and videos</h2>
+<h3>Readings</h3>
+<ul>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch5_v02.pdf">Open reading 1: Tarnoff Chapter 5 — Boolean Algebra</a>. Focus: §§5.1–5.7</li>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch6_v02.pdf">Open reading 2: Tarnoff Chapter 6 — Standard Boolean Expression Formats</a>. Focus: §§6.1–6.3: SOP and truth-table conversion</li>
+</ul>
+<h3>Author videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=dLIfh2wj8Dk">Open author video 1: Ep 034: Basic Boolean Algebraic Simplification Examples</a>. Focus: Boolean laws and absorption</li>
+<li><a href="https://www.youtube.com/watch?v=13HCv91RGOE">Open author video 2: Ep 036: Converting Truth Tables to Sum-of-Products Expressions</a>. Focus: Canonical SOP from output-1 rows</li>
+<li><a href="https://www.youtube.com/watch?v=euW9JldGCFk">Open author video 3: Ep 033: DeMorgan’s Theorem</a>. Focus: Complementing AND/OR expressions</li>
+</ul>
+
+<h2>Source evidence and format note</h2>
+<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 3 PDF, slides 2–12.</p>
+<p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
+<p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>
+  </main>
+</body>
+</html>

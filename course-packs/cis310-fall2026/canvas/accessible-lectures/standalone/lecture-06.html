@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 6: Memory Cells and Sequential Logic — Accessible Lecture</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    html { font-size: 100%; }
+    body { max-width: 76ch; margin: 0 auto; padding: 1rem; font: 1rem/1.65 system-ui, sans-serif; color: CanvasText; background: Canvas; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+    h2 { margin-top: 2.25rem; }
+    h3 { margin-top: 1.5rem; }
+    a { color: LinkText; text-decoration-thickness: .12em; text-underline-offset: .15em; }
+    a:focus-visible { outline: .2rem solid Highlight; outline-offset: .2rem; }
+    .skip-link { position: absolute; left: -10000px; top: auto; }
+    .skip-link:focus { left: 1rem; top: 1rem; padding: .5rem; color: ButtonText; background: ButtonFace; }
+    nav { display: flex; flex-wrap: wrap; gap: 1rem; padding-block: 1rem; border-block: .0625rem solid GrayText; }
+    dt { margin-top: .75rem; }
+    dd { margin-left: 1.25rem; }
+    li + li { margin-top: .4rem; }
+    @media (max-width: 32rem) { body { padding: .75rem; } nav { display: block; } nav a { display: block; margin-block: .75rem; } }
+    @media (forced-colors: active) { a:focus-visible { outline-color: Highlight; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lecture-content">Skip to lecture content</a>
+  <header>
+    <h1>Lecture 6: Memory Cells and Sequential Logic — Accessible Lecture</h1>
+    <nav aria-label="Lecture navigation">
+      <a href="lecture-05.html">Previous lecture: Combinational Logic and Data Selection</a>
+<a href="lecture-07.html">Next lecture: Memory Organization and Buses</a>
+    </nav>
+  </header>
+  <main id="lecture-content" tabindex="-1">
+<!-- Canvas Page title: Lecture 6: Memory Cells and Sequential Logic — Accessible Lecture -->
+<p><strong>Module 6 of 13</strong></p>
+<p><strong>Overview:</strong> Combinational gates calculate from current inputs; sequential circuits also remember a present state. This lesson develops one stored bit, clock-controlled updates, flip-flops, state tables, state diagrams, and the relationship between present state and next state.</p>
+
+<h2>Scope and boundaries</h2>
+<p>The required lab observes one bit only; Homework 2 state-machine and project register work remain student-created.</p>
+
+<h2>Learning objectives</h2>
+<p>After studying this page and attempting its examples, you should be able to:</p>
+<ul>
+<li>Identify feedback as the mechanism that permits a stable stored bit.</li>
+<li>Distinguish latch behavior from edge-triggered flip-flop behavior.</li>
+<li>Read a timing diagram using data, clock, and output evidence.</li>
+<li>Relate a state table or state diagram to current state, input, next state, and output.</li>
+</ul>
+
+<h2>Key terms in plain language</h2>
+<dl>
+<dt><strong>State</strong></dt>
+<dd>Stored information that summarizes relevant past behavior.</dd>
+<dt><strong>Latch</strong></dt>
+<dd>A storage element whose state may respond while an enable condition is active.</dd>
+<dt><strong>Edge-triggered flip-flop</strong></dt>
+<dd>A storage element that samples input at a specified clock transition.</dd>
+<dt><strong>Next-state logic</strong></dt>
+<dd>Combinational logic that computes the value to be stored at the next update event.</dd>
+</dl>
+
+<h2>How a circuit remembers</h2>
+<p>Feedback sends an output back into the circuit so that a stable logic value can persist after the initiating input changes. A practical memory cell must not only hold a value; it must also provide controlled ways to write a new value and read the stored output.</p>
+<p>An SR storage element exposes set and reset behavior. A D storage element provides one data input and is designed so the stored output follows a defined data value at the permitted update time, avoiding an ambiguous input combination at its interface.</p>
+
+
+<h2>Clock and timing evidence</h2>
+<p>Synchronous sequential circuits restrict state updates to clock events. For a rising-edge D flip-flop, changing D between rising edges should not immediately change Q; Q updates to the sampled D value at the configured edge. A timing diagram should therefore be read around each active clock event.</p>
+<p>Do not infer correctness from a single final output. Record D immediately before the edge, the edge itself, and Q immediately after it. That ordered evidence distinguishes stored-state behavior from a loose wire or combinational path.</p>
+
+
+<h2>From one bit to a state machine</h2>
+<p>A sequential circuit combines flip-flops with combinational gates. Its next state depends on current state and inputs; its outputs depend on state and, for some designs, current inputs. A state table lists these relationships, while a state diagram presents states and transitions graphically.</p>
+<p>Counters are a familiar example: the stored bit pattern names the current count, and next-state logic produces the following pattern at each clock event. Excitation tables help determine what flip-flop inputs are required to cause a desired transition.</p>
+
+
+<h2>Worked examples</h2>
+<h3>Example 1: Observe a D flip-flop holding state</h3>
+<p>Q initially stores 0. D changes to 1, but no active clock edge occurs.</p>
+<ol>
+<li>D is the requested next value.</li>
+<li>Without the configured edge, the storage event has not happened.</li>
+<li>Q remains at its present value 0.</li>
+<li>At the next rising edge, Q becomes 1.</li>
+</ol>
+<p><strong>Conclusion:</strong> The difference between D and Q before the edge is direct evidence that the element stores state.</p>
+
+<h3>Example 2: Describe a divide-by-two sequence</h3>
+<p>A flip-flop is configured so its next state is the complement of its present state.</p>
+<ol>
+<li>Start with Q equal to 0.</li>
+<li>First active edge stores 1.</li>
+<li>Second active edge stores 0.</li>
+<li>One full output cycle therefore takes two input clock edges.</li>
+</ol>
+<p><strong>Conclusion:</strong> The output frequency is half the input clock frequency because Q toggles once per edge.</p>
+
+<h2>Check your understanding</h2>
+<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<ol>
+<li>What observation proves that Q is stored rather than a direct copy of D?</li>
+<li>What information belongs in a state table row?</li>
+<li>Why is a clock useful when many storage elements must update together?</li>
+</ol>
+<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+
+<h2>Apply the concept hands-on</h2>
+<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<ul>
+<li><strong>Required circuit activity:</strong> Observe one stored state bit. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+</ul>
+
+<h2>Ask the approved U-M course tutor</h2>
+<p>Attempt the concept first. If you still need help, copy one prompt into the U-M course tutor. Ask for one hint or analogous example at a time, verify the response against the mapped sources, and do not request completed graded work.</p>
+<ol>
+<li>Give me a short D flip-flop timing sequence in words and ask me to predict Q at each edge.</li>
+<li>Help me distinguish present state, input, next state, and output in a small two-state example.</li>
+<li>Ask me diagnostic questions about why changing D did not change Q before giving a hint.</li>
+</ol>
+
+<h2>Mapped readings and videos</h2>
+<h3>Readings</h3>
+<ul>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch10_v02.pdf">Open reading 1: Tarnoff Chapter 10 — Latches</a>. Focus: §§10.1–10.5</li>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch11_v02.pdf">Open reading 2: Tarnoff Chapter 11 — State Machines</a>. Focus: §§11.1–11.2: state architecture, encoding, and next-state logic</li>
+</ul>
+<h3>Author videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=moxMU86NeVI">Open author video 1: Ep 058: Timing Diagrams for Flip-Flops and Latches</a>. Focus: Clock events, stored state, and timing evidence</li>
+<li><a href="https://www.youtube.com/watch?v=ts4g_NUuHAc">Open author video 2: Ep 061: D Flip-Flop Counter/Timer</a>. Focus: Counter states and divide-by-two behavior</li>
+<li><a href="https://www.youtube.com/watch?v=SZwLuDUsX3A">Open author video 3: Ep 064: State Machine Theory</a>. Focus: State bits and current/next-state logic</li>
+</ul>
+
+<h2>Source evidence and format note</h2>
+<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 6 PDF, slides 4–15 and 22–32.</p>
+<p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
+<p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>
+  </main>
+</body>
+</html>

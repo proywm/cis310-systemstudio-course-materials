@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 12: Address Spaces, x86 Registers, and Assembly — Accessible Lecture</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    html { font-size: 100%; }
+    body { max-width: 76ch; margin: 0 auto; padding: 1rem; font: 1rem/1.65 system-ui, sans-serif; color: CanvasText; background: Canvas; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+    h2 { margin-top: 2.25rem; }
+    h3 { margin-top: 1.5rem; }
+    a { color: LinkText; text-decoration-thickness: .12em; text-underline-offset: .15em; }
+    a:focus-visible { outline: .2rem solid Highlight; outline-offset: .2rem; }
+    .skip-link { position: absolute; left: -10000px; top: auto; }
+    .skip-link:focus { left: 1rem; top: 1rem; padding: .5rem; color: ButtonText; background: ButtonFace; }
+    nav { display: flex; flex-wrap: wrap; gap: 1rem; padding-block: 1rem; border-block: .0625rem solid GrayText; }
+    dt { margin-top: .75rem; }
+    dd { margin-left: 1.25rem; }
+    li + li { margin-top: .4rem; }
+    @media (max-width: 32rem) { body { padding: .75rem; } nav { display: block; } nav a { display: block; margin-block: .75rem; } }
+    @media (forced-colors: active) { a:focus-visible { outline-color: Highlight; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lecture-content">Skip to lecture content</a>
+  <header>
+    <h1>Lecture 12: Address Spaces, x86 Registers, and Assembly — Accessible Lecture</h1>
+    <nav aria-label="Lecture navigation">
+      <a href="lecture-11.html">Previous lecture: Processor Pipelining</a>
+    </nav>
+  </header>
+  <main id="lecture-content" tabindex="-1">
+<!-- Canvas Page title: Lecture 12: Address Spaces, x86 Registers, and Assembly — Accessible Lecture -->
+<p><strong>Module 13 of 13</strong></p>
+<p><strong>Overview:</strong> This lesson connects a running process’s virtual address space to physical memory and then connects assembly instructions to machine bytes, addresses, registers, flags, and the stack. The goal is to predict one state change at a time and verify it in a trace or real toolchain.</p>
+
+<h2>Scope and boundaries</h2>
+<p>Tutor interactions use analogous examples and trace reasoning; they must not produce current homework code, completed traces, or submission-ready assembly.</p>
+
+<h2>Learning objectives</h2>
+<p>After studying this page and attempting its examples, you should be able to:</p>
+<ul>
+<li>Distinguish a process virtual address from its mapped physical location.</li>
+<li>Explain the roles of code, static data, heap, and stack regions.</li>
+<li>Identify x86 data registers, the instruction pointer, stack pointer, and arithmetic flags.</li>
+<li>Trace MOV, arithmetic, compare/branch, CALL, and RET effects on machine state.</li>
+</ul>
+
+<h2>Key terms in plain language</h2>
+<dl>
+<dt><strong>Virtual address space</strong></dt>
+<dd>The process-visible range of addresses mapped by hardware and the operating system to memory resources.</dd>
+<dt><strong>Instruction pointer (EIP)</strong></dt>
+<dd>The x86 register holding the address used to locate the next instruction to execute.</dd>
+<dt><strong>Stack pointer (ESP)</strong></dt>
+<dd>The x86 register identifying the current top of the stack.</dd>
+<dt><strong>Flags</strong></dt>
+<dd>Condition bits such as zero, sign, carry, and overflow that record properties of an operation result.</dd>
+</dl>
+
+<h2>A process sees an address-space abstraction</h2>
+<p>Two processes can both use the same virtual address because each process has its own mapping. The operating system and memory-management hardware translate those virtual addresses to physical locations. The numeric virtual address is therefore not a universal physical RAM coordinate.</p>
+<p>The code or text region holds machine instructions; static data holds global or static program values; the heap supports dynamic allocation; and the stack supports calls and temporary local state. Exact layout varies, but these purposes remain useful for reasoning.</p>
+
+
+<h2>Source, bytes, addresses, and registers are related views</h2>
+<p>An assembler encodes a mnemonic and operands as machine-instruction bytes. The bytes occupy virtual addresses in the code region. A debugger can show the assembly text, encoded hexadecimal bytes, instruction addresses, and current register contents side by side.</p>
+<p>EIP identifies the next instruction location. General-purpose registers hold operands and results. ESP identifies the stack top. Flags record properties of arithmetic or comparison so a later conditional jump can select control flow.</p>
+
+
+<h2>Trace one instruction before running many</h2>
+<p>For MOV, identify source and destination and predict the destination value. For ADD or SUB, predict the result and which flags may change. CMP updates flags as if subtraction occurred but does not store the arithmetic result in either operand. A conditional jump reads relevant flags and may update EIP.</p>
+<p>CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A trace should record before-state, instruction, after-state, and evidence. SystemStudio’s Instruction Trace Tutor is a learning model, not an assembler; real NASM or exact Windows MASM/Irvine execution is separate.</p>
+
+
+<h2>Worked examples</h2>
+<h3>Example 1: Trace MOV and ADD</h3>
+<p>EAX begins at 0. Execute MOV EAX, 7 followed by ADD EAX, 5.</p>
+<ol>
+<li>MOV replaces EAX with 7.</li>
+<li>ADD reads the current 7 and adds 5.</li>
+<li>EAX becomes 12.</li>
+<li>The result is neither zero nor negative, so zero and sign flags are clear in this bounded example.</li>
+</ol>
+<p><strong>Conclusion:</strong> Name the exact instruction responsible for each observed state change.</p>
+
+<h3>Example 2: Trace a call boundary</h3>
+<p>EIP points to a CALL and ESP points to the current stack top.</p>
+<ol>
+<li>CALL places the return address on the stack and adjusts ESP.</li>
+<li>EIP changes to the procedure entry.</li>
+<li>The procedure may save registers or establish a frame.</li>
+<li>RET obtains the saved return address and resumes the caller.</li>
+</ol>
+<p><strong>Conclusion:</strong> The saved return address connects stack behavior to control flow.</p>
+
+<h2>Check your understanding</h2>
+<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<ol>
+<li>Why can identical virtual addresses in two processes map differently?</li>
+<li>How do assembly text, machine bytes, and instruction addresses describe one program?</li>
+<li>What evidence distinguishes CMP from SUB?</li>
+</ol>
+<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+
+<h2>Apply the concept hands-on</h2>
+<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<ul>
+<li><strong>Required assembly activity:</strong> Trace register arithmetic. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Compare, inspect flags, and branch. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Walk an array with a counted loop. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Trace a call and stack frame. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Use virtual console input safely. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+</ul>
+
+<h2>Ask the approved U-M course tutor</h2>
+<p>Attempt the concept first. If you still need help, copy one prompt into the U-M course tutor. Ask for one hint or analogous example at a time, verify the response against the mapped sources, and do not request completed graded work.</p>
+<ol>
+<li>Give me a new three-instruction register trace and ask for my before/after table one instruction at a time.</li>
+<li>Help me classify code, static data, heap, and stack examples without assuming exact addresses.</li>
+<li>Ask me to predict EIP and ESP across a small CALL and RET before explaining the stack changes.</li>
+</ol>
+
+<h2>Mapped readings and videos</h2>
+<h3>Readings</h3>
+<ul>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch15_v02.pdf">Open reading 1: Tarnoff Chapter 15 — Introduction to Processor Architecture</a>. Focus: §15.2.5: stack organization</li>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch16_v02.pdf">Open reading 2: Tarnoff Chapter 16 — Intel 80x86 Processor</a>. Focus: §§16.2.1–16.2.3: registers, instruction pointer, stack pointer, and flags</li>
+<li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch17_v02.pdf">Open reading 3: Tarnoff Chapter 17 — Intel 80x86 Assembly Language</a>. Focus: §§17.1–17.4.3: source translation, data transfer, control flow, CALL, and RET</li>
+<li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf">Open reading 4: OSTEP — The Abstraction: Address Spaces</a>. Focus: §13: process address space, code, static data, heap, stack, and memory virtualization</li>
+</ul>
+<h3>Author videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=th8FnKQNIYE">Open author video 1: Ep 080: Data Registers and the Program Counter</a>. Focus: EAX subregisters and EIP</li>
+<li><a href="https://www.youtube.com/watch?v=n8_2y5E8N4Y">Open author video 2: Ep 081: The Stack Pointer</a>. Focus: ESP and top-of-stack behavior</li>
+<li><a href="https://www.youtube.com/watch?v=mC5eNUpyfKY">Open author video 3: Ep 082: How Functions Use the Stack Pointer</a>. Focus: Calls, return addresses, and stack frames</li>
+<li><a href="https://www.youtube.com/watch?v=7eaTT8PekE0">Open author video 4: Ep 083: The Flags Register</a>. Focus: Zero, sign, carry, and overflow flags</li>
+</ul>
+
+<h2>Source evidence and format note</h2>
+<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 12 PDF, slides 2–25.</p>
+<p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
+<p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>
+  </main>
+</body>
+</html>

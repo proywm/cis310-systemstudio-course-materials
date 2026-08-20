@@ -230,7 +230,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openLessonText', async (resourceId: unknown) => {
       if (typeof resourceId !== 'string' || !preparationModule(resourceId)) {
-        await vscode.window.showErrorMessage('The selected accessible lesson text is invalid.');
+        await vscode.window.showErrorMessage('The selected accessible HTML lecture is invalid.');
         return;
       }
       await LessonTextPanel.show(courseMaterials, resourceId);

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.15.0
+
+- Made 13 accessible HTML lectures the primary course format in SystemStudio and retained the original untagged PDFs only as optional visual archives.
+- Added a deterministic Canvas publication bundle with 13 Canvas-safe page bodies, 13 standalone HTML documents, a title/file map, SHA-256 manifest, and instructor publication checklist.
+- Routed module, practice, quiz-review, and guided-lab lecture buttons to the accessible HTML reader instead of the legacy PDFs.
+- Added automated checks for heading structure, prohibited embedded content, descriptive link text, language declaration, skip navigation, and ZIP integrity.
+- Documented that automated generation is not accessibility certification and that Panorama plus manual assistive-technology review remains required before publication.
+
 ## 0.14.0
 
 - Added a novice-facing responsive HTML lesson for every one of the 13 lecture resources, grounded in extracted presentation text and the verified reading/video map.
