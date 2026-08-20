@@ -135,6 +135,21 @@ describe('course-material manifest', () => {
     const calendarHtml = syllabusHtml.split('id="tentative-fall-2026-course-calendar"')[1] ?? '';
     assert.equal((calendarHtml.match(/<td style="text-align: left;">(?:[1-9]|1\d|2[0-7])<\/td>/g) ?? []).length, 27);
     assert.match(await readFile(path.join(packRoot, 'syllabus', 'CIS310_Fall_2026_Syllabus.pdf'), 'utf8'), /^%PDF/);
+    const implementationOne = await readFile(path.join(packRoot, 'assignments', 'project-1-registers-dram.md'), 'utf8');
+    const implementationThree = await readFile(path.join(packRoot, 'assignments', 'project-3-processor.md'), 'utf8');
+    const finalPresentation = await readFile(path.join(packRoot, 'assignments', 'final-project-4-bit-processor.md'), 'utf8');
+    assert.match(implementationOne, /16-address × 8-bit \*\*instruction memory\*\*/i);
+    assert.match(implementationOne, /16-address × 4-bit \*\*data memory\*\*/i);
+    assert.match(implementationThree, /R-type \| `00 dd ss ff`/);
+    assert.match(implementationThree, /`LOAD` \| `01 dd aaaa`/);
+    assert.match(implementationThree, /`LDI` \| `10 dd iiii`/);
+    assert.match(implementationThree, /`STORE` \| `11 ss aaaa`/);
+    for (const encodedInstruction of ['`95`', '`A3`', '`24`', '`EE`', '`7E`', '`35`']) {
+      assert.match(implementationThree, new RegExp(`\\| ${encodedInstruction.replaceAll('`', '\\`')} \\|`));
+    }
+    assert.match(implementationThree, /After completion: `PC=6`, `R1=5`, `R2=8`, `R3=3`, and `DataMemory\[14\]=8`/);
+    assert.match(finalPresentation, /same cumulative 4-bit processor/i);
+    assert.doesNotMatch(finalPresentation, /final 8-bit processor|separate 8-bit processor/i);
     for (const resource of manifest.resources) {
       assert.ok(resource.localPath && resource.sha256);
       const digest = await sha256File(resolveCoursePackPath(packRoot, resource.localPath));

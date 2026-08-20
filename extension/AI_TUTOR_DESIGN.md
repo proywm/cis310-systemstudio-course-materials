@@ -48,6 +48,8 @@ The boundary depends on the activity, not simply on whether a question appears i
 
 SystemStudio adds three layers: student-facing attempt-first language, a modal learning-coach checkpoint before opening Maizey, and the instructor-controlled Maizey system prompt. The local FAQ also intercepts obvious “give me the answer/do my assignment” requests and redirects them to a safe help format. These are educational and service-level safeguards, not digital-rights controls: the extension does not transmit or automatically paste a question into Maizey, cannot prevent copying, cannot control another AI website, and cannot guarantee that an external model will always comply. Instructor configuration, assignment-specific policy, source curation, adversarial testing, and student accountability are still required.
 
+Assignment Mission Control also offers a circuit-specific design/debugging handoff. It copies only the selected **public interface contract** and coaching boundary—not the student’s `.dig` file, circuit topology, or local test output. After a failed preflight, the prompt asks the student to supply the earliest mismatch, their prediction, and one attempted change. It then requests one diagnostic question, hint, or smaller analogous example at a time and explicitly prohibits a finished wiring plan, `.dig` artifact, report, or sequence that reconstructs the deliverable.
+
 ## Canvas Questions Before Class setup
 
 Before release, the instructor should create and pin an ungraded Canvas discussion named **Questions Before Class**. If students should choose whether to reveal their name, configure it as **partially anonymous**. Canvas controls the identity display; SystemStudio cannot create anonymity by removing a name from copied text.

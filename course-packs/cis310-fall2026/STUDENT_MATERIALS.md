@@ -82,13 +82,13 @@ Browse the [official Tarnoff book page](https://faculty.etsu.edu/tarnoff/138292/
 
 | Milestone | Project assignment | Preparation |
 |---|---|---|
-| 1 | [Registers and DRAM](assignments/project-1-registers-dram.md) | Lectures 6, 7, and 10 |
+| 1 | [Registers and Processor Memories](assignments/project-1-registers-dram.md) | Lectures 6, 7, and 10 |
 | 2 | [Register File and ALU](assignments/project-2-register-file-alu.md) | Lectures 2, 5, and 10 |
 | 3 | [Integrated 4-bit Processor](assignments/project-3-processor.md) | Lectures 5--7 and 10--12 |
 
 ## Cumulative final presentation
 
-The [Final Presentation: Cumulative 4-bit Processor and Assembly-Program Demonstration](assignments/final-project-4-bit-processor.md) presents the same processor built through the three implementation milestones; it is not a separate width-upgrade project. Use the [public local circuit preflight contracts](assignments/LOCAL_CIRCUIT_PREFLIGHT.md) before submitting. The presentation and demonstration occur during final examination week. The exact date, time, room, order, released program/specification, required files, and submission deadline are to be announced in Canvas.
+The [Final Presentation: Cumulative 4-bit Processor](assignments/final-project-4-bit-processor.md) presents the same processor built through the three implementation milestones; it is not a separate width-upgrade project. The instruction word and instruction memory are 8 bits wide, while the registers, ALU, and data memory remain 4 bits wide. Use the [public local circuit preflight contracts](assignments/LOCAL_CIRCUIT_PREFLIGHT.md) before submitting. The presentation and demonstration occur during final examination week. The exact date, time, room, order, released requirements, required files, and submission deadline are to be announced in Canvas.
 
 ## Bundled offline presentation sequence
 

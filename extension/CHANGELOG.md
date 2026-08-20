@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.18.0
+
+- Replaced the ambiguous four-nibble/16-bit processor handout with one validated architecture: an 8-bit instruction word and instruction memory with a 4-bit PC, register file, ALU, and data memory.
+- Defined a four-state non-pipelined controller and a complete 8-bit instructional ISA for R-type arithmetic, immediate load, data-memory load, and store.
+- Added public preflights for the 8-bit instruction register and 16×8 instruction memory plus a 25-vector integrated program covering fetch, decode, execute, writeback, arithmetic, store, and load.
+- Added circuit-specific attempt-first AI tutor prompts from Assignment Mission Control and failed preflights; the handoff shares public contracts, not circuit files, and prohibits finished designs.
+- Retained a complete independently implemented reference CPU and all component validation designs in the instructor-only validation directory.
+
 ## 0.17.0
 
 - Standardized Implementation 3, the syllabus, calendar, roadmap, FAQ, and final-presentation guide around one cumulative 4-bit processor built through Implementations 1–3.

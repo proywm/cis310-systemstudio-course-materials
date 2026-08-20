@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -21,7 +21,7 @@
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.html",
       "modifiedAt": "2026-08-20T16:48:08Z",
       "localPath": "syllabus/CIS310_Fall_2026_Syllabus.html",
-      "sha256": "91f2ff7a4fca9ca11f5e64127810fa4f5172a435b483583c584a5a01aad8c7e0",
+      "sha256": "7c18fecbf9ccab63596a5d7590783599a4c9758312f0dbbb2d66a583ecc694d1",
       "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
     },
     {
@@ -248,16 +248,16 @@
       "kind": "assignment",
       "assignmentCategory": "project",
       "order": 201,
-      "title": "Project Assignment 1: Registers and DRAM",
-      "sourceTitle": "CIS310_assignment-1-v2.md.txt",
+      "title": "Implementation 1: Registers and Processor Memories",
+      "sourceTitle": "Fall 2026 revised implementation reference",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/project-1-registers-dram.md",
-      "modifiedAt": "2025-08-26T18:46:46Z",
+      "modifiedAt": "2026-08-20T20:00:00Z",
       "localPath": "assignments/project-1-registers-dram.md",
-      "sha256": "ec39f4e1ae15e7a8e8f486d82d02e008aa600bd3bcd6bddc3e565c75e786d058",
-      "concepts": ["registers", "program-counter", "instruction-register", "dram", "data-flow"],
+      "sha256": "729f1c9fb724037e8a56ed1b1be8ac433b673e29a998c595107d72a5978d36e6",
+      "concepts": ["registers", "program-counter", "8-bit-instruction-register", "16x8-instruction-memory", "16x4-data-memory", "data-flow"],
       "circuitStarter": {
-        "fileName": "registers-dram.dig",
-        "label": "Create Registers and DRAM circuit"
+        "fileName": "registers-memories.dig",
+        "label": "Create registers and processor memories circuit"
       },
       "relatedPresentationIds": ["lecture-06", "lecture-07", "lecture-10"]
     },
@@ -266,12 +266,12 @@
       "kind": "assignment",
       "assignmentCategory": "project",
       "order": 202,
-      "title": "Project Assignment 2: Register File and ALU",
-      "sourceTitle": "cis310_Assignment2.md.txt",
+      "title": "Implementation 2: Four-Register File and 4-bit ALU",
+      "sourceTitle": "Fall 2026 revised implementation reference",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/project-2-register-file-alu.md",
-      "modifiedAt": "2025-08-26T18:47:04Z",
+      "modifiedAt": "2026-08-20T20:00:00Z",
       "localPath": "assignments/project-2-register-file-alu.md",
-      "sha256": "df13bbe6505303f0a406730d60c0c012ec38a7e3c03ac5a3bfd3422387eed5c8",
+      "sha256": "24ace97b275e7643cc32036d85f25f2547bd852df433d1dbc3b3218737633385",
       "concepts": ["register-file", "multiplexer", "decoder", "alu", "microoperations"],
       "circuitStarter": {
         "fileName": "register-file-alu.dig",
@@ -285,12 +285,12 @@
       "assignmentCategory": "project",
       "order": 203,
       "title": "Project Assignment 3: Integrated 4-bit Processor",
-      "sourceTitle": "cis310_Assignment3.md.txt",
+      "sourceTitle": "Fall 2026 validated 4-bit processor specification",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/project-3-processor.md",
-      "modifiedAt": "2025-08-26T18:47:17Z",
+      "modifiedAt": "2026-08-20T20:00:00Z",
       "localPath": "assignments/project-3-processor.md",
-      "sha256": "1cfa7ba90daf961cd158773fc2a193f58d9e639a4722341f83816754d5c47f60",
-      "concepts": ["processor", "program-counter", "instruction-memory", "instruction-register", "decoder", "register-file", "alu", "control-flow"],
+      "sha256": "a6898b04631dd4c59b47e5f4dc66ad4a13a486177808ab346ea30a88191be20b",
+      "concepts": ["4-bit-processor", "8-bit-instruction-set", "program-counter", "instruction-memory", "instruction-register", "four-state-control", "register-file", "alu", "data-memory"],
       "circuitStarter": {
         "fileName": "integrated-processor.dig",
         "label": "Create Integrated Processor circuit"
@@ -312,12 +312,12 @@
       "kind": "assignment",
       "assignmentCategory": "project",
       "order": 204,
-      "title": "Final Presentation: Cumulative 4-bit Processor and Assembly-Program Demonstration",
+      "title": "Final Presentation: Cumulative 4-bit Processor",
       "sourceTitle": "Fall 2026 final-project planning reference",
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/final-project-4-bit-processor.md",
       "modifiedAt": "2026-08-20T20:00:00Z",
       "localPath": "assignments/final-project-4-bit-processor.md",
-      "sha256": "65842453edf70325695679c21e002a0081208ed26694cd82eae2922b2950ffd9",
+      "sha256": "0c1f2884e66cad8fe5a4c2c3bae746d9ba14314f847b8af880a358c0910d8020",
       "concepts": ["4-bit-processor", "cumulative-design", "datapath", "control-unit", "instruction-set", "assembly-programming", "testing", "presentation"],
       "circuitStarter": {
         "fileName": "final-4-bit-processor.dig",

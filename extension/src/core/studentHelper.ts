@@ -89,12 +89,13 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Run a public local circuit contract before Canvas',
       paragraphs: [
         'Open Coursework and Final Presentation, choose the implementation card, and select Run local circuit preflight. Choose the component contract and its .dig file. SystemStudio runs the unmodified Digital CLI against public expected behavior and reports the actual evidence.',
-        'The register, program-counter, memory, register-file, and ALU contracts use documented labels and widths. The integrated 4-bit processor runs its own embedded tests because the assignment does not define one universal opcode encoding. A pass is formative evidence—not a grade, rubric decision, or Canvas submission.'
+        'The register, PC, 8-bit instruction register/memory, 4-bit data memory, register-file, ALU, and integrated processor contracts use documented labels, widths, edge rules, and a published instructional-ISA program. A pass is formative evidence—not a grade, rubric decision, or Canvas submission.'
       ],
       checklist: [
         'Use the exact public interface labels shown in the preflight guide.',
         'Fix the earliest mismatch before interpreting later failures.',
-        'Add embedded tests for reset, four-nibble fetch, PC behavior, representative execution/writeback, and released program control flow.',
+        'Run the 25-vector integrated suite, then add your own embedded tests for reset, one-cycle instruction fetch, PC behavior, execution/writeback, and memory behavior.',
+        'Use Ask tutor for a design hint only after recording your prediction, earliest mismatch, and one attempted change; the tutor must not construct the circuit.',
         'Open the current Canvas assignment, submit the released files there, and confirm the receipt.'
       ],
       actions: [

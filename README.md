@@ -56,12 +56,12 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - blank and assignment-specific Digital circuit creation;
 - the complete upstream Digital v0.31 editor and simulator, streamed into a VS Code tab from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS, with the native window retained only as an explicit fallback;
 - seven lecture-mapped guided circuit builds, including a step-by-step half adder and K-map implementation, with fresh non-overwriting files and local checklist progress;
-- circuit preview, embedded-test support, and local public preflight suites for the 4-bit register, program counter, 16×4 memory, 4×4 register file, and all 2,048 ALU input combinations;
+- circuit preview, embedded-test support, and local public preflight suites for the 4-bit register/PC/data memory, 8-bit instruction register/memory, 4×4 register file, all 2,048 ALU input combinations, and a 25-vector cumulative processor program;
 - actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
 - five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
-- an attempt-first AI learning-coach checkpoint and graded-work boundary before the U-M Maizey handoff; and
+- an attempt-first AI learning-coach checkpoint, circuit-specific design/debugging prompt after public preflights, and graded-work boundary before the U-M Maizey handoff; and
 - a collapsible chat-style help entry, local FAQ, and structured Canvas Questions Before Class draft.
 
 No external document-hosting account is required to open the packaged syllabus, HTML lectures, or optional PDF archives. The required Tarnoff book and companion videos open from the author's official ETSU/YouTube sources; the extension does not redistribute them or use Google Drive.

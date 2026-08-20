@@ -49,10 +49,10 @@ export const COURSEWORK_CATALOG: readonly CourseworkItem[] = [
     checks: [{ id: 'timing', label: 'Clock edges, current state, next state, and outputs are explicitly shown.' }, { id: 'state-evidence', label: 'The state table/diagram and implementation describe the same behavior.' }, ...COMMON_CANVAS_CHECKS]
   },
   {
-    id: 'project-01', title: 'Implementation 1 · Registers and DRAM', kind: 'implementation', resourceId: 'project-01',
-    stage: 'Build storage components', summary: 'Registers, program counter, instruction register, memory, and controlled data movement.',
+    id: 'project-01', title: 'Implementation 1 · Registers and Processor Memories', kind: 'implementation', resourceId: 'project-01',
+    stage: 'Build storage and fetch', summary: '4-bit storage/data memory, an 8-bit instruction register and instruction memory, PC behavior, and one-cycle fetch.',
     preparation: ['Lectures 6, 7, and 10', 'Stored-state and address-decoder guided labs'], expectedExtensions: ['dig', 'pdf', 'docx', 'md', 'png'],
-    checks: [{ id: 'subcircuits', label: 'Registers, PC, IR, and memory are separated and clearly labeled.' }, { id: 'digital-test', label: 'The Digital circuit opens and each released test or documented test table has been run.' }, ...COMMON_CANVAS_CHECKS]
+    checks: [{ id: 'subcircuits', label: 'Register4, PC4, IR8, 16×8 instruction memory, and 16×4 data memory are separated and clearly labeled.' }, { id: 'digital-test', label: 'The component preflights and a complete fetch edge have expected-versus-observed evidence.' }, ...COMMON_CANVAS_CHECKS]
   },
   {
     id: 'project-02', title: 'Implementation 2 · Register File and ALU', kind: 'implementation', resourceId: 'project-02',
@@ -68,9 +68,9 @@ export const COURSEWORK_CATALOG: readonly CourseworkItem[] = [
   },
   {
     id: 'project-03', title: 'Implementation 3 · Integrated 4-bit Processor', kind: 'implementation', resourceId: 'project-03',
-    stage: 'Integrate the cumulative processor', summary: 'Reuse the tested storage, register-file, and ALU components to complete the cumulative 4-bit processor.',
+    stage: 'Integrate the cumulative processor', summary: 'Execute 8-bit instructions through a four-state controller while keeping registers, ALU data, and data memory 4 bits wide.',
     preparation: ['Lectures 5–7 and 10–12', 'Prior implementation components'], expectedExtensions: ['dig', 'pdf', 'docx', 'md', 'png'],
-    checks: [{ id: 'fetch-decode-execute', label: 'Fetch, decode, execute, register writeback, memory, and PC behavior are demonstrated.' }, { id: 'processor-program', label: 'A released test program has expected and observed state evidence.' }, ...COMMON_CANVAS_CHECKS]
+    checks: [{ id: 'fetch-decode-execute', label: 'FETCH, DECODE, EXECUTE, WRITEBACK, register/data-memory write gating, and PC behavior are demonstrated.' }, { id: 'processor-program', label: 'The published 25-vector program and at least one student-designed test have expected and observed evidence.' }, ...COMMON_CANVAS_CHECKS]
   },
   {
     id: 'final-project', title: 'Final Presentation · Cumulative 4-bit Processor and Assembly Program', kind: 'final', resourceId: 'final-project-4bit',

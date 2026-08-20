@@ -1,148 +1,101 @@
-> **Active Fall 2026 project reference.** Use this document to prepare and build incrementally. The matching Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, demonstrations, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
+> **Active Fall 2026 implementation reference.** Use this document to build and test incrementally. The matching Canvas assignment is authoritative for dates, points, allowed collaboration, required files, demonstrations, and submission. **Submit in Canvas; SystemStudio does not submit for you.**
 
-# Assignment 3: Implementing a 4-bit Processor
+# Implementation 3: Cumulative 4-bit Processor
 
-Building on your previous assignments, this assignment challenges you to integrate the essential components of a 4-bit processor. You will incorporate a **Program Counter (PC)**, **Instruction Memory**, extended **Instruction Registers (IRs)** to assemble 16-bit instructions from a 4-bit wide memory (over 4 cycles), an **Instruction Decoder**, the **Register File**, and the **ALU**.
+Build one working multicycle processor from the components tested in Implementations 1 and 2. It is a **4-bit processor** because its general-purpose registers, ALU, and data-memory words are 4 bits. Its instruction word is 8 bits so one instruction can contain an opcode, register field, and operand field without turning the arithmetic data path into 8 bits.
 
----
+## 1. Required architecture
 
-## Objective
+| Component | Required width/role |
+|---|---|
+| Program counter | 4 bits; addresses one of 16 instructions |
+| Instruction memory | 16 addresses × 8 bits; one complete instruction per address |
+| Instruction register | 8 bits; loads the complete instruction on one fetch edge |
+| Register file | Four registers × 4 bits; two reads and one write |
+| ALU | 4-bit `A`, `B`, and `D`; control table from Implementation 2 |
+| Data memory | 16 addresses × 4 bits; used by `LOAD` and `STORE` |
+| Control unit | Four-state multicycle controller |
 
-By the end of this assignment, you will:
-- Integrate the main components of a basic 4-bit processor.
-- Use a **Program Counter (PC)** to sequence through instructions stored in **Instruction Memory**.
-- Assemble 16-bit instructions using four 4-bit **Instruction Registers (IRs)** over 4 cycles.
-- Decode the 16-bit instruction to generate control signals.
-- Utilize the **Register File** and **ALU** to execute arithmetic and control operations.
-- Simulate a simple program that demonstrates data processing and control flow.
+This is **not a pipeline**: only one instruction is active and no stages from different instructions overlap.
 
----
+## 2. Instruction-set contract
 
-## 1. Setting Up the Project in Digital Simulator
+Bit positions are written from most significant to least significant.
 
-1. **Create a New Project:**
-   - Open **Digital** (by H. Neemann) and start a new project.
-   - Save the project as `4bitProcessor`.
+| Opcode/type | Encoding | Operation |
+|---|---|---|
+| R-type | `00 dd ss ff` | Apply ALU function `ff` to `R[dd]` and `R[ss]`; write result to `R[dd]` |
+| `LOAD` | `01 dd aaaa` | `R[dd] ← DataMemory[aaaa]` |
+| `LDI` | `10 dd iiii` | `R[dd] ← iiii` |
+| `STORE` | `11 ss aaaa` | `DataMemory[aaaa] ← R[ss]` |
 
-2. **Organize Your Workspace:**
-   - Create separate subcircuits for each major component:
-     - **Program Counter (PC)**
-     - **Instruction Memory**
-     - **Instruction Registers (IRs)**
-     - **Instruction Decoder**
-     - **Register File**
-     - **ALU**
-   - Clearly label all inputs, outputs, and control signals.
+Register codes are `00=R0`, `01=R1`, `10=R2`, and `11=R3`.
 
----
+For R-type instructions, `ff` maps to the ALU controls:
 
-## 2. Integrating the Processor Components
+| `ff` | Mnemonic | ALU control | Effect |
+|:---:|---|:---:|---|
+| `00` | `ADD Rdd,Rss` | `000` | `R[dd] ← R[dd] + R[ss]` |
+| `01` | `SUB Rdd,Rss` | `011` | `R[dd] ← R[dd] - R[ss]` |
+| `10` | `ADDC Rdd,Rss` | `001` | `R[dd] ← R[dd] + R[ss] + 1` |
+| `11` | `PASS Rdd` | `100` | `R[dd] ← R[dd]`; `ss` is ignored |
 
-### 2.1 Program Counter (PC)
+All arithmetic wraps modulo 16. The base ISA has no branch, jump, halt, or retained status flag. Do not claim those instructions work unless Canvas explicitly releases an extension with its encoding and tests.
 
-- **Purpose:**
-  - The PC holds the address of the current instruction in the Instruction Memory.
-- **Implementation:**
-  - Use a 4-bit register to implement the PC.
-- **Testing:**
-  - Verify that the PC increments correctly and can load a specific address when needed.
+## 3. Four-state control sequence
 
-### 2.2 Instruction Memory
+Expose `State[1:0]` for the public preflight: `FETCH=00`, `DECODE=01`, `EXECUTE=10`, and `WRITEBACK=11`.
 
-- **Purpose:**
-  - Store the processor's instructions.
-- **Implementation:**
-  - Use a 4-bit wide memory block.
-  - Design it with 16 addresses to hold your program instructions.
-  - The PC provides the address to the Instruction Memory for fetching instructions.
-- **Testing:**
-  - Load a simple program into memory and verify that the correct instruction is fetched using the PC.
+| State | Required actions before/at the next rising edge |
+|---|---|
+| `FETCH` | Read `InstructionMemory[PC]`; assert `IR_LD` and `PC_INC`. On the edge, the IR captures the instruction and PC advances modulo 16. |
+| `DECODE` | Interpret opcode/register/operand fields; select register-file read addresses; do not write architectural state. |
+| `EXECUTE` | Produce the ALU result, immediate, or data-memory read. For `STORE` only, assert `DMemWE` so the selected data word is written on the edge leaving this state. |
+| `WRITEBACK` | For R-type, `LOAD`, and `LDI`, select the correct writeback source and assert `RFWE`; the register changes on the edge returning to `FETCH`. `STORE` does not write a register. |
 
-### 2.3 Extended Instruction Registers (IRs)
+Reset must place `State=FETCH` and `PC=0`. Resetting other storage to zero is recommended for reproducible evidence. Gate writes by state: `DMemWE` may be 1 only for `STORE` during `EXECUTE`; `RFWE` may be 1 only for R-type/`LOAD`/`LDI` during `WRITEBACK`.
 
-- **Purpose:**
-  - To construct a full 16-bit instruction from a 4-bit wide Instruction Memory over 4 cycles.
-- **Implementation:**
-  - Use 4 separate 4-bit instruction registers (IR0, IR1, IR2, IR3).
-  - Each cycle, read a 4-bit segment from Instruction Memory.
-  - After 4 cycles, combine the 4 segments to form a complete 16-bit instruction.
-- **Control Signals:**
-  - Include a control signal to indicate when to latch new data into each IR.
-- **Testing:**
-  - Verify that after 4 cycles, the complete 16-bit instruction is correctly assembled.
+## 4. Datapath connections
 
-### 2.4 Instruction Decoder
+1. Connect `PC` to instruction-memory `Address`; connect its 8-bit output to `IR.D`.
+2. Decode `IR[7:6]` as opcode and `IR[5:4]` as destination/source register.
+3. For R-type, use `IR[3:2]` as `ReadSelB` and `IR[1:0]` as the function; use `IR[5:4]` for `ReadSelA` and `WriteSel`.
+4. For `LOAD`/`STORE`, use `IR[3:0]` as the 4-bit data-memory address.
+5. For `LDI`, use `IR[3:0]` directly as the 4-bit immediate.
+6. Use a writeback multiplexer with sources `ALUOut`, immediate, and `DataOut`.
+7. For `STORE`, route `ReadA=R[ss]` to data-memory `DataIn`.
+8. Expose the public evidence ports: `PC`, `State`, `IR`, `ReadA`, `ReadB`, `ALUOut`, `DataOut`, `RFWE`, and `DMemWE`.
 
-- **Purpose:**
-  - Decode the 16-bit instruction into control signals that drive the Register File, ALU, and other components.
-- **Implementation:**
-  - Design combinational logic that interprets the bits of the instruction.
-  - Generate control signals such as:
-    - **ALU operation code**
-    - **Register selections** for reading and writing in the Register File
-- **Testing:**
-  - Apply sample 16-bit instructions and verify that the correct control signals are generated.
+## 5. Published preflight program
 
-### 2.5 Register File and ALU
+Initialize instruction memory as follows; unused addresses 6–15 are `00`.
 
-- **Reference:**
-  - Review **Assignment 2** for the detailed implementation of the Register File and ALU.
-- **Integration:**
-  - Connect the outputs of the Register File (Read Data 1 and Read Data 2) to the ALU inputs.
-  - Feed the ALU result back into the Register File for operations that require storing computed values.
-  - Use the decoded signals to control the read/write operations and the ALU functions.
-- **Testing:**
-  - Perform operations such as addition, subtraction, increment, and decrement.
-  - Verify that data is correctly processed and output as expected.
+| Address | Hex | Assembly | Expected architectural effect after writeback |
+|:---:|:---:|---|---|
+| `0` | `95` | `LDI R1,5` | `R1=5` |
+| `1` | `A3` | `LDI R2,3` | `R2=3` |
+| `2` | `24` | `ADD R2,R1` | `R2=8` |
+| `3` | `EE` | `STORE R2,14` | `DataMemory[14]=8` |
+| `4` | `7E` | `LOAD R3,14` | `R3=8` |
+| `5` | `35` | `SUB R3,R1` | `R3=3` |
 
----
+Hand-check each encoding before simulation. For example, `EE = 11 10 1110`: `STORE`, source `R2`, address 14. `35 = 00 11 01 01`: R-type destination `R3`, source `R1`, `SUB`.
 
-## 3. Integrating the Complete Processor
+One instruction requires four rising edges after reset. The public program therefore completes six instructions in 24 processor edges. After completion: `PC=6`, `R1=5`, `R2=8`, `R3=3`, and `DataMemory[14]=8`.
 
-1. **Interconnect Components:**
-   - **PC → Instruction Memory:** The PC provides the address for instruction fetching.
-   - **Instruction Memory → IRs:** Route the 4-bit output to the Instruction Registers over 4 cycles.
-   - **IRs → Instruction Decoder:** Combine the 4-bit segments into a 16-bit instruction and decode it.
-   - **Decoder → Register File/ALU:** Use the decoded signals to control the operations of the Register File and ALU.
-   - Optionally, feed the ALU result back into the Register File.
-2. **Control Flow:**
-   - Ensure the processor properly sequences through fetch, decode, and execute phases.
-   - Use the PC to manage instruction addresses and control branching.
-3. **Testing the Full Processor:**
-   - Load a simple program that includes arithmetic operations and branching.
-   - Simulate the processor step-by-step and verify:
-     - Correct instruction fetch and assembly in the IRs.
-     - Proper decoding of the 16-bit instruction.
-     - Accurate execution by the Register File and ALU.
-     - Correct updating of the PC for sequential or branch operations.
+## 6. Incremental verification
 
----
+1. Rerun every component preflight before integration.
+2. Verify reset and one `FETCH`: the IR captures address 0 while the PC becomes 1.
+3. Step one `LDI`; confirm `RFWE` is low until `WRITEBACK` and the selected register changes only on the return-to-`FETCH` edge.
+4. Step `ADD`; record `ReadA=3`, `ReadB=5`, `ALUOut=8`, and then `R2=8`.
+5. Step `STORE`; prove `DMemWE=1` only in `EXECUTE` and memory address 14 becomes 8 without a register write.
+6. Step `LOAD`; prove the memory value becomes the writeback source and `R3=8`.
+7. Step `SUB`; prove `8-5=3` and the final state matches the published result.
+8. Run the 25-vector integrated public preflight and then add your own embedded tests for boundary and failure cases.
 
-## 4. Submission Requirements
+## 7. Evidence and submission
 
-1. **Project File:**
-   - Prepare the `4bitProcessor` circuit files and any repository link required by the current Canvas assignment.
-2. **Documentation:**
-   - Provide a report detailing:
-     - **Design Choices:** Explanation of how you integrated the PC, Instruction Memory, IRs, Instruction Decoder, Register File, and ALU.
-     - **Control Signals:** Description of how the instruction is decoded and how control signals are generated.
-     - **Testing:** Include screenshots the correct operation of each component and the full processor.
-3. **Fall 2026 deadline and submission:** Open the current Project Assignment 3 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
-4. **Collaboration (confirm in Fall 2026 Canvas):**
-   - Follow the current Canvas rules for group size, individual work, and contribution reporting.
+Preserve a block diagram, state/control table, instruction-memory image, edge-by-edge program trace, public preflight output, at least one additional student-designed test, and the current Canvas-required circuit/report/presentation artifacts. Explain why an 8-bit instruction register does not make the 4-bit data path an 8-bit processor.
 
-## 5. Local formative preflight and final-presentation continuity
-
-Before Canvas submission, open **Coursework and Final Presentation** in SystemStudio and rerun the public component suites for the register, PC, memory, register file, and ALU. For the integrated processor, add Digital `Testcase` elements that exercise the instruction encoding and test program released in Canvas, then choose **Integrated 4-bit processor — embedded tests**. See [Local circuit preflight contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
-
-The final-examination-week presentation demonstrates this same cumulative 4-bit processor and its program. It is not a new processor-width redesign. Keep the component and integrated evidence you generate here for that presentation.
-
-Passing local tests is private formative evidence only. It is not a grade, cannot assess all rubric criteria, and does not submit anything. Canvas requirements and instructor evaluation remain authoritative.
-
----
-
-## Conclusion
-
-This assignment requires you to integrate several key components to build a functioning 4-bit processor. Through this project, you will gain a deeper understanding of how the PC, Instruction Memory, extended IRs, decoding logic, Register File, and ALU interact to execute a program. This foundational knowledge is critical as you move on to more advanced topics in computer architecture.
-
-**Happy Building and Good Luck!**
+The final-examination-week presentation demonstrates this same cumulative processor and its instructional-ISA program. A passing local preflight is formative; it is not a Canvas submission, grade, or substitute for explanation and design evidence.

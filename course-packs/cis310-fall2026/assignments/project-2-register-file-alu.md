@@ -1,161 +1,72 @@
-> **Active Fall 2026 project reference.** Use this document to prepare and build incrementally. The matching Canvas assignment is authoritative for requirements, dates, points, allowed collaboration, file formats, demonstrations, and submission. **Submit your work in Canvas; SystemStudio does not submit it for you.**
+> **Active Fall 2026 implementation reference.** Use this document to build and test incrementally. The matching Canvas assignment is authoritative for dates, points, allowed collaboration, required files, demonstrations, and submission. **Submit in Canvas; SystemStudio does not submit for you.**
 
-# Assignment 2: Implementing a Register File and ALU
+# Implementation 2: Four-Register File and 4-bit ALU
 
-Building on your foundational work with registers and memory in the first assignment, this assignment focuses on designing and implementing a **Register File** and an **Arithmetic Logic Unit (ALU)** in the **Digital** simulator. You will integrate the register file (with two simultaneous read ports and one write port) and an ALU that performs specific arithmetic operations (as shown in the provided table).
+This milestone builds the processor’s reusable computation path: two register operands are read, the ALU computes a 4-bit result, and one selected register can receive a result on a later rising edge.
 
----
+## Learning objectives
 
-## Objective
+- implement a four-register × 4-bit register file with two independent read ports and one synchronous write port;
+- distinguish a register address from register data;
+- implement and verify all eight published ALU control cases;
+- reason about modulo-16 overflow and underflow; and
+- connect observable behavior to the interface used by the cumulative processor.
 
-By the end of this assignment, you will:
-- Design a **Register File** with four 4-bit General Purpose Registers (R0, R1, R2, R3).
-- Provide two read ports and one write port for the register file.
-- Implement an **ALU** capable of performing the listed arithmetic and transfer operations.
-- Integrate the register file and ALU to demonstrate data flow and operations on register data.
+## 1. Register-file contract
 
----
+| Port | Width | Meaning |
+|---|---:|---|
+| `C` | 1 | Rising-edge write clock |
+| `WE` | 1 | Write enable |
+| `WriteSel` | 2 | Destination register `R0`–`R3` |
+| `WriteData` | 4 | Value written on an enabled rising edge |
+| `ReadSelA` | 2 | Register selected for `ReadA` |
+| `ReadSelB` | 2 | Register selected for `ReadB` |
+| `ReadA` | 4 | First combinational read result |
+| `ReadB` | 4 | Second combinational read result |
 
-## 1. Setting Up the Digital Simulator
+Instantiate four tested `Register4` storage elements from Implementation 1. Decode `WriteSel` into four one-hot destination selects and combine each with the single `WE` signal. Do **not** introduce an unexplained eight-bit “per-register control word”; it is not part of the processor interface. Both read ports are independent multiplexers and may select the same register.
 
-1. **Create a New Project**  
-   - Open **Digital** (by H. Neemann) and start a new project.  
-   - Save the project as `RegisterFile_ALU`.
+At a rising edge, exactly the selected register changes when `WE=1`; no register changes when `WE=0`. Read selection is combinational: changing `ReadSelA` or `ReadSelB` changes the corresponding output without a write edge.
 
-2. **Organize Your Workspace**  
-   - Use separate subcircuits or neatly labeled sections for each component:
-     - **Register File** subcircuit
-     - **ALU** subcircuit
-   - Clearly label all inputs, outputs, and control signals.
+## 2. ALU contract
 
----
+The ALU has `A[3:0]`, `B[3:0]`, one-bit controls `S1`, `S0`, `Cin`, and output `D[3:0]`. Results wrap modulo 16.
 
-## 2. Designing the Register File
+| `S1 S0 Cin` | Required result `D` | Meaning |
+|:---:|---|---|
+| `000` | `A + B` | Add |
+| `001` | `A + B + 1` | Add with a fixed carry-in of 1 |
+| `010` | `A + NOT(B)` = `A - B - 1` modulo 16 | Subtract with borrow-in 1 |
+| `011` | `A + NOT(B) + 1` = `A - B` modulo 16 | Subtract |
+| `100` | `A` | Transfer A |
+| `101` | `A + 1` | Increment A |
+| `110` | `A - 1` | Decrement A |
+| `111` | `A` | Transfer A through the all-ones-plus-carry path |
 
-### 2.1 Overview
+`ADDC` in the instructional ISA uses control `001`; it adds the literal carry-in `1`. The base processor does not retain a carry flag between instructions. If you expose carry or zero as optional evidence, define their meaning separately and do not make them an undeclared input to the required result.
 
-You will create four 4-bit registers: **R0**, **R1**, **R2**, **R3**. The register file must allow:
-- **Two simultaneous reads** (using two 4-to-1 multiplexers internally).
-- **One write** to a selected register.
-- External signals to specify which registers to read from and write to.
+An implementation may select `B`, `NOT(B)`, zero, or all ones as the adder’s second operand and then apply `Cin`. However, the public test checks only the specified input/output behavior, not a required internal topology.
 
-### 2.2 Inputs and Outputs
+## 3. Build and test sequence
 
-1. **Read Register 1 (2 bits)**  
-   - Selects which register (R0–R3) is connected to **Read Data 1**.
+1. Write a register-file test table before wiring the four-register subcircuit.
+2. Write distinct values to all four registers and verify both read ports in different orders.
+3. Hold `WE=0`, change `WriteData`, pulse the clock, and prove that no value changed.
+4. Build the ALU and verify boundary cases such as `15+1→0`, `0-1→15`, and `3-5→14`.
+5. Run every ALU control with several operand pairs, then run the exhaustive public suite.
+6. Integrate register-file outputs with `ALU.A` and `ALU.B`; route `ALU.D` to `WriteData`; keep `WE=0` while inspecting a result, then assert it only for the intended write edge.
 
-2. **Read Register 2 (2 bits)**  
-   - Selects which register (R0–R3) is connected to **Read Data 2**.
+## 4. Evidence to preserve
 
-3. **Write Register (2 bits)**  
-   - Selects which register (R0–R3) will be written to (when the write enable signal is active).
+- labeled register-file and ALU interfaces;
+- a write/read table proving destination selection and two independent read ports;
+- expected and observed ALU results for all eight controls, including wraparound;
+- one complete read → compute → writeback → read-again sequence; and
+- the current Canvas-required files, report, and screenshots.
 
-4. **Per-register control word (four 2-bit fields)**
-   - The control word has eight control bits because it contains one 2-bit field for each of the four registers. This is control encoding; the processor data path and each register remain 4 bits wide.
+## 5. Local formative preflight
 
-5. **Write Data (4 bits)**  
-   - The 4-bit input value to be written into the selected register (if Write Enable is active).
+Open **Coursework and Final Presentation → Run local circuit preflight**. The register-file suite checks selective writes, write-disable behavior, and both read ports. The ALU suite checks all eight controls over all 256 operand pairs—2,048 vectors. See [Local Circuit Preflight Contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
 
-6. **Read Data 1 (4 bits)** and **Read Data 2 (4 bits)**  
-   - The outputs of the two selected registers.
-
-### 2.3 Implementation Steps
-
-1. **Create Four 4-bit Registers**  
-   - Label them **R0**, **R1**, **R2**, **R3**.
-   - Each register should have an enable/clock input to control writing.
-
-2. **Reading from Registers**  
-   - Use two **4-to-1 multiplexers** to select the register output for **Read Data 1** and **Read Data 2**.
-   - The select lines of each multiplexer connect to **Read Register 1** and **Read Register 2** respectively.
-
-3. **Writing to a Register**  
-   - Decode the 2-bit **Write Register** input to generate four enable signals (one per register).  
-   - Combine each decoded enable signal with the appropriate **per-register control** field to determine if a particular register should latch the **Write Data**.
-
-4. **Testing the Register File**  
-   - Drive **Read Register 1** and **Read Register 2** with test values (00, 01, 10, 11).
-   - Enable writes to each register in turn and verify that the correct data appears on **Read Data 1** and **Read Data 2**.
-
----
-
-## 3. Implementing the ALU
-
-### 3.1 ALU Functionality
-
-Your ALU should implement the following operations based on the 3-bit control signals \(\{S_1, S_0, C_{in}\}\):
-
-| S<sub>1</sub> | S<sub>0</sub> | C<sub>in</sub> | Input to ALU | Output (D)        | Micro Operation         |
-|:-------------:|:-------------:|:--------------:|:------------:|:------------------:|:------------------------:|
-| 0             | 0             | 0              | B            | A + B              | Add                     |
-| 0             | 0             | 1              | B            | A + B + 1          | Add with Carry          |
-| 0             | 1             | 0              | B̅           | A + B̅           | Subtract with Borrow    |
-| 0             | 1             | 1              | B̅           | A + B̅ + 1              | Subtract                |
-| 1             | 0             | 0              | 0          | A                  | Transfer A              |
-| 1             | 0             | 1              | 0           | A + 1              | Increment A             |
-| 1             | 1             | 0              | 1           | A - 1              | Decrement A             |
-| 1             | 1             | 1              | 1           | A                  | Transfer A              |
-
-**Notes:**
-- **B̅** denotes the bitwise complement of B.
-- The ALU has two 4-bit inputs: **A** and **B**.
-- The ALU has a 4-bit output: **D**.
-- \(\{S_1, S_0, C_{in}\}\) determine which operation is performed.
-
-### 3.2 Implementation Steps
-
-1. **Input Lines**  
-   - Two 4-bit inputs: **A** and **B**.
-   - Three control bits: **S1**, **S0**, and **Cin**.
-
-2. **Output Line**  
-   - One 4-bit output: **D** (the result).
-
-3. **Internal Design**  
-   - Use a **4-bit adder** that can also handle subtraction.  
-     - For subtraction, invert B and add 1 when necessary.  
-     - For increment/decrement, feed A into the adder with constant inputs for B (e.g., `0001` for increment, `1111` for decrement).
-   - Use multiplexers and/or logic gates to select whether to pass `B`, `B̅`, or a constant (for increment/decrement).
-   - Use additional logic to pass **A** directly (Transfer A).
-
-4. **Testing the ALU**  
-   - Apply test vectors to **A** and **B** and vary \(\{S_1, S_0, C_{in}\}\) to check each operation:
-     - **Add** (A + B)
-     - **Add with Carry** (A + B + 1)
-     - **Subtract** (A - B) and **Subtract with Borrow** (if needed)
-     - **Transfer A**
-     - **Increment A**
-     - **Decrement A**
-
----
-
-
-
-## 5. Submission Requirements
-
-1. **Project File**  
-   - Prepare the `RegisterFile_ALU` circuit files and any repository link required by the current Canvas assignment.
-
-2. **Documentation**  
-   - A brief report explaining:
-     - **Register File Design**: How you created two read ports and one write port.  
-     - **ALU Implementation**: How you handled add, subtract, increment, decrement, and transfer operations.  
-     - **Testing**: Show input/output waveforms or screenshots demonstrating each operation.
-
-3. **Fall 2026 deadline and submission**
-   - Open the current Project Assignment 2 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
-
-4. **Collaboration (confirm in Fall 2026 Canvas)**
-   - Follow the current Canvas rules for group size, individual work, and contribution reporting.
-
-### Local formative preflight before Canvas
-
-Open **Coursework and Final Presentation** in SystemStudio and choose **Run local circuit preflight**. The public register-file suite checks selective writes, write-disable behavior, and both independent read ports. The public ALU suite checks all eight published operations for all 256 pairs of 4-bit operands—2,048 vectors total. Use the exact top-level port names and widths in [Local circuit preflight contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
-
-Passing is private practice evidence only: it is not a grade, does not inspect your internal architecture or report, and does not submit anything. Canvas requirements and instructor evaluation remain authoritative.
-
----
-
-## Conclusion
-
-By completing this assignment, you will deepen your understanding of **register file** architecture—where multiple registers can be read from and written to in the same cycle—and of the **ALU** that manipulates register data according to control signals. Mastery of these concepts is essential for designing more advanced CPU components, including control units, pipelines, and complex instruction sets in future projects.
+Passing is private practice evidence only. It is not a grade, does not certify the internal architecture or report, and does not submit work to Canvas.

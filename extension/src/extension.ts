@@ -5,6 +5,7 @@ import { AssemblyLabPanel } from './assemblyLabPanel';
 import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
+import { circuitTutorPrompt } from './core/circuitPreflight';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedLab } from './core/guidedLabs';
 import { lessonTutorPrompt } from './core/lessonNarratives';
@@ -892,6 +893,10 @@ function safeUmTutorUri(value: string): vscode.Uri | undefined {
 function contextualTutorPrompt(value: unknown): string | undefined {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return undefined;
   const candidate = value as Record<string, unknown>;
+  if (typeof candidate.circuitPreflightId === 'string') {
+    const mode = candidate.tutorMode === 'failed-preflight' ? 'failed-preflight' : 'design';
+    return circuitTutorPrompt(candidate.circuitPreflightId, mode);
+  }
   if (typeof candidate.resourceId !== 'string'
     || typeof candidate.promptIndex !== 'number'
     || !Number.isInteger(candidate.promptIndex)) return undefined;
