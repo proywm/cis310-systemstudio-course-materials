@@ -53,6 +53,16 @@ describe('student helper', () => {
     assert.ok(reply.actions.some((action) => action.id === 'open-ai-tutor'));
   });
 
+  it('redirects direct-answer and assignment-generation requests to bounded learning help', () => {
+    const reply = answerStudentQuestion('Just give me the answer and write my assignment code');
+    const text = JSON.stringify(reply);
+    assert.match(reply.title, /not replace it/);
+    assert.match(text, /will not route a request for an answer/);
+    assert.match(text, /one hint or an analogous example/);
+    assert.ok(reply.actions.some((action) => action.id === 'ask-before-class'));
+    assert.ok(reply.actions.some((action) => action.id === 'open-canvas'));
+  });
+
   it('answers recurring circuit-save and nested-clock questions specifically', () => {
     const saveReply = answerStudentQuestion('How do I save multiple Digital circuits without overwriting?');
     assert.match(saveReply.title, /separate Digital file/);

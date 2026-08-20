@@ -44,9 +44,10 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - blank and assignment-specific Digital circuit creation;
 - circuit preview and deterministic testcase support;
 - a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
-- a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial; and
-- a local helper for topic, tool, calendar, and Canvas routing.
-- a collapsible chat-style help entry, local FAQ, U-M Maizey course-tutor handoff, and structured Canvas Questions Before Class draft.
+- a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
+- a local helper for topic, tool, calendar, and Canvas routing;
+- an attempt-first AI learning-coach checkpoint and graded-work boundary before the U-M Maizey handoff; and
+- a collapsible chat-style help entry, local FAQ, and structured Canvas Questions Before Class draft.
 
 No external document-hosting account is required to open the packaged syllabus or presentations. The required Tarnoff book and companion videos open from the author's official ETSU/YouTube sources; the extension does not redistribute them or use Google Drive.
 

@@ -423,7 +423,7 @@ function tutorialStepsHtml(): string {
     <div class="instruction"><strong>Explore the support path that fits today:</strong> you do not need to open every service.</div>
     <div class="choices">
       ${choice('faq', 'Local FAQ chat', 'Use recurring setup, navigation, Digital, assembly, or submission-process checklists without calling an AI service.')}
-      ${choice('tutor', 'U-M Maizey AI tutor', 'Ask for one source-grounded hint, analogous example, or check of your reasoning; verify the cited source.')}
+      ${choice('tutor', 'U-M Maizey AI learning coach', 'Attempt first. Ask for one source-grounded hint, analogous example, or check of your reasoning—not an answer or graded deliverable.')}
       ${choice('before', 'Questions Before Class', 'Send a complex concept or unclear decision point early so the instructor can adapt the next lecture.')}
       ${choice('anonymous', 'Canvas controls anonymity', 'Choose anonymous only when the Canvas discussion displays that option; SystemStudio cannot promise anonymity.')}
       ${choice('evidence', 'Make the question answerable', 'Include expected, observed, exact evidence, and what you already tried—never credentials, private grades, or another student’s work.')}

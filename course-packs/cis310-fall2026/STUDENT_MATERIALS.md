@@ -13,10 +13,10 @@
 Open the collapsible chat bubble in the Learning Center or **Tutor, Questions, and Help** in the sidebar:
 
 - **Local FAQ chat** answers recurring setup, Digital, assembly, navigation, and submission-process questions without calling an AI service. The complete [CIS 310 FAQ](support/FAQ.md) contains the same support boundaries.
-- **U-M Maizey AI course tutor** opens the course-grounded tutor in Canvas using your U-M login. Ask for one hint, a smaller analogous example, or a check of your reasoning; verify its answer against the cited course source.
+- **U-M Maizey AI learning coach** opens the course-grounded tutor in Canvas using your U-M login. Attempt a question first, then ask for one hint, a smaller analogous example, or a check of your reasoning; verify its response against the cited course source.
 - **Ask a Question Before Class** structures a complex concept request, copies it, and opens the Canvas discussion so the instructor can adjust the next lecture. Canvas—not the extension—controls whether the final post is named or anonymous.
 
-Do not include passwords, access tokens, private grades, medical details, or another student's work in a chat or discussion. The AI tutor may be inaccurate and cannot grant extensions, decide grades, or replace current Canvas instructions.
+For ungraded SystemStudio practice, state your answer and reasoning before asking the tutor for feedback. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule and do not use a tutor to generate final answers, finished circuits, complete code, report prose, or submission-ready artifacts. SystemStudio shows this boundary before opening Maizey, but it cannot control a different AI website or guarantee external-model behavior. Do not include passwords, access tokens, private grades, medical details, or another student's work in a chat or discussion. The AI tutor may be inaccurate and cannot grant extensions, decide grades, or replace current Canvas instructions.
 
 ## Practice and track your learning
 

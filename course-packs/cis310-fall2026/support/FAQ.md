@@ -42,6 +42,12 @@ Record five pieces of evidence: what you expected, what happened, the exact line
 
 U-M Maizey is the optional course-grounded conversational tutor inside Canvas. Ask it to diagnose your uncertainty, give one hint, explain a related example, or check your reasoning. It may be wrong. Open and verify the source it cites, and do not use it to generate a graded submission.
 
+## Can I paste a SystemStudio practice question into the AI tutor?
+
+You may use the tutor to learn from an ungraded readiness or tutorial question, but answer first. State your choice and one reason, then request a hint or feedback. Asking the tutor for the answer before attempting the question defeats the retrieval activity even when it is not an academic-integrity violation. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule. The tutor should not generate a final answer, finished circuit, complete program, report, or submission-ready artifact.
+
+SystemStudio shows a learning-coach checkpoint before opening Maizey, but it cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
+
 ## Does the extension use the instructor's private AI account or API key?
 
 No. The extension opens the U-M Maizey course tutor, where each student authenticates with a U-M account. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token or a faculty LLM key.

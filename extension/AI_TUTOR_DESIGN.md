@@ -38,6 +38,16 @@ For CIS 310:
 - analytics remain local, descriptive, and non-graded; and
 - human escalation uses the Canvas question queue and the existing course-support structure.
 
+## Attempt-first and graded-work guardrails
+
+The boundary depends on the activity, not simply on whether a question appears inside the extension:
+
+- **Ungraded readiness/tutorial practice:** a student may use the tutor to learn, but the tutor first asks the student to commit to an answer and one reason. It withholds the answer or option letter on the first turn, then supplies one hint or critiques the attempt. After a genuine attempt it may explain the correct reasoning because the item is formative.
+- **Homework, projects, quizzes, exams, reports, and other potentially graded work:** the tutor defaults to graded-task mode. It may ask a diagnostic question, cite a source, discuss one student-supplied step, debug visible evidence, or use an analogous example with different values. It does not produce final answers, completed truth tables/K-maps, wiring plans, `.dig` artifacts, end-to-end code, full traces, report prose, or a sequence of fragments that reconstructs the deliverable.
+- **Unclear status:** the tutor asks where the item came from and uses the stricter boundary unless the supplied course context verifies that it is formative; a student's unsupported label is not sufficient. Canvas assignment instructions remain authoritative.
+
+SystemStudio adds three layers: student-facing attempt-first language, a modal learning-coach checkpoint before opening Maizey, and the instructor-controlled Maizey system prompt. The local FAQ also intercepts obvious “give me the answer/do my assignment” requests and redirects them to a safe help format. These are educational and service-level safeguards, not digital-rights controls: the extension does not transmit or automatically paste a question into Maizey, cannot prevent copying, cannot control another AI website, and cannot guarantee that an external model will always comply. Instructor configuration, assignment-specific policy, source curation, adversarial testing, and student accountability are still required.
+
 ## Canvas Questions Before Class setup
 
 Before release, the instructor should create and pin an ungraded Canvas discussion named **Questions Before Class**. If students should choose whether to reveal their name, configure it as **partially anonymous**. Canvas controls the identity display; SystemStudio cannot create anonymity by removing a name from copied text.
@@ -72,10 +82,11 @@ The local FAQ converts those themes into concise checklists without including st
 2. Upload or publish only sources students are allowed to query; exclude answer keys, hidden tests, grades, accommodations, and private communications.
 3. Paste and review `support/MAIZEY_SYSTEM_PROMPT.txt` in the Maizey app settings.
 4. Enable returned data sources/citations and test at least one supported and one unsupported question per lecture.
-5. Create the pinned partially anonymous **Questions Before Class** discussion and set its exact URL in extension configuration.
-6. Put the exact Canvas Maizey link in `systemstudioCis310.maizeyTutorUrl`.
-7. Tell students that anonymous means Canvas displays the anonymous option—not that the extension guarantees identity removal.
-8. Pilot with students, monitor recurring misconceptions, and revise sources/FAQ/practice items. Do not treat chat counts or local accuracy as grades.
+5. Run adversarial guardrail tests: paste an ungraded multiple-choice item and request only its letter; request a full current homework solution, a completed circuit, end-to-end assembly code, and report prose; try role-change/prompt-injection wording; verify attempt-first tutoring or a bounded refusal each time.
+6. Create the pinned partially anonymous **Questions Before Class** discussion and set its exact URL in extension configuration.
+7. Put the exact Canvas Maizey link in `systemstudioCis310.maizeyTutorUrl`.
+8. Tell students that anonymous means Canvas displays the anonymous option—not that the extension guarantees identity removal.
+9. Pilot with students, monitor recurring misconceptions, and revise sources/FAQ/practice items. Do not treat chat counts or local accuracy as grades.
 
 ## Sources
 

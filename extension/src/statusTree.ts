@@ -116,7 +116,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         return [
           describedActionItem(
             'Open U-M Maizey AI course tutor',
-            'Canvas · U-M login · course-grounded',
+            'attempt first · hints, not deliverables',
             'systemstudioCis310.openAiTutor',
             'sparkle'
           ),

@@ -1,3 +1,5 @@
+import { looksLikeDirectSolutionRequest } from './aiTutorGuardrails';
+
 export type StudentHelperAction =
   | 'open-canvas'
   | 'open-ai-tutor'
@@ -55,6 +57,27 @@ export function parseStudentHelperRequest(value: unknown): StudentHelperRequest 
 export function answerStudentQuestion(question: string): StudentHelperReply {
   const text = question.toLowerCase();
 
+  if (looksLikeDirectSolutionRequest(question)) {
+    return {
+      title: 'Use the tutor to strengthen your attempt—not replace it',
+      paragraphs: [
+        'SystemStudio will not route a request for an answer, finished circuit, complete program, report, or other submission-ready work. For ungraded readiness practice, commit to an answer and explain why before requesting feedback. For homework or projects, the current Canvas instructions control whether AI assistance is allowed.',
+        'The AI tutor can still help with a smaller analogous example, one conceptual hint, a question about your prediction, or feedback on evidence and reasoning you provide. If you are unsure whether a request crosses the assignment boundary, ask the instructor.'
+      ],
+      checklist: [
+        'State your current prediction or attempted answer.',
+        'Show the exact truth-table row, signal, instruction, register state, or error where reasoning breaks down.',
+        'Ask for one hint or an analogous example with different values—not the deliverable.',
+        'Verify the response against a mapped course source and the current Canvas AI rules.'
+      ],
+      actions: [
+        { id: 'open-ai-tutor', label: 'Open tutor as a learning coach' },
+        { id: 'ask-before-class', label: 'Ask the instructor about this boundary' },
+        { id: 'open-canvas', label: 'Check assignment AI rules' }
+      ]
+    };
+  }
+
   if (matches(text, ['ai tutor', 'maizey', 'chatbot', 'artificial intelligence', 'llm'])) {
     return {
       title: 'Use the U-M Maizey course tutor for conversational help',
@@ -63,8 +86,8 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'For CIS 310, U-M Maizey in Canvas is the preferred AI layer. Students authenticate with their own U-M account, so the extension does not receive your prompt and does not use the instructor’s personal LLM account or API key. AI can still be wrong: verify technical claims against the cited course source.'
       ],
       checklist: [
-        'State the concept, your prediction, and the exact step that is unclear.',
-        'Ask for one hint or one analogous example before asking for a complete solution.',
+        'Attempt the question first; state your prediction and the exact step that is unclear.',
+        'Ask for one hint, one diagnostic question, or one analogous example—not the answer.',
         'Open and check the cited course source.',
         'For a graded task, use the tutor to learn the method—not to produce a submission.'
       ],

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.10.4
+
+- Added an attempt-first learning-coach checkpoint before SystemStudio opens the external U-M Maizey tutor.
+- Added distinct tutor behavior for ungraded readiness practice and potentially graded homework, projects, quizzes, exams, and reports.
+- Strengthened the instructor Maizey prompt against direct-answer requests, deliverable reconstruction over multiple turns, and role-change/prompt-injection attempts.
+- Added deterministic local-FAQ interception for obvious requests to solve an assignment, write submission code, build a completed circuit, or provide an answer key.
+- Documented both the allowed help patterns and the honest limitation that SystemStudio cannot control another AI website or guarantee external-model compliance.
+
 ## 0.10.3
 
 - Rebuilt the guided tutorial as a visible eight-lesson self-paced path with free lesson selection, skipping, resume, and rerun controls.

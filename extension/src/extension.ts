@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { AssemblyLabPanel } from './assemblyLabPanel';
 import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
+import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
@@ -147,6 +148,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await StudentHelperPanel.show(context);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async () => {
+      const decision = await vscode.window.showInformationMessage(
+        AI_TUTOR_PREFLIGHT.message,
+        { modal: true, detail: AI_TUTOR_PREFLIGHT.detail },
+        AI_TUTOR_PREFLIGHT.openLabel,
+        AI_TUTOR_PREFLIGHT.syllabusLabel
+      );
+      if (decision === AI_TUTOR_PREFLIGHT.syllabusLabel) {
+        await vscode.commands.executeCommand('systemstudioCis310.openSyllabus');
+        return;
+      }
+      if (decision !== AI_TUTOR_PREFLIGHT.openLabel) return;
       const configured = vscode.workspace.getConfiguration('systemstudioCis310')
         .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
       const uri = safeUmTutorUri(configured) ?? vscode.Uri.parse(DEFAULT_CANVAS_COURSE);
