@@ -7,6 +7,7 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedLab } from './core/guidedLabs';
+import { preparationModule, preparationUrl, type PreparationField } from './core/learningResources';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import {
   CourseCalendarPanel,
@@ -196,6 +197,43 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials);
+    }),
+    vscode.commands.registerCommand(
+      'systemstudioCis310.openModuleSource',
+      async (resourceId: unknown, target: unknown, sourceIndex: unknown) => {
+        if (typeof resourceId !== 'string' || !preparationModule(resourceId)
+          || (target !== 'reading' && target !== 'video')
+          || typeof sourceIndex !== 'number' || !Number.isInteger(sourceIndex) || sourceIndex < 0) {
+          await vscode.window.showErrorMessage('The selected course-module source is invalid.');
+          return;
+        }
+        const url = preparationUrl(resourceId, target, sourceIndex);
+        if (!url) {
+          await vscode.window.showErrorMessage('The selected course-module source is unavailable.');
+          return;
+        }
+        await vscode.env.openExternal(vscode.Uri.parse(url));
+      }
+    ),
+    vscode.commands.registerCommand(
+      'systemstudioCis310.toggleModuleStep',
+      async (resourceId: unknown, field: unknown) => {
+        if (typeof resourceId !== 'string' || !preparationModule(resourceId)
+          || (field !== 'read' && field !== 'watched')) {
+          await vscode.window.showErrorMessage('The selected course-module progress step is invalid.');
+          return;
+        }
+        await practiceStore.togglePreparation(resourceId, field as PreparationField);
+      }
+    ),
+    vscode.commands.registerCommand('systemstudioCis310.startModulePractice', async (resourceId: unknown) => {
+      if (typeof resourceId !== 'string' || !preparationModule(resourceId)) {
+        await vscode.window.showErrorMessage('The selected course module is invalid.');
+        return;
+      }
+      await PracticePanel.show(context, practiceStore, courseMaterials, {
+        mode: 'practice', focus: 'recommended', resourceId, length: 3
+      });
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabs', async (labId?: unknown) => {
       await GuidedLabPanel.show(context, typeof labId === 'string' ? labId : undefined);

@@ -38,7 +38,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 ## Main student workflow
 
 1. Open **SystemStudio CIS 310 → Start Here**.
-2. Prepare for the next lecture with **Read → Watch → Try 3 questions**.
+2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Read → Watch → Lecture → Try 3 questions → guided activity** sequence.
 3. Check Canvas for live requirements and submission.
 4. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
 5. For assembly, choose **Build and Run with Real Assembly Toolchain** for executable evidence. Use **Instruction Trace Tutor** only for prediction practice.
@@ -46,7 +46,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 
 ## Included learning features
 
-- 13 lecture modules with focused open-textbook readings and official author videos;
+- an always-visible, sequential 13-module sidebar outline with module completion state and direct navigation to each focused open-textbook reading, official author video, packaged lecture, readiness check, and mapped guided lab;
 - 43 author-written readiness/practice questions, five-question practice, quiz mode, confidence checks, explanations, and spaced local review;
 - 13 packaged presentation PDFs, three homework references, and three processor-project references;
 - 27-meeting Monday/Wednesday Fall 2026 calendar with `.ics` export;

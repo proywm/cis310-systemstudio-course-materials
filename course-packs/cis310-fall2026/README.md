@@ -22,7 +22,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 ## Student workflow
 
-1. Open **Start Here** and complete the next Read → Watch → Try 3 questions preparation module before class.
+1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Read → Watch → Try 3 questions preparation path before class.
 2. Open the syllabus and course calendar from the SystemStudio sidebar.
 3. Use the presentation and assignment reference after the mapped open-book reading, not as a substitute for it.
 4. Open the matching Canvas assignment and confirm its current requirements.

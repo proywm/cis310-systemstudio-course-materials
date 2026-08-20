@@ -1,12 +1,17 @@
 import * as vscode from 'vscode';
 import type { AssemblyManager } from './assemblyManager';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import {
+  buildCourseModuleNavigation,
+  type CourseModuleNavigation,
+  type ModuleNavigationItem
+} from './core/moduleNavigation';
 import type { DigitalManager } from './digitalManager';
 import type { NativeAssemblyManager } from './nativeAssemblyManager';
 import type { PracticeStore } from './practiceStore';
 
-type StatusGroup = 'start' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
-type StatusNode = vscode.TreeItem & { groupId?: StatusGroup };
+type StatusGroup = 'start' | 'modules' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusNode = vscode.TreeItem & { groupId?: StatusGroup; module?: CourseModuleNavigation };
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   private readonly changeEmitter = new vscode.EventEmitter<StatusNode | undefined>();
@@ -33,14 +38,21 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
   async getChildren(element?: StatusNode): Promise<StatusNode[]> {
     if (!element) {
+      const learningPath = this.practiceStore.getLearningPath();
+      const complete = learningPath.filter((module) => module.complete).length;
       return [
         groupItem('start', 'Start Here', 'home', true),
-        groupItem('learn', 'Learn and Practice', 'mortar-board', false),
+        groupItem('modules', `Course Modules (${complete}/${learningPath.length})`, 'list-tree', true),
+        groupItem('learn', 'Practice and Progress', 'mortar-board', false),
         groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
         groupItem('assembly', 'Assembly Programming', 'terminal', false),
         groupItem('environment', 'Environment and Setup', 'tools', false),
         groupItem('help', 'Tutor, Questions, and Help', 'comment-discussion', false)
       ];
+    }
+
+    if (element.module) {
+      return element.module.items.map(moduleActionItem);
     }
 
     switch (element.groupId) {
@@ -74,6 +86,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           )
         ];
       }
+      case 'modules':
+        return buildCourseModuleNavigation(this.practiceStore.getLearningPath()).map(moduleItem);
       case 'learn':
         return [
           describedActionItem(
@@ -255,6 +269,58 @@ function groupItem(id: StatusGroup, label: string, icon: string, expanded: boole
   return item;
 }
 
+function moduleItem(module: CourseModuleNavigation): StatusNode {
+  const item: StatusNode = new vscode.TreeItem(
+    module.label,
+    module.expanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed
+  );
+  item.id = `systemstudioCis310.module.${module.resourceId}`;
+  item.module = module;
+  item.description = module.description;
+  item.tooltip = module.tooltip;
+  item.iconPath = new vscode.ThemeIcon(module.complete ? 'pass-filled' : module.next ? 'arrow-circle-right' : 'circle-outline');
+  return item;
+}
+
+function moduleActionItem(action: ModuleNavigationItem): StatusNode {
+  switch (action.kind) {
+    case 'reading':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.openModuleSource', 'book-open',
+        [action.resourceId, 'reading', action.index]
+      );
+    case 'toggle-read':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.toggleModuleStep',
+        action.label.startsWith('Reading step completed') ? 'pass-filled' : 'circle-outline',
+        [action.resourceId, 'read']
+      );
+    case 'video':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.openModuleSource', 'play-circle',
+        [action.resourceId, 'video', action.index]
+      );
+    case 'toggle-watched':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.toggleModuleStep',
+        action.label.startsWith('Video step completed') ? 'pass-filled' : 'circle-outline',
+        [action.resourceId, 'watched']
+      );
+    case 'lecture':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.openCourseMaterial', 'file-pdf', [action.resourceId]
+      );
+    case 'practice':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.startModulePractice', 'beaker', [action.resourceId]
+      );
+    case 'lab':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.openGuidedLabs', 'tools', [action.labId]
+      );
+  }
+}
+
 function actionItem(label: string, command: string, icon: string, args?: unknown[]): StatusNode {
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
@@ -262,8 +328,15 @@ function actionItem(label: string, command: string, icon: string, args?: unknown
   return item;
 }
 
-function describedActionItem(label: string, description: string, command: string, icon: string): StatusNode {
-  const item = actionItem(label, command, icon);
+function describedActionItem(
+  label: string,
+  description: string,
+  command: string,
+  icon: string,
+  args?: unknown[]
+): StatusNode {
+  const item = actionItem(label, command, icon, args);
   item.description = description;
+  item.tooltip = `${label}\n${description}`;
   return item;
 }

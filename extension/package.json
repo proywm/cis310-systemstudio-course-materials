@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",

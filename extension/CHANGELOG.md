@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.12.0
+
+- Added an expanded **Course Modules** sidebar section that keeps all 13 sequential modules visible, with completed-module count and per-module progress.
+- Highlighted the next unfinished module without hiding the rest of the outline; expanding any module reveals its mapped readings, author videos, packaged lecture PDF, three-question readiness check, and relevant guided labs.
+- Added sidebar controls for the existing local reading/video checkmarks and direct module-scoped readiness practice, while retaining **Start Here** as a short next-action area.
+- Renamed the former **Learn and Practice** utility group to **Practice and Progress** so it is not mistaken for the course-module outline.
+
 ## 0.11.0
 
 - Removed the reduced eight-component circuit renderer from the student path and made the complete upstream Digital v0.31 application the default `.dig` editor.

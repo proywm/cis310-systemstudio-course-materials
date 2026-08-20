@@ -32,7 +32,7 @@ Write the expected input/output behavior first. Build and test the smallest comp
 
 ## Is there a guided circuit or assembly walkthrough?
 
-Yes. Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. The Lecture 2 half-adder lab first asks for all four predicted Sum/Carry rows, creates a fresh non-overwriting `.dig` file, and opens Full Digital. It then walks through labeled pins, the Sum and Carry paths, simulation evidence, optional official preview, and explanation. Additional circuit labs cover a Boolean gate path, multiplexer, stored bit, address decoder, and a small arithmetic/logic selector.
+Yes. Expand the matching **Course Modules** entry and choose its build activity, use **Practice and Progress → Build with guided labs**, or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. The Lecture 2 half-adder lab first asks for all four predicted Sum/Carry rows, creates a fresh non-overwriting `.dig` file, and opens Full Digital. It then walks through labeled pins, the Sum and Carry paths, simulation evidence, optional official preview, and explanation. Additional circuit labs cover a Boolean gate path, multiplexer, stored bit, address decoder, and a small arithmetic/logic selector.
 
 ## Is the circuit editor a simplified copy of Digital?
 

@@ -19,7 +19,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
 
-![SystemStudio CIS 310 Learning Center showing the grouped sidebar and Read, Watch, Try three questions preparation path](docs/images/systemstudio-learning-center.svg)
+![SystemStudio CIS 310 Learning Center showing all 13 course modules and the Read, Watch, Try three questions preparation path](docs/images/systemstudio-learning-center.svg)
 
 ![SystemStudio CIS 310 self-paced tutorial showing all eight lessons at once](docs/images/systemstudio-self-paced-tutorial.svg)
 
@@ -32,6 +32,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 ## What students receive
 
 - a locally packaged Fall 2026 syllabus PDF;
+- an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their reading, video, lecture, readiness-practice, and guided-lab links;
 - a self-paced Read → Watch → Try 3 questions path for every lecture topic, separating readiness sources from additional references and requiring three distinct practice questions for completion;
 - 13 integrity-checked presentation PDFs that open inside VS Code;
 - three homework references and three processor-project references;

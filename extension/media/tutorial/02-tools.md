@@ -1,12 +1,13 @@
-# Six logical groups
+# Course modules and task groups
 
-The SystemStudio sidebar shows one short **Start Here** path and keeps other choices in collapsed groups:
+The SystemStudio sidebar shows one short **Start Here** path followed by an expanded **Course Modules** outline:
 
 1. **Start Here**
-2. **Learn and Practice**
-3. **Build Digital Circuits**
-4. **Assembly Programming**
-5. **Environment and Setup**
-6. **Help and Tutorial**
+2. **Course Modules** — all 13 modules, with the next unfinished module highlighted
+3. **Practice and Progress**
+4. **Build Digital Circuits**
+5. **Assembly Programming**
+6. **Environment and Setup**
+7. **Tutor, Questions, and Help**
 
-Start with the recommended five-question practice or the current Canvas task, then expand only the group you need.
+Expand any module to open its mapped readings, author videos, packaged lecture, three-question readiness check, and guided activity. The module row shows local reading, video, and question progress. Use **Start Here** for the recommended next action or the current Canvas task, and use the remaining groups for practice history and tools.
