@@ -7,6 +7,7 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedLab } from './core/guidedLabs';
+import { lessonTutorPrompt } from './core/lessonNarratives';
 import {
   MODULE_CONFIDENCE_QUESTION_TARGET,
   preparationModule,
@@ -24,6 +25,7 @@ import { FullDigitalEditorProvider } from './fullDigitalEditor';
 import { FullDigitalRuntime } from './fullDigitalRuntime';
 import { DigitalTestController } from './digitalTests';
 import { GuidedLabPanel } from './guidedLabPanel';
+import { LessonTextPanel } from './lessonTextPanel';
 import { NativeAssemblyManager } from './nativeAssemblyManager';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
@@ -35,6 +37,7 @@ import { TutorialPanel } from './tutorialPanel';
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
 const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 const EMBEDDED_CONTAINER_PLATFORM = process.platform === 'win32' || process.platform === 'darwin';
+const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Copy Prompt and Open Tutor';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -178,18 +181,28 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
       await StudentHelperPanel.show(context);
     }),
-    vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async () => {
+    vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async (launchContext?: unknown) => {
+      const starterPrompt = contextualTutorPrompt(launchContext);
+      const openLabel = starterPrompt ? CONTEXTUAL_TUTOR_OPEN_LABEL : AI_TUTOR_PREFLIGHT.openLabel;
       const decision = await vscode.window.showInformationMessage(
-        AI_TUTOR_PREFLIGHT.message,
-        { modal: true, detail: AI_TUTOR_PREFLIGHT.detail },
-        AI_TUTOR_PREFLIGHT.openLabel,
+        starterPrompt ? 'Copy this lesson prompt and open the CIS 310 AI tutor?' : AI_TUTOR_PREFLIGHT.message,
+        {
+          modal: true,
+          detail: starterPrompt
+            ? `The source-bounded prompt will be copied to your clipboard so you can paste it into the U-M tutor. ${AI_TUTOR_PREFLIGHT.detail}`
+            : AI_TUTOR_PREFLIGHT.detail
+        },
+        openLabel,
         AI_TUTOR_PREFLIGHT.syllabusLabel
       );
       if (decision === AI_TUTOR_PREFLIGHT.syllabusLabel) {
         await vscode.commands.executeCommand('systemstudioCis310.openSyllabus');
         return;
       }
-      if (decision !== AI_TUTOR_PREFLIGHT.openLabel) return;
+      if (decision !== openLabel) return;
+      if (starterPrompt) {
+        await vscode.env.clipboard.writeText(starterPrompt);
+      }
       const configured = vscode.workspace.getConfiguration('systemstudioCis310')
         .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
       const uri = safeUmTutorUri(configured) ?? vscode.Uri.parse(DEFAULT_CANVAS_COURSE);
@@ -203,12 +216,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         );
       }
       await vscode.env.openExternal(uri);
+      if (starterPrompt) {
+        await vscode.window.showInformationMessage(
+          'The lesson prompt is on your clipboard. Paste it into the U-M tutor, make an attempt, and ask for one hint at a time.'
+        );
+      }
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPreClassQuestion', async () => {
       PreClassQuestionPanel.show(context);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openLessonText', async (resourceId: unknown) => {
+      if (typeof resourceId !== 'string' || !preparationModule(resourceId)) {
+        await vscode.window.showErrorMessage('The selected accessible lesson text is invalid.');
+        return;
+      }
+      await LessonTextPanel.show(courseMaterials, resourceId);
     }),
     vscode.commands.registerCommand(
       'systemstudioCis310.openModuleSource',
@@ -858,6 +883,15 @@ function safeUmTutorUri(value: string): vscode.Uri | undefined {
   } catch {
     return undefined;
   }
+}
+
+function contextualTutorPrompt(value: unknown): string | undefined {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return undefined;
+  const candidate = value as Record<string, unknown>;
+  if (typeof candidate.resourceId !== 'string'
+    || typeof candidate.promptIndex !== 'number'
+    || !Number.isInteger(candidate.promptIndex)) return undefined;
+  return lessonTutorPrompt(candidate.resourceId, candidate.promptIndex);
 }
 
 async function chooseWorkspaceFolder(placeHolder: string): Promise<vscode.WorkspaceFolder | undefined> {

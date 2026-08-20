@@ -4,7 +4,13 @@ These answers address recurring, anonymized themes in prior CIS 310 student ques
 
 ## Where do I begin?
 
-Open **Course Modules** in SystemStudio. Complete the next **Read → Watch → Practice → Build/trace** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's framing, not as a replacement for the required open book.
+Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/trace** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
+
+## Where is the text alternative to a presentation?
+
+Expand the lecture under **Course Modules** and choose **Study the accessible lesson text**, or open **Course Materials → Accessible lesson texts**. Each responsive HTML lesson provides objectives, key terms, direct explanations, worked examples, self-checks, source evidence, and previous/next navigation. The presentation PDF remains available as a paired visual resource; SystemStudio does not claim that the original PDF is independently remediated.
+
+If a diagram, circuit, equation, video, or simulator interaction is still inaccessible, identify the lecture and item and contact the instructor promptly for an equivalent format or activity. The streamed Digital canvas is specifically disclosed as graphical and is not a screen-reader-equivalent circuit editor.
 
 ## I cannot see an assignment, lecture video, or final-demonstration instructions in Canvas.
 

@@ -6,6 +6,7 @@ import {
 } from './learningResources';
 
 export type ModuleNavigationItemKind =
+  | 'lesson'
   | 'reading'
   | 'toggle-read'
   | 'video'
@@ -45,11 +46,17 @@ export function buildCourseModuleNavigation(
     description: module.complete
       ? 'complete'
       : `${module.resourceId === nextResourceId ? 'next · ' : ''}${moduleStatus(module)}`,
-    tooltip: `${module.lectureLabel}\n${module.focus}\nReadiness question: ${module.readinessPrompt}`,
+    tooltip: `${module.lectureLabel}\n${module.focus}\nIncludes an accessible HTML explanation paired with the visual PDF.\nReadiness question: ${module.readinessPrompt}`,
     complete: module.complete,
     next: module.resourceId === nextResourceId,
     expanded: false,
     items: [
+      {
+        kind: 'lesson',
+        label: 'Study the accessible lesson text',
+        description: 'learning objectives · plain-language explanations · worked examples · AI tutor prompts',
+        resourceId: module.resourceId
+      },
       ...module.readings.map((reading, sourceIndex): ModuleNavigationItem => ({
         kind: 'reading',
         label: `Read ${sourceIndex + 1}: ${reading.title}`,
@@ -79,7 +86,7 @@ export function buildCourseModuleNavigation(
       {
         kind: 'lecture',
         label: `Open ${module.lectureLabel} presentation`,
-        description: 'packaged offline PDF',
+        description: 'paired visual PDF · accessible HTML lesson listed above',
         resourceId: module.resourceId
       },
       {

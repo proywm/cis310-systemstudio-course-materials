@@ -1,6 +1,6 @@
 # CIS 310 Fall 2026 Course Pack
 
-This is the active student course pack for Fall 2026 CIS 310. It is packaged with the SystemStudio VS Code extension so the syllabus, presentations, and assignment references open locally, while focused readings and official author videos open from the required book's authoritative sources.
+This is the active student course pack for Fall 2026 CIS 310. It is packaged with the SystemStudio VS Code extension so the syllabus, accessible lesson texts, presentations, and assignment references open locally, while focused readings and official author videos open from the required book's authoritative sources.
 
 ## Course authority
 
@@ -9,11 +9,12 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 ## Included
 
 - one SHA-256-verified Fall 2026 syllabus PDF;
-- a 13-module Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, lecture PDFs, and hands-on work;
+- a 13-module Accessible lesson → Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, lecture PDFs, and hands-on work;
+- 13 responsive HTML lesson texts with objectives, definitions, explanations, examples, self-checks, source evidence, and lesson-specific tutor prompts;
 - 13 SHA-256-verified presentation PDFs covering Lectures 1--12, including the Lecture 8 companion;
 - three homework study references;
 - three processor-project study and implementation references;
-- 43 formative practice questions, with at least three mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
+- 104 formative practice questions, exactly eight mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
 - the complete upstream Digital v0.31 application for circuit editing and simulation, plus six mapped circuit builds; actual NASM/ELF32 execution, exact Windows MASM/Irvine32 routing, and five separately labeled trace-tutor activities;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
@@ -22,7 +23,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 ## Student workflow
 
-1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
+1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Accessible lesson → Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
 2. Open the syllabus and course calendar from the SystemStudio sidebar.
 3. Use the presentation and assignment reference after the mapped open-book reading, not as a substitute for it.
 4. Open the matching Canvas assignment and confirm its current requirements.

@@ -4,13 +4,20 @@ Last verified: August 20, 2026
 
 ## Scope and method
 
-This audit covers all 13 Fall 2026 modules, 104 formative questions, seven circuit labs, and five assembly traces. It does not infer coverage from a title.
+This audit covers all 13 Fall 2026 modules, 13 novice-facing HTML lesson texts, 104 formative questions, seven circuit labs, and five assembly traces. It does not infer coverage from a title.
 
 1. All 14 assigned Tarnoff chapter PDFs and the two added OSTEP chapter PDFs were checked against the named concept and bounded section.
 2. Text was extracted from all 13 packaged lecture PDFs and checked against the slide locators stored with questions.
 3. Captions/transcripts were retrieved and read for all 29 unique mapped author videos. The official [ETSU OER series](https://dc.etsu.edu/computer-organization-design-oer/) and Intermation channel are the author-video sources. Caption text was used for verification and is not redistributed.
 4. Every question records at least one direct evidence path: reading index, video index, or lecture-slide number. An item may rely on the lecture PDF when the book/video does not teach the course-specific framing; the interface says so instead of inventing a source.
 5. Automated tests require exactly eight questions per module, valid source indexes, valid slide numbers, a full answer explanation, a takeaway, all five selected-response Bloom levels, and balanced answer positions.
+6. Every HTML lesson was written from the extracted lecture text and verified reading/video map. Tests require at least 500 words, four objectives and key terms, three explanatory sections, two worked examples, three self-checks, three bounded tutor prompts, explicit slide evidence, and a scope boundary.
+
+## Accessible lesson-text alternative
+
+Each module now begins with a responsive HTML lesson rather than requiring a student to infer the lecture from a visual PDF. The lesson uses one descriptive heading hierarchy, plain-language definitions, speakable notation, sequenced examples, source links with descriptive labels, previous/next navigation, and native keyboard-operable controls. It does not claim that the original presentation PDF is independently remediated; the PDF remains available as the instructor's paired visual framing.
+
+The implementation follows the instructor-supplied UM-Dearborn digital-accessibility course export and current U-M guidance summarized in [`ACCESSIBILITY_IMPLEMENTATION.md`](ACCESSIBILITY_IMPLEMENTATION.md). Automated structural checks supplement, but do not replace, keyboard, screen-reader, zoom/reflow, contrast, and caption review with disabled students and accessibility specialists.
 
 ## Depth and prerequisite decisions
 
@@ -49,4 +56,4 @@ This audit covers all 13 Fall 2026 modules, 104 formative questions, seven circu
 
 ## Maintenance rule
 
-Do not add a question or lab by keyword matching. Read the bounded source text, inspect the lecture slide, and read the video transcript. Record only evidence that directly teaches the tested reasoning. If the current sources are insufficient, narrow the item or add a direct authoritative open source. Run `npm test`, the manifest verifier, the packaged VSIX smoke checks, and an instructor content review before classroom release.
+Do not add a lesson claim, question, or lab by keyword matching. Read the bounded source text, inspect the lecture slide, and read the video transcript. Record only evidence that directly teaches the stated concept or tested reasoning. If the current sources are insufficient, narrow the explanation/item or add a direct authoritative open source. Run `npm test`, the manifest verifier, the packaged VSIX smoke checks, an accessibility review, and an instructor content review before classroom release.

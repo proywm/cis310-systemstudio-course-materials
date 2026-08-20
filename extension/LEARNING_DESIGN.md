@@ -25,8 +25,8 @@ The design combines established student-support patterns: a clean starting point
 | Observed pattern | CIS 310 adaptation | Intended student benefit |
 |---|---|---|
 | Simple dashboard and personalized suggestions | One expanded **Start Here** group and the next incomplete lecture preparation | Less scanning and less uncertainty about where to begin |
-| Video lessons and study schedule | A self-paced 13-module **Read → Watch → Practice 8 questions → Build/trace** path, with transcript-checked readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
-| Lesson library | Focused Tarnoff chapter sections, targeted official author videos, and the packaged lecture for every topic | Let a student move among primary explanation, audiovisual reinforcement, and class framing |
+| Video lessons and study schedule | A self-paced 13-module **Accessible lesson → Read → Watch → Practice 8 questions → Build/trace** path, with transcript-checked readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
+| Lesson library | A novice-facing responsive HTML explanation, focused Tarnoff sections, targeted official author videos, and the paired visual lecture for every topic | Provide direct text, examples, and source navigation instead of requiring students to infer concepts from slides alone |
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
 | Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
@@ -41,13 +41,14 @@ The extension does not guarantee an exam score, grade increase, mastery, or lear
 
 ## Open-book and author-video pathway
 
-The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*, supplemented only where the course presentation needs a directly aligned open source (OSTEP for I/O devices and address spaces). Each of the 13 presentation resources maps to focused readings, one or more transcript-checked videos from Tarnoff's official Intermation channel or ETSU OER series, the packaged lecture PDF, one readiness prompt, exactly eight related questions, and hands-on work where appropriate. Five distinct questions establish the readiness checkpoint; all eight form the confidence set. This changes the default sequence from “open the slides” to:
+The required open text is David Tarnoff's *Computer Organization and Design Fundamentals*, supplemented only where the course presentation needs a directly aligned open source (OSTEP for I/O devices and address spaces). Each of the 13 presentation resources maps to a novice-facing HTML lesson, focused readings, one or more transcript-checked videos from Tarnoff's official Intermation channel or ETSU OER series, the paired visual lecture PDF, one readiness prompt, exactly eight related questions, and hands-on work where appropriate. Five distinct questions establish the readiness checkpoint; all eight form the confidence set. This changes the default sequence from “open the slides” to:
 
-1. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
-2. **Watch:** begin with the author videos tagged for readiness, use the others as additional explanations, and self-mark the video step;
-3. **Retrieve:** answer five mapped questions without reopening the source, then continue to eight for broader confidence-building practice;
-4. **Build/trace:** construct and test the mapped circuit or inspect instruction-by-instruction machine state where the topic supports authentic hands-on work; and
-5. **Bring uncertainty:** take one unresolved point or confident miss to class or to the instructor.
+1. **Study the accessible lesson:** use the direct HTML explanation, objectives, key terms, worked examples, and self-check prompts; open the paired PDF when its visual framing helps;
+2. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
+3. **Watch:** begin with the author videos tagged for readiness, use the others as additional explanations, and self-mark the video step;
+4. **Retrieve:** answer five mapped questions without reopening the source, then continue to eight for broader confidence-building practice;
+5. **Build/trace:** construct and test the mapped circuit or inspect instruction-by-instruction machine state where the topic supports authentic hands-on work; and
+6. **Bring uncertainty:** use an attempt-first lesson tutor prompt, or take one unresolved point or confident miss to class or to the instructor.
 
 The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. The packaged lecture PDFs remain local and no Google Drive link is used.
 
@@ -66,7 +67,7 @@ The implemented scheduler and recommendation weights are conservative instructio
 ## Cognitive-overhead decisions
 
 - **Course Modules** keeps all 13 module titles visible; only the selected/next module needs to be expanded. Specialized tools remain grouped and collapsed.
-- The primary action is the next incomplete Read → Watch → Practice → Build/trace module; readiness requires reading and video self-checks plus five distinct questions, and module completion also includes required hands-on work. All eight questions remain available as the confidence set.
+- The primary action is the next incomplete Accessible lesson → Read → Watch → Practice → Build/trace module; readiness requires reading and video self-checks plus five distinct questions, and module completion also includes required hands-on work. All eight questions remain available as the confidence set.
 - Questions appear one at a time with one required choice and one confidence choice.
 - Explanations use a stable structure: outcome, explanation, takeaway, related lesson, optional reflection, next.
 - Full Digital setup, real assembly execution, the non-assembler trace tutor, learning, and help are separately labeled so an environment failure is not mistaken for a concept failure.

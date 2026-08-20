@@ -10,6 +10,7 @@ import {
   type CourseMaterialResource,
   type CourseMaterialsManifest
 } from './core/coursePack';
+import { LESSON_NARRATIVES, type LessonNarrative } from './core/lessonNarratives';
 
 const PACK_DIRECTORY = ['course-packs', 'cis310-fall2026'] as const;
 
@@ -82,8 +83,8 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     if (element.type === 'practice') {
       const item = new vscode.TreeItem('Prepare and practice', vscode.TreeItemCollapsibleState.None);
-      item.description = 'open book · author videos · readiness checks';
-      item.tooltip = 'Open the Read → Watch → Practice 8 questions → Build/trace path, plus explanations, source evidence, saved questions, and spaced review.';
+      item.description = 'accessible lessons · open book · videos · readiness checks';
+      item.tooltip = 'Open the Accessible lesson → Read → Watch → Practice 8 questions → Build/trace path, plus explanations, source evidence, saved questions, and spaced review.';
       item.iconPath = new vscode.ThemeIcon('book');
       item.command = { command: 'systemstudioCis310.openPracticeCenter', title: 'Open CIS 310 Learning' };
       return item;
@@ -93,6 +94,8 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
       item.iconPath = new vscode.ThemeIcon(
         element.section === 'syllabus'
           ? 'book'
+          : element.section === 'lesson'
+            ? 'book-open'
           : element.section === 'presentation'
             ? 'preview'
             : element.section === 'homework'
@@ -101,16 +104,31 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
       );
       return item;
     }
+    if (element.type === 'lesson') {
+      const item = new vscode.TreeItem(
+        `${element.lesson.lectureLabel}: ${element.lesson.title}`,
+        vscode.TreeItemCollapsibleState.None
+      );
+      item.description = 'accessible HTML · examples · tutor prompts';
+      item.tooltip = `${element.lesson.overview}\n${element.lesson.slideEvidence}`;
+      item.iconPath = new vscode.ThemeIcon('book-open');
+      item.command = {
+        command: 'systemstudioCis310.openLessonText',
+        title: 'Open accessible lesson text',
+        arguments: [element.lesson.resourceId]
+      };
+      return item;
+    }
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
     item.description = element.resource.kind === 'syllabus'
       ? 'Fall 2026 PDF · Canvas current'
       : element.resource.kind === 'presentation'
-        ? 'bundled offline PDF'
+        ? 'visual PDF · paired accessible lesson'
         : 'packaged reference';
     item.tooltip = element.resource.kind === 'syllabus'
       ? 'Active Fall 2026 syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission.'
       : element.resource.kind === 'presentation'
-      ? `${element.resource.sourceTitle}\nPackaged for offline viewing; no external document-hosting account required.`
+      ? `${element.resource.sourceTitle}\nVisual PDF reference paired with a responsive HTML lesson text. The PDF is not represented as independently remediated.`
       : `${element.resource.sourceTitle}\nUse this study reference with the current Canvas assignment.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(
@@ -133,6 +151,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
         { type: 'notice' },
         { type: 'practice' },
         { type: 'section', section: 'syllabus', label: `Syllabus (${this.materials.getResources('syllabus').length})` },
+        { type: 'section', section: 'lesson', label: `Accessible lesson texts (${LESSON_NARRATIVES.length})` },
         { type: 'section', section: 'presentation', label: `Presentations (${this.materials.getResources('presentation').length})` },
         { type: 'section', section: 'homework', label: `Homework (${this.materials.getAssignments('homework').length})` },
         { type: 'section', section: 'project', label: `Project Assignments (${this.materials.getAssignments('project').length})` }
@@ -140,6 +159,9 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     if (element.type !== 'section') {
       return [];
+    }
+    if (element.section === 'lesson') {
+      return LESSON_NARRATIVES.map((lesson) => ({ type: 'lesson', lesson }));
     }
     const resources = element.section === 'presentation' || element.section === 'syllabus'
       ? this.materials.getResources(element.section)
@@ -155,5 +177,6 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
 type MaterialsNode =
   | { type: 'notice' }
   | { type: 'practice' }
-  | { type: 'section'; section: 'syllabus' | 'presentation' | AssignmentCategory; label: string }
+  | { type: 'section'; section: 'syllabus' | 'lesson' | 'presentation' | AssignmentCategory; label: string }
+  | { type: 'lesson'; lesson: LessonNarrative }
   | { type: 'resource'; resource: CourseMaterialResource };

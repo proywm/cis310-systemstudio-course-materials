@@ -349,7 +349,7 @@ function tutorialStepsHtml(): string {
     <p>Start from your task, not from a list of tools. This practice choice does not change configuration.</p>
     <div class="instruction"><strong>Choose one:</strong> the path that best matches your immediate need.</div>
     <div class="choices">
-      ${choice('prepare', 'Prepare before class', 'Read the mapped open-book section, watch the author video, then try three readiness questions.')}
+      ${choice('prepare', 'Prepare before class', 'Study the accessible lesson, read the mapped open-book section, watch the author video, then complete the five-question readiness checkpoint.')}
       ${choice('requirements', 'Find requirements or submit', 'Go to the current Fall 2026 Canvas course; SystemStudio never submits for you.')}
       ${choice('circuit', 'Design or debug a circuit', 'Move from a lecture concept to a small circuit, prediction, preview, and test.')}
       ${choice('assembly', 'Write, run, or trace assembly', 'Use an actual assembler for executable behavior and the separately labeled tutor for visualization.')}
@@ -366,12 +366,12 @@ function tutorialStepsHtml(): string {
       ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as a packaged PDF.')}
       ${choice('calendar', 'Monday/Wednesday calendar', '27 verified regular meetings starting August 26, with holidays and recess identified.')}
       ${choice('openbook', 'Required open book and author videos', 'Focused Tarnoff chapters and official author videos come before the related class and slides.')}
-      ${choice('presentations', '13 bundled presentations', 'Local, integrity-checked PDFs open inside VS Code without an external document-hosting account.')}
+      ${choice('presentations', '13 lessons and presentations', 'Each responsive HTML lesson explains the visual PDF with objectives, examples, self-checks, and source-bounded tutor prompts.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
-      ${choice('practice', 'CIS 310 Learning', 'Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
+      ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
-    <div class="actions"><button data-action="open-learning" class="primary">Open Read → Watch → Practice path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
+    <div class="actions"><button data-action="open-learning" class="primary">Open course preparation path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>

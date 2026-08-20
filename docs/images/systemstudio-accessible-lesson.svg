@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title description">
+  <title id="title">SystemStudio accessible CIS 310 lesson reader</title>
+  <desc id="description">A Visual Studio Code-style view. The left sidebar shows Module 2 expanded with accessible lesson, reading, video, visual PDF, eight-question practice, and half-adder activity. The main pane shows a responsive text lesson with objectives, key terms, a plain-language explanation, and previous and next lesson buttons.</desc>
+  <rect width="1440" height="860" rx="14" fill="#181818"/>
+  <rect width="1440" height="44" rx="14" fill="#323233"/>
+  <circle cx="22" cy="22" r="6" fill="#ff5f57"/><circle cx="42" cy="22" r="6" fill="#febc2e"/><circle cx="62" cy="22" r="6" fill="#28c840"/>
+  <text x="720" y="28" text-anchor="middle" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="15">SystemStudio CIS 310 — Accessible lesson text</text>
+
+  <rect x="0" y="44" width="430" height="816" fill="#202020"/>
+  <line x1="430" y1="44" x2="430" y2="860" stroke="#474747"/>
+  <text x="24" y="80" fill="#f0f0f0" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600">COURSE MODULES (0/13)</text>
+  <text x="28" y="118" fill="#ccc" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Module 1: Introduction and Data Representation</text>
+  <rect x="18" y="138" width="395" height="34" rx="5" fill="#094771"/>
+  <text x="30" y="160" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="600">⌄ Module 2: Signed Data, Logic, and Adders</text>
+  <text x="52" y="198" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="14">▣ Study the accessible lesson text</text>
+  <text x="76" y="218" fill="#aaa" font-family="Segoe UI,Arial,sans-serif" font-size="11">objectives · explanations · examples · tutor prompts</text>
+  <text x="52" y="250" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="14">□ Read 1: Tarnoff Chapters 2 and 3</text>
+  <text x="76" y="270" fill="#aaa" font-family="Segoe UI,Arial,sans-serif" font-size="11">signed representation and binary arithmetic</text>
+  <text x="52" y="302" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="14">▷ Watch: Two’s complement and addition</text>
+  <text x="52" y="338" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="14">▧ Open Lecture 2 visual presentation PDF</text>
+  <text x="52" y="374" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="14">⚗ Practice the 8-question confidence set</text>
+  <text x="76" y="394" fill="#aaa" font-family="Segoe UI,Arial,sans-serif" font-size="11">0/8 tried · readiness after 5</text>
+  <text x="52" y="430" fill="#ddd" font-family="Segoe UI,Arial,sans-serif" font-size="14">⌁ Build: Half adder from its truth table</text>
+  <text x="76" y="450" fill="#aaa" font-family="Segoe UI,Arial,sans-serif" font-size="11">required hands-on · guided · self-paced</text>
+  <text x="28" y="496" fill="#bbb" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Module 3: Boolean Algebra</text>
+  <text x="28" y="530" fill="#bbb" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Module 4: Karnaugh Maps</text>
+  <text x="28" y="564" fill="#bbb" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Module 5: Combinational Logic</text>
+  <text x="28" y="598" fill="#bbb" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Module 6: Sequential Logic</text>
+  <text x="28" y="632" fill="#bbb" font-family="Segoe UI,Arial,sans-serif" font-size="15">› Modules 7–13 remain available below</text>
+
+  <rect x="430" y="44" width="1010" height="816" fill="#1e1e1e"/>
+  <text x="484" y="84" fill="#a8a8a8" font-family="Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">MODULE 2 OF 13 · ACCESSIBLE HTML LESSON</text>
+  <text x="484" y="128" fill="#f4f4f4" font-family="Segoe UI,Arial,sans-serif" font-size="29" font-weight="650">Lecture 2: Signed Data, Boolean Logic, and Adders</text>
+  <text x="484" y="164" fill="#ccc" font-family="Segoe UI,Arial,sans-serif" font-size="16">Connect fixed-width signed values and truth tables to the behavior of an adder circuit.</text>
+  <rect x="484" y="188" width="290" height="40" rx="5" fill="#3a3d41"/><text x="505" y="214" fill="#eee" font-family="Segoe UI,Arial,sans-serif" font-size="13">Previous: Lecture 1 — Data Representation</text>
+  <rect x="786" y="188" width="265" height="40" rx="5" fill="#3a3d41"/><text x="807" y="214" fill="#eee" font-family="Segoe UI,Arial,sans-serif" font-size="13">Next: Lecture 3 — Boolean Algebra</text>
+  <line x1="484" y1="252" x2="1380" y2="252" stroke="#555"/>
+
+  <rect x="484" y="276" width="896" height="70" rx="6" fill="#252526" stroke="#73c991" stroke-width="3"/>
+  <text x="506" y="302" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">What this lesson covers</text>
+  <text x="506" y="327" fill="#ccc" font-family="Segoe UI,Arial,sans-serif" font-size="14">Representation, Boolean behavior, truth tables, and the half-adder relationship; graded artifacts remain in Canvas.</text>
+
+  <text x="484" y="390" fill="#f0f0f0" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="650">Learning objectives</text>
+  <text x="504" y="424" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">• Encode and interpret signed fixed-width values using two’s complement.</text>
+  <text x="504" y="452" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">• Derive Sum and Carry outputs from a two-input truth table.</text>
+  <text x="504" y="480" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">• Explain overflow using the representable range, not an extra output bit alone.</text>
+
+  <text x="484" y="528" fill="#f0f0f0" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="650">Key terms in plain language</text>
+  <text x="504" y="562" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">Two’s complement</text>
+  <text x="650" y="562" fill="#ccc" font-family="Segoe UI,Arial,sans-serif" font-size="15">A fixed-width signed representation that lets the same adder support subtraction.</text>
+  <text x="504" y="592" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">Truth table</text>
+  <text x="602" y="592" fill="#ccc" font-family="Segoe UI,Arial,sans-serif" font-size="15">A complete list of input combinations and the output for each combination.</text>
+
+  <text x="484" y="642" fill="#f0f0f0" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="650">From a truth table to a half adder</text>
+  <text x="484" y="678" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">For inputs A and B, Sum is one when exactly one input is one. Carry is one only when both</text>
+  <text x="484" y="702" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">inputs are one. Therefore Sum follows exclusive OR, while Carry follows AND. Predict all four</text>
+  <text x="484" y="726" fill="#d3d3d3" font-family="Segoe UI,Arial,sans-serif" font-size="15">rows before constructing the guided circuit, then compare each simulated output with the table.</text>
+
+  <rect x="484" y="766" width="225" height="42" rx="5" fill="#0e639c"/><text x="505" y="793" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="600">Open 8-question practice set</text>
+  <rect x="724" y="766" width="270" height="42" rx="5" fill="#0e639c"/><text x="745" y="793" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="600">Copy prompt and open U-M tutor</text>
+  <text x="1392" y="838" text-anchor="end" fill="#777" font-family="Segoe UI,Arial,sans-serif" font-size="11">Responsive lesson reader · v0.14.0</text>
+</svg>

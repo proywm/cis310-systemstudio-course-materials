@@ -32,10 +32,11 @@ describe('sidebar course-module navigation', () => {
     assert.equal(navigation.filter((module) => module.expanded).length, 0);
   });
 
-  it('places mapped readings, videos, lecture, readiness practice, progress controls, and labs inside modules', () => {
+  it('places accessible lesson text, mapped sources, presentation, practice, progress controls, and labs inside modules', () => {
     const navigation = buildCourseModuleNavigation(learningPath());
     for (const module of navigation) {
       const kinds = new Set(module.items.map((item) => item.kind));
+      assert.ok(kinds.has('lesson'), `${module.resourceId} has no accessible lesson text`);
       assert.ok(kinds.has('reading'), `${module.resourceId} has no reading`);
       assert.ok(kinds.has('toggle-read'), `${module.resourceId} has no reading progress control`);
       assert.ok(kinds.has('video'), `${module.resourceId} has no video`);

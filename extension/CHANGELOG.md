@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.14.0
+
+- Added a novice-facing responsive HTML lesson for every one of the 13 lecture resources, grounded in extracted presentation text and the verified reading/video map.
+- Each lesson provides objectives, key terms, three direct explanations, two worked examples, three self-checks, explicit presentation evidence and scope boundaries, previous/next navigation, and mapped learning/lab actions.
+- Added lesson-specific, attempt-first tutor prompts that students copy before opening the configured U-M course tutor; graded-work guardrails and external-AI limitations remain explicit.
+- Applied the instructor-supplied UM-Dearborn accessibility-course guidance to semantic headings, descriptive controls, keyboard focus, reflow, high-contrast/forced-color behavior, reduced motion, and a direct HTML alternative to visual PDFs.
+- Added automated narrative completeness and accessible-structure checks, plus a documented manual screen-reader, keyboard, zoom, contrast, caption, and disabled-student review checklist.
+- Corrected stale three-question and 43-question documentation to the current five-question readiness checkpoint, eight-question confidence set, and 104-question bank.
+
 ## 0.13.0
 
 - Expanded the evidence-mapped practice bank from 43 to 104 questions: exactly eight per module, a five-question readiness checkpoint, balanced answer positions, Bloom-level labels from Remember through Evaluate, and explanation/justification with reading, video, and lecture-slide evidence.

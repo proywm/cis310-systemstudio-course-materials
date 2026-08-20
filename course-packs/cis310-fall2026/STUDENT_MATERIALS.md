@@ -1,6 +1,6 @@
 # CIS 310 Fall 2026 Course Materials
 
-> **Active Fall 2026 course workspace:** [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for requirements, deadlines, points, allowed collaboration, required files, and submission. **Submit every required deliverable in Canvas; SystemStudio does not submit for you.** The syllabus and all 13 presentations are packaged as local, integrity-checked PDFs.
+> **Active Fall 2026 course workspace:** [Canvas course 552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for requirements, deadlines, points, allowed collaboration, required files, and submission. **Submit every required deliverable in Canvas; SystemStudio does not submit for you.** Each module pairs a responsive HTML lesson with its local, integrity-checked visual presentation PDF.
 
 ## Start with the Fall 2026 course documents
 
@@ -20,7 +20,9 @@ For ungraded SystemStudio practice, state your answer and reasoning before askin
 
 ## Practice and track your learning
 
-Open the expanded **Course Modules** section to see all 13 modules and navigate them in sequence or revisit any topic. The next unfinished module is highlighted without hiding the rest of the outline. Expand any module to reach its mapped readings, author videos, packaged lecture, three-question readiness check, local progress controls, and any related guided activity. Begin with sources tagged **Readiness source**; the other listed items are additional references. The readings are focused sections of David Tarnoff's free *Computer Organization and Design Fundamentals*; the videos come from Tarnoff's official channel or ETSU OER series. Under **Practice and Progress**, you can also select one of six topics, take a 10-question quiz, or review questions that are due or saved. Practice mode gives feedback after each question; quiz mode gives feedback at the end. Choose a confidence level before submitting, then use the explanation, visibly labeled mapped reading/video focus, and packaged lecture. A module is checked only after three distinct questions have been tried.
+Open the expanded **Course Modules** section to see all 13 modules and navigate them in sequence or revisit any topic. The next unfinished module is highlighted without hiding the rest of the outline. Expand any module to reach its responsive HTML lesson, mapped readings, author videos, visual lecture PDF, five-question readiness checkpoint, eight-question confidence set, local progress controls, and any related guided activity. Begin with the HTML lesson's objectives, terms, explanations, examples, and self-checks; then use sources tagged **Readiness source**. The other listed items are additional references. The readings are focused sections of David Tarnoff's free *Computer Organization and Design Fundamentals*; the videos come from Tarnoff's official channel or ETSU OER series. Under **Practice and Progress**, you can also select one of six topics, take a 10-question quiz, or review questions that are due or saved. Practice mode gives feedback after each question; quiz mode gives feedback at the end. Choose a confidence level before submitting, then use the explanation, visibly labeled mapped reading/video focus, and paired presentation. A module's question checkpoint requires five distinct attempts; completing all eight gives the broader confidence set.
+
+The HTML lesson is the direct-text alternative to the visual slide deck. It reflows with zoom, uses semantic headings and native controls, does not depend on color alone, and offers previous/next navigation. Each **Ask the course tutor** button copies a source-bounded, attempt-first prompt and opens the configured U-M tutor; the student must paste the prompt and should verify the response against the mapped course source.
 
 The dashboard reports local practice evidence—coverage, accuracy, due questions, practice days, and confidence mismatches. It does not calculate a grade, certify mastery, rank students, or send results to Canvas or the instructor. You can reset the local history at any time.
 
@@ -101,7 +103,7 @@ Browse the [official Tarnoff book page](https://faculty.etsu.edu/tarnoff/138292/
 
 ## Using these materials in SystemStudio
 
-1. Complete the mapped Read → Watch → five-question readiness checkpoint before the related class meeting; continue through all eight questions for the confidence set.
+1. Complete the mapped Accessible lesson → Read → Watch → five-question readiness checkpoint before the related class meeting; continue through all eight questions for the confidence set.
 2. Complete the mapped formative lab when one is required; predict before creating or running its artifact. Optional labs provide further circuit or assembly practice.
 3. Read the assignment and its mapped lecture topics before opening the simulator.
 4. Keep guided practice under `circuits/guided/` and create assignment work separately under `circuits/work/`.

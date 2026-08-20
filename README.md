@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, novice-facing accessible lesson texts, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -10,7 +10,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 |---|---|
 | Current requirements, deadlines, grades, announcements, and submission | [Fall 2026 CIS 310 Canvas](https://canvas.umd.umich.edu/courses/552144) |
 | Course policies, outcomes, tools, and topic sequence | [Fall 2026 syllabus PDF](course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf) |
-| Open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
+| Accessible lesson text, open-book readings, author videos, homework, projects, and presentations | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
 | Verified reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
@@ -19,7 +19,9 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
 
-![SystemStudio CIS 310 Learning Center showing all 13 course modules and the Read, Watch, eight-question practice, and hands-on preparation path](docs/images/systemstudio-learning-center.svg)
+![SystemStudio CIS 310 Learning Center showing all 13 course modules and the accessible lesson, reading, video, eight-question practice, and hands-on preparation path](docs/images/systemstudio-learning-center.svg)
+
+![SystemStudio CIS 310 accessible lesson reader showing the module sequence, direct explanations, objectives, key terms, practice, hands-on work, and tutor prompt](docs/images/systemstudio-accessible-lesson.svg)
 
 ![SystemStudio CIS 310 self-paced tutorial showing all eight lessons at once](docs/images/systemstudio-self-paced-tutorial.svg)
 
@@ -34,8 +36,9 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 ## What students receive
 
 - a locally packaged Fall 2026 syllabus PDF;
-- an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their reading, video, lecture, readiness-practice, and guided-lab links;
-- a self-paced Read → Watch → Practice → Build/trace path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
+- an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their accessible lesson, reading, video, visual lecture, readiness-practice, and guided-lab links;
+- 13 responsive HTML lesson texts, grounded in the packaged lectures and verified source map, with novice explanations, examples, self-checks, and bounded tutor prompts;
+- a self-paced Accessible lesson → Read → Watch → Practice → Build/trace path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
 - 13 integrity-checked presentation PDFs that open inside VS Code;
 - three homework references and three processor-project references;
 - 104 short, evidence-mapped practice questions—exactly eight for each of the 13 presentation resources—with Bloom-level labels and full explanation/justification;

@@ -146,16 +146,16 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Prepare with the open book before using the slides',
       paragraphs: [
         'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and the targeted official author videos needed for its questions.',
-        'Use the self-paced Read → Watch → Practice → Build/trace path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture slides.'
+        'Use the self-paced Accessible lesson → Read → Watch → Practice → Build/trace path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture slides.'
       ],
       checklist: [
-        'Open the next preparation module and read only its mapped chapter or sections.',
+        'Open the next preparation module and study its direct HTML lesson, then read only the mapped chapter or sections.',
         'Watch the mapped author videos and write down one unresolved point.',
-        'Try the three-question readiness check without reopening the source.',
+        'Try the five-question readiness checkpoint without reopening the source.',
         'Bring the unresolved point or a confident miss to class or to the instructor.'
       ],
       actions: [
-        { id: 'open-learning', label: 'Open Read → Watch → Practice path' },
+        { id: 'open-learning', label: 'Open course preparation path' },
         { id: 'open-materials', label: 'See the complete lecture map' }
       ]
     };

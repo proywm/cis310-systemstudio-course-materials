@@ -1,6 +1,6 @@
 # Embedded materials, authoritative Canvas
 
-SystemStudio uses one preparation sequence for every lecture: **Read → Watch → Practice 8 questions → Build/trace where mapped**. Five distinct questions form the readiness checkpoint; all eight form the confidence set. Each answer includes an explanation, justification, and mapped evidence from focused open-book sections, transcript-checked author videos, and the packaged lecture PDF. Those authoritative sources open externally; the extension does not copy the book or use Google Drive.
+SystemStudio uses one preparation sequence for every lecture: **Accessible lesson → Read → Watch → Practice 8 questions → Build/trace where mapped**. The responsive HTML lesson supplies direct novice-facing explanations, examples, self-checks, and source-bounded tutor prompts; the PDF remains the paired visual framing. Five distinct questions form the readiness checkpoint; all eight form the confidence set. Each answer includes an explanation, justification, and mapped evidence from focused open-book sections, transcript-checked author videos, and the packaged lecture PDF. Those authoritative sources open externally; the extension does not copy the book or use Google Drive.
 
 SystemStudio includes these resources inside the extension:
 

@@ -92,7 +92,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         return [
           describedActionItem(
             'Prepare before class',
-            'mapped open book · author videos · readiness check',
+            'accessible lesson · open book · author videos · readiness check',
             'systemstudioCis310.openPracticeCenter',
             'book'
           ),
@@ -291,6 +291,10 @@ function moduleItem(module: CourseModuleNavigation): StatusNode {
 
 function moduleActionItem(action: ModuleNavigationItem): StatusNode {
   switch (action.kind) {
+    case 'lesson':
+      return describedActionItem(
+        action.label, action.description, 'systemstudioCis310.openLessonText', 'book-open', [action.resourceId]
+      );
     case 'reading':
       return describedActionItem(
         action.label, action.description, 'systemstudioCis310.openModuleSource', 'book-open',
