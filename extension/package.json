@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Active Fall 2026 CIS 310 open-book preparation, practice, course materials, managed Digital circuits, and embedded IA-32 assembly inside Visual Studio Code.",
-  "version": "0.10.5",
+  "description": "Active Fall 2026 CIS 310 preparation, practice, embedded circuit construction, managed Digital verification, and embedded IA-32 assembly inside Visual Studio Code.",
+  "version": "0.10.6",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -40,6 +40,7 @@
     "onView:systemstudioCis310.explorer",
     "onView:systemstudioCis310.materials",
     "onCustomEditor:systemstudioCis310.circuitPreview",
+    "onCustomEditor:systemstudioCis310.embeddedCircuitEditor",
     "onLanguage:digital-circuit",
     "onLanguage:nasm",
     "onCommand:systemstudioCis310.setupDigital",
@@ -59,6 +60,7 @@
     "onCommand:systemstudioCis310.openSyllabus",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
+    "onCommand:systemstudioCis310.openEmbeddedCircuit",
     "onCommand:systemstudioCis310.createCircuit",
     "onCommand:systemstudioCis310.createAssignmentCircuit",
     "onCommand:systemstudioCis310.testCircuit",
@@ -78,7 +80,7 @@
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
-      "description": "Native Digital simulator launch and circuit testing are disabled until the workspace is trusted. The bounded embedded assembly interpreter remains available.",
+      "description": "Native Digital launch and official circuit testing are disabled until the workspace is trusted. The bounded embedded circuit and assembly workbenches remain available.",
       "restrictedConfigurations": [
         "systemstudioCis310.javaPath",
         "systemstudioCis310.testTimeoutSeconds"
@@ -185,6 +187,12 @@
         "command": "systemstudioCis310.openDigital",
         "title": "CIS 310: Open Circuit in Digital",
         "category": "SystemStudio"
+      },
+      {
+        "command": "systemstudioCis310.openEmbeddedCircuit",
+        "title": "CIS 310: Open Embedded Circuit Workbench",
+        "category": "SystemStudio",
+        "icon": "$(circuit-board)"
       },
       {
         "command": "systemstudioCis310.createCircuit",
@@ -314,6 +322,16 @@
     ],
     "customEditors": [
       {
+        "viewType": "systemstudioCis310.embeddedCircuitEditor",
+        "displayName": "SystemStudio Embedded Circuit Workbench",
+        "selector": [
+          {
+            "filenamePattern": "*.dig"
+          }
+        ],
+        "priority": "default"
+      },
+      {
         "viewType": "systemstudioCis310.circuitPreview",
         "displayName": "SystemStudio Circuit Preview",
         "selector": [
@@ -359,7 +377,7 @@
       {
         "id": "systemstudioCis310.gettingStarted",
         "title": "Get Started with SystemStudio CIS 310",
-        "description": "Learn the Fall 2026 read-watch-practice, Canvas, course-material, Digital circuit, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
+        "description": "Learn the Fall 2026 read-watch-practice, Canvas, course-material, embedded circuit, advanced Digital, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
         "steps": [
           {
             "id": "guidedTour",
@@ -385,7 +403,7 @@
           {
             "id": "circuits",
             "title": "Build Guided Circuits from Lecture Concepts",
-            "description": "Start with the Lecture 2 half adder, then continue through Boolean gates, selection, stored state, address decoding, and a small ALU slice. Each lab maps the reading/video, prediction, fresh circuit, simulation evidence, and explanation.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Check the environment](command:systemstudioCis310.checkEnvironment)",
+            "description": "Start with the Lecture 2 half adder in the embedded VS Code workbench, then continue through Boolean gates, selection, stored state, address decoding, and a small ALU slice. Each lab maps the reading/video, prediction, fresh Digital-compatible circuit, simulation evidence, and explanation.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Create a new embedded circuit](command:systemstudioCis310.createCircuit)",
             "media": { "markdown": "media/tutorial/04-circuits.md" },
             "completionEvents": ["onCommand:systemstudioCis310.openGuidedLabs"]
           },
@@ -413,6 +431,11 @@
         }
       ],
       "explorer/context": [
+        {
+          "command": "systemstudioCis310.openEmbeddedCircuit",
+          "when": "resourceExtname == .dig",
+          "group": "systemstudio@0"
+        },
         {
           "command": "systemstudioCis310.openDigital",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",
@@ -447,6 +470,11 @@
         }
       ],
       "editor/title": [
+        {
+          "command": "systemstudioCis310.openEmbeddedCircuit",
+          "when": "resourceExtname == .dig",
+          "group": "navigation@0"
+        },
         {
           "command": "systemstudioCis310.openDigital",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",

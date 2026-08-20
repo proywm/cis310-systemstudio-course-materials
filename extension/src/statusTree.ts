@@ -178,7 +178,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
     return [
       digital,
       actionItem('Open guided circuit labs', 'systemstudioCis310.openGuidedLabs', 'map', ['circuit-half-adder']),
-      actionItem('Create a new blank Digital circuit', 'systemstudioCis310.createCircuit', 'new-file'),
+      actionItem('Create a circuit in the embedded workbench', 'systemstudioCis310.createCircuit', 'new-file'),
+      actionItem('Open an existing circuit in the workbench', 'systemstudioCis310.openEmbeddedCircuit', 'circuit-board'),
       open,
       actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder')
     ];
@@ -248,7 +249,7 @@ function informationItem(label: string, description: string, icon: string): Stat
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
   item.description = description;
-  item.tooltip = 'Remote SSH is optional. Use local desktop VS Code for the full Digital graphical editing workflow.';
+  item.tooltip = 'The embedded circuit workbench runs in desktop or Remote SSH VS Code. Use a graphical desktop only for Full Digital.';
   return item;
 }
 

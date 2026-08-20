@@ -31,6 +31,7 @@ The design combines established student-support patterns: a clean starting point
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
 | Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
 | Guided deliberate practice | Six circuit builds and five assembly traces, each mapped to the lecture sources and structured as predict → construct/step → inspect → explain | Bridge declarative lecture knowledge to visible signal or machine-state evidence without supplying a graded artifact |
+| Embedded construction | A bounded VS Code circuit workbench with port-to-port wiring, live one-bit values, manual clocks, D flip-flop state, accessible component list, and Digital-compatible saves | Keep novice attention on the signal path while removing Java/window switching from the first build |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
@@ -67,10 +68,10 @@ The implemented scheduler and recommendation weights are conservative instructio
 - The primary action is the next incomplete Read → Watch → Try module; completion requires reading and video self-checks plus three distinct questions, while a five-question recommended session is the second action and customization is secondary.
 - Questions appear one at a time with one required choice and one confidence choice.
 - Explanations use a stable structure: outcome, explanation, takeaway, related lesson, optional reflection, next.
-- Setup, Digital, assembly, learning, and help are separate groups so a tool failure is not mistaken for a content failure.
+- Embedded circuit construction, advanced Digital setup, assembly, learning, and help are separately labeled so a Java/native-window failure is not mistaken for a circuit-concept failure.
 - Student-facing course files open as rendered documents, not raw Markdown.
 - Sessions remain skippable; practice does not block access to assignments, tools, or Canvas.
-- Hands-on labs use one stable six-checkpoint pattern, create non-overwriting circuit files, and open code directly beside the embedded assembly state panel.
+- Hands-on labs use one stable six-checkpoint pattern, create non-overwriting circuit files, open supported circuits directly in the embedded workbench, and open code beside the embedded assembly state panel.
 - Status labels use neutral language such as **building**, **review**, and **steady**, not pass/fail or mastered/not mastered.
 
 ## Progress model and privacy
@@ -88,7 +89,7 @@ Before classroom release, the instructor should:
 1. verify every reading section, author video, question, option, explanation, and lecture mapping against the Fall 2026 materials, following the [content alignment audit](CONTENT_ALIGNMENT_AUDIT.md);
 2. check that no practice item exposes a graded assignment answer or hidden assessment content;
 3. verify every guided lab against its reading/video/lecture mapping and confirm its artifact and constants remain distinct from graded deliverables;
-4. complete each circuit lab in Digital and execute every assembly example in the embedded interpreter;
+4. complete each circuit lab in the embedded workbench, verify representative saved files in Digital, and execute every assembly example in the embedded interpreter;
 5. run keyboard, screen-reader, contrast, zoom, and reduced-motion checks on each Learning Center screen;
 6. smoke-test the packaged VSIX on Windows, macOS, and Linux;
 7. pilot the language and session length with a small student group;

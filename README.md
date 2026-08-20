@@ -42,6 +42,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
+- an embedded VS Code circuit workbench for inputs, outputs, AND/OR/XOR/NOT, a manual clock, and one-bit D flip-flops, with live simulation and Digital-compatible `.dig` saves;
 - six lecture-mapped guided circuit builds, including a step-by-step half adder, with fresh non-overwriting files and local checklist progress;
 - circuit preview and deterministic testcase support;
 - a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
@@ -63,7 +64,7 @@ code --install-extension systemstudio-cis310.vsix
 
 Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open the **SystemStudio CIS 310** activity-bar view, and start the guided tutorial.
 
-Java 8 or newer is required for the Digital graphical application. The embedded assembly lab does not require Visual Studio, Docker, MASM, NASM, a linker, or administrator access.
+Java is not required for the embedded circuit or assembly workbenches. Java 8 or newer is required only for Digital’s official preview/tests and full advanced graphical application. The embedded assembly lab does not require Visual Studio, Docker, MASM, NASM, a linker, or administrator access.
 
 ## Repository layout
 

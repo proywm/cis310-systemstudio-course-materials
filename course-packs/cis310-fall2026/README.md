@@ -14,7 +14,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 - three homework study references;
 - three processor-project study and implementation references;
 - 43 formative practice questions, with at least three mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
-- six mapped guided circuit builds and five mapped guided assembly traces delivered through the extension's Hands-on Lab Center;
+- an embedded VS Code circuit workbench for the guided one-bit component subset, saving Digital-compatible `.dig` files without Java, plus six mapped circuit builds and five mapped assembly traces delivered through the Hands-on Lab Center;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
 - an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
@@ -33,6 +33,10 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 9. Use the local FAQ for recurring questions, U-M Maizey for source-grounded conversational help, or **Ask a Question Before Class** when the instructor should address an issue in the next meeting.
 
 Learning Center reading/video checkmarks, guided-lab checkmarks, and practice progress stay on the student's machine. They are ungraded and self-reported, do not predict a course grade or certify mastery, and can be reset from the relevant dashboard or lab.
+
+## Circuit-editor boundary
+
+The embedded circuit workbench supports inputs, outputs, AND/OR/XOR/NOT, a manual clock, and one-bit D flip-flops. It runs inside VS Code and saves `.dig` files. Digital v0.31 remains the verified advanced companion for official previews/testcases, buses, memories, subcircuits, HDL, and other unsupported features. The embedded editor refuses to rewrite an advanced file it cannot represent fully.
 
 ## Assembly boundary
 

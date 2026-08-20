@@ -58,7 +58,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     boundary: 'This practice expression is deliberately different from the current homework expressions.',
     artifact: { kind: 'circuit', fileName: 'guided-boolean-path.dig' },
     steps: [
-      circuitStep('predict', 'Predict before opening Digital', 'Create the four-row table for F = (A AND NOT B) OR (NOT A AND B). Circle the rows where exactly one input is 1.', 'A completed four-row prediction in your notes.'),
+      circuitStep('predict', 'Predict before opening the workbench', 'Create the four-row table for F = (A AND NOT B) OR (NOT A AND B). Circle the rows where exactly one input is 1.', 'A completed four-row prediction in your notes.'),
       circuitStep('pins', 'Place and label the interface', 'Create input pins A and B and one output pin F. Keep the labels visible so each simulated row is unambiguous.', 'A blank interface with two labeled inputs and one labeled output.'),
       circuitStep('terms', 'Build the two product terms', 'Use two NOT gates and two AND gates to form A·¬B and ¬A·B. Build one term at a time.', 'Each AND output can be probed separately.'),
       circuitStep('combine', 'Combine the terms', 'Feed the two product terms into one OR gate and connect it to F.', 'F changes only when the two inputs differ.'),
@@ -78,8 +78,8 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
       circuitStep('pins', 'Create the circuit interface', 'Create and label input pins A and B and output pins Sum and Carry. Arrange Sum above Carry so the paths remain visually separate.', 'Two labeled inputs and two labeled outputs.'),
       circuitStep('sum', 'Build the Sum path', 'Connect A and B to an XOR gate, then connect that output to Sum. Before clicking an input, predict which two rows make XOR high.', 'The Sum path implements “exactly one input is high.”'),
       circuitStep('carry', 'Build the Carry path', 'Connect the same A and B inputs to an AND gate, then connect that output to Carry.', 'The Carry path becomes high only for 1+1.'),
-      circuitStep('test', 'Simulate all four additions', 'Toggle each input pair in Digital. Record predicted and observed Sum/Carry; repair a mismatch before proceeding.', 'All four observed Carry·Sum pairs match the binary-addition table you wrote before building.'),
-      circuitStep('inspect', 'Inspect and explain the evidence', 'Save the `.dig` file, return to VS Code, and preview it. Explain why the two output paths use different gates.', 'A saved circuit plus a short explanation tied to the truth table.')
+      circuitStep('test', 'Simulate all four additions', 'Toggle each input pair in the embedded workbench. Record predicted and observed Sum/Carry; repair a mismatch before proceeding.', 'All four observed Carry·Sum pairs match the binary-addition table you wrote before building.'),
+      circuitStep('inspect', 'Inspect and explain the evidence', 'Save the `.dig` file and optionally open Digital’s verified preview. Explain why the two output paths use different gates.', 'A saved Digital-compatible circuit plus a short explanation tied to the truth table.')
     ],
     reflection: 'What additional input and logic would a full adder need, without drawing the full assignment solution?'
   },
@@ -124,9 +124,9 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     steps: [
       circuitStep('predict', 'Map addresses to outputs', 'List addresses 00 through 11 and predict which one of Y0–Y3 should be selected for each.', 'A four-row one-hot table.'),
       circuitStep('interface', 'Place address and output signals', 'Create two address inputs A1/A0 and four labeled outputs Y0–Y3.', 'Six clearly labeled signals.'),
-      circuitStep('decoder', 'Add the decoder', 'Configure a decoder for two select bits and connect its four outputs to Y0–Y3. Note whether its outputs are active-high or active-low.', 'The configured polarity is recorded.'),
-      circuitStep('test', 'Sweep every address', 'Toggle 00, 01, 10, and 11. At each address, verify exactly one intended output is active under the configured polarity.', 'Four observed one-hot selections.'),
-      circuitStep('enable', 'Test chip select if available', 'Add or use an enable/chip-select input. Disable it and observe whether all outputs become inactive.', 'Evidence distinguishing address decoding from device enable.'),
+      circuitStep('decoder', 'Build four decoded paths', 'Create NOT A1 and NOT A0, then use four two-input AND gates for ¬A1·¬A0, ¬A1·A0, A1·¬A0, and A1·A0. Connect them in address order to Y0–Y3.', 'Four visible minterm paths with active-high outputs.'),
+      circuitStep('test', 'Sweep every address', 'Toggle 00, 01, 10, and 11. At each address, verify exactly one intended output is active.', 'Four observed one-hot selections.'),
+      circuitStep('invariant', 'Check the one-hot invariant', 'For every address, count the active outputs. Diagnose the first row where the count is not exactly one.', 'A four-row active-output count of one.'),
       circuitStep('explain', 'Connect to memory', 'Explain why a memory system needs both an address and a selection/enable decision.', 'A short address-versus-chip-select explanation.')
     ],
     reflection: 'How many output selections are possible with n address bits?'
@@ -140,7 +140,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     steps: [
       circuitStep('contract', 'Define the small contract', 'Use one-bit A and B, control OP, result Y, and carry C. Define OP=0 as XOR and OP=1 as half-adder Sum/Carry.', 'A written operation table.'),
       circuitStep('paths', 'Build independent paths', 'Build and test the XOR result and half-adder carry path separately before adding selection.', 'Each path has its own verified rows.'),
-      circuitStep('select', 'Select the visible result', 'Use a 2-to-1 multiplexer controlled by OP to choose the result path. Keep carry inactive or explicitly ignored for the logic operation.', 'OP visibly changes the chosen operation.'),
+      circuitStep('select', 'Select the visible result', 'Build a 2-to-1 selector from NOT, two AND gates, and OR: gate the logic result with ¬OP and the arithmetic result with OP. Keep carry explicitly inactive or ignored for the logic operation.', 'OP visibly changes the chosen operation.'),
       circuitStep('test', 'Exercise operations and inputs', 'For both OP values, test at least A,B=01 and 11. Record Y and C.', 'Four operation/input observations.'),
       circuitStep('fault', 'Introduce and diagnose one mismatch', 'Temporarily swap one selector input, predict the symptom, observe it, and restore the correct connection.', 'A recorded expected/observed diagnostic.'),
       circuitStep('explain', 'Name the reusable pattern', 'Explain why computing candidate results first and selecting afterward scales to a larger ALU.', 'A structural explanation without a project wiring plan.')

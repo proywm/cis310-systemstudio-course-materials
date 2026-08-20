@@ -179,7 +179,7 @@ export class CircuitPreviewProvider implements vscode.CustomTextEditorProvider {
     <section class="canvas"><img src="${svgUri}" alt="Circuit diagram exported by Digital"></section>
     ${result ? `<section class="result"><h2>Latest deterministic test</h2><pre>${escapeHtml(result)}</pre></section>` : ''}
   </main>
-  <footer>The native Digital window is used for graphical editing and interactive simulation. This VS Code view provides the integrated preview and test evidence.</footer>
+  <footer>The embedded workbench handles supported one-bit construction and simulation inside VS Code. This view uses Digital’s official exporter for verification; Full Digital remains available for advanced editing.</footer>
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
     document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => vscode.postMessage({ action: button.dataset.action })));

@@ -28,7 +28,7 @@ The dashboard reports local practice evidence—coverage, accuracy, due question
 
 Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. Every lab is mapped to the same focused reading, author video, and lecture used by the readiness path. Checkmarks are self-reported, remain on this device, and are not grades.
 
-The six circuit labs create a fresh blank file under `circuits/guided/` and walk through prediction, construction in Digital, simulation, evidence, and explanation:
+The six circuit labs create a fresh blank file under `circuits/guided/` and open it in the embedded VS Code circuit workbench. Students place components, connect output and input ports, drag or nudge the layout, toggle inputs or the manual clock, observe live values, save a Digital-compatible `.dig` file, and optionally verify it with Digital’s official preview/tests:
 
 - Lecture 2 half adder;
 - Lecture 3 Boolean expression to gates;
@@ -40,6 +40,8 @@ The six circuit labs create a fresh blank file under `circuits/guided/` and walk
 The five assembly labs open original examples beside the embedded machine-state panel: register arithmetic, flags and signed branching, array addressing with a counted loop, a stack frame with `CALL`/`RET`, and virtual console input. Students predict before stepping and inspect registers, flags, memory, stack, EIP, output, and trace evidence.
 
 These are formative prerequisite or analogous labs. They do not provide the graded four-bit adder, multiplier, counter, register file, ALU, processor, report, or assignment answer. Canvas controls the released task and submission.
+
+The embedded editor supports the one-bit components used by these guided builds: inputs, outputs, AND/OR/XOR/NOT, a manual clock, and D flip-flops. **Full Digital** remains available for buses, RAM/ROM, subcircuits, HDL, and other advanced components. If an existing `.dig` file contains an unsupported feature, the embedded editor will not rewrite it.
 
 ## Read before class: open book and author-video map
 

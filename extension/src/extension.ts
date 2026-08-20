@@ -16,6 +16,7 @@ import {
 } from './courseCalendarPanel';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
+import { EmbeddedCircuitEditorProvider } from './embeddedCircuitEditor';
 import { GuidedLabPanel } from './guidedLabPanel';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
@@ -136,6 +137,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.window.registerTreeDataProvider('systemstudioCis310.explorer', statusTree),
     vscode.window.registerTreeDataProvider('systemstudioCis310.materials', materialsTree),
     vscode.window.registerCustomEditorProvider(
+      EmbeddedCircuitEditorProvider.viewType,
+      new EmbeddedCircuitEditorProvider(),
+      { webviewOptions: { retainContextWhenHidden: true }, supportsMultipleEditorsPerDocument: false }
+    ),
+    vscode.window.registerCustomEditorProvider(
       CircuitPreviewProvider.viewType,
       new CircuitPreviewProvider(context, manager),
       { webviewOptions: { retainContextWhenHidden: false }, supportsMultipleEditorsPerDocument: false }
@@ -183,6 +189,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabs', async (labId?: unknown) => {
       await GuidedLabPanel.show(context, typeof labId === 'string' ? labId : undefined);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openEmbeddedCircuit', async (candidate?: vscode.Uri) => {
+      const uri = await resolveCircuitUri(candidate);
+      if (uri) await vscode.commands.executeCommand('vscode.openWith', uri, EmbeddedCircuitEditorProvider.viewType);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabArtifact', async (labId: unknown) => {
       const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
@@ -674,7 +684,7 @@ function requireTrustedWorkspace(): boolean {
 function nativeDigitalUnavailableReason(): string | undefined {
   if (isHeadlessRemote(vscode.env.remoteName)) {
     return `The native Digital editor cannot open on this ${vscode.env.remoteName} host because no graphical display is available. ` +
-      'Circuit previews, tests, course materials, and starter workspaces remain available. Use local desktop VS Code for graphical editing.';
+      'The embedded circuit workbench, course materials, and starter workspaces remain available. Use local desktop VS Code only for the full advanced Digital editor.';
   }
   return undefined;
 }
@@ -777,9 +787,10 @@ async function createUniqueCircuit(manager: DigitalManager, directory: string, r
 }
 
 async function offerToOpenCircuit(uri: vscode.Uri, label = 'Created a blank Digital circuit'): Promise<void> {
-  const actions = nativeDigitalUnavailableReason() ? ['Reveal File'] : ['Open in Digital', 'Reveal File'];
-  const action = await vscode.window.showInformationMessage(`${label}: ${uri.fsPath}`, ...actions);
-  if (action === 'Open in Digital') {
+  await vscode.commands.executeCommand('vscode.openWith', uri, EmbeddedCircuitEditorProvider.viewType);
+  const actions = nativeDigitalUnavailableReason() ? ['Reveal File'] : ['Open Full Digital', 'Reveal File'];
+  const action = await vscode.window.showInformationMessage(`${label}. Opened in the embedded circuit workbench: ${uri.fsPath}`, ...actions);
+  if (action === 'Open Full Digital') {
     await vscode.commands.executeCommand('systemstudioCis310.openDigital', uri);
   } else if (action === 'Reveal File') {
     await vscode.commands.executeCommand('revealInExplorer', uri);

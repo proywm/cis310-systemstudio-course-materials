@@ -85,7 +85,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Use the lecture-mapped Hands-on Lab Center',
       paragraphs: [
         'The lab center connects the mapped reading, author video, and lecture to a prediction-first circuit build or assembly trace. Its checkmarks stay on this device and are not graded.',
-        'Circuit labs create a fresh blank file under circuits/guided; assembly labs open an original example beside the embedded machine-state panel. These formative labs do not generate a graded deliverable.'
+        'Circuit labs create a fresh blank file under circuits/guided and open it in the embedded VS Code workbench; assembly labs open an original example beside the embedded machine-state panel. These formative labs do not generate a graded deliverable.'
       ],
       checklist: [
         'Choose the lab mapped to the lecture concept.',
@@ -261,11 +261,11 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Separate an environment problem from a circuit problem',
       paragraphs: [
         'Run the environment check first. Digital needs the pinned simulator and Java 8 or newer; the extension can install and verify Digital in its own storage.',
-        'On Remote SSH, the native Digital window cannot appear without a graphical desktop. Bundled PDFs, circuit preview/tests, and the embedded assembly lab still work there; use local desktop VS Code for the Digital GUI.'
+        'The course-scoped circuit workbench runs inside VS Code, including Remote SSH, without Java. Digital’s official preview/tests still need the managed JAR and Java; its full Swing window needs a graphical desktop.'
       ],
       checklist: [
         'Check Digital checksum, Java version, and workspace trust.',
-        'If setup is ready, create a small blank circuit and inspect preview/test evidence.',
+        'Create a small blank circuit in the embedded workbench; install Digital only when you need its official preview, tests, or advanced components.',
         'If only the GUI is unavailable over SSH, reopen the workspace locally.'
       ],
       actions: [
@@ -281,7 +281,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Create a separate Digital file instead of reusing one circuit',
       paragraphs: [
         'Use Create a new blank Digital circuit for each task or subcircuit and give it a distinct name. SystemStudio checks the target path and does not overwrite an existing circuit.',
-        'Inside Digital, use Save As when you intentionally branch an existing design. Keep reusable subcircuits in the same workspace and confirm each file name before editing.'
+        'The embedded workbench opens every newly created file separately. In full Digital, use Save As when you intentionally branch an existing design. Keep reusable subcircuits in the same workspace and confirm each file name before editing.'
       ],
       checklist: [
         'Create or choose the circuits/work folder.',

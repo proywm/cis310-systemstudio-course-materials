@@ -375,23 +375,23 @@ function tutorialStepsHtml(): string {
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>
-    <p>Check the environment before rewriting a circuit. Digital, Java, workspace trust, and local-vs-remote GUI access are separate signals.</p>
+    <p>The embedded workbench builds and simulates the course subset without Java or a desktop display. Check the environment only when you need Digital’s official preview/tests or advanced native editor.</p>
     <div class="instruction"><strong>Explore any case:</strong> identify the evidence that distinguishes it, then return for the others when relevant.</div>
     <div class="choices">
       ${choice('check', 'Run the environment check', 'Reports Digital checksum, Java version, and workspace trust without changing the machine.')}
       ${choice('install', 'Install or verify Digital', 'After consent, installs the pinned release in extension storage and verifies its checksum.')}
-      ${choice('remote', 'Recognize Remote SSH limits', 'Preview/tests work remotely, but the native Digital graphical window needs local desktop VS Code.')}
+      ${choice('remote', 'Recognize the two editor levels', 'The embedded workbench runs in desktop or Remote SSH VS Code; the full Swing editor still needs a graphical desktop.')}
     </div>
     <div class="actions"><button data-action="check-digital" class="secondary">Try: Check environment</button><button data-action="setup-digital" class="secondary">Try: Install / verify</button></div>
   </div></section>
   <section class="step" data-step="3" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Build a half adder, then extend the pattern</h2>
-    <p>The Hands-on Lab Center keeps the lecture source, prediction, Digital build steps, evidence checks, and explanation together. It creates a fresh file and never fills in a graded assignment.</p>
+    <p>The Hands-on Lab Center keeps the lecture source, prediction, embedded circuit build, evidence checks, and explanation together. It creates a fresh Digital-compatible file and never fills in a graded assignment.</p>
     <div class="instruction"><strong>Start with Lecture 2:</strong> predict all four one-bit additions, build separate Sum and Carry paths, simulate every row, and explain the evidence.</div>
     <div class="choices">
       ${choice('read', 'Read §8.1 and watch binary addition', 'Use the mapped open-book section and author video before adding gates.')}
       ${choice('predict', 'Predict Sum and Carry', 'Record 00, 01, 10, and 11 before the simulator can influence the answer.')}
-      ${choice('build', 'Build inside a fresh `.dig` file', 'Place A/B, Sum/Carry, XOR, and AND through the guided checklist; existing work is never overwritten.')}
+      ${choice('build', 'Build inside VS Code', 'The fresh `.dig` file opens in the embedded workbench. Place A/B, Sum/Carry, XOR, and AND; connect ports and toggle inputs without leaving the tutorial environment.')}
       ${choice('evidence', 'Simulate and record four rows', 'Compare each observed Carry·Sum pair with the prediction, then preview the saved structure in VS Code.')}
       ${choice('extend', 'Choose the next circuit lab', 'Continue with Boolean gates, a 2-to-1 selector, one stored bit, address decoding, or a small ALU slice.')}
     </div>
@@ -444,7 +444,7 @@ function tutorialStepsHtml(): string {
       ${choice('syntax', 'Unsupported assembly syntax', 'Use the exact source-line diagnostic and compatibility guide.')}
       ${choice('input', 'Missing virtual input', 'Add one response per line, rebuild, and step again.')}
       ${choice('loop', 'Possible infinite loop', 'Use the 10,000-step safety stop and inspect the recent trace and branch condition.')}
-      ${choice('remote', 'Digital GUI over Remote SSH', 'Keep using preview/tests remotely; use local desktop VS Code for graphical editing.')}
+      ${choice('remote', 'Advanced Digital GUI over Remote SSH', 'Use the embedded circuit workbench remotely; use local desktop VS Code only when the full Swing editor is needed.')}
       ${choice('canvas', 'Unclear or changing requirement', 'Open Fall 2026 Canvas. Never infer a deadline from a study reference.')}
     </div>
     <div class="actions"><button data-action="open-canvas" class="primary">Open Canvas</button><button data-action="show-tools" class="secondary">Open grouped tools</button><button data-action="native-walkthrough" class="secondary">Open Getting Started</button></div>

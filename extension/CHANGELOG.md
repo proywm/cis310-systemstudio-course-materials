@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.10.6
+
+- Added an original embedded circuit workbench that builds and simulates the supported CIS 310 one-bit component set entirely inside desktop or Remote SSH VS Code.
+- Added inputs, outputs, AND/OR/XOR/NOT, a manual clock, one-bit D flip-flops, port-to-port wiring, drag/nudge layout, live values, accessible component navigation, undo/redo, and Digital-compatible `.dig` saves.
+- Made the embedded workbench the default for fresh guided and assignment circuits while retaining Digital v0.31 for official preview/testcases and advanced components.
+- Added fail-closed handling for unsupported `.dig` features so an advanced circuit is never silently simplified or overwritten.
+- Updated the half-adder, selector, decoder, state, and ALU-slice walkthroughs, FAQ, tutorial, student guide, syllabus, and automated round-trip/simulation tests.
+
 ## 0.10.5
 
 - Added a self-paced Hands-on Lab Center mapped to the same reading, author video, and lecture sources as readiness practice.
