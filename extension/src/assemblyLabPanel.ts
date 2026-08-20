@@ -9,7 +9,7 @@ type AssemblyAction = 'assemble' | 'reset' | 'step' | 'run';
 export class AssemblyLabPanel implements vscode.Disposable {
   private static readonly panels = new Map<string, AssemblyLabPanel>();
   private readonly disposables: vscode.Disposable[] = [];
-  private profile: AssemblyProfile = 'auto';
+  private profile: AssemblyProfile = 'nasm-ia32';
   private input = '';
 
   static async show(
@@ -177,8 +177,6 @@ export class AssemblyLabPanel implements vscode.Disposable {
     <div class="field">
       <label for="profile">Environment profile</label>
       <select id="profile">
-        <option value="auto">Auto-detect</option>
-        <option value="irvine32">Irvine32-style trace model</option>
         <option value="nasm-ia32">NASM-style trace model</option>
       </select>
     </div>
@@ -225,7 +223,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
     </section>
     <section class="wide">
       <h2>Compatibility boundary</h2>
-      <p class="subtle"><strong>This panel is not MASM or NASM.</strong> It is a bounded source-level visualization used to predict and inspect instruction effects. Choose <em>Build and run real code</em> for an actual assembler, linker, and executable. Exact Microsoft MASM/Irvine32 is offered only when ml.exe, link.exe, and the official Irvine library are present on Windows.</p>
+      <p class="subtle"><strong>This panel is not NASM or GDB.</strong> It is a bounded source-level visualization used only for prediction practice. Choose <em>Build and run real code</em> or the Actual NASM Workbench for assembler, linker, executable, register, memory, and disassembly evidence.</p>
     </section>
   </div>
   <script nonce="${nonce}">
@@ -265,8 +263,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
       }
       if (payload.type !== 'state') return;
       const state = payload.state;
-      const profileLabel = state.profile === 'irvine32' ? 'Irvine32-style trace model'
-        : state.profile === 'nasm-ia32' ? 'NASM-style trace model' : 'Generic IA-32 trace model';
+      const profileLabel = state.profile === 'nasm-ia32' ? 'NASM-style trace model' : 'Generic IA-32 trace model';
       document.getElementById('filename').textContent = payload.fileName + ' • ' + profileLabel;
       message.className = 'message';
       message.textContent = state.halted
@@ -321,7 +318,7 @@ function requestFromMessage(message: unknown): AssemblyRequest | undefined {
   const action = request.action;
   const profile = request.profile;
   if (action !== 'assemble' && action !== 'reset' && action !== 'step' && action !== 'run') return undefined;
-  if (profile !== 'auto' && profile !== 'irvine32' && profile !== 'nasm-ia32') return undefined;
+  if (profile !== 'nasm-ia32') return undefined;
   if (typeof request.input !== 'string' || request.input.length > 64 * 1024) return undefined;
   return { action, profile, input: request.input };
 }

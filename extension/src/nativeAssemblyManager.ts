@@ -1,150 +1,221 @@
+import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { constants as fsConstants } from 'node:fs';
-import { access, chmod, mkdir, readdir, readFile, rm, stat } from 'node:fs/promises';
+import { access, chmod, copyFile, mkdir, readFile, readdir, rm, stat } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { detectAssemblySyntax } from './core/assemblySyntax';
+import { GdbMiSession } from './core/gdbMi';
 import { runProcess, type ProcessResult } from './core/processRunner';
-import { downloadFile } from './core/download';
-import { equalsSha256, sha256File } from './core/checksum';
-import { extractZipSafely } from './core/safeZip';
-import { detectAssemblySyntax, type AssemblySyntax } from './core/assemblySyntax';
 
-const IRVINE_COMMIT = '35b0fb4f47cdd73d253a69c587f4e61a02a597b9';
-const IRVINE_ARCHIVE_URL = `https://raw.githubusercontent.com/surferkip/asmbook/${IRVINE_COMMIT}/Irvine.zip`;
-const IRVINE_ARCHIVE_SHA256 = '91f08e4dacf517cbe14b08f9af5ac3cdd676dbab8e452671baa81443b3c0d881';
+const NASM_CONTAINER_IMAGE = 'systemstudio-cis310-nasm:0.20.0';
 
-export type RealAssemblyToolchain = 'nasm-linux' | 'masm-irvine-windows';
-export type RealAssemblyChoice = 'auto' | RealAssemblyToolchain;
-export type RealToolchainState = 'ready' | 'setup' | 'missing-linker' | 'unsupported';
+export type NasmRuntime = 'native-linux' | 'course-container';
+export type NasmState = 'ready' | 'setup' | 'missing-debugger' | 'unsupported';
 
-export interface RealAssemblyStatus {
-  nasm: { available: boolean; state: RealToolchainState; executable?: string; linker?: string; detail: string };
-  masm: { available: boolean; state: RealToolchainState; executable?: string; linker?: string; irvineRoot?: string; detail: string };
+export interface NasmStatus {
+  available: boolean;
+  state: NasmState;
+  runtime?: NasmRuntime;
+  detail: string;
+  nasm?: string;
+  linker?: string;
+  gdb?: string;
+  docker?: string;
 }
 
-export interface RealAssemblyResult {
-  toolchain: RealAssemblyToolchain;
+export interface NasmBuildResult {
+  runtime: NasmRuntime;
+  sourcePath: string;
+  buildDirectory: string;
+  objectPath: string;
   executablePath: string;
   assembler: ProcessResult;
   linker: ProcessResult;
+}
+
+export interface NasmRunResult extends NasmBuildResult {
   execution: ProcessResult;
 }
 
-/** Invokes real assemblers, linkers, and executable machine code. */
+export interface NasmDebugHandle {
+  build: NasmBuildResult;
+  session: GdbMiSession;
+}
+
+/** Builds, runs, and debugs actual NASM ELF32 code. No MASM emulation is used. */
 export class NativeAssemblyManager {
   constructor(
     private readonly context: vscode.ExtensionContext,
     private readonly output: vscode.OutputChannel
   ) {}
 
-  async status(): Promise<RealAssemblyStatus> {
-    const nasmHostSupported = process.platform === 'linux' && (process.arch === 'x64' || process.arch === 'ia32');
-    const nasm = nasmHostSupported ? await this.resolveNasm(false) : undefined;
-    const nasmLinker = nasmHostSupported ? await findExecutable(configured('nasmLinkerPath', 'ld')) : undefined;
-    const masm = await this.resolveMasm(false);
+  async status(): Promise<NasmStatus> {
+    const native = await this.nativeTools(false);
+    if (native?.nasm && native.linker && native.gdb) {
+      return {
+        available: true,
+        state: 'ready',
+        runtime: 'native-linux',
+        detail: 'Actual NASM, GNU ld, and GDB are ready on this x86 Linux host.',
+        ...native
+      };
+    }
+    const docker = await findExecutable(configured('nasmDockerPath', 'docker'));
+    if (docker && await dockerDaemonReady(docker)) {
+      const imageReady = await this.containerImageReady(docker);
+      return {
+        available: imageReady,
+        state: imageReady ? 'ready' : 'setup',
+        runtime: 'course-container',
+        docker,
+        detail: imageReady
+          ? 'The pinned NASM/ELF32 course container is ready. It supplies NASM, GNU ld, GDB, and QEMU-i386.'
+          : 'Docker is ready; build the pinned NASM/ELF32 course image once before using the workbench.'
+      };
+    }
+    if (native?.nasm && native.linker && !native.gdb) {
+      return { available: false, state: 'missing-debugger', detail: 'NASM and GNU ld are present, but GDB is required for the integrated workbench.', ...native };
+    }
+    const installable = process.platform === 'linux' && (process.arch === 'x64' || process.arch === 'ia32') && await isDebianFamily();
     return {
-      nasm: nasm && nasmLinker
-        ? { available: true, state: 'ready', executable: nasm, linker: nasmLinker, detail: `Actual NASM found at ${nasm}; GNU ld found at ${nasmLinker}.` }
-        : { available: false, state: !nasmHostSupported ? 'unsupported' : nasm ? 'missing-linker' : 'setup', executable: nasm, linker: nasmLinker, detail: !nasmHostSupported
-          ? `The verified NASM/ELF32 execution path is x86 Linux; this ${process.platform}/${process.arch} host is unsupported.`
-          : nasm && !nasmLinker
-            ? 'Actual NASM is installed, but GNU ld is missing. Install binutils or configure systemstudioCis310.nasmLinkerPath.'
-            : 'Actual NASM is not prepared yet; the extension can install it without administrator access on Debian/Ubuntu.' },
-      masm: masm
-        ? { available: true, state: 'ready', ...masm, detail: 'Microsoft ml.exe, link.exe, and the Irvine32 library are configured.' }
-        : { available: false, state: process.platform === 'win32' ? 'setup' : 'unsupported', detail: process.platform === 'win32'
-          ? 'Configure Microsoft ml.exe, link.exe, and the official Irvine directory.'
-          : 'Exact Microsoft MASM/Irvine32 execution is Windows-only and is not emulated or relabeled on this host.' }
+      available: false,
+      state: installable || Boolean(docker) ? 'setup' : 'unsupported',
+      docker,
+      detail: installable
+        ? 'Prepare NASM privately on this Debian/Ubuntu host, or enable Docker for the portable course environment.'
+        : docker
+          ? 'The Docker command exists, but the Docker service is unavailable. Start Docker Desktop or restore Docker access.'
+          : 'Use Docker Desktop on Windows/macOS, or NASM + GNU ld + GDB on x86 Linux.'
     };
   }
 
-  async detectSyntax(uri: vscode.Uri): Promise<AssemblySyntax> {
-    if (uri.scheme !== 'file' || path.extname(uri.fsPath).toLowerCase() !== '.asm') {
-      throw new Error('Choose a local .asm source file.');
-    }
-    return detectAssemblySyntax(await readFile(uri.fsPath, 'utf8'));
-  }
-
-  async buildAndRun(uri: vscode.Uri, requested: RealAssemblyChoice = 'auto'): Promise<RealAssemblyResult> {
-    if (uri.scheme !== 'file' || path.extname(uri.fsPath).toLowerCase() !== '.asm') {
-      throw new Error('Choose a local .asm source file.');
-    }
-    await access(uri.fsPath, fsConstants.R_OK);
-    const source = await readFile(uri.fsPath, 'utf8');
-    const syntax = detectAssemblySyntax(source);
-    if (requested === 'auto' && syntax === 'ambiguous') {
-      throw new Error('Auto-detect could not distinguish MASM from NASM syntax confidently. Run the command again and choose the real toolchain explicitly.');
-    }
-    const selected = requested === 'auto'
-      ? syntax === 'masm' ? 'masm-irvine-windows' : 'nasm-linux'
-      : requested;
-    return selected === 'masm-irvine-windows'
-      ? this.buildAndRunMasm(uri)
-      : this.buildAndRunNasm(uri);
-  }
-
-  private async buildAndRunNasm(uri: vscode.Uri): Promise<RealAssemblyResult> {
-    if (process.platform !== 'linux' || (process.arch !== 'x64' && process.arch !== 'ia32')) {
-      throw new Error(
-        `The verified NASM/ELF32 build-and-execute path runs on x86 Linux; this ${process.platform}/${process.arch} host is unsupported. This extension does not ship a Linux VM or container.`
+  async prepare(): Promise<NasmStatus> {
+    let status = await this.status();
+    if (status.available) return status;
+    const nativeInstallable = process.platform === 'linux' && (process.arch === 'x64' || process.arch === 'ia32') && await isDebianFamily();
+    if (nativeInstallable) {
+      const choice = await vscode.window.showInformationMessage(
+        'Prepare the actual NASM package in private extension storage? GNU ld and GDB remain host tools. No administrator access or system modification is used.',
+        { modal: true },
+        'Prepare NASM',
+        'Use Course Container'
       );
+      if (choice === 'Prepare NASM') {
+        await this.resolveNasm(true);
+        status = await this.status();
+        if (status.available) return status;
+      } else if (choice !== 'Use Course Container') {
+        return status;
+      }
     }
-    const nasm = await this.resolveNasm(true);
-    if (!nasm) throw new Error('Actual NASM could not be prepared.');
-    const linker = await findExecutable(configured('nasmLinkerPath', 'ld'));
-    if (!linker) throw new Error('GNU ld was not found. Install binutils or configure systemstudioCis310.nasmLinkerPath.');
-    const build = await buildDirectory(this.context, uri.fsPath, 'nasm-linux');
-    const objectPath = path.join(build, 'program.o');
-    const executablePath = path.join(build, 'program');
-    const assembler = await runProcess(nasm, [
-      '-f', 'elf32', '-g', '-F', 'dwarf', '-o', objectPath, uri.fsPath
-    ], { cwd: path.dirname(uri.fsPath), timeoutMs: 30_000, maxOutputBytes: 2 * 1024 * 1024 });
+    const docker = await findExecutable(configured('nasmDockerPath', 'docker'));
+    if (!docker || !(await dockerDaemonReady(docker))) {
+      throw new Error('Docker is not ready. Start Docker Desktop, or install NASM, GNU ld, and GDB on x86 Linux.');
+    }
+    await this.ensureContainerImage(docker, true);
+    return this.status();
+  }
+
+  async build(uri: vscode.Uri): Promise<NasmBuildResult> {
+    await validateNasmSource(uri);
+    let status = await this.status();
+    if (!status.available) status = await this.prepare();
+    if (!status.available || !status.runtime) throw new Error(status.detail);
+    return status.runtime === 'native-linux'
+      ? this.buildNative(uri, status)
+      : this.buildContainer(uri, status);
+  }
+
+  async buildAndRun(uri: vscode.Uri): Promise<NasmRunResult> {
+    const build = await this.build(uri);
+    const execution = build.runtime === 'native-linux'
+      ? await runProcess(build.executablePath, [], { cwd: build.buildDirectory, timeoutMs: 10_000, maxOutputBytes: 2 * 1024 * 1024 })
+      : await this.runContainer(build);
+    this.logBuild(build, execution);
+    return { ...build, execution };
+  }
+
+  async startDebug(uri: vscode.Uri): Promise<NasmDebugHandle> {
+    const build = await this.build(uri);
+    if (build.runtime === 'native-linux') {
+      const status = await this.status();
+      if (!status.gdb) throw new Error('GDB is not available for the NASM workbench.');
+      const child = spawn(status.gdb, ['--quiet', '--interpreter=mi2'], {
+        cwd: build.buildDirectory,
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      const session = new GdbMiSession(child);
+      await session.initialize(build.executablePath, 'native');
+      return { build, session };
+    }
+    const docker = await findExecutable(configured('nasmDockerPath', 'docker'));
+    if (!docker) throw new Error('Docker is unavailable for the NASM workbench.');
+    const child = spawn(docker, [
+      'run', '--rm', '-i', '--platform', 'linux/amd64', '--network', 'none',
+      '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--read-only',
+      '--tmpfs', '/tmp:rw,noexec,nosuid,size=64m',
+      ...containerUserArgs(), '-v', `${build.buildDirectory}:/work:rw`,
+      NASM_CONTAINER_IMAGE, '/opt/systemstudio/debug-nasm.sh', '/work/program'
+    ], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const session = new GdbMiSession(child, 25_000, async () => readOptional(path.join(build.buildDirectory, 'program.stdout')));
+    await session.initialize('/work/program', 'qemu-remote');
+    return { build, session };
+  }
+
+  private async buildNative(uri: vscode.Uri, status: NasmStatus): Promise<NasmBuildResult> {
+    if (!status.nasm || !status.linker) throw new Error('The native NASM toolchain is incomplete.');
+    const buildDirectoryPath = await createBuildDirectory(this.context, uri.fsPath, 'nasm-native');
+    const objectPath = path.join(buildDirectoryPath, 'program.o');
+    const executablePath = path.join(buildDirectoryPath, 'program');
+    const assembler = await runProcess(status.nasm, ['-f', 'elf32', '-g', '-F', 'dwarf', '-o', objectPath, uri.fsPath], {
+      cwd: path.dirname(uri.fsPath), timeoutMs: 30_000, maxOutputBytes: 2 * 1024 * 1024
+    });
     assertSuccess('NASM assembly', assembler);
-    const linkerResult = await runProcess(linker, [
-      '-m', 'elf_i386', '-o', executablePath, objectPath
-    ], { cwd: build, timeoutMs: 30_000, maxOutputBytes: 2 * 1024 * 1024 });
-    assertSuccess('ELF link', linkerResult);
-    await chmod(executablePath, 0o700);
-    const execution = await runProcess(executablePath, [], {
-      cwd: build,
-      timeoutMs: 10_000,
-      maxOutputBytes: 2 * 1024 * 1024
+    const linker = await runProcess(status.linker, ['-m', 'elf_i386', '-o', executablePath, objectPath], {
+      cwd: buildDirectoryPath, timeoutMs: 30_000, maxOutputBytes: 2 * 1024 * 1024
     });
-    this.logResult(uri.fsPath, 'nasm-linux', executablePath, assembler, linkerResult, execution);
-    return { toolchain: 'nasm-linux', executablePath, assembler, linker: linkerResult, execution };
+    assertSuccess('ELF32 link', linker);
+    await chmod(executablePath, 0o700);
+    return { runtime: 'native-linux', sourcePath: uri.fsPath, buildDirectory: buildDirectoryPath, objectPath, executablePath, assembler, linker };
   }
 
-  private async buildAndRunMasm(uri: vscode.Uri): Promise<RealAssemblyResult> {
-    const tools = await this.resolveMasm(true);
-    if (!tools) {
-      throw new Error(
-        process.platform === 'win32'
-          ? 'Exact MASM/Irvine32 requires configured Microsoft ml.exe, link.exe, and the official Irvine directory. Open the Real Toolchain guide.'
-          : 'This is MASM/Irvine32 source. Exact execution requires Windows with Microsoft ml.exe and the official Irvine32 library; SystemStudio will not call the trace simulator an assembler.'
-      );
-    }
-    const build = await buildDirectory(this.context, uri.fsPath, 'masm-irvine-windows');
-    const objectPath = path.join(build, 'program.obj');
-    const executablePath = path.join(build, 'program.exe');
-    const assembler = await runProcess(tools.executable, [
-      '/nologo', '/c', '/coff', '/Zi', `/I${tools.irvineRoot}`, `/Fo${objectPath}`, uri.fsPath
-    ], { cwd: path.dirname(uri.fsPath), timeoutMs: 60_000, maxOutputBytes: 2 * 1024 * 1024 });
-    assertSuccess('Microsoft MASM assembly', assembler);
-    const linkerResult = await runProcess(tools.linker, [
-      '/NOLOGO', '/SUBSYSTEM:CONSOLE', '/DEBUG', `/OUT:${executablePath}`,
-      objectPath,
-      path.join(tools.irvineRoot, 'Irvine32.lib'),
-      path.join(tools.irvineRoot, 'Kernel32.lib'),
-      path.join(tools.irvineRoot, 'User32.lib')
-    ], { cwd: build, timeoutMs: 60_000, maxOutputBytes: 2 * 1024 * 1024 });
-    assertSuccess('Microsoft link', linkerResult);
-    const execution = await runProcess(executablePath, [], {
-      cwd: build,
-      timeoutMs: 15_000,
-      maxOutputBytes: 2 * 1024 * 1024
+  private async buildContainer(uri: vscode.Uri, status: NasmStatus): Promise<NasmBuildResult> {
+    if (!status.docker) throw new Error('Docker is unavailable for the course container.');
+    await this.ensureContainerImage(status.docker, false);
+    const buildDirectoryPath = await createBuildDirectory(this.context, uri.fsPath, 'nasm-container');
+    const sourcePath = path.join(buildDirectoryPath, 'program.asm');
+    const objectPath = path.join(buildDirectoryPath, 'program.o');
+    const executablePath = path.join(buildDirectoryPath, 'program');
+    await copyFile(uri.fsPath, sourcePath);
+    const base = containerRunArgs(buildDirectoryPath);
+    const assembler = await runProcess(status.docker, [...base, NASM_CONTAINER_IMAGE, 'nasm', '-f', 'elf32', '-g', '-F', 'dwarf', '-o', '/work/program.o', '/work/program.asm'], {
+      timeoutMs: 60_000, maxOutputBytes: 2 * 1024 * 1024
     });
-    this.logResult(uri.fsPath, 'masm-irvine-windows', executablePath, assembler, linkerResult, execution);
-    return { toolchain: 'masm-irvine-windows', executablePath, assembler, linker: linkerResult, execution };
+    assertSuccess('Container NASM assembly', assembler);
+    const linker = await runProcess(status.docker, [...base, NASM_CONTAINER_IMAGE, 'ld', '-m', 'elf_i386', '-o', '/work/program', '/work/program.o'], {
+      timeoutMs: 60_000, maxOutputBytes: 2 * 1024 * 1024
+    });
+    assertSuccess('Container ELF32 link', linker);
+    return { runtime: 'course-container', sourcePath: uri.fsPath, buildDirectory: buildDirectoryPath, objectPath, executablePath, assembler, linker };
+  }
+
+  private async runContainer(build: NasmBuildResult): Promise<ProcessResult> {
+    const docker = await findExecutable(configured('nasmDockerPath', 'docker'));
+    if (!docker) throw new Error('Docker is unavailable for the course container.');
+    return runProcess(docker, [...containerRunArgs(build.buildDirectory), NASM_CONTAINER_IMAGE, 'qemu-i386', '/work/program'], {
+      timeoutMs: 15_000, maxOutputBytes: 2 * 1024 * 1024
+    });
+  }
+
+  private async nativeTools(installNasm: boolean): Promise<{ nasm?: string; linker?: string; gdb?: string } | undefined> {
+    if (process.platform !== 'linux' || (process.arch !== 'x64' && process.arch !== 'ia32')) return undefined;
+    const [nasm, linker, gdb] = await Promise.all([
+      this.resolveNasm(installNasm),
+      findExecutable(configured('nasmLinkerPath', 'ld')),
+      findExecutable(configured('nasmGdbPath', 'gdb'))
+    ]);
+    return { nasm, linker, gdb };
   }
 
   private async resolveNasm(install: boolean): Promise<string | undefined> {
@@ -154,84 +225,28 @@ export class NativeAssemblyManager {
     const managedRoot = path.join(this.context.globalStorageUri.fsPath, 'assembly-toolchains', 'nasm-debian-amd64');
     const managed = path.join(managedRoot, 'usr', 'bin', 'nasm');
     if (await executable(managed)) return managed;
-    if (!install || process.platform !== 'linux' || (process.arch !== 'x64' && process.arch !== 'ia32') || !(await isDebianFamily())) return undefined;
-
-    const choice = await vscode.window.showInformationMessage(
-      'Install the distribution’s actual NASM package into private extension storage? No administrator access or system modification is required.',
-      { modal: true },
-      'Install Actual NASM'
-    );
-    if (choice !== 'Install Actual NASM') return undefined;
+    if (!install || !(await isDebianFamily())) return undefined;
     await vscode.window.withProgress(
-      { location: vscode.ProgressLocation.Notification, title: 'Installing actual NASM', cancellable: false },
+      { location: vscode.ProgressLocation.Notification, title: 'Preparing actual NASM', cancellable: false },
       async () => this.installDebianPackage('nasm', managedRoot)
     );
     return await executable(managed) ? managed : undefined;
   }
 
-  private async resolveMasm(installIrvine: boolean): Promise<{ executable: string; linker: string; irvineRoot: string } | undefined> {
-    if (process.platform !== 'win32') return undefined;
-    const discovered = await discoverVisualStudioMasm();
-    const executable = await findExecutable(configured('masmPath', 'ml.exe')) ?? discovered?.executable;
-    const linker = await findExecutable(configured('masmLinkerPath', 'link.exe')) ?? discovered?.linker;
-    if (!executable || !linker) return undefined;
-    let irvineRoot = await validIrvineRoot(configured('irvineRoot', 'C:\\Irvine'));
-    if (!irvineRoot) irvineRoot = await validIrvineRoot(this.managedIrvineRoot);
-    if (!irvineRoot && installIrvine) irvineRoot = await this.installOfficialIrvine();
-    if (!irvineRoot) return undefined;
-    return { executable, linker, irvineRoot };
-  }
-
-  private get managedIrvineRoot(): string {
-    return path.join(this.context.globalStorageUri.fsPath, 'assembly-toolchains', 'irvine32', IRVINE_COMMIT, 'Irvine');
-  }
-
-  private async installOfficialIrvine(): Promise<string | undefined> {
-    const choice = await vscode.window.showInformationMessage(
-      'Download the official Irvine.zip educational resources from Kip Irvine’s GitHub repository into private extension storage? The archive is pinned and SHA-256 verified.',
-      { modal: true },
-      'Download Official Irvine32'
-    );
-    if (choice !== 'Download Official Irvine32') return undefined;
-    const root = path.dirname(this.managedIrvineRoot);
-    const archive = path.join(root, 'Irvine.zip');
-    const partial = `${archive}.part`;
-    await mkdir(root, { recursive: true });
-    await vscode.window.withProgress(
-      { location: vscode.ProgressLocation.Notification, title: 'Downloading official Irvine32 resources', cancellable: false },
-      async () => {
-        await downloadFile(IRVINE_ARCHIVE_URL, partial);
-        const hash = await sha256File(partial);
-        if (!equalsSha256(hash, IRVINE_ARCHIVE_SHA256)) {
-          throw new Error(`Irvine.zip checksum mismatch. Expected ${IRVINE_ARCHIVE_SHA256}, received ${hash}.`);
-        }
-        await rm(archive, { force: true });
-        const { rename } = await import('node:fs/promises');
-        await rename(partial, archive);
-        await extractZipSafely(archive, root);
-      }
-    );
-    return validIrvineRoot(this.managedIrvineRoot);
-  }
-
   private async installDebianPackage(packageName: string, runtimeRoot: string): Promise<void> {
     const aptGet = await findExecutable('apt-get');
     const dpkgDeb = await findExecutable('dpkg-deb');
-    if (!aptGet || !dpkgDeb) throw new Error('apt-get and dpkg-deb are required for the private NASM installation.');
+    if (!aptGet || !dpkgDeb) throw new Error('apt-get and dpkg-deb are required for the private NASM preparation.');
     const staging = `${runtimeRoot}.staging-${process.pid}-${Date.now()}`;
     const downloads = path.join(staging, 'downloads');
     await rm(staging, { recursive: true, force: true });
     await mkdir(downloads, { recursive: true });
     try {
-      const download = await runProcess(aptGet, ['download', packageName], {
-        cwd: downloads, timeoutMs: 180_000, maxOutputBytes: 2 * 1024 * 1024
-      });
+      const download = await runProcess(aptGet, ['download', packageName], { cwd: downloads, timeoutMs: 180_000, maxOutputBytes: 2 * 1024 * 1024 });
       assertSuccess(`Download ${packageName}`, download);
       const packageFile = (await readdir(downloads)).find((name) => name.endsWith('.deb'));
       if (!packageFile) throw new Error(`No ${packageName} package was downloaded.`);
-      const extraction = await runProcess(dpkgDeb, ['-x', path.join(downloads, packageFile), staging], {
-        timeoutMs: 60_000, maxOutputBytes: 1024 * 1024
-      });
+      const extraction = await runProcess(dpkgDeb, ['-x', path.join(downloads, packageFile), staging], { timeoutMs: 60_000, maxOutputBytes: 1024 * 1024 });
       assertSuccess(`Extract ${packageName}`, extraction);
       await rm(downloads, { recursive: true, force: true });
       await rm(runtimeRoot, { recursive: true, force: true });
@@ -243,65 +258,70 @@ export class NativeAssemblyManager {
     }
   }
 
-  private logResult(
-    source: string,
-    toolchain: RealAssemblyToolchain,
-    executablePath: string,
-    assembler: ProcessResult,
-    linker: ProcessResult,
-    execution: ProcessResult
-  ): void {
-    this.output.appendLine(`Real assembly toolchain: ${toolchain}`);
-    this.output.appendLine(`Source: ${source}`);
-    this.output.appendLine(`Executable: ${executablePath}`);
-    appendStage(this.output, 'assembler', assembler);
-    appendStage(this.output, 'linker', linker);
+  private async containerImageReady(docker: string): Promise<boolean> {
+    const result = await runProcess(docker, ['image', 'inspect', NASM_CONTAINER_IMAGE], { timeoutMs: 15_000, maxOutputBytes: 128 * 1024 });
+    return result.code === 0 && !result.timedOut;
+  }
+
+  private async ensureContainerImage(docker: string, prompt: boolean): Promise<void> {
+    if (await this.containerImageReady(docker)) return;
+    if (prompt) {
+      const choice = await vscode.window.showInformationMessage(
+        'Build the pinned CIS 310 NASM course image? It contains NASM, GNU ld, GDB, and QEMU-i386 and is used without network access when student programs run.',
+        { modal: true },
+        'Build Course Image'
+      );
+      if (choice !== 'Build Course Image') throw new Error('The NASM course-image setup was cancelled.');
+    }
+    const contextDirectory = path.join(this.context.extensionUri.fsPath, 'media', 'nasm-container');
+    const build = await vscode.window.withProgress(
+      { location: vscode.ProgressLocation.Notification, title: 'Building CIS 310 NASM course image', cancellable: false },
+      () => runProcess(docker, ['build', '--platform', 'linux/amd64', '--tag', NASM_CONTAINER_IMAGE, contextDirectory], {
+        timeoutMs: 10 * 60_000, maxOutputBytes: 4 * 1024 * 1024
+      })
+    );
+    assertSuccess('NASM course-image build', build);
+  }
+
+  private logBuild(build: NasmBuildResult, execution: ProcessResult): void {
+    this.output.appendLine(`Actual NASM runtime: ${build.runtime}`);
+    this.output.appendLine(`Source: ${build.sourcePath}`);
+    this.output.appendLine(`ELF32 executable: ${build.executablePath}`);
+    appendStage(this.output, 'assembler', build.assembler);
+    appendStage(this.output, 'linker', build.linker);
     appendStage(this.output, 'program', execution);
   }
 }
 
-async function discoverVisualStudioMasm(): Promise<{ executable: string; linker: string } | undefined> {
-  if (process.platform !== 'win32') return undefined;
-  const installerRoot = process.env['ProgramFiles(x86)'];
-  const vswhere = installerRoot
-    ? path.join(installerRoot, 'Microsoft Visual Studio', 'Installer', 'vswhere.exe')
-    : undefined;
-  if (!vswhere || !(await executable(vswhere))) return undefined;
-  const result = await runProcess(vswhere, [
-    '-latest', '-products', '*', '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property', 'installationPath'
-  ], { timeoutMs: 15_000, maxOutputBytes: 128 * 1024 });
-  if (result.code !== 0) return undefined;
-  const installation = result.stdout.trim();
-  if (!installation) return undefined;
-  try {
-    const version = (await readFile(
-      path.join(installation, 'VC', 'Auxiliary', 'Build', 'Microsoft.VCToolsVersion.default.txt'),
-      'utf8'
-    )).trim();
-    const bin = path.join(installation, 'VC', 'Tools', 'MSVC', version, 'bin', 'Hostx64', 'x86');
-    const executablePath = path.join(bin, 'ml.exe');
-    const linkerPath = path.join(bin, 'link.exe');
-    return await executable(executablePath) && await executable(linkerPath)
-      ? { executable: executablePath, linker: linkerPath }
-      : undefined;
-  } catch {
-    return undefined;
-  }
+async function validateNasmSource(uri: vscode.Uri): Promise<void> {
+  if (uri.scheme !== 'file' || path.extname(uri.fsPath).toLowerCase() !== '.asm') throw new Error('Choose a local .asm source file.');
+  await access(uri.fsPath, fsConstants.R_OK);
+  const syntax = detectAssemblySyntax(await readFile(uri.fsPath, 'utf8'));
+  if (syntax === 'masm') throw new Error('This is MASM/Irvine syntax. Fall 2026 uses NASM 32-bit; create a NASM lab or translate the source before building.');
 }
 
-async function validIrvineRoot(candidate: string): Promise<string | undefined> {
-  for (const file of ['Irvine32.inc', 'Irvine32.lib', 'Kernel32.lib', 'User32.lib']) {
-    try {
-      await access(path.join(candidate, file), fsConstants.R_OK);
-    } catch {
-      return undefined;
-    }
-  }
-  return candidate;
+async function dockerDaemonReady(docker: string): Promise<boolean> {
+  const result = await runProcess(docker, ['info', '--format', '{{.ServerVersion}}'], { timeoutMs: 10_000, maxOutputBytes: 128 * 1024 });
+  return result.code === 0 && !result.timedOut && Boolean(result.stdout.trim());
 }
 
-async function buildDirectory(context: vscode.ExtensionContext, sourcePath: string, toolchain: string): Promise<string> {
-  const hash = createHash('sha256').update(`${toolchain}\0${path.resolve(sourcePath)}`).digest('hex').slice(0, 16);
+function containerRunArgs(buildDirectory: string): string[] {
+  return [
+    'run', '--rm', '--platform', 'linux/amd64', '--network', 'none',
+    '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--read-only',
+    '--tmpfs', '/tmp:rw,noexec,nosuid,size=64m',
+    ...containerUserArgs(), '-v', `${buildDirectory}:/work:rw`
+  ];
+}
+
+function containerUserArgs(): string[] {
+  return process.platform === 'linux' && process.getuid && process.getgid
+    ? ['--user', `${process.getuid()}:${process.getgid()}`]
+    : [];
+}
+
+async function createBuildDirectory(context: vscode.ExtensionContext, sourcePath: string, runtime: string): Promise<string> {
+  const hash = createHash('sha256').update(`${runtime}\0${path.resolve(sourcePath)}`).digest('hex').slice(0, 16);
   const directory = path.join(context.globalStorageUri.fsPath, 'assembly-builds', hash);
   await rm(directory, { recursive: true, force: true });
   await mkdir(directory, { recursive: true });
@@ -315,9 +335,7 @@ function configured(name: string, fallback: string): string {
 async function findExecutable(name: string): Promise<string | undefined> {
   const hasSeparator = name.includes('/') || name.includes('\\');
   if (hasSeparator) return await executable(name) ? name : undefined;
-  const extensions = process.platform === 'win32'
-    ? (process.env.PATHEXT ?? '.EXE;.CMD;.BAT').split(';')
-    : [''];
+  const extensions = process.platform === 'win32' ? (process.env.PATHEXT ?? '.EXE;.CMD;.BAT').split(';') : [''];
   for (const directory of (process.env.PATH ?? '').split(path.delimiter).filter(Boolean)) {
     for (const extension of extensions) {
       const candidate = path.join(directory, process.platform === 'win32' && !path.extname(name) ? `${name}${extension}` : name);
@@ -354,4 +372,12 @@ function appendStage(output: vscode.OutputChannel, stage: string, result: Proces
   output.appendLine(`[${stage}] exit=${result.code} timedOut=${result.timedOut}`);
   if (result.stdout.trim()) output.appendLine(result.stdout.trimEnd());
   if (result.stderr.trim()) output.appendLine(result.stderr.trimEnd());
+}
+
+async function readOptional(file: string): Promise<string> {
+  try {
+    return await readFile(file, 'utf8');
+  } catch {
+    return '';
+  }
 }

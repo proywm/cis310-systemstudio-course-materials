@@ -1,6 +1,4 @@
-; Real NASM + GNU ld example for the SystemStudio full toolchain path.
-; This source is assembled to an ELF32 object, linked, and executed as IA-32
-; machine code. It does not use the instructional trace simulator.
+; Actual NASM/ELF32: sum an array through indirect addressing and a loop.
 bits 32
 
 section .data
@@ -20,7 +18,9 @@ sum_loop:
     add esi, 4
     loop sum_loop
 
-    ; Convert the known two-digit exercise result (15) to ASCII.
+inspect_sum:
+    cmp eax, 15
+    jne failed
     xor edx, edx
     mov ebx, 10
     div ebx
@@ -28,13 +28,18 @@ sum_loop:
     add dl, '0'
     mov [result + 6], al
     mov [result + 7], dl
-
-    mov eax, 4              ; Linux IA-32 sys_write
-    mov ebx, 1
     mov ecx, result
     mov edx, result_len
-    int 0x80
+    xor esi, esi
+    jmp report
 
-    mov eax, 1              ; Linux IA-32 sys_exit
-    xor ebx, ebx
+failed:
+    mov esi, 1
+
+report:
+    mov eax, 4
+    mov ebx, 1
+    int 0x80
+    mov eax, 1
+    mov ebx, esi
     int 0x80

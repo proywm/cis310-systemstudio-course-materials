@@ -3,6 +3,7 @@ export const TARNOFF_BOOK_HOME = 'https://faculty.etsu.edu/tarnoff/138292/';
 export const TARNOFF_AUTHOR_CHANNEL = 'https://www.youtube.com/@Intermation';
 export const TARNOFF_OER_SERIES = 'https://dc.etsu.edu/computer-organization-design-oer/';
 export const OSTEP_ADDRESS_SPACES = 'https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf';
+export const CARTER_PC_ASSEMBLY = 'https://pacman128.github.io/pcasm/';
 export const MODULE_READINESS_QUESTION_TARGET = 5;
 export const MODULE_CONFIDENCE_QUESTION_TARGET = 8;
 
@@ -242,7 +243,8 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
       { title: 'Tarnoff Chapter 15 — Introduction to Processor Architecture', focus: '§15.2.5: stack organization', url: chapter(15) },
       { title: 'Tarnoff Chapter 16 — Intel 80x86 Processor', focus: '§§16.2.1–16.2.3: registers, instruction pointer, stack pointer, and flags', url: chapter(16) },
       { title: 'Tarnoff Chapter 17 — Intel 80x86 Assembly Language', focus: '§§17.1–17.4.3: source translation, data transfer, control flow, CALL, and RET', url: chapter(17) },
-      { title: 'OSTEP — The Abstraction: Address Spaces', focus: '§13: process address space, code, static data, heap, stack, and memory virtualization', url: OSTEP_ADDRESS_SPACES }
+      { title: 'OSTEP — The Abstraction: Address Spaces', focus: '§13: process address space, code, static data, heap, stack, and memory virtualization', url: OSTEP_ADDRESS_SPACES },
+      { title: 'Paul Carter — PC Assembly Language', focus: '§§1.2.5, 1.3–1.4, 2.1–2.3, 4.2–4.5, 4.8.1, and 5.1: NASM source, registers/flags, control flow, stack/calls, recursion, and arrays', url: CARTER_PC_ASSEMBLY }
     ],
     authorVideos: [
       { title: 'Ep 080: Data Registers and the Program Counter', focus: 'EAX subregisters and EIP', url: 'https://www.youtube.com/watch?v=th8FnKQNIYE' },
@@ -251,7 +253,7 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
       { title: 'Ep 083: The Flags Register', focus: 'Zero, sign, carry, and overflow flags', url: 'https://www.youtube.com/watch?v=7eaTT8PekE0' }
     ],
     readinessPrompt: 'Can I predict which register, flag, or stack location changes before stepping one instruction?',
-    readinessSources: { readingIndexes: [0, 1, 2], videoIndexes: [0, 1, 2, 3] }
+    readinessSources: { readingIndexes: [0, 1, 2, 4], videoIndexes: [0, 1, 2, 3] }
   }
 ] as const;
 

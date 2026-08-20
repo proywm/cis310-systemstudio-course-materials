@@ -29,6 +29,7 @@ import { DigitalTestController } from './digitalTests';
 import { GuidedLabPanel } from './guidedLabPanel';
 import { LessonTextPanel } from './lessonTextPanel';
 import { NativeAssemblyManager } from './nativeAssemblyManager';
+import { NasmWorkbenchPanel } from './nasmWorkbenchPanel';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
 import { PreClassQuestionPanel } from './preClassQuestionPanel';
@@ -323,43 +324,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await access(target);
         const uri = vscode.Uri.file(target);
         await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
-        await AssemblyLabPanel.show(context, assemblyManager, uri, 'assemble');
+        await NasmWorkbenchPanel.show(context, nativeAssemblyManager, uri);
       } catch (error) {
         await showFailure('Could not open the guided assembly lab', error, output);
-      }
-    }),
-    vscode.commands.registerCommand('systemstudioCis310.openGuidedLabRealArtifact', async (labId: unknown, artifactId: unknown) => {
-      const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
-      const artifact = lab?.artifact.kind === 'assembly' && typeof artifactId === 'string'
-        ? lab.artifact.realArtifacts?.find((candidate) => candidate.id === artifactId)
-        : undefined;
-      if (!lab || !artifact) {
-        await vscode.window.showErrorMessage('The selected real-toolchain lab source is invalid.');
-        return;
-      }
-      const workspaceFolder = await chooseWorkspaceFolder(`Choose a workspace for “${lab.title}”`);
-      if (!workspaceFolder) {
-        await vscode.window.showErrorMessage('Open a local folder before preparing the assembly source.');
-        return;
-      }
-      try {
-        const guide = path.join(workspaceFolder.uri.fsPath, 'assembly', 'README.md');
-        let assemblyLabExists = false;
-        try {
-          await access(guide);
-          assemblyLabExists = true;
-        } catch {
-          assemblyLabExists = false;
-        }
-        if (assemblyLabExists) await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
-        else await assemblyManager.createLab(workspaceFolder.uri.fsPath);
-        const target = path.join(workspaceFolder.uri.fsPath, 'assembly', ...artifact.relativePath.split('/'));
-        await access(target);
-        const uri = vscode.Uri.file(target);
-        await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
-        await vscode.commands.executeCommand('systemstudioCis310.buildRunAssembly', uri);
-      } catch (error) {
-        await showFailure('Could not build and run the guided assembly source', error, output);
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.startQuickPractice', async () => {
@@ -560,17 +527,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           const upgraded = await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
           const action = await vscode.window.showInformationMessage(
             upgraded.addedFiles
-              ? `Added real-toolchain and trace-tutor resources without overwriting student .asm files. Pre-0.11 guides were archived before replacement.`
+              ? 'Added current NASM workbench and trace-practice resources without overwriting student .asm files. Older generated guides were archived before replacement.'
               : `The assembly workspace already exists at ${path.dirname(existingGuide)}.`,
             'Open Guide',
-            'Open Trace Tutor'
+            'Open NASM Workbench'
           );
           if (action === 'Open Guide') {
             await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(upgraded.guidePath));
-          } else if (action === 'Open Trace Tutor') {
+          } else if (action === 'Open NASM Workbench') {
             const uri = vscode.Uri.file(upgraded.entryPath);
             await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
-            await AssemblyLabPanel.show(context, assemblyManager, uri);
+            await NasmWorkbenchPanel.show(context, nativeAssemblyManager, uri);
           }
         } catch (error) {
           await showFailure('Could not update the assembly workspace', error, output);
@@ -580,19 +547,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       try {
         const created = await assemblyManager.createLab(workspaceFolder.uri.fsPath);
         const action = await vscode.window.showInformationMessage(
-          `Created real-toolchain examples and a separate instruction-trace tutor workspace at ${created}.`,
+          `Created the NASM 32-bit workspace and optional instruction-trace practice at ${created}.`,
           'Open Guide',
-          'Open Trace Tutor'
+          'Open NASM Workbench'
         );
         if (action === 'Open Guide') {
           await vscode.commands.executeCommand(
             'markdown.showPreview',
             vscode.Uri.file(path.join(created, 'README.md'))
           );
-        } else if (action === 'Open Trace Tutor') {
-          const uri = vscode.Uri.file(path.join(created, 'irvine32', 'AddTwo.asm'));
+        } else if (action === 'Open NASM Workbench') {
+          const uri = vscode.Uri.file(path.join(created, 'nasm-elf32', 'RegisterArithmetic.asm'));
           await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
-          await AssemblyLabPanel.show(context, assemblyManager, uri);
+          await NasmWorkbenchPanel.show(context, nativeAssemblyManager, uri);
         }
       } catch (error) {
         await showFailure('Could not create the assembly workspace', error, output);
@@ -603,63 +570,39 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       const real = await nativeAssemblyManager.status();
       output.appendLine([
         'CIS 310 Assembly Environment',
-        `Actual NASM/ELF32: ${real.nasm.available ? `${real.nasm.executable} + ${real.nasm.linker}` : real.nasm.detail}`,
-        `Exact Microsoft MASM/Irvine32: ${real.masm.available ? real.masm.executable : 'not available'}`,
+        `Actual NASM/ELF32: ${real.available ? `ready via ${real.runtime}` : 'setup needed'}`,
+        `Runtime detail: ${real.detail}`,
         `Trace tutor bundled: ${trace.embeddedReady ? 'yes' : 'no'} (not an assembler)`,
-        `NASM detail: ${real.nasm.detail}`,
-        `MASM detail: ${real.masm.detail}`,
         `Trace detail: ${trace.detail}`
       ].join('\n'));
       output.show(true);
-      await vscode.window.showInformationMessage(
-        `Actual NASM: ${real.nasm.available ? 'ready' : 'not ready on this host'}. Exact Microsoft MASM/Irvine32: ${real.masm.available ? 'ready' : 'not configured on this host'}. See the output for host-specific details. The trace tutor is separate and is not an assembler.`
+      const action = await vscode.window.showInformationMessage(
+        `NASM 32-bit: ${real.available ? `ready via ${real.runtime}` : 'setup needed'}. ${real.detail}`,
+        real.available ? 'Open Output' : 'Prepare Environment'
       );
+      if (action === 'Prepare Environment') {
+        try {
+          await nativeAssemblyManager.prepare();
+          statusTree.refresh();
+        } catch (error) {
+          await showFailure('Could not prepare the NASM environment', error, output);
+        }
+      } else if (action === 'Open Output') {
+        output.show(true);
+      }
     }),
     vscode.commands.registerCommand('systemstudioCis310.buildRunAssembly', async (candidate?: vscode.Uri) => {
       if (!requireTrustedWorkspace()) return;
       const uri = await resolveAssemblyUri(candidate);
       if (!uri) return;
       try {
-        const detectedSyntax = await nativeAssemblyManager.detectSyntax(uri);
-        const detectedLabel = detectedSyntax === 'masm'
-          ? 'heuristic result: MASM/Irvine32'
-          : detectedSyntax === 'nasm'
-            ? 'heuristic result: NASM/ELF32'
-            : 'ambiguous—choose explicitly';
-        const toolchain = await vscode.window.showQuickPick(
-          [
-            {
-              label: 'Auto-detect from source',
-              description: detectedLabel,
-              detail: 'This is a syntax heuristic. Ambiguous source is stopped instead of silently routed; choose an explicit toolchain when unsure.',
-              value: 'auto' as const
-            },
-            {
-              label: 'Actual NASM → ELF32',
-              description: 'x86 Linux',
-              detail: 'Runs nasm, GNU ld, and the resulting IA-32 executable.',
-              value: 'nasm-linux' as const
-            },
-            {
-              label: 'Exact Microsoft MASM + Irvine32',
-              description: 'Windows only',
-              detail: 'Runs Microsoft ml.exe/link.exe with the official Irvine32 library.',
-              value: 'masm-irvine-windows' as const
-            }
-          ],
-          {
-            title: 'Choose the real assembly toolchain',
-            placeHolder: 'Cancel makes no changes; no option invokes the Instruction Trace Tutor'
-          }
-        );
-        if (!toolchain) return;
         const result = await vscode.window.withProgress(
-          { location: vscode.ProgressLocation.Notification, title: 'Building and running with the real assembly toolchain', cancellable: false },
-          () => nativeAssemblyManager.buildAndRun(uri, toolchain.value)
+          { location: vscode.ProgressLocation.Notification, title: 'Building and running actual NASM/ELF32 code', cancellable: false },
+          () => nativeAssemblyManager.buildAndRun(uri)
         );
         output.show(true);
         const programOutput = [result.execution.stdout.trim(), result.execution.stderr.trim()].filter(Boolean).join('\n');
-        const message = `${result.toolchain} produced ${path.basename(result.executablePath)} and executed real machine code (exit ${result.execution.code}).`;
+        const message = `NASM via ${result.runtime} produced ${path.basename(result.executablePath)} and executed actual IA-32 machine code (exit ${result.execution.code}).`;
         if (result.execution.timedOut || result.execution.code !== 0) {
           await vscode.window.showWarningMessage(`${message}${programOutput ? ` Output: ${programOutput}` : ''}`);
         } else {
@@ -668,6 +611,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       } catch (error) {
         await showFailure('Real assembly build/run failed', error, output);
       }
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openNasmWorkbench', async (candidate?: vscode.Uri) => {
+      if (!requireTrustedWorkspace()) return;
+      const uri = await resolveAssemblyUri(candidate);
+      if (uri) await NasmWorkbenchPanel.show(context, nativeAssemblyManager, uri);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openAssemblyLab', async (candidate?: vscode.Uri) => {
       const uri = await resolveAssemblyUri(candidate);
@@ -694,7 +642,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await AssemblyLabPanel.show(context, assemblyManager, uri, 'reset');
       }
     }),
-    vscode.commands.registerCommand('systemstudioCis310.openMasmGuide', async () => {
+    vscode.commands.registerCommand('systemstudioCis310.openNasmGuide', async () => {
       await vscode.commands.executeCommand('markdown.showPreview', assemblyManager.compatibilityGuideUri);
     }),
     vscode.commands.registerCommand('systemstudioCis310.browseLectures', async () => {
@@ -933,6 +881,15 @@ function contextualTutorPrompt(value: unknown): string | undefined {
   }
   if (typeof candidate.guidedAssemblyLabId === 'string') {
     return guidedAssemblyTutorPrompt(candidate.guidedAssemblyLabId);
+  }
+  if (typeof candidate.nasmWorkbenchSource === 'string') {
+    return [
+      `I am debugging the formative NASM 32-bit source “${candidate.nasmWorkbenchSource}” in the CIS 310 workbench.`,
+      'First ask for my prediction, the earliest instruction where observed state differs, the relevant register/flag/stack/memory values, and any NASM/GDB diagnostic.',
+      'Then give one diagnostic question or a small analogous example at a time. Explain the evidence and ask me to make the next edit.',
+      'Do not write or repair the graded program, provide a submission-ready solution, or claim that the trace tutor is actual NASM.',
+      'Remind me that the 32-bit IA-32 NASM environment is separate from the course 4-bit instructional processor.'
+    ].join('\n');
   }
   if (typeof candidate.resourceId !== 'string'
     || typeof candidate.promptIndex !== 'number'

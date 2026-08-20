@@ -755,7 +755,7 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
         heading: 'Trace one instruction before running many',
         paragraphs: [
           'For MOV, identify source and destination and predict the destination value. For ADD or SUB, predict the result and which flags may change. CMP updates flags as if subtraction occurred but does not store the arithmetic result in either operand. A conditional jump reads relevant flags and may update EIP.',
-          'CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A trace should record before-state, instruction, after-state, and evidence. SystemStudio’s Instruction Trace Tutor is a learning model, not an assembler; real NASM or exact Windows MASM/Irvine execution is separate.'
+          'CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A useful debug record includes before-state, instruction, after-state, and evidence. SystemStudio’s NASM Workbench assembles and links the actual ELF32 source, then reads registers, EFLAGS, stack, memory, and Intel disassembly from an actual GDB session. The optional Instruction Trace Tutor remains a conceptual model and is not build evidence.'
         ]
       }
     ],

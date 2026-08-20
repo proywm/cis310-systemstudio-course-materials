@@ -42,7 +42,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a locally packaged accessible Fall 2026 HTML syllabus, with an optional print PDF carrying the same content;
 - an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their accessible HTML lecture, reading, video, optional visual archive, readiness-practice, and guided-lab links;
 - 13 primary responsive HTML lectures, grounded in verified source material, with novice explanations, examples, self-checks, and bounded tutor prompts;
-- a self-paced Accessible lesson → Read → Watch → Practice → Build/trace path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
+- a self-paced Accessible lesson → Read → Watch → Practice → Build/debug path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
 - 13 integrity-checked legacy presentation PDFs retained as optional visual archives;
 - three homework references, three cumulative 4-bit processor-project milestones, a final-presentation planning reference, and public executable circuit-preflight contracts;
 - 104 short, evidence-mapped practice questions—exactly eight for each of the 13 presentation resources—with Bloom-level labels and full explanation/justification;
@@ -57,8 +57,8 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - the complete upstream Digital v0.31 editor and simulator, streamed into a VS Code tab from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS, with the native window retained only as an explicit fallback;
 - seven lecture-mapped guided circuit builds, including a step-by-step half adder and K-map implementation, with fresh non-overwriting files and local checklist progress;
 - circuit preview, embedded-test support, and local public preflight suites for the 4-bit register/PC/data memory, 8-bit instruction register/memory, 4×4 register file, all 2,048 ALU input combinations, and a 25-vector cumulative processor program;
-- actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
-- eight lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, virtual input, linear search, and iterative/recursive binary search;
+- one NASM-first x86 environment with actual ELF32 build/run and actual GDB state inspection, using native x86-Linux tools or the portable course container on Windows/macOS;
+- seven lecture-mapped, self-checking NASM walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, linear search, and iterative/recursive binary search, plus a separately labeled optional trace tutor;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
 - an attempt-first AI learning-coach checkpoint, circuit-specific design/debugging prompt after public preflights, and graded-work boundary before the U-M Maizey handoff; and
@@ -76,7 +76,7 @@ code --install-extension systemstudio-cis310.vsix
 
 Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open the **SystemStudio CIS 310** activity-bar view, and start the guided tutorial.
 
-Java 8 or newer is required for Full Digital on Linux and for native fallback/CLI use. On Windows/macOS, Docker Desktop supplies the pinned Java/X11 runtime used to embed upstream Digital in a VS Code tab. The extension can privately prepare Xvfb/x11vnc on Debian/Ubuntu headless hosts. Real NASM requires NASM and GNU `ld`; the Debian/Ubuntu NASM package can be installed privately after confirmation. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The trace tutor has no external toolchain requirement but is explicitly not an assembler.
+Java 8 or newer is required for Full Digital on Linux and for native fallback/CLI use. On Windows/macOS, Docker Desktop supplies the pinned Java/X11 runtime used to embed upstream Digital in a VS Code tab and the NASM/GDB/QEMU runtime used by the assembly workbench. The extension can privately prepare Xvfb/x11vnc and NASM on Debian/Ubuntu hosts after confirmation. Native assembly additionally requires GNU `ld` and GDB. The optional trace tutor has no external toolchain requirement but is explicitly not an assembler.
 
 ## Repository layout
 

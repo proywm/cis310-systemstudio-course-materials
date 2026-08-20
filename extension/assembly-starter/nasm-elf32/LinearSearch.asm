@@ -1,4 +1,4 @@
-; Real NASM/ELF32 regression example: iterative linear search.
+; Actual NASM/ELF32 regression example: iterative linear search.
 bits 32
 
 section .data
@@ -16,22 +16,18 @@ _start:
     call linear_search
     cmp eax, 0
     jne failed
-
     mov edi, 7
     call linear_search
     cmp eax, 2
     jne failed
-
     mov edi, 3
     call linear_search
     cmp eax, 4
     jne failed
-
     mov edi, 99
     call linear_search
     cmp eax, -1
     jne failed
-
     mov ecx, pass_message
     mov edx, pass_length
     xor ebx, ebx
@@ -43,7 +39,6 @@ linear_search:
     mov ecx, value_count
     xor ebx, ebx
     mov eax, -1
-
 search_loop:
     test ecx, ecx
     jz search_done
@@ -53,10 +48,8 @@ search_loop:
     inc ebx
     dec ecx
     jmp search_loop
-
 search_found:
     mov eax, ebx
-
 search_done:
     ret
 
@@ -64,7 +57,6 @@ failed:
     mov ecx, fail_message
     mov edx, fail_length
     mov ebx, 1
-
 report:
     push ebx
     mov eax, 4

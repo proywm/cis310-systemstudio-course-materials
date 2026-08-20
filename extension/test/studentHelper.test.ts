@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import * as path from 'node:path';
 import { describe, it } from 'node:test';
 import { answerStudentQuestion, parseStudentHelperRequest } from '../src/core/studentHelper';
 
@@ -48,7 +50,7 @@ describe('student helper', () => {
     const reply = answerStudentQuestion('What should I read and watch before class?');
     const text = JSON.stringify(reply);
     assert.match(text, /David Tarnoff/);
-    assert.match(text, /Read → Watch → Practice → Build\/trace/);
+    assert.match(text, /Read → Watch → Practice → Build\/debug/);
     assert.ok(reply.actions.some((action) => action.id === 'open-learning'));
   });
 
@@ -99,5 +101,17 @@ describe('student helper', () => {
     assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'open-canvas' }), { type: 'action', action: 'open-canvas' });
     assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'ask-before-class' }), { type: 'action', action: 'ask-before-class' });
     assert.equal(parseStudentHelperRequest({ type: 'action', action: 'workbench.action.terminal.kill' }), undefined);
+  });
+
+  it('ships an optional animated companion without replacing accessible text controls', async () => {
+    const panel = await readFile(path.resolve('src', 'studentHelperPanel.ts'), 'utf8');
+    const image = await readFile(path.resolve('media', 'tutor-companion.png'));
+    assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+    assert.match(panel, /Orbit is ready for your CIS 310 questions/);
+    assert.match(panel, /aria-label="Open CIS 310 question assistant"/);
+    assert.match(panel, /Pause companion motion/);
+    assert.match(panel, /prefers-reduced-motion:reduce/);
+    assert.match(panel, /The animated companion is only a visual guide/);
+    assert.match(panel, /img-src \$\{webview\.cspSource\}/);
   });
 });

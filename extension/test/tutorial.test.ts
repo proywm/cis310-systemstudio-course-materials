@@ -53,7 +53,7 @@ describe('guided tutorial state', () => {
     assert.match(source, /Choose any lesson/);
     assert.match(source, /Work in any order/);
     assert.match(source, /Start the half-adder build/);
-    assert.match(source, /Start the register-arithmetic trace/);
+    assert.match(source, /Open actual register-arithmetic workbench/);
     assert.match(source, /next\.disabled = false/);
     assert.doesNotMatch(source, /if \(!requirementMet\(steps\[current\]\)\) return/);
   });

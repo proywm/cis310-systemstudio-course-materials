@@ -7,6 +7,7 @@ import {
   TARNOFF_AUTHOR_CHANNEL,
   TARNOFF_BOOK_HOME,
   TARNOFF_OER_SERIES,
+  CARTER_PC_ASSEMBLY,
   emptyPreparationProgress,
   normalizePreparationProgress,
   preparationModule,
@@ -32,7 +33,8 @@ describe('CIS 310 pre-class learning path', () => {
       for (const reading of module.readings) {
         assert.ok(
           reading.url.startsWith('https://faculty.etsu.edu/tarnoff/')
-            || reading.url.startsWith('https://pages.cs.wisc.edu/~remzi/OSTEP/'),
+            || reading.url.startsWith('https://pages.cs.wisc.edu/~remzi/OSTEP/')
+            || reading.url === CARTER_PC_ASSEMBLY,
           `unexpected reading source for ${module.resourceId}`
         );
       }

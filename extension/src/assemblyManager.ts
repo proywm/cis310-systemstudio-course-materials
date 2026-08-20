@@ -118,25 +118,23 @@ export class AssemblyManager implements vscode.Disposable {
     return target;
   }
 
-  /** Adds current real-toolchain and trace-tutor assets without overwriting student assembly. */
+  /** Adds current NASM workbench and trace-practice assets without overwriting student assembly. */
   async upgradeLab(workspaceRoot: string): Promise<AssemblyLabUpgrade> {
     const source = path.join(this.context.extensionUri.fsPath, 'assembly-starter');
     const target = path.join(workspaceRoot, 'assembly');
     let addedFiles = false;
     const starterFiles: Array<readonly [string, string]> = [
-      ['irvine32', 'AddTwo.asm'],
-      ['irvine32', 'ConsoleInput.asm'],
-      ['irvine32', 'FlagsBranch.asm'],
-      ['irvine32', 'StackCall.asm'],
-      ['nasm-ia32', 'LoopSum.asm'],
-      ['real-toolchains/nasm-linux', 'LoopSum.asm'],
-      ['real-toolchains/masm-irvine', 'AddTwo.asm'],
-      ['real-toolchains/nasm-linux', 'LinearSearch.asm'],
-      ['real-toolchains/nasm-linux', 'BinarySearchIterative.asm'],
-      ['real-toolchains/nasm-linux', 'BinarySearchRecursive.asm'],
-      ['real-toolchains/masm-irvine', 'LinearSearch.asm'],
-      ['real-toolchains/masm-irvine', 'BinarySearchIterative.asm'],
-      ['real-toolchains/masm-irvine', 'BinarySearchRecursive.asm']
+      ['nasm-elf32', 'RegisterArithmetic.asm'],
+      ['nasm-elf32', 'FlagsBranch.asm'],
+      ['nasm-elf32', 'LoopSum.asm'],
+      ['nasm-elf32', 'StackCall.asm'],
+      ['nasm-elf32', 'LinearSearch.asm'],
+      ['nasm-elf32', 'BinarySearchIterative.asm'],
+      ['nasm-elf32', 'BinarySearchRecursive.asm'],
+      ['trace-tutor-examples', 'RegisterArithmetic.asm'],
+      ['trace-tutor-examples', 'FlagsBranch.asm'],
+      ['trace-tutor-examples', 'LoopSum.asm'],
+      ['trace-tutor-examples', 'StackCall.asm']
     ];
     for (const [directory, fileName] of starterFiles) {
       const destinationDirectory = path.join(target, directory);
@@ -150,7 +148,7 @@ export class AssemblyManager implements vscode.Disposable {
     addedFiles = await installCurrentAssemblyGuides(source, target) || addedFiles;
 
     return {
-      entryPath: path.join(target, 'irvine32', 'AddTwo.asm'),
+      entryPath: path.join(target, 'nasm-elf32', 'RegisterArithmetic.asm'),
       guidePath,
       addedFiles
     };

@@ -15,9 +15,9 @@ import {
 import { preparationModule } from '../src/core/learningResources';
 
 describe('guided circuit and assembly labs', () => {
-  it('maps seven circuit builds and eight assembly traces to verified lecture sources', async () => {
+  it('maps seven circuit builds and seven actual NASM labs to verified lecture sources', async () => {
     assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'circuit').length, 7);
-    assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'assembly').length, 8);
+    assert.equal(GUIDED_LABS.filter((lab) => lab.kind === 'assembly').length, 7);
     assert.equal(new Set(GUIDED_LABS.map((lab) => lab.id)).size, GUIDED_LABS.length);
     for (const lab of GUIDED_LABS) {
       const module = preparationModule(lab.resourceId);
@@ -31,12 +31,8 @@ describe('guided circuit and assembly labs', () => {
       if (lab.artifact.kind === 'circuit') {
         assert.match(lab.artifact.fileName, /^[a-z0-9][a-z0-9-]*\.dig$/);
       } else {
-        assert.match(lab.artifact.relativePath, /^(?:irvine32|nasm-ia32|real-toolchains\/masm-irvine)\/[A-Za-z0-9-]+\.asm$/);
+        assert.match(lab.artifact.relativePath, /^nasm-elf32\/[A-Za-z0-9-]+\.asm$/);
         await access(path.resolve('assembly-starter', ...lab.artifact.relativePath.split('/')));
-        for (const artifact of lab.artifact.realArtifacts ?? []) {
-          assert.match(artifact.relativePath, /^real-toolchains\/(?:nasm-linux|masm-irvine)\/[A-Za-z0-9-]+\.asm$/);
-          await access(path.resolve('assembly-starter', ...artifact.relativePath.split('/')));
-        }
       }
     }
   });
@@ -90,15 +86,6 @@ describe('guided circuit and assembly labs', () => {
     assert.equal(parseGuidedLabRequest({ type: 'open-artifact', labId: '../bad' }), undefined);
     const search = GUIDED_LABS.find((candidate) => candidate.id === 'assembly-linear-search');
     assert.ok(search);
-    assert.deepEqual(parseGuidedLabRequest({
-      type: 'open-real-artifact', labId: search.id, artifactId: 'nasm-linux'
-    }), { type: 'open-real-artifact', labId: search.id, artifactId: 'nasm-linux' });
-    assert.equal(parseGuidedLabRequest({
-      type: 'open-real-artifact', labId: search.id, artifactId: '../bad'
-    }), undefined);
-    assert.equal(parseGuidedLabRequest({
-      type: 'open-real-artifact', labId: lab.id, artifactId: 'nasm-linux'
-    }), undefined);
     assert.deepEqual(parseGuidedLabRequest({ type: 'open-tutor', labId: search.id }), {
       type: 'open-tutor', labId: search.id
     });
@@ -106,6 +93,6 @@ describe('guided circuit and assembly labs', () => {
     const prompt = guidedAssemblyTutorPrompt(search.id);
     assert.match(prompt ?? '', /state my expected result/);
     assert.match(prompt ?? '', /Do not write, repair, or complete my program/);
-    assert.match(prompt ?? '', /real assembler\/linker\/executable evidence/);
+    assert.match(prompt ?? '', /actual NASM\/GNU ld\/GDB evidence/);
   });
 });

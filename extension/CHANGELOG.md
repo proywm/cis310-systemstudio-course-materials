@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.20.0
+
+- Replaced the dual MASM/NASM student path with one NASM 32-bit workflow using actual ELF32 assembly/link/execution and a persistent actual GDB/MI session.
+- Added native x86-Linux and hardened Docker/QEMU runtimes for a consistent Windows/macOS fallback without relabeling a teaching model as a toolchain.
+- Added seven retained self-checking programs and guided labs for arithmetic, flags/branches, loops, stack/calls, linear search, and iterative/recursive binary search.
+- Added a repeatable NASM/GDB smoke script that verifies all seven executables plus actual breakpoints, registers, flags, stack, memory, disassembly, stepping, and output.
+- Mapped Lecture 12 to Paul Carter's open NASM-based *PC Assembly Language* and the official NASM manual, while retaining accessible HTML as the primary introduction.
+- Added Orbit, an original optional animated tutor companion with a pause control, keyboard-operable chat button, text-equivalent help paths, and reduced-motion behavior.
+
 ## 0.19.0
 
 - Added prediction-first linear-search, iterative binary-search, and recursive binary-search walkthroughs with explicit return-to-Canvas steps.

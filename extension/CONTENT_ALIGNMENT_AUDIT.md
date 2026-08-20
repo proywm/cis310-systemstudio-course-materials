@@ -4,7 +4,7 @@ Last verified: August 20, 2026
 
 ## Scope and method
 
-This audit covers all 13 Fall 2026 modules, 13 novice-facing HTML lesson texts, 104 formative questions, seven circuit labs, and eight assembly traces. It does not infer coverage from a title.
+This audit covers all 13 Fall 2026 modules, 13 novice-facing HTML lesson texts, 104 formative questions, seven circuit labs, and seven actual NASM/GDB labs. It does not infer coverage from a title.
 
 1. All 14 assigned Tarnoff chapter PDFs and the two added OSTEP chapter PDFs were checked against the named concept and bounded section.
 2. Text was extracted from all 13 packaged lecture PDFs and checked against the slide locators stored with questions.

@@ -33,7 +33,7 @@ export class TutorialPanel implements vscode.Disposable {
     if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
     if (context.globalState.get<TutorialProgress>(PROGRESS_KEY)) return false;
     const action = await vscode.window.showInformationMessage(
-      'Welcome to Fall 2026 CIS 310. Start the clickable tour of preparation, coursework/final-project planning, Canvas, Full Digital, real assembly, the trace tutor, and help?',
+      'Welcome to Fall 2026 CIS 310. Start the clickable tour of preparation, coursework/final-project planning, Canvas, Full Digital, the actual NASM/GDB workbench, and help?',
       'Start Guided Tutorial',
       'Skip for now'
     );
@@ -140,7 +140,7 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'create-circuit': { id: 'systemstudioCis310.createCircuit' },
     'create-workspace': { id: 'systemstudioCis310.createStarterWorkspace' },
     'create-assembly-lab': { id: 'systemstudioCis310.createAssemblyLab' },
-    'assembly-guide': { id: 'systemstudioCis310.openMasmGuide' },
+    'assembly-guide': { id: 'systemstudioCis310.openNasmGuide' },
     'native-walkthrough': { id: 'systemstudioCis310.openGettingStarted' }
   };
   const selected = command[action];
@@ -218,7 +218,7 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
   </header>
   <div class="progress-wrap">
     <div class="progress-label"><span id="stepLabel"></span><span id="requirement"></span></div>
-    <div class="progress" role="progressbar" aria-label="Current tutorial position" aria-valuemin="1" aria-valuemax="8"><div id="progressBar"></div></div>
+    <div class="progress" role="progressbar" aria-label="Current tutorial position" aria-valuemin="1" aria-valuemax="9"><div id="progressBar"></div></div>
   </div>
   <div class="tutorial-body">
     <nav id="lessonNav" class="lesson-nav" aria-label="Tutorial lessons">
@@ -372,7 +372,7 @@ function tutorialStepsHtml(): string {
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three milestones + final presentation', 'Processor memories, Register File/ALU, and the integrated 4-bit processor build one cumulative processor for the final instructional-ISA program demonstration.')}
       ${choice('mission', 'Assignment Mission Control', 'Use local status, checklists, file inspection, receipt confirmation, final-project self-evaluation, and the manual grade estimate without confusing them with Canvas evaluation.')}
-      ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
+      ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/debug, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
     <div class="actions"><button data-action="open-coursework" class="primary">Open coursework and final project</button><button data-action="open-learning" class="secondary">Open preparation path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open accessible syllabus</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
@@ -401,22 +401,35 @@ function tutorialStepsHtml(): string {
     <div class="actions"><button data-action="open-half-adder-lab" class="primary">Start the half-adder build</button><button data-action="open-guided-labs" class="secondary">Browse all circuit labs</button><button data-action="show-materials" class="secondary">Open mapped materials</button></div>
   </div></section>
   <section class="step" data-step="4" data-require="all"><div class="focus-card">
-    <h2 tabindex="-1">Bridge a concept to assembly</h2>
-    <p>Use the real-toolchain command for assembler, linker, executable, and program-output evidence. Use the separately labeled Instruction Trace Tutor only for prediction and visualization; loading there does not prove that MASM or NASM accepts the file.</p>
-    <div class="instruction"><strong>Begin with register arithmetic:</strong> then progress to flags/branches, an array loop, a stack frame, input, linear search, and iterative or recursive binary search.</div>
+    <h2 tabindex="-1">Build and run one consistent NASM program</h2>
+    <p>Fall 2026 uses NASM 32-bit for student-authored x86 work. The extension selects a native x86-Linux toolchain when it is complete; otherwise it uses the prepared course container. There is no MASM/NASM chooser.</p>
+    <div class="instruction"><strong>Practice the complete first run:</strong> create the NASM workspace, read the source, predict, build, run its self-check, and interpret the actual exit status.</div>
     <div class="choices">
-      ${choice('predict', 'Predict register or memory state', 'Write what should change before executing the instruction.')}
-      ${choice('arithmetic', 'Register arithmetic', 'Step MOV and ADD; compare EAX and flags with a line-by-line prediction.')}
-      ${choice('branch', 'Flags and a conditional branch', 'Step CMP and JL; use the flag snapshot and EIP path as evidence.')}
-      ${choice('memory', 'Array and counted loop', 'Observe ESI addresses, ECX, memory values, and the EAX accumulator.')}
-      ${choice('stack', 'CALL, stack frame, and RET', 'Watch ESP, EBP, the return address, preserved EBX, and returned EAX.')}
-      ${choice('input', 'Virtual console input', 'Trace procedure register contracts and a controlled invalid-input path.')}
-      ${choice('search', 'Search algorithms', 'Predict and test found, absent, and boundary cases for linear search and iterative/recursive binary search; compare time and stack behavior.')}
-      ${choice('real', 'Real assembler and executable', 'Build actual NASM/ELF32 code, or exact Microsoft MASM/Irvine32 when the Windows toolchain is configured.')}
+      ${choice('prepare', 'Prepare once', 'On x86 Linux, use actual NASM, GNU ld, and GDB. On Windows/macOS, start Docker Desktop and build the course image after the explicit prompt.')}
+      ${choice('read', 'Read the actual source', 'Locate BITS 32, data/text sections, GLOBAL _start, labels, and the Linux IA-32 exit path before editing.')}
+      ${choice('predict', 'Predict before execution', 'Write expected EAX and flags after MOV/MOV/ADD. Do not let the debugger become the prediction.')}
+      ${choice('build', 'Assemble and link', 'Build and run invokes actual NASM and GNU ld. Resolve the first diagnostic rather than changing unrelated lines.')}
+      ${choice('test', 'Interpret the self-check', 'PASS with exit code 0 is local formative evidence. It is neither a Canvas submission nor an instructor/GSI grade.')}
+      ${choice('boundary', 'Keep the two processors separate', 'NASM targets IA-32 x86. It does not run on the Digital project’s 4-bit datapath and 8-bit instructional words.')}
     </div>
-    <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Start the register-arithmetic trace</button><button data-action="open-search-guided-lab" class="secondary">Start the search walkthrough</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
+    <div class="actions"><button data-action="create-assembly-lab" class="primary">Create or update NASM workspace</button><button data-action="open-assembly-guided-labs" class="secondary">Open register-arithmetic lab</button><button data-action="assembly-guide" class="secondary">Open NASM guide</button></div>
   </div></section>
   <section class="step" data-step="5" data-require="all"><div class="focus-card">
+    <h2 tabindex="-1">Debug actual machine state in the NASM Workbench</h2>
+    <p>The workbench maintains an actual GDB session. Source location, EIP-aligned Intel disassembly, registers, EFLAGS, stack, memory, breakpoints, and program output come from the assembled executable—not the trace tutor.</p>
+    <div class="instruction"><strong>Use predict → breakpoint → inspect → step → explain:</strong> begin with <code>inspect_after_add</code>, then repeat the workflow for a loop or search label.</div>
+    <div class="choices">
+      ${choice('start', 'Start or restart GDB', 'Starting rebuilds the current source with DWARF information and stops at the first actual instruction.')}
+      ${choice('breakpoint', 'Continue to a safe label', 'Enter a NASM label such as inspect_after_add or an explicit hexadecimal address. Other GDB command text is rejected.')}
+      ${choice('registers', 'Inspect registers and flags', 'Compare EAX–EDI, EBP, ESP, EIP, and named EFLAGS with the written prediction.')}
+      ${choice('memory', 'Inspect stack and memory', 'Use $esp, another allowed register, a NASM symbol, or a hexadecimal address; connect each value to the code that produced it.')}
+      ${choice('disassembly', 'Read actual disassembly', 'Relate the highlighted machine instruction and address to the NASM source without assuming one source line always means one instruction.')}
+      ${choice('step', 'Step one actual instruction', 'Observe exactly what changed, identify the earliest mismatch, and explain the causal instruction.')}
+      ${choice('tutor', 'Ask after attempting', 'Provide prediction, first mismatch, and evidence. The tutor gives one hint at a time and must not write graded code.')}
+    </div>
+    <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Open actual register-arithmetic workbench</button><button data-action="open-search-guided-lab" class="secondary">Open linear-search walkthrough</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button></div>
+  </div></section>
+  <section class="step" data-step="6" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Inspect evidence, not just “it ran”</h2>
     <p>Use the evidence that fits the task. This is where tool output becomes feedback you can explain.</p>
     <div class="instruction"><strong>Explore the evidence relevant to your task:</strong> return later for the other forms.</div>
@@ -428,7 +441,7 @@ function tutorialStepsHtml(): string {
       ${choice('trace', 'Output, trace, and diagnostics', 'Locate the exact instruction, input, unsupported form, or safety stop.')}
     </div>
   </div></section>
-  <section class="step" data-step="6" data-require="all"><div class="focus-card">
+  <section class="step" data-step="7" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Choose the right kind of conversation</h2>
     <p>The chat bubble separates a private local FAQ, the U-M Maizey course tutor, and a Canvas question for the instructor.</p>
     <div class="instruction"><strong>Explore the support path that fits today:</strong> you do not need to open every service.</div>
@@ -441,13 +454,13 @@ function tutorialStepsHtml(): string {
     </div>
     <div class="actions"><button data-action="open-helper" class="primary">Open local FAQ chat</button><button data-action="open-ai-tutor" class="secondary">Open U-M Maizey</button><button data-action="ask-before-class" class="secondary">Ask before class</button></div>
   </div></section>
-  <section class="step" data-step="7" data-require="all"><div class="focus-card">
+  <section class="step" data-step="8" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Recover, verify, and continue</h2>
     <p>Common failures have different next steps. SystemStudio points to evidence and stops safely instead of guessing.</p>
     <div class="instruction"><strong>Explore the recovery path you need:</strong> use the lesson list to return when a different problem occurs.</div>
     <div class="choices">
       ${choice('syntax', 'Unsupported assembly syntax', 'Use the exact source-line diagnostic and compatibility guide.')}
-      ${choice('input', 'Missing virtual input', 'Add one response per line, reload the trace model, and step again.')}
+      ${choice('debugger', 'Debugger did not start', 'Confirm NASM, GNU ld, and GDB on x86 Linux, or start Docker Desktop and prepare the course image. Then restart the workbench.')}
       ${choice('loop', 'Possible infinite loop', 'Use the 10,000-step safety stop and inspect the recent trace and branch condition.')}
       ${choice('remote', 'Full Digital over Remote SSH', 'The extension transports the actual upstream Digital Swing desktop into the VS Code tab on supported Linux hosts.')}
       ${choice('canvas', 'Unclear or changing requirement', 'Open Fall 2026 Canvas. Never infer a deadline from a study reference.')}

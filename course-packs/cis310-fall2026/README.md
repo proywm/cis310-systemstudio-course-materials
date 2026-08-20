@@ -9,14 +9,14 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 ## Included
 
 - one SHA-256-verified accessible Fall 2026 HTML syllabus, with an optional print PDF carrying the same content;
-- a 13-module Accessible HTML lecture → Read → Watch → Practice 8 questions → Build/trace path mapped to focused open readings, transcript-checked author videos, legacy slide evidence, and hands-on work;
+- a 13-module Accessible HTML lecture → Read → Watch → Practice 8 questions → Build/debug path mapped to focused open readings, transcript-checked author videos, legacy slide evidence, and hands-on work;
 - 13 responsive HTML lectures with objectives, definitions, explanations, examples, self-checks, source evidence, and lesson-specific tutor prompts;
 - a Canvas publication bundle at [`canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip`](canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip), containing 13 Canvas-safe bodies, 13 standalone pages, a page map, and a validation manifest;
 - 13 SHA-256-verified legacy presentation PDFs covering Lectures 1--12, including the Lecture 8 companion, retained as optional visual archives;
 - three homework study references;
 - three cumulative 4-bit processor study/implementation references plus a final-presentation planning reference;
 - 104 formative practice questions, exactly eight mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
-- the complete upstream Digital v0.31 application for circuit editing and simulation, plus seven mapped circuit builds; actual NASM/ELF32 execution, exact Windows MASM/Irvine32 routing, and five separately labeled trace-tutor activities;
+- the complete upstream Digital v0.31 application for circuit editing and simulation, plus seven mapped circuit builds; seven actual NASM/ELF32/GDB labs using native x86-Linux tools or a portable Windows/macOS course container, and separately labeled optional trace-tutor activities;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
 - an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
@@ -42,7 +42,7 @@ SystemStudio runs the complete upstream Digital v0.31 application rather than a 
 
 ## Assembly boundary
 
-The real execution path invokes actual NASM and GNU `ld` for ELF32 on Linux. Exact MASM/Irvine32 invokes Microsoft `ml.exe`, Microsoft `link.exe`, and the official Irvine library on Windows. The separate Instruction Trace Tutor is a bounded visualization, not an assembler; it does not emit machine code and cannot establish toolchain compatibility.
+The assembly path invokes actual NASM and GNU `ld`, executes a self-checking ELF32 program, and drives an actual GDB session. It uses host tools on x86 Linux or a hardened course container with NASM, GNU `ld`, GDB, and QEMU-i386 on Windows/macOS. The separate Instruction Trace Tutor is a bounded optional visualization, not an assembler; it does not emit machine code and cannot establish toolchain compatibility.
 
 ## Deliberately excluded
 

@@ -1,11 +1,12 @@
-export const TUTORIAL_VERSION = 11;
+export const TUTORIAL_VERSION = 12;
 
 export const TUTORIAL_STEP_IDS = [
   'choose-environment',
   'canvas-and-materials',
   'diagnose-environment',
   'concept-to-circuit',
-  'concept-to-assembly',
+  'nasm-build-workflow',
+  'nasm-debug-workflow',
   'inspect-evidence',
   'ask-for-help',
   'recover-and-continue'

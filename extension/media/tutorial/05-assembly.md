@@ -1,9 +1,20 @@
-# Real execution and a separate trace tutor
+# One NASM 32-bit workflow
 
-Open the **Hands-on Lab Center** and choose one of five mapped traces: register arithmetic, flags and a branch, an array loop, a stack frame, or virtual console input. Each path asks for a prediction before opening its original example beside the clearly labeled Instruction Trace Tutor.
+Fall 2026 uses NASM 32-bit for student-authored x86 work. Create the NASM
+workspace, open an actual source, predict its state, and use **Build and run**.
+SystemStudio invokes NASM and GNU `ld`; a self-checking program reports `PASS`
+and exit code 0 only when its included cases succeed.
 
-Use **Build and Run with Real Assembly Toolchain** when the evidence must come from an actual assembler, linker, executable, and program output. Actual NASM/ELF32 is supported on Linux; exact Microsoft MASM/Irvine32 is available only when the Windows `ml.exe`, `link.exe`, and official Irvine library are configured.
+Open the **Actual NASM Debug Workbench**, start GDB, and continue to a named
+NASM label such as `inspect_after_add`. Compare EAX–EDI, EBP, ESP, EIP,
+decoded EFLAGS, stack, memory, source location, and Intel disassembly with the
+prediction. Step one actual instruction and explain every changed value.
 
-Use the separately labeled **Instruction Trace Tutor** only for prediction practice. Step while observing its teaching-model registers, flags, memory, stack, virtual input/output, and control flow. The tutor does not emit machine code, and loading a file there is not evidence that MASM or NASM accepts it.
+On x86 Linux the extension can use NASM, GNU `ld`, and GDB directly. On
+Windows/macOS it uses the locally built course container after Docker Desktop
+is available and the student confirms setup. The container executes without
+network access. Docker itself is not silently installed.
 
-When stuck, use the chat entry. The local FAQ routes topic, tool, and submission questions without calling AI; U-M Maizey provides optional source-grounded conversation in Canvas; **Ask a Question Before Class** sends a structured draft to the Canvas discussion. Attempt an ungraded practice question before asking Maizey for a hint. For graded work, request a diagnostic question, analogous example, source, or critique of your own step—not a final answer, finished circuit, code, report, or submission-ready artifact. None knows or changes private grades, grants exceptions, or submits coursework.
+The optional Instruction Trace Tutor is conceptual practice, not build or
+debug evidence. NASM targets IA-32 x86 and is separate from the Digital
+project’s 4-bit datapath and 8-bit instructional words.

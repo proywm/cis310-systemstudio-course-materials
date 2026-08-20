@@ -163,7 +163,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Build with guided labs',
-            '7 circuits · 8 assembly traces · self-paced',
+            '7 circuits · 7 actual NASM labs · self-paced',
             'systemstudioCis310.openGuidedLabs',
             'tools'
           ),
@@ -256,13 +256,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   private async assemblyItems(): Promise<StatusNode[]> {
     const trace = await this.assemblyManager.getStatus();
     const real = await this.nativeAssemblyManager.status();
-    const status = new vscode.TreeItem('Real assembly toolchains', vscode.TreeItemCollapsibleState.None);
-    status.iconPath = new vscode.ThemeIcon(real.nasm.available || real.masm.available ? 'verified-filled' : 'tools');
-    status.description = `NASM ${toolchainStateLabel(real.nasm.state)} · MASM ${toolchainStateLabel(real.masm.state)}`;
-    status.tooltip = `${real.nasm.detail}\n${real.masm.detail}`;
+    const status = new vscode.TreeItem('NASM 32-bit workbench', vscode.TreeItemCollapsibleState.None);
+    status.iconPath = new vscode.ThemeIcon(real.available ? 'verified-filled' : 'tools');
+    status.description = `${toolchainStateLabel(real.state)}${real.runtime ? ` · ${real.runtime === 'native-linux' ? 'native' : 'course container'}` : ''}`;
+    status.tooltip = real.detail;
     status.command = {
       command: 'systemstudioCis310.checkAssemblyEnvironment',
-      title: 'Check real assembly toolchains'
+      title: 'Check NASM workbench environment'
     };
     const tutor = new vscode.TreeItem('Instruction trace tutor', vscode.TreeItemCollapsibleState.None);
     tutor.iconPath = new vscode.ThemeIcon(trace.embeddedReady ? 'debug-alt' : 'warning');
@@ -270,12 +270,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
     tutor.tooltip = trace.detail;
     return [
       status,
-      actionItem('Build and run with a real toolchain', 'systemstudioCis310.buildRunAssembly', 'run'),
+      actionItem('Open actual NASM debug workbench', 'systemstudioCis310.openNasmWorkbench', 'debug-alt'),
+      actionItem('Build and run actual NASM code', 'systemstudioCis310.buildRunAssembly', 'run'),
       tutor,
       actionItem('Open guided assembly labs', 'systemstudioCis310.openGuidedLabs', 'map', ['assembly-register-arithmetic']),
-      actionItem('Create real-toolchain and trace examples', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
-      actionItem('Open instruction trace tutor', 'systemstudioCis310.openAssemblyLab', 'debug-alt'),
-      actionItem('Open assembly toolchain guide', 'systemstudioCis310.openMasmGuide', 'book')
+      actionItem('Create NASM lab workspace', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
+      actionItem('Open optional instruction trace tutor', 'systemstudioCis310.openAssemblyLab', 'symbol-event'),
+      actionItem('Open NASM workbench guide', 'systemstudioCis310.openNasmGuide', 'book')
     ];
   }
 
@@ -315,11 +316,11 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   }
 }
 
-function toolchainStateLabel(state: 'ready' | 'setup' | 'missing-linker' | 'unsupported'): string {
+function toolchainStateLabel(state: 'ready' | 'setup' | 'missing-debugger' | 'unsupported'): string {
   switch (state) {
     case 'ready': return 'ready';
     case 'setup': return 'setup needed';
-    case 'missing-linker': return 'missing ld';
+    case 'missing-debugger': return 'missing GDB';
     case 'unsupported': return 'unsupported host';
   }
 }

@@ -31,6 +31,15 @@ On Debian/Ubuntu headless Linux, SystemStudio can ask the host package manager t
 
 The real NASM path invokes the host NASM and GNU linker. On Debian/Ubuntu, SystemStudio can ask the distribution package manager to download NASM into private extension storage; NASM is BSD-2-Clause licensed and is not bundled in the VSIX.
 
-The exact Windows path invokes Microsoft `ml.exe` and `link.exe` already installed under their Microsoft license. SystemStudio does not redistribute those binaries. After explicit confirmation, it can download the official `Irvine.zip` educational resources from the pinned `surferkip/asmbook` repository and verify SHA-256 `91f08e4dacf517cbe14b08f9af5ac3cdd676dbab8e452671baa81443b3c0d881`. The upstream repository states that these files may be downloaded and used for educational purposes and remain the author’s property.
+The portable assembly course image installs the Debian-distributed NASM assembler, GNU binutils, GDB, and QEMU user-mode emulator under their respective upstream licenses. The image is built locally from the pinned Dockerfile; SystemStudio does not redistribute a prebuilt image. Student runs disable networking, drop capabilities, use a read-only container root, and mount only a private build directory read/write.
 
-The separate IA-32 Instruction Trace Tutor and its formative examples are original SystemStudio source code. It is not Microsoft MASM, NASM, or the Irvine32 binary library and is not endorsed by Microsoft or the textbook author.
+Paul A. Carter's *PC Assembly Language* is linked, not redistributed. Its source repository declares the book under CC BY-NC-SA 4.0. The official NASM manual is linked as a syntax reference.
+
+The separate IA-32 Instruction Trace Tutor and its formative examples are original SystemStudio source code. It is not NASM or GDB and is not endorsed by their maintainers or the book author.
+
+## Tutor companion
+
+The original Orbit tutor-companion image was generated for this course project
+with OpenAI's built-in image-generation tool. It does not reuse VS Code Pets
+sprites or characters. The retained prompt and accessibility boundary are in
+`media/TUTOR_COMPANION_PROMPT.md`.

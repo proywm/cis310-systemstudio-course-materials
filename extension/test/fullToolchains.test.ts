@@ -35,7 +35,7 @@ describe('full Digital and real assembly declarations', () => {
 
   it('ships a NASM source that must assemble and execute as real ELF32 machine code', () => {
     const source = readFileSync(
-      path.join(root, 'assembly-starter', 'real-toolchains', 'nasm-linux', 'LoopSum.asm'),
+      path.join(root, 'assembly-starter', 'nasm-elf32', 'LoopSum.asm'),
       'utf8'
     );
     assert.match(source, /^bits 32$/m);
@@ -51,14 +51,19 @@ describe('full Digital and real assembly declarations', () => {
     assert.doesNotMatch(panel, /No Visual Studio • no Docker • every OS/);
   });
 
-  it('offers explicit real-toolchain choices without claiming a bundled VM or container', () => {
+  it('offers one actual NASM/GDB path with a hardened cross-platform course container', () => {
     const extension = readFileSync(path.join(root, 'src', 'extension.ts'), 'utf8');
     const manager = readFileSync(path.join(root, 'src', 'nativeAssemblyManager.ts'), 'utf8');
-    assert.match(extension, /Auto-detect from source/);
-    assert.match(extension, /Actual NASM → ELF32/);
-    assert.match(extension, /Exact Microsoft MASM \+ Irvine32/);
-    assert.match(manager, /does not ship a Linux VM or container/);
-    assert.doesNotMatch(manager, /portable course container/);
+    const manifest = readFileSync(path.join(root, 'package.json'), 'utf8');
+    const dockerfile = readFileSync(path.join(root, 'media', 'nasm-container', 'Dockerfile'), 'utf8');
+    const debuggerScript = readFileSync(path.join(root, 'media', 'nasm-container', 'debug-nasm.sh'), 'utf8');
+    assert.match(manifest, /Open Actual NASM Debug Workbench/);
+    assert.doesNotMatch(extension, /Exact Microsoft MASM \+ Irvine32|Auto-detect from source/);
+    assert.match(manager, /systemstudio-cis310-nasm:0\.20\.0/);
+    assert.match(manager, /--cap-drop/);
+    assert.match(manager, /--network/);
+    assert.match(dockerfile, /qemu-user/);
+    assert.match(debuggerScript, /qemu-i386 -g 1234/);
   });
 
   it('discloses the streamed desktop screen-reader boundary', () => {
@@ -68,11 +73,11 @@ describe('full Digital and real assembly declarations', () => {
     assert.match(editor, /screen-reader-equivalent circuit editor/);
   });
 
-  it('archives pre-0.12 assembly guides during a safe workspace upgrade', () => {
+  it('archives pre-0.20 assembly guides during a safe workspace upgrade', () => {
     const upgrader = readFileSync(path.join(root, 'src', 'core', 'assemblyGuideUpgrade.ts'), 'utf8');
-    assert.match(upgrader, /systemstudio-assembly-guide: 0\.12/);
-    assert.match(upgrader, /COMPATIBILITY-pre-0\.12\.md/);
-    assert.match(upgrader, /IRVINE32_PROFILE-pre-0\.12\.md/);
+    assert.match(upgrader, /systemstudio-assembly-guide: 0\.20/);
+    assert.match(upgrader, /COMPATIBILITY-pre-0\.20\.md/);
+    assert.match(upgrader, /LEGACY-IRVINE32_PROFILE\.md/);
     assert.match(upgrader, /await rename\(destination, archived\)/);
   });
 });

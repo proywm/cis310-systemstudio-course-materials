@@ -468,8 +468,8 @@ function starterReadme(): string {
     `5. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
     `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n` +
     `7. Submit the required files through the current Fall 2026 Canvas assignment.\n\n` +
-    `For assembly programming, read \`assembly/README.md\`. Use **Build and Run with Real Assembly Toolchain** ` +
-    `for actual NASM or exact Windows MASM/Irvine32. The separately labeled trace tutor is only a learning visualization.\n\n` +
+    `For assembly programming, read \`assembly/README.md\`. Use the **Actual NASM Debug Workbench** ` +
+    `for NASM assembly, ELF32 linking/execution, and GDB inspection. The separately labeled trace tutor is only an optional learning visualization.\n\n` +
     `No ALU, register-file, or processor solution is bundled. This protects the learning task while ` +
     `retaining a small half-adder example for tool orientation.\n\n` +
     `## Suggested learning sequence\n\n` +
@@ -487,6 +487,6 @@ function starterThirdPartyNotice(): string {
     `- License: ${DIGITAL_RELEASE.licenseName}\n` +
     `- License text: ${DIGITAL_RELEASE.licenseUrl}\n\n` +
     `SystemStudio downloads and runs the upstream Digital release rather than reimplementing its editor. The in-editor ` +
-    `Linux display uses noVNC (MPL-2.0) as a transport only. The real assembly path invokes external toolchains; ` +
-    `Microsoft MASM is never bundled or emulated. The separate trace tutor is original SystemStudio code.\n`;
+    `Linux display uses noVNC (MPL-2.0) as a transport only. The actual assembly path invokes NASM, GNU ld, GDB, ` +
+    `and QEMU-i386 when the course container is used. The separate trace tutor is original SystemStudio code.\n`;
 }

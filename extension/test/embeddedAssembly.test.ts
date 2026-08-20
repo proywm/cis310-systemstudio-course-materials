@@ -269,68 +269,28 @@ END main
     assert.equal(snapshot.registers.EAX, 32);
   });
 
-  it('executes every assembly example used by the guided labs', () => {
+  it('executes every optional source-level trace-tutor example', () => {
     const source = (directory: string, name: string) => readFileSync(
       path.join(process.cwd(), 'assembly-starter', directory, name),
       'utf8'
     );
-    const addTwo = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('irvine32', 'AddTwo.asm'), { profile: 'irvine32' })
-    ).run();
-    const consoleInput = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('irvine32', 'ConsoleInput.asm'), { profile: 'irvine32' }),
-      { input: '-42\nAda Lovelace\n' }
+    const registerArithmetic = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('trace-tutor-examples', 'RegisterArithmetic.asm'), { profile: 'nasm-ia32' })
     ).run();
     const flagsBranch = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('irvine32', 'FlagsBranch.asm'), { profile: 'irvine32' })
+      assembleEmbeddedX86(source('trace-tutor-examples', 'FlagsBranch.asm'), { profile: 'nasm-ia32' })
     ).run();
     const stackCall = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('irvine32', 'StackCall.asm'), { profile: 'irvine32' })
+      assembleEmbeddedX86(source('trace-tutor-examples', 'StackCall.asm'), { profile: 'nasm-ia32' })
     ).run();
-    const nasm = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('nasm-ia32', 'LoopSum.asm'), { profile: 'nasm-ia32' })
-    ).run();
-    const linearSearch = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'LinearSearch.asm'), { profile: 'irvine32' })
-    ).run();
-    const binaryIterative = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'BinarySearchIterative.asm'), { profile: 'irvine32' })
-    ).run();
-    const binaryRecursive = new EmbeddedX86Machine(
-      assembleEmbeddedX86(source('real-toolchains/masm-irvine', 'BinarySearchRecursive.asm'), { profile: 'irvine32' })
+    const loop = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('trace-tutor-examples', 'LoopSum.asm'), { profile: 'nasm-ia32' })
     ).run();
 
-    assert.match(addTwo.output, /EAX=0x0000002A/);
-    assert.match(consoleInput.output, /You entered -42; name=Ada Lovelace/);
-    assert.equal(consoleInput.inputRemaining, '');
-    assert.equal(flagsBranch.registers.EBX, 1);
-    assert.equal(stackCall.registers.EAX, 42);
-    assert.equal(stackCall.registers.EBX, 32);
-    assert.equal(nasm.output, '30\n');
-    assert.equal(linearSearch.registers.EAX, 3);
-    assert.equal(binaryIterative.registers.EAX, 4);
-    assert.equal(binaryRecursive.registers.EAX, 4);
-  });
-
-  it('trace-tests search found, absent, first, and last cases', () => {
-    const searchSource = (name: string) => readFileSync(
-      path.join(process.cwd(), 'assembly-starter', 'real-toolchains', 'masm-irvine', name),
-      'utf8'
-    );
-    const run = (source: string) => new EmbeddedX86Machine(
-      assembleEmbeddedX86(source, { profile: 'irvine32' })
-    ).run().registers.EAX;
-
-    const linear = searchSource('LinearSearch.asm');
-    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 4')), 0);
-    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 3')), 4);
-    assert.equal(run(linear.replace('targetValue DWORD 19', 'targetValue DWORD 99')), 0xffffffff);
-
-    for (const name of ['BinarySearchIterative.asm', 'BinarySearchRecursive.asm']) {
-      const binary = searchSource(name);
-      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 3')), 0, `${name} first`);
-      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 44')), 6, `${name} last`);
-      assert.equal(run(binary.replace('targetValue  DWORD 25', 'targetValue  DWORD 20')), 0xffffffff, `${name} absent`);
-    }
+    assert.equal(registerArithmetic.registers.EAX, 12);
+    assert.equal(flagsBranch.registers.EAX, 2);
+    assert.equal(flagsBranch.registers.EBX, 2);
+    assert.equal(stackCall.registers.EAX, 13);
+    assert.equal(loop.registers.EAX, 15);
   });
 });

@@ -18,12 +18,6 @@ export interface GuidedCircuitArtifact {
 export interface GuidedAssemblyArtifact {
   kind: 'assembly';
   relativePath: string;
-  profile: 'irvine32' | 'nasm-ia32';
-  realArtifacts?: readonly {
-    id: 'nasm-linux' | 'masm-irvine-windows';
-    label: string;
-    relativePath: string;
-  }[];
 }
 
 export interface GuidedLab {
@@ -52,12 +46,31 @@ export type GuidedLabRequest =
   | { type: 'toggle-step'; labId: string; stepId: string; completed: boolean }
   | { type: 'open-source'; labId: string; source: 'reading' | 'video' | 'lecture' }
   | { type: 'open-artifact'; labId: string }
-  | { type: 'open-real-artifact'; labId: string; artifactId: 'nasm-linux' | 'masm-irvine-windows' }
   | { type: 'open-tutor'; labId: string }
   | { type: 'reset-lab'; labId: string };
 
 const circuitStep = (id: string, title: string, instruction: string, evidence: string): GuidedLabStep =>
   ({ id, title, instruction, evidence });
+
+const nasmSteps = (breakpoint: string, prediction: string, experiment: string): readonly GuidedLabStep[] => [
+  circuitStep('read', 'Read the mapped sources', 'Read the focused open-book sections and accessible lecture before opening code.', 'One prerequisite idea restated in your own words.'),
+  circuitStep('predict', 'Predict before running', prediction, 'A written register/flag/stack prediction.'),
+  circuitStep('build', 'Build and run actual code', 'Open the actual NASM Workbench and select Build and run. Resolve every assembler diagnostic before debugging.', 'NASM and linker success plus executable output and exit code.'),
+  circuitStep('breakpoint', 'Continue to the evidence label', `Start the debugger, enter ${breakpoint} as the breakpoint, and select Continue.`, 'The actual EIP/source location and current disassembly row.'),
+  circuitStep('inspect', 'Inspect architectural state', 'Compare registers, decoded EFLAGS, stack, memory, and Intel disassembly with the prediction. Identify the earliest mismatch.', 'An expected-versus-observed evidence table.'),
+  circuitStep('experiment', 'Make one controlled change', experiment, 'A second prediction, actual build, and observed result.'),
+  circuitStep('explain', 'Explain and return to Canvas', 'Explain which instruction caused each important change. Then verify the live Canvas requirements and submit only your own work.', 'A concise causal explanation and checked Canvas destination.')
+];
+
+const searchSteps = (breakpoint: string, prediction: string, cases: string): readonly GuidedLabStep[] => [
+  circuitStep('contract', 'State the function contract', 'Define the target input, zero-based found result, and -1 absent sentinel before opening code.', 'A precise input/output contract.'),
+  circuitStep('predict', 'Predict the algorithm state', prediction, 'A paper trace made before execution.'),
+  circuitStep('build', 'Run the self-checking executable', 'Build and run actual NASM code. Treat PASS with exit code 0 as formative evidence, not a course grade.', 'Assembler/linker success, PASS output, and exit code 0.'),
+  circuitStep('debug', 'Stop inside the algorithm', `Start actual GDB, continue to ${breakpoint}, and inspect registers, flags, memory, stack, and disassembly.`, 'Actual state at the named label.'),
+  circuitStep('step', 'Step a complete decision', 'Step through comparison, branch, and state update; stop at the first mismatch from the paper trace.', 'Before/after state tied to actual instructions.'),
+  circuitStep('cases', 'Exercise meaningful cases', cases, 'Found, boundary, and absent expected/observed results.'),
+  circuitStep('explain', 'Explain complexity and submit correctly', 'Explain termination and comparison growth, then verify the current Canvas contract before submitting personal work.', 'A justified explanation and Canvas receipt when submitted.')
+];
 
 export const GUIDED_LABS: readonly GuidedLab[] = [
   {
@@ -180,162 +193,67 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     reflection: 'Which signals belong to operation computation, and which belong to control?'
   },
   {
-    id: 'assembly-register-arithmetic', kind: 'assembly', title: 'Trace register arithmetic',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
-    requiredForModule: true,
-    purpose: 'Connect MOV and ADD source statements to EAX and arithmetic flags.',
-    boundary: 'The bundled example uses original constants and is not a solution to Homework 3.',
-    artifact: { kind: 'assembly', relativePath: 'irvine32/AddTwo.asm', profile: 'irvine32' },
-    steps: [
-      circuitStep('predict', 'Predict EAX', 'Before loading the trace model, compute EAX after each MOV/ADD instruction and note which flags might change.', 'A line-by-line EAX prediction.'),
-      circuitStep('build', 'Load the trace model', 'Open the Instruction Trace Tutor with the Irvine32-style profile or Auto-detect and select Load trace model.', 'The next source instruction and initial teaching-state registers are visible; this is not assembler evidence.'),
-      circuitStep('step-mov', 'Step through MOV', 'Step once and compare EAX with your prediction. Explain why moving a value does not perform addition.', 'The observed EAX value after MOV.'),
-      circuitStep('step-add', 'Step through ADD', 'Step again and inspect EAX, ZF, SF, CF, and OF.', 'The result and four observed flags.'),
-      circuitStep('modify', 'Change one constant', 'Edit one constant, predict the new result, rebuild, and step again.', 'A second prediction/observation pair.'),
-      circuitStep('explain', 'Explain source-to-state evidence', 'Name the exact instruction responsible for each register or flag change.', 'A concise trace explanation.')
-    ],
-    reflection: 'Which evidence distinguishes a wrong prediction from a tool or syntax error?'
+    id: 'assembly-register-arithmetic', kind: 'assembly', title: 'Build and debug register arithmetic',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 0, requiredForModule: true,
+    purpose: 'Connect NASM MOV, ADD, and CMP to actual IA-32 registers, flags, disassembly, and executable evidence.',
+    boundary: 'The original constants are formative; this is not a solution to a current Canvas assignment.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/RegisterArithmetic.asm' },
+    steps: nasmSteps('inspect_after_add', 'Predict EAX after MOV/MOV/ADD and identify which instruction can change arithmetic flags.', 'Change one constant, predict the new EAX and test result, then rebuild.'),
+    reflection: 'Which evidence distinguishes a NASM syntax error, a wrong prediction, and a failing executable check?'
   },
   {
-    id: 'assembly-flags-branch', kind: 'assembly', title: 'Compare, inspect flags, and branch',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 3,
-    requiredForModule: false,
-    purpose: 'Observe how CMP updates flags and a conditional jump changes EIP.',
-    boundary: 'The example is a standalone signed-comparison trace, not submitted assignment code.',
-    artifact: { kind: 'assembly', relativePath: 'irvine32/FlagsBranch.asm', profile: 'irvine32' },
-    steps: [
-      circuitStep('predict', 'Predict the branch', 'Read the two compared values and predict whether JL is taken. Record the expected EBX marker.', 'A branch and EBX prediction.'),
-      circuitStep('build', 'Build and locate CMP', 'Build the source, then step until CMP is the next instruction.', 'The source line and pre-CMP registers are visible.'),
-      circuitStep('cmp', 'Execute CMP', 'Step CMP and inspect ZF, SF, CF, and OF without expecting either operand to change.', 'A flag snapshot with unchanged operands.'),
-      circuitStep('jump', 'Execute the conditional jump', 'Step JL and observe the next source line/EIP. Compare the taken path with your prediction.', 'The selected control-flow path.'),
-      circuitStep('reverse', 'Reverse the relationship', 'Change the first value so the comparison reverses, rebuild, and repeat.', 'A second branch outcome with evidence.'),
-      circuitStep('explain', 'Explain signed branching', 'Explain why signed less-than uses sign/overflow meaning rather than carry alone.', 'A flags-to-branch explanation.')
-    ],
-    reflection: 'Why does CMP change flags without storing a subtraction result in either operand?'
+    id: 'assembly-flags-branch', kind: 'assembly', title: 'Inspect flags and a signed branch',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 3, requiredForModule: false,
+    purpose: 'Use actual CMP/EFLAGS evidence to explain why a signed conditional branch is taken.',
+    boundary: 'The comparison values are standalone practice, not submitted code.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/FlagsBranch.asm' },
+    steps: nasmSteps('inspect_signed_compare', 'Predict ZF, SF, CF, OF and whether JGE is taken after comparing -3 with 2.', 'Reverse the operands, predict the new flags/path, then rebuild.'),
+    reflection: 'Why can signed less-than not be decided from CF alone?'
   },
   {
-    id: 'assembly-memory-loop', kind: 'assembly', title: 'Walk an array with a counted loop',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
-    requiredForModule: false,
-    purpose: 'Connect ESI addresses, ECX loop count, memory values, and an EAX accumulator.',
-    boundary: 'The NASM example sums a fixed original array and does not answer a current homework prompt.',
-    artifact: { kind: 'assembly', relativePath: 'nasm-ia32/LoopSum.asm', profile: 'nasm-ia32' },
-    steps: [
-      circuitStep('predict', 'Predict the first iteration', 'Record initial ESI, ECX, and EAX, then predict them after one loop body.', 'Three before/after register predictions.'),
-      circuitStep('build', 'Load the NASM-style trace', 'Select NASM-style trace model, load it, and locate the declared values in Data symbols.', 'The teaching-model array address and first value are visible; use the real NASM example for executable evidence.'),
-      circuitStep('load', 'Observe memory addressing', 'Step ADD EAX,[ESI] and verify the loaded value comes from the address in ESI.', 'A matching address, memory value, and accumulator change.'),
-      circuitStep('advance', 'Observe pointer and count changes', 'Step ADD ESI,4 and LOOP. Record the new pointer, ECX, and branch target.', 'Evidence for one complete iteration.'),
-      circuitStep('run', 'Run to completion', 'Predict the sum and doubled result, then Run and compare with output and EAX.', 'Final EAX and output match the prediction.'),
-      circuitStep('modify', 'Change the data, not the algorithm', 'Change one array element, predict the delta in the final output, rebuild, and run.', 'A controlled data-change experiment.')
-    ],
-    reflection: 'Why does ESI advance by four rather than one in this example?'
+    id: 'assembly-memory-loop', kind: 'assembly', title: 'Walk and sum an array',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 0, requiredForModule: false,
+    purpose: 'Relate ESI addresses, ECX loop count, memory words, EAX accumulation, and actual output.',
+    boundary: 'This fixed array is formative and does not answer a released homework prompt.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/LoopSum.asm' },
+    steps: nasmSteps('inspect_sum', 'Predict ESI, ECX, and EAX after the first and final loop iterations.', 'Change one array value, predict the output delta, then rebuild and run.'),
+    reflection: 'Why does ESI advance by four for each DD array element?'
   },
   {
-    id: 'assembly-linear-search', kind: 'assembly', title: 'Implement and verify linear search',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
-    requiredForModule: false,
-    purpose: 'Trace a complete array search, then verify equivalent MASM/Irvine32 or NASM/ELF32 code with a real toolchain.',
-    boundary: 'This uses an original fixed array and target for ungraded practice; it is not a completed answer to a released assignment.',
-    artifact: {
-      kind: 'assembly', relativePath: 'real-toolchains/masm-irvine/LinearSearch.asm', profile: 'irvine32',
-      realArtifacts: [
-        { id: 'nasm-linux', label: 'Build real NASM/ELF32 version', relativePath: 'real-toolchains/nasm-linux/LinearSearch.asm' },
-        { id: 'masm-irvine-windows', label: 'Build exact MASM/Irvine32 version', relativePath: 'real-toolchains/masm-irvine/LinearSearch.asm' }
-      ]
-    },
-    steps: [
-      circuitStep('contract', 'State the search contract', 'Before opening code, define the input, the zero-based index returned when found, and the -1 sentinel returned when absent.', 'A three-part input/output contract.'),
-      circuitStep('predict', 'Trace the comparisons on paper', 'For target 19 in [4,12,7,19,3], list each compared index/value and predict the returned index.', 'Comparisons at indices 0–3 and predicted result 3.'),
-      circuitStep('trace', 'Trace the MASM source', 'Open the trace source, step the loop, and watch ESI, ECX, EBX, EAX, and ZF. Stop at the first difference from your prediction.', 'A register/flag snapshot for at least two iterations and the match.'),
-      circuitStep('execute', 'Build and execute real code', 'Use the real NASM button on x86 Linux or exact MASM/Irvine32 button on configured Windows. Do not count a trace-tutor run as assembler evidence.', 'Assembler, linker, executable exit status, and PASS output or MASM register evidence.'),
-      circuitStep('missing', 'Test the absent-value path', 'Change only the target to a value not in the array, predict the number of comparisons, rebuild or retrace, and verify EAX=-1.', 'A found-versus-not-found expected/observed pair.'),
-      circuitStep('edge', 'Test a boundary position', 'Use the first or last array value as the target and explain how the observed iteration count follows from linear search.', 'One boundary result and comparison count.'),
-      circuitStep('canvas', 'Return to the released assignment', 'Open the current Canvas item, identify which evidence and files it actually requests, and submit only your own work.', 'A checked Canvas requirement and later submission receipt.')
-    ],
-    reflection: 'Why is the worst-case comparison count linear in the number of array elements?'
+    id: 'assembly-linear-search', kind: 'assembly', title: 'Test linear search',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 0, requiredForModule: false,
+    purpose: 'Debug a complete NASM array search and verify found, boundary, and absent cases.',
+    boundary: 'The fixed data and tests are formative; follow the current Canvas contract for submitted work.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/LinearSearch.asm' },
+    steps: searchSteps('search_loop', 'For target 19, list each expected index/value comparison and the returned index.', 'Use first, last, and absent targets; retain PASS and exit-code evidence.'),
+    reflection: 'Why is the worst-case comparison count linear in the number of elements?'
   },
   {
-    id: 'assembly-binary-search-iterative', kind: 'assembly', title: 'Implement iterative binary search',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 1, sourceVideoIndex: 0,
-    requiredForModule: false,
-    purpose: 'Maintain low/high bounds in a loop and verify that each comparison discards the correct half of a sorted array.',
-    boundary: 'The original seven-element data set is formative practice and must not replace a Canvas-assigned algorithm or data set.',
-    artifact: {
-      kind: 'assembly', relativePath: 'real-toolchains/masm-irvine/BinarySearchIterative.asm', profile: 'irvine32',
-      realArtifacts: [
-        { id: 'nasm-linux', label: 'Build real NASM/ELF32 version', relativePath: 'real-toolchains/nasm-linux/BinarySearchIterative.asm' },
-        { id: 'masm-irvine-windows', label: 'Build exact MASM/Irvine32 version', relativePath: 'real-toolchains/masm-irvine/BinarySearchIterative.asm' }
-      ]
-    },
-    steps: [
-      circuitStep('precondition', 'Check the sorted precondition', 'Confirm the array is ascending and explain why the half-discard decision is invalid for unsorted data.', 'A sortedness check and one-sentence consequence.'),
-      circuitStep('predict', 'Predict low, high, and midpoint', 'For target 25, record each expected low/high/mid triple until index 4 is found.', 'A bounded iteration table ending at index 4.'),
-      circuitStep('trace', 'Trace one bound update', 'Step CMP and the following conditional path. Verify EBX is low, ECX is high, EDX is mid, and only the correct bound changes.', 'Before/after bounds and the comparison result.'),
-      circuitStep('execute', 'Build and execute real code', 'Run the matching actual NASM/ELF32 or exact Windows MASM/Irvine32 path and retain its assembler/linker/program evidence.', 'A real-toolchain result kept separate from the teaching trace.'),
-      circuitStep('missing', 'Exercise termination when absent', 'Choose a value between two elements, predict the last valid interval, and verify that low eventually becomes greater than high and EAX=-1.', 'The final invalid interval and returned sentinel.'),
-      circuitStep('compare', 'Compare with linear search', 'For this same target, count the comparisons in both algorithms and explain what sortedness buys.', 'Two comparison counts plus a justified contrast.'),
-      circuitStep('canvas', 'Return to the released assignment', 'Check Canvas for the required syntax, function contract, tests, evidence, AI rule, and submission format before adapting any practice idea.', 'A Canvas-aligned personal implementation plan.')
-    ],
-    reflection: 'Which invariant about low, high, and the possible target region must remain true after every iteration?'
+    id: 'assembly-binary-search-iterative', kind: 'assembly', title: 'Test iterative binary search',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 0, requiredForModule: false,
+    purpose: 'Inspect low/high/mid updates and verify that each comparison discards the correct half.',
+    boundary: 'The seven-element data set is formative and must not replace a Canvas-assigned implementation.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/BinarySearchIterative.asm' },
+    steps: searchSteps('inspect_midpoint', 'For target 25, predict every low/high/mid triple and the found index.', 'Test an absent value between elements and explain the final low>high interval.'),
+    reflection: 'Which invariant keeps the possible target region within low through high?'
   },
   {
-    id: 'assembly-binary-search-recursive', kind: 'assembly', title: 'Implement recursive binary search',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 2,
-    requiredForModule: false,
-    purpose: 'Connect binary-search subproblems to stack arguments, return addresses, preserved registers, base cases, and recursive returns.',
-    boundary: 'This is an original recursion/stack exercise; students must follow the current Canvas contract and produce their own submitted code.',
-    artifact: {
-      kind: 'assembly', relativePath: 'real-toolchains/masm-irvine/BinarySearchRecursive.asm', profile: 'irvine32',
-      realArtifacts: [
-        { id: 'nasm-linux', label: 'Build real NASM/ELF32 version', relativePath: 'real-toolchains/nasm-linux/BinarySearchRecursive.asm' },
-        { id: 'masm-irvine-windows', label: 'Build exact MASM/Irvine32 version', relativePath: 'real-toolchains/masm-irvine/BinarySearchRecursive.asm' }
-      ]
-    },
-    steps: [
-      circuitStep('base', 'Name both base cases', 'Write the found base case and the low>high absent base case before tracing any CALL.', 'Two explicit stopping conditions.'),
-      circuitStep('frame', 'Map one stack frame', 'Identify target at [EBP+8], low at [EBP+12], high at [EBP+16], and the saved EBP/return address. Predict ESP after the prologue.', 'A labeled frame diagram with addresses relative to EBP.'),
-      circuitStep('recurse', 'Predict the smaller subproblem', 'For target 25, calculate mid and state the exact low/high arguments passed to the next call.', 'One parent interval and one strictly smaller child interval.'),
-      circuitStep('trace', 'Trace nested calls and returns', 'Step through at least two CALL levels, inspect the stack, then follow RET back while verifying EAX keeps the found index.', 'Two frame snapshots and the return path.'),
-      circuitStep('execute', 'Build and execute real code', 'Run the corresponding actual NASM/ELF32 or exact Windows MASM/Irvine32 source. Preserve real assembler/linker/executable evidence.', 'PASS/exit evidence or exact MASM/Irvine32 run evidence.'),
-      circuitStep('missing', 'Verify recursive termination', 'Use an absent target and confirm every call receives a smaller interval before the low>high base case returns -1.', 'An interval-size sequence ending at the absent base case.'),
-      circuitStep('explain', 'Compare loop and recursion', 'Explain which state lives in registers for the iterative version and which state is repeated in stack frames for the recursive version.', 'A precise control/state comparison.'),
-      circuitStep('canvas', 'Return to the released assignment', 'Open Canvas and confirm whether recursion, parameter conventions, register preservation, screenshots, and test cases are required.', 'A checked live requirement list and submission destination.')
-    ],
-    reflection: 'What guarantees that recursive binary search cannot call itself forever on a valid finite interval?'
+    id: 'assembly-binary-search-recursive', kind: 'assembly', title: 'Inspect recursive binary search',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 2, requiredForModule: false,
+    purpose: 'Connect recursive subproblems to actual stack frames, arguments, return addresses, and EAX.',
+    boundary: 'This recursion exercise is formative; students must produce their own Canvas submission.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/BinarySearchRecursive.asm' },
+    steps: searchSteps('inspect_recursive_frame', 'Name both base cases and map target, low, high, saved EBP, and return address in one frame.', 'Inspect two nested frames, then test the absent base case and return path.'),
+    reflection: 'What guarantees that each recursive call receives a strictly smaller interval?'
   },
   {
-    id: 'assembly-stack-call', kind: 'assembly', title: 'Trace a call and stack frame',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 2,
-    requiredForModule: false,
-    purpose: 'Observe CALL, a saved register, a frame pointer, RET, and restoration of ESP.',
-    boundary: 'The small procedure is an original trace example, not a project implementation.',
-    artifact: { kind: 'assembly', relativePath: 'irvine32/StackCall.asm', profile: 'irvine32' },
-    steps: [
-      circuitStep('predict', 'Predict preserved and changed state', 'Predict EAX, EBX, EBP, and ESP before CALL, inside the procedure, and after RET.', 'A three-point register/stack prediction.'),
-      circuitStep('call', 'Step CALL', 'Build and step to CALL, then execute it. Inspect EIP and the top of stack for the return address.', 'Visible control transfer and stack growth.'),
-      circuitStep('frame', 'Create the frame', 'Step PUSH EBP and MOV EBP,ESP. Identify the saved frame pointer and current frame base.', 'A stack and EBP snapshot.'),
-      circuitStep('preserve', 'Observe register preservation', 'Step PUSH/POP around the arithmetic and confirm EBX returns to its caller-visible value.', 'EBX before and after the procedure.'),
-      circuitStep('return', 'Leave and return', 'Step LEAVE and RET. Confirm ESP and EIP return to the caller path while EAX keeps the result.', 'Restored stack plus returned result.'),
-      circuitStep('explain', 'Explain the calling sequence', 'Describe separately what CALL, the procedure body, LEAVE, and RET contribute.', 'A four-part explanation tied to trace evidence.')
-    ],
-    reflection: 'Which stack value lets RET know where execution should continue?'
-  },
-  {
-    id: 'assembly-console-input', kind: 'assembly', title: 'Use virtual console input safely',
-    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 0,
-    requiredForModule: false,
-    purpose: 'Trace Irvine-style input contracts without OS-specific setup or a shared instructor credential.',
-    boundary: 'Input remains in the bounded trace-tutor model and the example is not a submitted program.',
-    artifact: { kind: 'assembly', relativePath: 'irvine32/ConsoleInput.asm', profile: 'irvine32' },
-    steps: [
-      circuitStep('contract', 'Read the procedure contracts', 'Identify the register used for ReadInt output and the EDX/ECX inputs plus EAX output used by ReadString.', 'A short input/output register table.'),
-      circuitStep('input', 'Plan virtual input', 'Enter one signed integer and one name on separate lines in Virtual console input.', 'Two deliberate input lines with no private information.'),
-      circuitStep('readint', 'Step ReadInt', 'Step through the first call and inspect EAX and OF. Compare with the entered integer.', 'The integer and overflow evidence.'),
-      circuitStep('readstring', 'Step ReadString', 'Observe the buffer address, maximum length, returned character count, and Data symbols.', 'EDX, ECX, EAX, and buffer evidence.'),
-      circuitStep('invalid', 'Try a controlled invalid integer', 'Rebuild with a nonnumeric first line and observe OF and the badInput branch.', 'A reproducible error-path trace.'),
-      circuitStep('explain', 'Explain the model boundary', 'State why the tutor’s virtual input is portable and why it is not evidence of native Irvine32 behavior.', 'A portability explanation that explicitly separates the trace model from exact Windows execution.')
-    ],
-    reflection: 'What evidence shows whether a failure came from input validation or program control flow?'
+    id: 'assembly-stack-call', kind: 'assembly', title: 'Inspect a call and stack frame',
+    lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 4, sourceVideoIndex: 2, requiredForModule: false,
+    purpose: 'Observe actual CALL, argument placement, saved EBP, return address, RET, and restored ESP.',
+    boundary: 'The small add procedure is formative, not a project implementation.',
+    artifact: { kind: 'assembly', relativePath: 'nasm-elf32/StackCall.asm' },
+    steps: nasmSteps('inspect_stack_frame', 'Predict the stack from the two PUSH instructions through CALL and the frame prologue.', 'Change one argument, predict EAX, then rebuild and rerun the self-check.'),
+    reflection: 'Which stored stack value tells RET where execution should continue?'
   }
 ] as const;
 
@@ -357,8 +275,8 @@ export function guidedAssemblyTutorPrompt(labId: string): string | undefined {
     `Learning purpose: ${lab.purpose}`,
     'First ask me to state my expected result, the earliest instruction where expected and observed state differ, and the register/flag/memory/stack evidence I have collected.',
     'Then give one diagnostic question or one small hint at a time. Use a smaller analogous example if I lack a prerequisite.',
-    'Do not write, repair, or complete my program; do not provide submission-ready MASM/NASM code; and do not infer current Canvas requirements.',
-    'Keep the Instruction Trace Tutor separate from real assembler/linker/executable evidence, and tell me when exact toolchain evidence is required.'
+    'Do not write, repair, or complete my program; do not provide submission-ready NASM code; and do not infer current Canvas requirements.',
+    'Use the actual NASM/GNU ld/GDB evidence when diagnosing build or execution behavior. Keep the optional Instruction Trace Tutor separate and tell me when actual toolchain evidence is required.'
   ].join('\n');
 }
 
@@ -417,10 +335,6 @@ export function parseGuidedLabRequest(value: unknown): GuidedLabRequest | undefi
   if (value.type === 'select') return { type: 'select', labId: lab.id };
   if (value.type === 'open-artifact') return { type: 'open-artifact', labId: lab.id };
   if (value.type === 'open-tutor' && lab.kind === 'assembly') return { type: 'open-tutor', labId: lab.id };
-  if (value.type === 'open-real-artifact' && (value.artifactId === 'nasm-linux' || value.artifactId === 'masm-irvine-windows')
-    && lab.artifact.kind === 'assembly' && lab.artifact.realArtifacts?.some((artifact) => artifact.id === value.artifactId)) {
-    return { type: 'open-real-artifact', labId: lab.id, artifactId: value.artifactId };
-  }
   if (value.type === 'reset-lab') return { type: 'reset-lab', labId: lab.id };
   if (value.type === 'open-source' && (value.source === 'reading' || value.source === 'video' || value.source === 'lecture')) {
     return { type: 'open-source', labId: lab.id, source: value.source };

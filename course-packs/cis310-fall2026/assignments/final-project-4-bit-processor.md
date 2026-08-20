@@ -17,7 +17,7 @@ The presentation occurs during **Fall 2026 final examination week**. Exact logis
 5. **System evidence:** show expected versus observed PC, state, IR, register operands/results, data memory, and write-enable timing.
 6. **Presentation:** explain the datapath, control sequence, tests, limitations, and each authorized team member’s contribution.
 
-An 8-bit instruction word carries control fields; the general-purpose registers, ALU data, and data-memory words remain 4 bits. If Canvas separately requests IA-32 MASM/NASM work, present it as a different toolchain artifact—x86 code does not execute on this instructional processor.
+An 8-bit instruction word carries control fields; the general-purpose registers, ALU data, and data-memory words remain 4 bits. If Canvas separately requests IA-32 NASM work, present it as a different toolchain artifact—x86 code does not execute on this instructional processor.
 
 ## Pre-presentation verification
 

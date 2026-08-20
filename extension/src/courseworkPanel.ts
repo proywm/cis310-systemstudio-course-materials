@@ -63,7 +63,7 @@ const MEETING_TOPICS = [
   ['Processor components and pipelining', 'lecture-11'],
   ['Address spaces and x86 registers', 'lecture-12'],
   ['Assembly syntax, translation, and execution model', 'lecture-12'],
-  ['Assembly trace: registers, flags, stack, and memory', 'lecture-12'],
+  ['Actual NASM/GDB evidence: registers, flags, stack, memory, and disassembly', 'lecture-12'],
   ['Integration, final-project planning, and review', 'lecture-10']
 ] as const;
 

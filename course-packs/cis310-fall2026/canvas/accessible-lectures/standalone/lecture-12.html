@@ -74,7 +74,7 @@
 
 <h2>Trace one instruction before running many</h2>
 <p>For MOV, identify source and destination and predict the destination value. For ADD or SUB, predict the result and which flags may change. CMP updates flags as if subtraction occurred but does not store the arithmetic result in either operand. A conditional jump reads relevant flags and may update EIP.</p>
-<p>CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A trace should record before-state, instruction, after-state, and evidence. SystemStudio’s Instruction Trace Tutor is a learning model, not an assembler; real NASM or exact Windows MASM/Irvine execution is separate.</p>
+<p>CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A useful debug record includes before-state, instruction, after-state, and evidence. SystemStudio’s NASM Workbench assembles and links the actual ELF32 source, then reads registers, EFLAGS, stack, memory, and Intel disassembly from an actual GDB session. The optional Instruction Trace Tutor remains a conceptual model and is not build evidence.</p>
 
 
 <h2>Worked examples</h2>
@@ -110,14 +110,13 @@
 <h2>Apply the concept hands-on</h2>
 <p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
 <ul>
-<li><strong>Required assembly activity:</strong> Trace register arithmetic. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Compare, inspect flags, and branch. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Walk an array with a counted loop. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Implement and verify linear search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Implement iterative binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Implement recursive binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Trace a call and stack frame. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Use virtual console input safely. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Required assembly activity:</strong> Build and debug register arithmetic. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Inspect flags and a signed branch. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Walk and sum an array. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Test linear search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Test iterative binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Inspect recursive binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Optional assembly activity:</strong> Inspect a call and stack frame. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
 </ul>
 
 <h2>Ask the approved U-M course tutor</h2>
@@ -135,6 +134,7 @@
 <li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch16_v02.pdf">Open reading 2: Tarnoff Chapter 16 — Intel 80x86 Processor</a>. Focus: §§16.2.1–16.2.3: registers, instruction pointer, stack pointer, and flags</li>
 <li><a href="https://faculty.etsu.edu/tarnoff/ntes2150/Ch17_v02.pdf">Open reading 3: Tarnoff Chapter 17 — Intel 80x86 Assembly Language</a>. Focus: §§17.1–17.4.3: source translation, data transfer, control flow, CALL, and RET</li>
 <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf">Open reading 4: OSTEP — The Abstraction: Address Spaces</a>. Focus: §13: process address space, code, static data, heap, stack, and memory virtualization</li>
+<li><a href="https://pacman128.github.io/pcasm/">Open reading 5: Paul Carter — PC Assembly Language</a>. Focus: §§1.2.5, 1.3–1.4, 2.1–2.3, 4.2–4.5, 4.8.1, and 5.1: NASM source, registers/flags, control flow, stack/calls, recursion, and arrays</li>
 </ul>
 <h3>Author videos</h3>
 <ul>

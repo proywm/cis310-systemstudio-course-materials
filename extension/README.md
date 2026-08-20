@@ -24,18 +24,12 @@ Digital is downloaded into VS Code global storage only after consent. The releas
 
 ### Assembly programming
 
-SystemStudio separates real execution from instructional visualization.
+Fall 2026 uses one student-facing x86 path: **NASM 32-bit → GNU ELF32 link → executable tests → actual GDB debugging**. The integrated workbench shows source location, EIP-aligned Intel disassembly, EAX–EDI/EBP/ESP/EIP, decoded EFLAGS, stack words, a validated memory watch, label/address breakpoints, single-instruction stepping, output, and exit status.
 
-**Build and Run with Real Assembly Toolchain** invokes actual external tools:
+- On x86 Linux, SystemStudio uses actual host NASM, GNU `ld`, and GDB. On Debian/Ubuntu, it can prepare NASM in private extension storage after explicit confirmation; it does not modify the system.
+- On Windows, macOS, or as a Linux fallback, it uses a locally built course container containing NASM, GNU `ld`, GDB, and QEMU-i386. Student execution has networking disabled, all capabilities dropped, a read-only container root, and only the private build directory writable. Docker Desktop is a prerequisite and is never installed silently.
 
-- NASM/ELF32 on Linux: actual `nasm`, GNU `ld`, and the resulting IA-32 executable. If NASM is absent on Debian/Ubuntu, the extension can install the distribution package privately after confirmation.
-- Exact MASM/Irvine32 on Windows: Microsoft `ml.exe`, Microsoft `link.exe`, and the official `Irvine32.lib`. SystemStudio discovers Visual Studio C++ tools when possible. It can download the author’s official pinned `Irvine.zip` after confirmation and checksum verification.
-
-Microsoft MASM is Windows-only. SystemStudio does not bundle it, emulate it on Linux/macOS, or call another interpreter “MASM.” Students use the verified NASM path on x86 Linux or an instructor-approved Windows environment when an assignment requires Irvine32.
-
-The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, or **Exact Microsoft MASM + Irvine32**. Auto-detect selects from source syntax; an explicit choice never falls back to the trace tutor. The assembly workflow does not ship a Linux VM or course toolchain container, and SystemStudio never installs Docker Desktop itself. Docker is used only to embed upstream Digital on Windows/macOS when the student already has Docker Desktop.
-
-**Instruction Trace Tutor** is a separate, clearly labeled learning simulator. It visualizes a bounded source-level model of registers, flags, memory, stack, virtual input/output, and control flow. It does not emit machine code. Loading or running a file there is not evidence that MASM or NASM accepts it.
+The **Instruction Trace Tutor** remains a separate optional conceptual simulator. It does not emit machine code, drive GDB, or prove that NASM accepts a file.
 
 ## Main student workflow
 
@@ -44,7 +38,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 3. Open **Coursework and Final Presentation** for the assignment roadmap, executable public circuit preflights, local file checks, final-presentation self-evaluation, opt-in Canvas-calendar import, missed-class recovery, diagnostics, and the manual grade estimate. These local indicators are not instructor grades.
 4. Check Canvas for live requirements, instructor evaluation, submission, and receipt.
 5. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
-6. For assembly, choose **Build and Run with Real Assembly Toolchain** for executable evidence. Use **Instruction Trace Tutor** only for prediction practice.
+6. For assembly, use the **Actual NASM Debug Workbench**: predict, build/run, break at an inspect label, compare machine state, step, and explain. Use **Instruction Trace Tutor** only for optional conceptual practice.
 7. Use the local FAQ, U-M Maizey learning-coach handoff, or structured Canvas Question Before Class when help is needed.
 
 ## Included learning features
@@ -57,7 +51,9 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 - a manual grade estimate using student-entered Canvas scores, published 15/65/20 weights, two-lowest participation-item drops, retained earned/possible point aggregation, and syllabus letter boundaries—visually separated from official instructor evaluation in Canvas;
 - opt-in local Canvas `.ics` import and a 27-meeting missed-class recovery route to the mapped accessible lesson;
 - 27-meeting Monday/Wednesday Fall 2026 calendar with confirmed 10:00–11:45 a.m., ELB 1329 `.ics` events;
-- seven guided circuit builds and eight assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation; the search labs also open retained real NASM/Linux and MASM/Irvine32 sources;
+- seven guided circuit builds and seven actual NASM/GDB labs, each mapped to reading, video, lecture, prediction, executable evidence, and explanation;
+- seven retained self-checking NASM programs covering arithmetic, flags/branches, array loops, stack/calls, linear search, and iterative/recursive binary search;
+- an original optional animated tutor companion with a text-equivalent interface, pause control, and automatic reduced-motion behavior;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
 - local FAQ routing, attempt-first AI tutor guardrails, and Canvas Questions Before Class support; and
 - no Google Drive dependency for the packaged syllabus, presentations, or assignments.
@@ -80,10 +76,11 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Create a New Digital Circuit` | Creates a non-overwriting blank `.dig` and opens Full Digital |
 | `CIS 310: Preview Digital Circuit` | Generates a read-only view with Digital’s official exporter |
 | `CIS 310: Run Digital Circuit Tests` | Runs embedded Digital testcases with the official CLI |
-| `CIS 310: Build and Run with Real Assembly Toolchain` | Invokes actual NASM/ELF32 or exact Windows MASM/Irvine32 |
+| `CIS 310: Build and Run Actual NASM` | Assembles, links, and executes actual NASM ELF32 code |
+| `CIS 310: Open Actual NASM Debug Workbench` | Opens actual GDB registers, flags, stack, memory, disassembly, breakpoints, stepping, and output |
 | `CIS 310: Open Instruction Trace Tutor` | Opens the non-assembler learning visualization |
-| `CIS 310: Check Real Assembly Toolchains` | Reports actual NASM and exact MASM/Irvine availability separately |
-| `CIS 310: Create Assembly Toolchain and Trace Examples` | Adds real NASM/MASM examples plus separate trace examples and guides |
+| `CIS 310: Check NASM Workbench Environment` | Reports the native or portable NASM/GDB runtime |
+| `CIS 310: Create NASM Assembly Workspace` | Adds actual self-checking NASM sources, optional trace examples, and guides |
 | `CIS 310: Open Hands-on Circuit and Assembly Labs` | Opens lecture-mapped guided builds and traces |
 | `CIS 310: Open Learning and Practice` | Opens preparation, practice, quiz, confidence, and review tools |
 | `CIS 310: Open Coursework and Final Presentation` | Opens assignment checklists, circuit preflights, final-presentation progression, grade estimate, Canvas-calendar import, recovery, and diagnostics |
@@ -94,11 +91,10 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 
 - `systemstudioCis310.nasmPath`
 - `systemstudioCis310.nasmLinkerPath`
-- `systemstudioCis310.masmPath`
-- `systemstudioCis310.masmLinkerPath`
-- `systemstudioCis310.irvineRoot`
+- `systemstudioCis310.nasmGdbPath`
+- `systemstudioCis310.nasmDockerPath`
 
-See the generated `assembly/COMPATIBILITY.md` and `assembly/IRVINE32_PROFILE.md` guides.
+See the generated `assembly/README.md`, `assembly/COMPATIBILITY.md`, and `assembly/OPEN_BOOK.md` guides.
 
 ## Security and privacy
 
@@ -121,15 +117,14 @@ npm run check
 npm run package
 ```
 
-Release verification includes unit tests, manifest/resource checks, packaging, VSIX installation, the official Digital CLI, an actual upstream Digital GUI session on Xvfb/x11vnc, input interaction on the upstream half-adder, and a real NASM → ELF32 object → GNU link → IA-32 execution smoke test. Platform-specific Microsoft MASM verification must run on Windows with the licensed Microsoft toolchain; the Linux build reports that path unavailable instead of substituting another engine.
+Release verification includes unit tests, manifest/resource checks, packaging, the official Digital CLI, an actual upstream Digital GUI session on Xvfb/x11vnc, and `npm run smoke:nasm`. The NASM smoke assembles, links, and executes all seven retained programs, then verifies an actual GDB breakpoint, registers, flags, stack, memory, disassembly, step, and output. Docker image configuration is statically checked here; a host with Docker daemon access is still required for the cross-platform runtime smoke.
 
 ## Remaining platform boundaries
 
 - Java is required for Full Digital on Linux and for native fallback/CLI tools. The Windows/macOS embedded container supplies its own pinned Java runtime.
 - Windows/macOS in-tab Digital requires Docker Desktop running for the one-time image build and later sessions. The container is non-root, capability-dropped, localhost-only at the VNC boundary, and mounts only the installed Digital directory plus the selected circuit directory.
 - Managed Xvfb/x11vnc installation targets Debian/Ubuntu x64. Other headless Linux distributions must provide those packages.
-- Exact Microsoft MASM/Irvine32 requires Windows and the Microsoft toolchain.
-- Actual NASM/ELF32 execution currently targets x86 Linux. Other hosts require an instructor-provided Linux environment; this extension does not claim to supply one.
+- Native NASM/ELF32/GDB execution targets x86 Linux. Windows/macOS use the course container through an already-running Docker Desktop installation.
 - The in-editor Full Digital desktop is a graphical noVNC canvas. It forwards input but does not expose Digital’s component-level Swing semantics to VS Code screen readers; students who need a screen-reader-equivalent workflow should contact the instructor for an accessible alternative and evaluate native Digital with platform assistive technology.
 - Canvas remains authoritative, and the extension never submits coursework.
 

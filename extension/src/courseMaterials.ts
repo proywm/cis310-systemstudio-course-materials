@@ -95,7 +95,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (element.type === 'practice') {
       const item = new vscode.TreeItem('Prepare and practice', vscode.TreeItemCollapsibleState.None);
       item.description = 'accessible lessons · open book · videos · readiness checks';
-      item.tooltip = 'Open the Accessible lesson → Read → Watch → Practice 8 questions → Build/trace path, plus explanations, source evidence, saved questions, and spaced review.';
+      item.tooltip = 'Open the Accessible lesson → Read → Watch → Practice 8 questions → Build/debug path, plus explanations, source evidence, saved questions, and spaced review.';
       item.iconPath = new vscode.ThemeIcon('book');
       item.command = { command: 'systemstudioCis310.openPracticeCenter', title: 'Open CIS 310 Learning' };
       return item;

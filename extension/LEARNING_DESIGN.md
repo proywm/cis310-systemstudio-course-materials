@@ -25,12 +25,12 @@ The design combines established student-support patterns: a clean starting point
 | Observed pattern | CIS 310 adaptation | Intended student benefit |
 |---|---|---|
 | Simple dashboard and personalized suggestions | One expanded **Start Here** group and the next incomplete lecture preparation | Less scanning and less uncertainty about where to begin |
-| Video lessons and study schedule | A self-paced 13-module **Accessible lesson → Read → Watch → Practice 8 questions → Build/trace** path, with transcript-checked readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
+| Video lessons and study schedule | A self-paced 13-module **Accessible lesson → Read → Watch → Practice 8 questions → Build/debug** path, with transcript-checked readiness sources separated from additional references | Make pre-class preparation concrete without implying every listed video is a short required lesson |
 | Lesson library | A novice-facing responsive HTML explanation, focused Tarnoff sections, targeted official author videos, and the paired visual lecture for every topic | Provide direct text, examples, and source navigation instead of requiring students to infer concepts from slides alone |
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
 | Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
-| Guided deliberate practice | Seven circuit builds and eight assembly traces, each mapped to lecture sources and structured as predict → construct/step → inspect → explain; search labs add real-toolchain verification and found/absent/boundary tests | Bridge declarative lecture knowledge to visible signal or machine-state evidence without supplying a graded artifact |
+| Guided deliberate practice | Seven circuit builds and seven actual NASM/GDB labs, each mapped to lecture sources and structured as predict → build/run → breakpoint → inspect/step → explain; self-checking search programs include found/absent/boundary tests | Bridge declarative lecture knowledge to visible signal or actual machine-state evidence without supplying a graded artifact |
 | Full circuit construction | The complete upstream Digital application, transported into VS Code from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS; native launch is an explicit fallback | Preserve the authentic component library, interaction model, file behavior, simulation, and dialogs instead of teaching a reduced substitute |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
@@ -47,7 +47,7 @@ The required open text is David Tarnoff's *Computer Organization and Design Fund
 2. **Read:** begin with the sources tagged for the readiness prompt, use additional references when useful, and self-mark the reading step;
 3. **Watch:** begin with the author videos tagged for readiness, use the others as additional explanations, and self-mark the video step;
 4. **Retrieve:** answer five mapped questions without reopening the source, then continue to eight for broader confidence-building practice;
-5. **Build/trace:** construct and test the mapped circuit or inspect instruction-by-instruction machine state where the topic supports authentic hands-on work; and
+5. **Build/debug:** construct and test the mapped circuit or assemble, execute, and inspect actual machine state where the topic supports authentic hands-on work; and
 6. **Bring uncertainty:** use an attempt-first lesson tutor prompt, or take one unresolved point or confident miss to class or to the instructor.
 
 The extension links to authoritative sources instead of redistributing the book or downloading videos. This avoids stale copies and copyright ambiguity. It also means book/video access leaves VS Code and is governed by the external site's privacy and accessibility behavior. The buttons display the relevant section or concept focus, but the external PDF/video may open at its beginning; the interface therefore calls these **mapped sources**, not exact page or timestamp links. Primary HTML lectures and optional PDF archives remain local, and no Google Drive link is used.
@@ -67,7 +67,7 @@ The implemented scheduler and recommendation weights are conservative instructio
 ## Cognitive-overhead decisions
 
 - **Course Modules** keeps all 13 module titles visible; only the selected/next module needs to be expanded. Specialized tools remain grouped and collapsed.
-- The primary action is the next incomplete Accessible lesson → Read → Watch → Practice → Build/trace module; readiness requires reading and video self-checks plus five distinct questions, and module completion also includes required hands-on work. All eight questions remain available as the confidence set.
+- The primary action is the next incomplete Accessible lesson → Read → Watch → Practice → Build/debug module; readiness requires reading and video self-checks plus five distinct questions, and module completion also includes required hands-on work. All eight questions remain available as the confidence set.
 - Questions appear one at a time with one required choice and one confidence choice.
 - Explanations use a stable structure: outcome, explanation, takeaway, related lesson, optional reflection, next.
 - Full Digital setup, real assembly execution, the non-assembler trace tutor, learning, and help are separately labeled so an environment failure is not mistaken for a concept failure.

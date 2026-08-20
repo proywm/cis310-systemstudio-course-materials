@@ -129,8 +129,8 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     return {
       title: 'Use the lecture-mapped Hands-on Lab Center',
       paragraphs: [
-        'The lab center connects the mapped reading, author video, and lecture to a prediction-first circuit build or assembly trace. Its checkmarks stay on this device and are not graded.',
-        'Circuit labs create a fresh blank file under circuits/guided and open it in the complete upstream Digital application; assembly trace labs open an original example beside the clearly labeled Instruction Trace Tutor. These formative labs do not generate a graded deliverable.'
+        'The lab center connects the mapped reading, author video, and lecture to a prediction-first circuit build or actual NASM debugging task. Its checkmarks stay on this device and are not graded.',
+        'Circuit labs create a fresh blank file under circuits/guided and open it in the complete upstream Digital application. Assembly labs open self-checking NASM ELF32 source in the actual GDB workbench. The separately labeled trace tutor is optional conceptual practice. These formative labs do not generate a graded deliverable.'
       ],
       checklist: [
         'Choose the lab mapped to the lecture concept.',
@@ -189,7 +189,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Prepare with the open book before using the slides',
       paragraphs: [
         'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and the targeted official author videos needed for its questions.',
-        'Use the self-paced Accessible lesson → Read → Watch → Practice → Build/trace path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture slides.'
+        'Use the self-paced Accessible lesson → Read → Watch → Practice → Build/debug path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture evidence.'
       ],
       checklist: [
         'Open the next preparation module and study its direct HTML lesson, then read only the mapped chapter or sections.',
@@ -403,24 +403,25 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     };
   }
 
-  if (matches(text, ['masm', 'nasm', 'irvine', 'assembly', 'register', 'flag', 'stack', 'eip'])) {
+  if (matches(text, ['masm', 'nasm', 'irvine', 'assembly', 'register', 'flag', 'stack', 'eip', 'gdb', 'disassembly'])) {
     return {
-      title: 'Choose real execution or instructional tracing deliberately',
+      title: 'Use the actual NASM/GDB workbench',
       paragraphs: [
-        'Choose Build and Run with Real Assembly Toolchain for executable evidence. Actual NASM produces and runs ELF32 code; exact Microsoft MASM/Irvine32 is available only with ml.exe, link.exe, and the official Irvine library on Windows.',
-        'The separate Instruction Trace Tutor visualizes a bounded source model. It is not MASM or NASM, does not emit machine code, and cannot be used as proof that a source file assembles.'
+        'Fall 2026 uses one student-facing x86 dialect: NASM 32-bit. Build and Run invokes actual NASM, GNU ld, and the ELF32 executable. Start the workbench debugger to inspect actual registers, EFLAGS, stack, memory, Intel disassembly, breakpoints, and program output.',
+        'On x86 Linux the extension uses the native tools. On Windows, macOS, and as a Linux fallback, the course container supplies NASM, GNU ld, GDB, and QEMU-i386 after Docker Desktop is started and the student approves the one-time image build. The optional Instruction Trace Tutor is only a bounded conceptual visualization and is not build evidence.'
       ],
       checklist: [
-        'For executable evidence, use Build and Run with Real Assembly Toolchain and inspect the assembler, linker, output, and exit status.',
-        'For a prediction exercise, open the Instruction Trace Tutor and watch registers, flags, stack, memory, output, and control flow.',
+        'Create or update the NASM workspace, open one source under assembly/nasm-elf32, and predict the result before running.',
+        'Build and run; inspect the NASM diagnostic, linker result, program output, and exit status.',
+        'Start GDB, continue to a named inspect label, then compare registers, flags, stack, memory, and current disassembly with the prediction.',
         'For search practice, use the linear-search walkthrough before iterative and recursive binary search; test first, middle/final, and absent values.',
-        'Never treat a trace-tutor load as proof that external MASM or NASM accepts the source.'
+        'Never treat a trace-tutor load as proof that NASM accepts the source.'
       ],
       actions: [
-        { id: 'build-run-assembly', label: 'Build and run real assembly' },
-        { id: 'open-guided-labs', label: 'Open guided assembly traces' },
-        { id: 'create-assembly-lab', label: 'Create assembly lab' },
-        { id: 'assembly-guide', label: 'Open compatibility guide' }
+        { id: 'build-run-assembly', label: 'Build and run actual NASM' },
+        { id: 'open-guided-labs', label: 'Open guided NASM labs' },
+        { id: 'create-assembly-lab', label: 'Create NASM workspace' },
+        { id: 'assembly-guide', label: 'Open NASM guide' }
       ]
     };
   }
@@ -447,7 +448,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     return conceptBridge(
       'Memory and machine organization',
       'Homework 3 and bundled Lectures 8–10 and 12',
-      ['Locate the relevant hierarchy, cycle, or address-space diagram.', 'Explain each transition in your own words.', 'Use an assembly trace when the question concerns instructions or registers.'],
+      ['Locate the relevant hierarchy, cycle, or address-space diagram.', 'Explain each transition in your own words.', 'Use actual NASM/GDB evidence when the question concerns executable instructions or registers.'],
       false
     );
   }

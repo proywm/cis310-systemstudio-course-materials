@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "SystemStudio MASM/NASM IA-32 Teaching Assembly",
+  "name": "SystemStudio NASM IA-32 Assembly",
   "scopeName": "source.nasm",
   "patterns": [
     { "include": "#comments" },

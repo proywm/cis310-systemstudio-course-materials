@@ -8,7 +8,7 @@ CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 132
 
 ## Where do I begin?
 
-Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/trace** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
+Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/debug** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
 
 ## Where is the text alternative to a presentation?
 
@@ -82,7 +82,7 @@ Choose **Ask a Question Before Class**, select the anonymous preference, and pre
 
 ## Which assembly environment should I choose?
 
-Use **Build and Run with Real Assembly Toolchain** for claims about compilation or program behavior. Linux uses actual NASM, GNU `ld`, and an ELF32 executable. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The separately labeled **Instruction Trace Tutor** is only a source-level visualization and is not proof that MASM or NASM accepts a file.
+Use the **Actual NASM Debug Workbench** for claims about compilation or program behavior. It invokes actual NASM, GNU `ld`, an ELF32 executable, and GDB: host tools on x86 Linux or the portable course container on Windows/macOS. The separately labeled **Instruction Trace Tutor** is only an optional source-level visualization and is not proof that NASM accepts a file.
 
 ## Where can I get human help?
 
