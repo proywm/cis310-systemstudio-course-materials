@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import type { AssemblyManager } from './assemblyManager';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
-import { isHeadlessRemote } from './core/runtimeEnvironment';
 import type { DigitalManager } from './digitalManager';
+import type { NativeAssemblyManager } from './nativeAssemblyManager';
 import type { PracticeStore } from './practiceStore';
 
 type StatusGroup = 'start' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
@@ -15,6 +15,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   constructor(
     private readonly manager: DigitalManager,
     private readonly assemblyManager: AssemblyManager,
+    private readonly nativeAssemblyManager: NativeAssemblyManager,
     private readonly practiceStore: PracticeStore
   ) {
     this.practiceSubscription = practiceStore.onDidChange(() => this.refresh());
@@ -154,7 +155,6 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
   private async digitalItems(): Promise<StatusNode[]> {
     const status = await this.manager.getStatus();
-    const headlessRemote = isHeadlessRemote(vscode.env.remoteName);
     const digital = new vscode.TreeItem(
       status.integrityVerified
         ? `Digital ${DIGITAL_RELEASE.displayVersion}: installed`
@@ -167,41 +167,42 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       status.integrityVerified ? 'verified-filled' : status.installed ? 'error' : 'cloud-download'
     );
     digital.description = status.integrityVerified
-      ? headlessRemote ? 'preview/tests ready; GUI local' : 'ready'
+      ? 'full upstream simulator ready'
       : 'setup required';
     digital.command = { command: 'systemstudioCis310.setupDigital', title: 'Install or verify Digital' };
-
-    const open = headlessRemote
-      ? informationItem('Digital GUI: use local desktop VS Code', `${vscode.env.remoteName} has no graphical display`, 'remote')
-      : actionItem('Open an existing circuit in Digital', 'systemstudioCis310.openDigital', 'open-preview');
 
     return [
       digital,
       actionItem('Open guided circuit labs', 'systemstudioCis310.openGuidedLabs', 'map', ['circuit-half-adder']),
-      actionItem('Create a circuit in the embedded workbench', 'systemstudioCis310.createCircuit', 'new-file'),
-      actionItem('Open an existing circuit in the workbench', 'systemstudioCis310.openEmbeddedCircuit', 'circuit-board'),
-      open,
+      actionItem('Create a circuit in Full Digital', 'systemstudioCis310.createCircuit', 'new-file'),
+      actionItem('Open an existing circuit in Full Digital', 'systemstudioCis310.openDigital', 'circuit-board'),
       actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder')
     ];
   }
 
   private async assemblyItems(): Promise<StatusNode[]> {
-    const assembly = await this.assemblyManager.getStatus();
-    const status = new vscode.TreeItem('Embedded IA-32 teaching lab', vscode.TreeItemCollapsibleState.None);
-    status.iconPath = new vscode.ThemeIcon(assembly.embeddedReady ? 'verified-filled' : 'terminal');
-    status.description = 'Irvine32 Classroom + NASM IA-32';
-    status.tooltip = assembly.detail;
+    const trace = await this.assemblyManager.getStatus();
+    const real = await this.nativeAssemblyManager.status();
+    const status = new vscode.TreeItem('Real assembly toolchains', vscode.TreeItemCollapsibleState.None);
+    status.iconPath = new vscode.ThemeIcon(real.nasm.available || real.masm.available ? 'verified-filled' : 'tools');
+    status.description = `NASM ${toolchainStateLabel(real.nasm.state)} · MASM ${toolchainStateLabel(real.masm.state)}`;
+    status.tooltip = `${real.nasm.detail}\n${real.masm.detail}`;
     status.command = {
       command: 'systemstudioCis310.checkAssemblyEnvironment',
-      title: 'Check embedded assembly engine'
+      title: 'Check real assembly toolchains'
     };
+    const tutor = new vscode.TreeItem('Instruction trace tutor', vscode.TreeItemCollapsibleState.None);
+    tutor.iconPath = new vscode.ThemeIcon(trace.embeddedReady ? 'debug-alt' : 'warning');
+    tutor.description = 'learning simulator — not an assembler';
+    tutor.tooltip = trace.detail;
     return [
       status,
+      actionItem('Build and run with a real toolchain', 'systemstudioCis310.buildRunAssembly', 'run'),
+      tutor,
       actionItem('Open guided assembly labs', 'systemstudioCis310.openGuidedLabs', 'map', ['assembly-register-arithmetic']),
-      actionItem('Create Irvine32 / NASM assembly lab', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
-      actionItem('Open assembly lab', 'systemstudioCis310.openAssemblyLab', 'debug-alt'),
-      actionItem('Run assembly file', 'systemstudioCis310.runAssembly', 'run'),
-      actionItem('Open assembly compatibility guide', 'systemstudioCis310.openMasmGuide', 'book')
+      actionItem('Create real-toolchain and trace examples', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
+      actionItem('Open instruction trace tutor', 'systemstudioCis310.openAssemblyLab', 'debug-alt'),
+      actionItem('Open assembly toolchain guide', 'systemstudioCis310.openMasmGuide', 'book')
     ];
   }
 
@@ -234,6 +235,15 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   }
 }
 
+function toolchainStateLabel(state: 'ready' | 'setup' | 'missing-linker' | 'unsupported'): string {
+  switch (state) {
+    case 'ready': return 'ready';
+    case 'setup': return 'setup needed';
+    case 'missing-linker': return 'missing ld';
+    case 'unsupported': return 'unsupported host';
+  }
+}
+
 function groupItem(id: StatusGroup, label: string, icon: string, expanded: boolean): StatusNode {
   const item: StatusNode = new vscode.TreeItem(
     label,
@@ -242,14 +252,6 @@ function groupItem(id: StatusGroup, label: string, icon: string, expanded: boole
   item.id = `systemstudioCis310.group.${id}`;
   item.groupId = id;
   item.iconPath = new vscode.ThemeIcon(icon);
-  return item;
-}
-
-function informationItem(label: string, description: string, icon: string): StatusNode {
-  const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
-  item.iconPath = new vscode.ThemeIcon(icon);
-  item.description = description;
-  item.tooltip = 'The embedded circuit workbench runs in desktop or Remote SSH VS Code. Use a graphical desktop only for Full Digital.';
   return item;
 }
 

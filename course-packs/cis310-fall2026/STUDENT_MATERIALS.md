@@ -28,7 +28,7 @@ The dashboard reports local practice evidence—coverage, accuracy, due question
 
 Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. Every lab is mapped to the same focused reading, author video, and lecture used by the readiness path. Checkmarks are self-reported, remain on this device, and are not grades.
 
-The six circuit labs create a fresh blank file under `circuits/guided/` and open it in the embedded VS Code circuit workbench. Students place components, connect output and input ports, drag or nudge the layout, toggle inputs or the manual clock, observe live values, save a Digital-compatible `.dig` file, and optionally verify it with Digital’s official preview/tests:
+The six circuit labs create a fresh blank file under `circuits/guided/` and open it in the complete upstream Digital simulator. Students use Digital’s original component library, wiring canvas, simulation controls, dialogs, and save behavior, then optionally verify the result with Digital’s official preview/tests:
 
 - Lecture 2 half adder;
 - Lecture 3 Boolean expression to gates;
@@ -37,11 +37,11 @@ The six circuit labs create a fresh blank file under `circuits/guided/` and open
 - Lecture 7 2-to-4 address decoder; and
 - Lecture 10 small arithmetic/logic selector.
 
-The five assembly labs open original examples beside the embedded machine-state panel: register arithmetic, flags and signed branching, array addressing with a counted loop, a stack frame with `CALL`/`RET`, and virtual console input. Students predict before stepping and inspect registers, flags, memory, stack, EIP, output, and trace evidence.
+The five assembly trace labs open original examples beside the Instruction Trace Tutor: register arithmetic, flags and signed branching, array addressing with a counted loop, a stack frame with `CALL`/`RET`, and virtual input. Students predict before stepping and inspect the model’s registers, flags, memory, stack, EIP, output, and trace. This is visualization evidence—not assembler evidence. Use **Build and Run with Real Assembly Toolchain** for actual NASM/ELF32 or exact Windows MASM/Irvine32 execution.
 
 These are formative prerequisite or analogous labs. They do not provide the graded four-bit adder, multiplier, counter, register file, ALU, processor, report, or assignment answer. Canvas controls the released task and submission.
 
-The embedded editor supports the one-bit components used by these guided builds: inputs, outputs, AND/OR/XOR/NOT, a manual clock, and D flip-flops. **Full Digital** remains available for buses, RAM/ROM, subcircuits, HDL, and other advanced components. If an existing `.dig` file contains an unsupported feature, the embedded editor will not rewrite it.
+There is no reduced student circuit editor. Every guided `.dig` file opens in Full Digital, including buses, RAM/ROM, subcircuits, HDL, and the rest of Digital’s upstream feature set.
 
 ## Read before class: open book and author-video map
 
@@ -113,6 +113,6 @@ Browse the [official Tarnoff book page](https://faculty.etsu.edu/tarnoff/138292/
 
 ## Assembly programming
 
-Use **CIS 310: Create Embedded Assembly Lab**, open `assembly/irvine32/AddTwo.asm`, and choose **Open Embedded Assembly Lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. The same source-level IA-32 teaching engine runs on Windows, Linux, macOS, and Remote SSH without Docker, Visual Studio, NASM, a linker, administrator access, or another download.
+Use **CIS 310: Create Assembly Toolchain and Trace Examples**. Open `assembly/real-toolchains/nasm-linux/LoopSum.asm` and choose **Build and Run with Real Assembly Toolchain** for actual NASM, GNU linking, and IA-32 execution. On a configured Windows host, `assembly/real-toolchains/masm-irvine/AddTwo.asm` uses Microsoft `ml.exe`, Microsoft `link.exe`, and the official Irvine32 library.
 
-The lab lets you build, step, run, and reset while observing registers, flags, data, stack, virtual-console input, output, EIP, and the recent instruction trace. Use the Hands-on Lab Center to open `AddTwo.asm`, `FlagsBranch.asm`, `LoopSum.asm`, `StackCall.asm`, or `ConsoleInput.asm` with a prediction-and-evidence walkthrough. Read `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, the complete macro language, or arbitrary external libraries.
+For prediction practice, open a formative source under `assembly/irvine32/` or `assembly/nasm-ia32/` with **Instruction Trace Tutor**. Its teaching model can show registers, flags, data, stack, virtual input/output, EIP, and recent trace, but it is not an assembler and does not generate binaries. Read `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md` before choosing a path.

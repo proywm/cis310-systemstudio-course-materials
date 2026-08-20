@@ -15,6 +15,7 @@ export type StudentHelperAction =
   | 'setup-digital'
   | 'create-circuit'
   | 'create-assembly-lab'
+  | 'build-run-assembly'
   | 'assembly-guide';
 
 export interface StudentHelperReply {
@@ -43,6 +44,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'setup-digital',
   'create-circuit',
   'create-assembly-lab',
+  'build-run-assembly',
   'assembly-guide'
 ]);
 
@@ -85,7 +87,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Use the lecture-mapped Hands-on Lab Center',
       paragraphs: [
         'The lab center connects the mapped reading, author video, and lecture to a prediction-first circuit build or assembly trace. Its checkmarks stay on this device and are not graded.',
-        'Circuit labs create a fresh blank file under circuits/guided and open it in the embedded VS Code workbench; assembly labs open an original example beside the embedded machine-state panel. These formative labs do not generate a graded deliverable.'
+        'Circuit labs create a fresh blank file under circuits/guided and open it in the complete upstream Digital application; assembly trace labs open an original example beside the clearly labeled Instruction Trace Tutor. These formative labs do not generate a graded deliverable.'
       ],
       checklist: [
         'Choose the lab mapped to the lecture concept.',
@@ -261,12 +263,12 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Separate an environment problem from a circuit problem',
       paragraphs: [
         'Run the environment check first. Digital needs the pinned simulator and Java 8 or newer; the extension can install and verify Digital in its own storage.',
-        'The course-scoped circuit workbench runs inside VS Code, including Remote SSH, without Java. Digital’s official preview/tests still need the managed JAR and Java; its full Swing window needs a graphical desktop.'
+        'SystemStudio uses the complete upstream Digital application. On supported headless Linux/Remote SSH hosts, its real Swing desktop is transported into the VS Code tab; desktop Windows/macOS use Digital’s native window. Java and the managed Digital JAR are required.'
       ],
       checklist: [
         'Check Digital checksum, Java version, and workspace trust.',
-        'Create a small blank circuit in the embedded workbench; install Digital only when you need its official preview, tests, or advanced components.',
-        'If only the GUI is unavailable over SSH, reopen the workspace locally.'
+        'Open a small blank circuit in Full Digital and confirm that its original menus and component library are visible.',
+        'On a headless Linux host, allow SystemStudio to prepare the private X/VNC display; otherwise use the native desktop window.'
       ],
       actions: [
         { id: 'check-environment', label: 'Check environment' },
@@ -281,7 +283,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Create a separate Digital file instead of reusing one circuit',
       paragraphs: [
         'Use Create a new blank Digital circuit for each task or subcircuit and give it a distinct name. SystemStudio checks the target path and does not overwrite an existing circuit.',
-        'The embedded workbench opens every newly created file separately. In full Digital, use Save As when you intentionally branch an existing design. Keep reusable subcircuits in the same workspace and confirm each file name before editing.'
+        'Full Digital opens every newly created file separately. Use Digital’s Save As when you intentionally branch an existing design. Keep reusable subcircuits in the same workspace and confirm each title and path before editing.'
       ],
       checklist: [
         'Create or choose the circuits/work folder.',
@@ -337,17 +339,18 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
 
   if (matches(text, ['masm', 'nasm', 'irvine', 'assembly', 'register', 'flag', 'stack', 'eip'])) {
     return {
-      title: 'Use the embedded IA-32 teaching lab',
+      title: 'Choose real execution or instructional tracing deliberately',
       paragraphs: [
-        'Choose Irvine32 Classroom for textbook-style MASM/Irvine syntax, NASM IA-32 for NASM-style syntax, or Auto-detect when unsure.',
-        'The bounded teaching interpreter runs inside the extension on Windows, macOS, Linux, and Remote SSH. It does not require Docker or a host assembler and does not claim complete native MASM/NASM compatibility.'
+        'Choose Build and Run with Real Assembly Toolchain for executable evidence. Actual NASM produces and runs ELF32 code; exact Microsoft MASM/Irvine32 is available only with ml.exe, link.exe, and the official Irvine library on Windows.',
+        'The separate Instruction Trace Tutor visualizes a bounded source model. It is not MASM or NASM, does not emit machine code, and cannot be used as proof that a source file assembles.'
       ],
       checklist: [
-        'Build first and read the exact source-line diagnostic.',
-        'Step while watching registers, flags, stack, memory, output, and trace.',
-        'Compare observed state with the state you predicted before running.'
+        'For executable evidence, use Build and Run with Real Assembly Toolchain and inspect the assembler, linker, output, and exit status.',
+        'For a prediction exercise, open the Instruction Trace Tutor and watch registers, flags, stack, memory, output, and control flow.',
+        'Never treat a trace-tutor load as proof that external MASM or NASM accepts the source.'
       ],
       actions: [
+        { id: 'build-run-assembly', label: 'Build and run real assembly' },
         { id: 'open-guided-labs', label: 'Open guided assembly traces' },
         { id: 'create-assembly-lab', label: 'Create assembly lab' },
         { id: 'assembly-guide', label: 'Open compatibility guide' }
@@ -416,7 +419,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
   return {
     title: 'Choose the kind of help you need',
     paragraphs: [
-      'Ask about a course topic, Digital setup, circuit workflow, embedded assembly, Canvas submission, or describe where your expected and observed results differ.',
+      'Ask about a course topic, Digital setup, circuit workflow, real assembly toolchains, the instruction trace tutor, Canvas submission, or describe where your expected and observed results differ.',
       'This local helper routes you to bundled course evidence and tools. It is not Canvas, a grader, or a source of current deadlines.'
     ],
     checklist: [

@@ -33,7 +33,7 @@ export class TutorialPanel implements vscode.Disposable {
     if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
     if (context.globalState.get<TutorialProgress>(PROGRESS_KEY)) return false;
     const action = await vscode.window.showInformationMessage(
-      'Welcome to Fall 2026 CIS 310. Start the clickable tour of open-book preparation, learning practice, Canvas, bundled materials, Digital circuits, embedded assembly, and help?',
+      'Welcome to Fall 2026 CIS 310. Start the clickable tour of open-book preparation, learning practice, Canvas, bundled materials, Full Digital, real assembly, the trace tutor, and help?',
       'Start Guided Tutorial',
       'Skip for now'
     );
@@ -352,7 +352,7 @@ function tutorialStepsHtml(): string {
       ${choice('prepare', 'Prepare before class', 'Read the mapped open-book section, watch the author video, then try three readiness questions.')}
       ${choice('requirements', 'Find requirements or submit', 'Go to the current Fall 2026 Canvas course; SystemStudio never submits for you.')}
       ${choice('circuit', 'Design or debug a circuit', 'Move from a lecture concept to a small circuit, prediction, preview, and test.')}
-      ${choice('assembly', 'Write or trace assembly', 'Use the embedded Irvine32/NASM teaching lab without separate compiler setup.')}
+      ${choice('assembly', 'Write, run, or trace assembly', 'Use an actual assembler for executable behavior and the separately labeled tutor for visualization.')}
       ${choice('confusion', 'I am not sure what is wrong', 'Separate concept, requirement, and environment questions before changing work.')}
     </div>
     <div class="actions"><button data-action="show-tools" class="secondary">Show the real SystemStudio sidebar</button></div>
@@ -375,23 +375,23 @@ function tutorialStepsHtml(): string {
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>
-    <p>The embedded workbench builds and simulates the course subset without Java or a desktop display. Check the environment only when you need Digital’s official preview/tests or advanced native editor.</p>
+    <p>SystemStudio uses the complete upstream Digital application. On headless Linux it prepares a private display and transports the real Swing UI into the VS Code tab; on desktop hosts it opens the native window.</p>
     <div class="instruction"><strong>Explore any case:</strong> identify the evidence that distinguishes it, then return for the others when relevant.</div>
     <div class="choices">
       ${choice('check', 'Run the environment check', 'Reports Digital checksum, Java version, and workspace trust without changing the machine.')}
       ${choice('install', 'Install or verify Digital', 'After consent, installs the pinned release in extension storage and verifies its checksum.')}
-      ${choice('remote', 'Recognize the two editor levels', 'The embedded workbench runs in desktop or Remote SSH VS Code; the full Swing editor still needs a graphical desktop.')}
+      ${choice('remote', 'Recognize the display modes', 'Both modes run upstream Digital: streamed inside VS Code on supported headless Linux, or in its native desktop window.')}
     </div>
     <div class="actions"><button data-action="check-digital" class="secondary">Try: Check environment</button><button data-action="setup-digital" class="secondary">Try: Install / verify</button></div>
   </div></section>
   <section class="step" data-step="3" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Build a half adder, then extend the pattern</h2>
-    <p>The Hands-on Lab Center keeps the lecture source, prediction, embedded circuit build, evidence checks, and explanation together. It creates a fresh Digital-compatible file and never fills in a graded assignment.</p>
+    <p>The Hands-on Lab Center keeps the lecture source, prediction, Full Digital circuit build, evidence checks, and explanation together. It creates a fresh circuit and never fills in a graded assignment.</p>
     <div class="instruction"><strong>Start with Lecture 2:</strong> predict all four one-bit additions, build separate Sum and Carry paths, simulate every row, and explain the evidence.</div>
     <div class="choices">
       ${choice('read', 'Read §8.1 and watch binary addition', 'Use the mapped open-book section and author video before adding gates.')}
       ${choice('predict', 'Predict Sum and Carry', 'Record 00, 01, 10, and 11 before the simulator can influence the answer.')}
-      ${choice('build', 'Build inside VS Code', 'The fresh `.dig` file opens in the embedded workbench. Place A/B, Sum/Carry, XOR, and AND; connect ports and toggle inputs without leaving the tutorial environment.')}
+      ${choice('build', 'Build in Full Digital', 'The fresh `.dig` file opens in upstream Digital. Place A/B, Sum/Carry, XOR, and AND; connect them and toggle every input row using Digital’s original controls.')}
       ${choice('evidence', 'Simulate and record four rows', 'Compare each observed Carry·Sum pair with the prediction, then preview the saved structure in VS Code.')}
       ${choice('extend', 'Choose the next circuit lab', 'Continue with Boolean gates, a 2-to-1 selector, one stored bit, address decoding, or a small ALU slice.')}
     </div>
@@ -399,7 +399,7 @@ function tutorialStepsHtml(): string {
   </div></section>
   <section class="step" data-step="4" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Bridge a concept to assembly</h2>
-    <p>The embedded lab uses one consistent source-level IA-32 teaching machine across Windows, macOS, Linux, and Remote SSH. The new guided traces tell you what to predict and which register, flag, memory, stack, output, or EIP evidence to inspect after each step.</p>
+    <p>Use the real-toolchain command for assembler, linker, executable, and program-output evidence. Use the separately labeled Instruction Trace Tutor only for prediction and visualization; loading there does not prove that MASM or NASM accepts the file.</p>
     <div class="instruction"><strong>Begin with register arithmetic:</strong> then continue with flags/branches, an array loop, a stack frame, or virtual console input.</div>
     <div class="choices">
       ${choice('predict', 'Predict register or memory state', 'Write what should change before executing the instruction.')}
@@ -408,6 +408,7 @@ function tutorialStepsHtml(): string {
       ${choice('memory', 'Array and counted loop', 'Observe ESI addresses, ECX, memory values, and the EAX accumulator.')}
       ${choice('stack', 'CALL, stack frame, and RET', 'Watch ESP, EBP, the return address, preserved EBX, and returned EAX.')}
       ${choice('input', 'Virtual console input', 'Trace procedure register contracts and a controlled invalid-input path.')}
+      ${choice('real', 'Real assembler and executable', 'Build actual NASM/ELF32 code, or exact Microsoft MASM/Irvine32 when the Windows toolchain is configured.')}
     </div>
     <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Start the register-arithmetic trace</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
   </div></section>
@@ -417,7 +418,7 @@ function tutorialStepsHtml(): string {
     <div class="instruction"><strong>Explore the evidence relevant to your task:</strong> return later for the other forms.</div>
     <div class="choices">
       ${choice('truth', 'Truth-table or state row', 'Compare a chosen input/state with the circuit’s observed output/next state.')}
-      ${choice('preview', 'Circuit preview', 'Inspect structure inside VS Code, including on Remote SSH.')}
+      ${choice('preview', 'Full Digital and official preview', 'Edit and simulate in upstream Digital; use its SVG exporter as separate read-only evidence.')}
       ${choice('tests', 'Circuit tests', 'Use instructor-approved embedded testcases as repeatable evidence.')}
       ${choice('machine', 'Registers, flags, memory, and stack', 'Step assembly and compare each visible change with your prediction.')}
       ${choice('trace', 'Output, trace, and diagnostics', 'Locate the exact instruction, input, unsupported form, or safety stop.')}
@@ -442,9 +443,9 @@ function tutorialStepsHtml(): string {
     <div class="instruction"><strong>Explore the recovery path you need:</strong> use the lesson list to return when a different problem occurs.</div>
     <div class="choices">
       ${choice('syntax', 'Unsupported assembly syntax', 'Use the exact source-line diagnostic and compatibility guide.')}
-      ${choice('input', 'Missing virtual input', 'Add one response per line, rebuild, and step again.')}
+      ${choice('input', 'Missing virtual input', 'Add one response per line, reload the trace model, and step again.')}
       ${choice('loop', 'Possible infinite loop', 'Use the 10,000-step safety stop and inspect the recent trace and branch condition.')}
-      ${choice('remote', 'Advanced Digital GUI over Remote SSH', 'Use the embedded circuit workbench remotely; use local desktop VS Code only when the full Swing editor is needed.')}
+      ${choice('remote', 'Full Digital over Remote SSH', 'The extension transports the actual upstream Digital Swing desktop into the VS Code tab on supported Linux hosts.')}
       ${choice('canvas', 'Unclear or changing requirement', 'Open Fall 2026 Canvas. Never infer a deadline from a study reference.')}
     </div>
     <div class="actions"><button data-action="open-canvas" class="primary">Open Canvas</button><button data-action="show-tools" class="secondary">Open grouped tools</button><button data-action="native-walkthrough" class="secondary">Open Getting Started</button></div>

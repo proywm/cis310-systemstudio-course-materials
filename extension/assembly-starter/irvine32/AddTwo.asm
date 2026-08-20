@@ -1,8 +1,8 @@
 TITLE SystemStudio Register Addition (AddTwo.asm)
 
-; The program shape matches the introductory Visual Studio/MASM workflow.
-; SystemStudio executes it in the embedded Irvine32 Classroom profile.
-; No Microsoft or Irvine binary is bundled or loaded.
+; Formative trace-tutor example: it models selected source-level effects only.
+; It is not assembled or linked by the tutor. For exact MASM/Irvine32 execution,
+; use real-toolchains/masm-irvine/AddTwo.asm on Windows with the real toolchain.
 
 .386
 .model flat,stdcall

@@ -1,0 +1,66 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import * as path from 'node:path';
+import { describe, it } from 'node:test';
+
+const root = process.cwd();
+
+describe('full Digital and real assembly declarations', () => {
+  it('makes the upstream Full Digital desktop the only default .dig editor', () => {
+    const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')) as {
+      contributes: { customEditors: Array<{ viewType: string; priority: string }> };
+    };
+    const defaults = manifest.contributes.customEditors.filter((editor) => editor.priority === 'default');
+    assert.deepEqual(defaults.map((editor) => editor.viewType), ['systemstudioCis310.fullDigitalEditor']);
+    assert.equal(manifest.contributes.customEditors.some((editor) => editor.viewType.includes('embeddedCircuit')), false);
+  });
+
+  it('stages the complete noVNC client used to transport the real Swing application', () => {
+    const rfb = readFileSync(path.join(root, 'media', 'vendor', 'novnc', 'core', 'rfb.js'), 'utf8');
+    assert.match(rfb, /export default class RFB/);
+    assert.match(rfb, /sendCtrlAltDel/);
+  });
+
+  it('ships a NASM source that must assemble and execute as real ELF32 machine code', () => {
+    const source = readFileSync(
+      path.join(root, 'assembly-starter', 'real-toolchains', 'nasm-linux', 'LoopSum.asm'),
+      'utf8'
+    );
+    assert.match(source, /^bits 32$/m);
+    assert.match(source, /^global _start$/m);
+    assert.match(source, /int 0x80/);
+    assert.doesNotMatch(source, /WriteDec|DumpRegs|source-level teaching/);
+  });
+
+  it('labels the source-level assembly panel as a trace tutor rather than MASM or NASM', () => {
+    const panel = readFileSync(path.join(root, 'src', 'assemblyLabPanel.ts'), 'utf8');
+    assert.match(panel, /Learning simulator — not an assembler/);
+    assert.match(panel, /Build and run real code/);
+    assert.doesNotMatch(panel, /No Visual Studio • no Docker • every OS/);
+  });
+
+  it('offers explicit real-toolchain choices without claiming a bundled VM or container', () => {
+    const extension = readFileSync(path.join(root, 'src', 'extension.ts'), 'utf8');
+    const manager = readFileSync(path.join(root, 'src', 'nativeAssemblyManager.ts'), 'utf8');
+    assert.match(extension, /Auto-detect from source/);
+    assert.match(extension, /Actual NASM → ELF32/);
+    assert.match(extension, /Exact Microsoft MASM \+ Irvine32/);
+    assert.match(manager, /does not ship a Linux VM or container/);
+    assert.doesNotMatch(manager, /portable course container/);
+  });
+
+  it('discloses the streamed desktop screen-reader boundary', () => {
+    const editor = readFileSync(path.join(root, 'src', 'fullDigitalEditor.ts'), 'utf8');
+    assert.match(editor, /Accessibility boundary/);
+    assert.match(editor, /component-level Swing semantics are not exposed/);
+    assert.match(editor, /screen-reader-equivalent circuit editor/);
+  });
+
+  it('archives pre-0.11 assembly guides during a safe workspace upgrade', () => {
+    const upgrader = readFileSync(path.join(root, 'src', 'core', 'assemblyGuideUpgrade.ts'), 'utf8');
+    assert.match(upgrader, /systemstudio-assembly-guide: 0\.11/);
+    assert.match(upgrader, /COMPATIBILITY-pre-0\.11\.md/);
+    assert.match(upgrader, /IRVINE32_PROFILE-pre-0\.11\.md/);
+    assert.match(upgrader, /await rename\(destination, archived\)/);
+  });
+});

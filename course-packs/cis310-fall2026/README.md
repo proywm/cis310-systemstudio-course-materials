@@ -14,7 +14,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 - three homework study references;
 - three processor-project study and implementation references;
 - 43 formative practice questions, with at least three mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
-- an embedded VS Code circuit workbench for the guided one-bit component subset, saving Digital-compatible `.dig` files without Java, plus six mapped circuit builds and five mapped assembly traces delivered through the Hands-on Lab Center;
+- the complete upstream Digital v0.31 application for circuit editing and simulation, plus six mapped circuit builds; actual NASM/ELF32 execution, exact Windows MASM/Irvine32 routing, and five separately labeled trace-tutor activities;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
 - an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
@@ -34,15 +34,13 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 Learning Center reading/video checkmarks, guided-lab checkmarks, and practice progress stay on the student's machine. They are ungraded and self-reported, do not predict a course grade or certify mastery, and can be reset from the relevant dashboard or lab.
 
-## Circuit-editor boundary
+## Circuit tool
 
-The embedded circuit workbench supports inputs, outputs, AND/OR/XOR/NOT, a manual clock, and one-bit D flip-flops. It runs inside VS Code and saves `.dig` files. Digital v0.31 remains the verified advanced companion for official previews/testcases, buses, memories, subcircuits, HDL, and other unsupported features. The embedded editor refuses to rewrite an advanced file it cannot represent fully.
+SystemStudio runs the complete upstream Digital v0.31 application rather than a reduced circuit renderer. Supported headless Linux hosts stream the real Swing desktop into VS Code; Windows/macOS use Digital’s native window. The separate preview and testcase commands also use Digital’s official exporter and CLI.
 
 ## Assembly boundary
 
-The extension supplies an original, bounded IA-32 teaching interpreter with Irvine32 Classroom and NASM IA-32 profiles. It supports the documented introductory register, memory, flag, stack, branch, procedure, and console workflows on Windows, macOS, Linux, and Remote SSH.
-
-It is not a full MASM/NASM toolchain, does not produce native objects or executables, and does not reproduce every operating-system API, macro, directive, calling convention, x87 instruction, or SIMD instruction. Use an instructor-approved native toolchain when an assignment explicitly requires those capabilities.
+The real execution path invokes actual NASM and GNU `ld` for ELF32 on Linux. Exact MASM/Irvine32 invokes Microsoft `ml.exe`, Microsoft `link.exe`, and the official Irvine library on Windows. The separate Instruction Trace Tutor is a bounded visualization, not an assembler; it does not emit machine code and cannot establish toolchain compatibility.
 
 ## Deliberately excluded
 

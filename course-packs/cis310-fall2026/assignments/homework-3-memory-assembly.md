@@ -24,7 +24,7 @@ Review Lectures 8--10 and 12 on I/O, the memory hierarchy, the instruction cycle
 
 1. Open the mapped bundled lecture PDF and identify the relevant diagram or trace.
 2. Explain the concept in your own words before writing the final response.
-3. For instruction or register questions, create the embedded assembly lab and step through a short example.
+3. For instruction or register questions, use the Instruction Trace Tutor for prediction practice; use the real assembly-toolchain command when the result depends on actual syntax, linking, encoded code, or executable behavior.
 4. Compare your explanation with the visible register, flag, stack, output, and instruction-trace evidence.
 5. Confirm the exact response and file requirements in Canvas.
 

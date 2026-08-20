@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, guided circuit builds, embedded assembly traces, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -42,10 +42,10 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
-- an embedded VS Code circuit workbench for inputs, outputs, AND/OR/XOR/NOT, a manual clock, and one-bit D flip-flops, with live simulation and Digital-compatible `.dig` saves;
+- the complete upstream Digital v0.31 editor and simulator, streamed into VS Code on supported headless Linux hosts or opened in its native desktop window;
 - six lecture-mapped guided circuit builds, including a step-by-step half adder, with fresh non-overwriting files and local checklist progress;
 - circuit preview and deterministic testcase support;
-- a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
+- actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
 - five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
@@ -64,7 +64,7 @@ code --install-extension systemstudio-cis310.vsix
 
 Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open the **SystemStudio CIS 310** activity-bar view, and start the guided tutorial.
 
-Java is not required for the embedded circuit or assembly workbenches. Java 8 or newer is required only for Digital’s official preview/tests and full advanced graphical application. The embedded assembly lab does not require Visual Studio, Docker, MASM, NASM, a linker, or administrator access.
+Java 8 or newer is required for Full Digital. The extension can privately prepare Xvfb/x11vnc on Debian/Ubuntu headless hosts. Real NASM requires NASM and GNU `ld`; the Debian/Ubuntu NASM package can be installed privately after confirmation. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The trace tutor has no external toolchain requirement but is explicitly not an assembler.
 
 ## Repository layout
 

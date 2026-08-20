@@ -4,6 +4,10 @@
 node_modules/
 dist/
 extension/course-packs/
+extension/media/vendor/
+course-packs/**/syllabus/*.aux
+course-packs/**/syllabus/*.log
+course-packs/**/syllabus/*.out
 coverage/
 .DS_Store
 *.vsix

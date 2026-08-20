@@ -1,4 +1,4 @@
-import { access, cp, mkdir, readFile, rename } from 'node:fs/promises';
+import { access, cp, mkdir, readFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import {
@@ -9,6 +9,7 @@ import {
   type AssemblyProfile,
   type MachineSnapshot
 } from './core/embeddedAssembly';
+import { installCurrentAssemblyGuides } from './core/assemblyGuideUpgrade';
 
 export interface AssemblyExecutionOptions {
   profile?: AssemblyProfile;
@@ -34,9 +35,9 @@ interface AssemblySession {
 }
 
 /**
- * Owns the extension-native, source-level IA-32 teaching engine.
+ * Owns the extension-native, source-level IA-32 instruction-trace tutor.
  *
- * Student assembly is interpreted inside the extension's bounded memory model.
+ * Source is modeled inside the extension's bounded teaching memory model.
  * No child process, native assembler, container, network request, or host binary
  * is used by this class.
  */
@@ -56,7 +57,7 @@ export class AssemblyManager implements vscode.Disposable {
   async getStatus(): Promise<AssemblyStatus> {
     return {
       embeddedReady: true,
-      detail: 'Embedded IA-32 teaching engine is bundled; no Docker, assembler, SDK, or administrator access is required.'
+      detail: 'The IA-32 Instruction Trace Tutor is bundled and needs no toolchain. It is a learning visualization, not an assembler.'
     };
   }
 
@@ -117,19 +118,19 @@ export class AssemblyManager implements vscode.Disposable {
     return target;
   }
 
-  /** Adds current embedded assets to an older generated lab without overwriting student assembly. */
+  /** Adds current real-toolchain and trace-tutor assets without overwriting student assembly. */
   async upgradeLab(workspaceRoot: string): Promise<AssemblyLabUpgrade> {
     const source = path.join(this.context.extensionUri.fsPath, 'assembly-starter');
     const target = path.join(workspaceRoot, 'assembly');
     let addedFiles = false;
     const starterFiles: Array<readonly [string, string]> = [
-      ['embedded', 'add-two.asm'],
-      ['embedded', 'loop-sum.asm'],
       ['irvine32', 'AddTwo.asm'],
       ['irvine32', 'ConsoleInput.asm'],
       ['irvine32', 'FlagsBranch.asm'],
       ['irvine32', 'StackCall.asm'],
-      ['nasm-ia32', 'LoopSum.asm']
+      ['nasm-ia32', 'LoopSum.asm'],
+      ['real-toolchains/nasm-linux', 'LoopSum.asm'],
+      ['real-toolchains/masm-irvine', 'AddTwo.asm']
     ];
     for (const [directory, fileName] of starterFiles) {
       const destinationDirectory = path.join(target, directory);
@@ -139,46 +140,12 @@ export class AssemblyManager implements vscode.Disposable {
         path.join(destinationDirectory, fileName)
       ) || addedFiles;
     }
-    addedFiles = await copyIfMissing(
-      path.join(source, 'COMPATIBILITY.md'),
-      path.join(target, 'COMPATIBILITY.md')
-    ) || addedFiles;
-    addedFiles = await copyIfMissing(
-      path.join(source, 'IRVINE32_PROFILE.md'),
-      path.join(target, 'IRVINE32_PROFILE.md')
-    ) || addedFiles;
-
     const guidePath = path.join(target, 'README.md');
-    let resolvedGuidePath = guidePath;
-    if (await existingPath(guidePath)) {
-      const currentGuide = await readFile(guidePath, 'utf8');
-      if (currentGuide.includes('# CIS 310 Assembly Paths') && currentGuide.includes('Portable Assembly Lab')) {
-        const archivedGuide = path.join(target, 'README-v0.4-container-pilot.md');
-        if (await existingPath(archivedGuide)) {
-          resolvedGuidePath = path.join(target, 'README-EMBEDDED.md');
-          addedFiles = await copyIfMissing(
-            path.join(source, 'README.md'),
-            resolvedGuidePath
-          ) || addedFiles;
-        } else {
-          await rename(guidePath, archivedGuide);
-          await cp(path.join(source, 'README.md'), guidePath, { force: false, errorOnExist: true });
-          addedFiles = true;
-        }
-      } else if (!currentGuide.includes('FlagsBranch.asm')) {
-        resolvedGuidePath = path.join(target, 'README-HANDS-ON.md');
-        addedFiles = await copyIfMissing(
-          path.join(source, 'README.md'),
-          resolvedGuidePath
-        ) || addedFiles;
-      }
-    } else {
-      addedFiles = await copyIfMissing(path.join(source, 'README.md'), guidePath) || addedFiles;
-    }
+    addedFiles = await installCurrentAssemblyGuides(source, target) || addedFiles;
 
     return {
       entryPath: path.join(target, 'irvine32', 'AddTwo.asm'),
-      guidePath: resolvedGuidePath,
+      guidePath,
       addedFiles
     };
   }
@@ -223,7 +190,7 @@ export class AssemblyManager implements vscode.Disposable {
       this.diagnostics.delete(uri);
       const snapshot = machine.snapshot();
       this.output.appendLine(
-        `Embedded assembly loaded: ${path.basename(uri.fsPath)} (${program.profile}, ` +
+        `Instruction trace loaded: ${path.basename(uri.fsPath)} (${program.profile}, ` +
         `${program.instructions.length} source-level instructions)`
       );
       return snapshot;
@@ -236,7 +203,7 @@ export class AssemblyManager implements vscode.Disposable {
 
   private reportCompileError(uri: vscode.Uri, document: vscode.TextDocument, error: unknown): void {
     if (!(error instanceof AssemblyCompileError)) {
-      this.output.appendLine(`Embedded assembly error: ${errorText(error)}`);
+      this.output.appendLine(`Instruction-trace tutor error: ${errorText(error)}`);
       return;
     }
     const diagnostics = error.diagnostics.map((item) => {
@@ -247,11 +214,11 @@ export class AssemblyManager implements vscode.Disposable {
         item.message,
         vscode.DiagnosticSeverity.Error
       );
-      diagnostic.source = 'SystemStudio embedded IA-32';
+      diagnostic.source = 'SystemStudio IA-32 trace tutor';
       return diagnostic;
     });
     this.diagnostics.set(uri, diagnostics);
-    this.output.appendLine(`Embedded assembly could not load: ${path.basename(uri.fsPath)}\n${error.message}`);
+    this.output.appendLine(`Instruction trace could not load: ${path.basename(uri.fsPath)}\n${error.message}`);
   }
 
   private reportExecutionError(uri: vscode.Uri, error: unknown): void {
@@ -262,10 +229,10 @@ export class AssemblyManager implements vscode.Disposable {
         error.message.replace(/^Line \d+:\s*/, ''),
         vscode.DiagnosticSeverity.Error
       );
-      diagnostic.source = 'SystemStudio embedded IA-32';
+      diagnostic.source = 'SystemStudio IA-32 trace tutor';
       this.diagnostics.set(uri, [diagnostic]);
     }
-    this.output.appendLine(`Embedded assembly execution stopped: ${path.basename(uri.fsPath)}\n${errorText(error)}`);
+    this.output.appendLine(`Instruction trace stopped: ${path.basename(uri.fsPath)}\n${errorText(error)}`);
   }
 
   private logSnapshot(action: string, uri: vscode.Uri, snapshot: MachineSnapshot): void {

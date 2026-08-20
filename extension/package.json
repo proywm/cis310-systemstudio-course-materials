@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Active Fall 2026 CIS 310 preparation, practice, embedded circuit construction, managed Digital verification, and embedded IA-32 assembly inside Visual Studio Code.",
-  "version": "0.10.6",
+  "description": "Active Fall 2026 CIS 310 learning materials, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
+  "version": "0.11.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -40,7 +40,7 @@
     "onView:systemstudioCis310.explorer",
     "onView:systemstudioCis310.materials",
     "onCustomEditor:systemstudioCis310.circuitPreview",
-    "onCustomEditor:systemstudioCis310.embeddedCircuitEditor",
+    "onCustomEditor:systemstudioCis310.fullDigitalEditor",
     "onLanguage:digital-circuit",
     "onLanguage:nasm",
     "onCommand:systemstudioCis310.setupDigital",
@@ -60,7 +60,6 @@
     "onCommand:systemstudioCis310.openSyllabus",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
-    "onCommand:systemstudioCis310.openEmbeddedCircuit",
     "onCommand:systemstudioCis310.createCircuit",
     "onCommand:systemstudioCis310.createAssignmentCircuit",
     "onCommand:systemstudioCis310.testCircuit",
@@ -72,6 +71,7 @@
     "onCommand:systemstudioCis310.createAssemblyLab",
     "onCommand:systemstudioCis310.checkAssemblyEnvironment",
     "onCommand:systemstudioCis310.openAssemblyLab",
+    "onCommand:systemstudioCis310.buildRunAssembly",
     "onCommand:systemstudioCis310.runAssembly",
     "onCommand:systemstudioCis310.stepAssembly",
     "onCommand:systemstudioCis310.resetAssembly",
@@ -80,10 +80,15 @@
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
-      "description": "Native Digital launch and official circuit testing are disabled until the workspace is trusted. The bounded embedded circuit and assembly workbenches remain available.",
+      "description": "Full Digital and real assembly execution are disabled until the workspace is trusted. Read-only course materials and learning practice remain available.",
       "restrictedConfigurations": [
         "systemstudioCis310.javaPath",
-        "systemstudioCis310.testTimeoutSeconds"
+        "systemstudioCis310.testTimeoutSeconds",
+        "systemstudioCis310.nasmPath",
+        "systemstudioCis310.nasmLinkerPath",
+        "systemstudioCis310.masmPath",
+        "systemstudioCis310.masmLinkerPath",
+        "systemstudioCis310.irvineRoot"
       ]
     },
     "virtualWorkspaces": {
@@ -185,14 +190,8 @@
       },
       {
         "command": "systemstudioCis310.openDigital",
-        "title": "CIS 310: Open Circuit in Digital",
+        "title": "CIS 310: Open Full Digital Simulator",
         "category": "SystemStudio"
-      },
-      {
-        "command": "systemstudioCis310.openEmbeddedCircuit",
-        "title": "CIS 310: Open Embedded Circuit Workbench",
-        "category": "SystemStudio",
-        "icon": "$(circuit-board)"
       },
       {
         "command": "systemstudioCis310.createCircuit",
@@ -238,35 +237,41 @@
       },
       {
         "command": "systemstudioCis310.createAssemblyLab",
-        "title": "CIS 310: Create Embedded Assembly Lab",
+        "title": "CIS 310: Create Assembly Toolchain and Trace Examples",
         "category": "SystemStudio"
       },
       {
         "command": "systemstudioCis310.checkAssemblyEnvironment",
-        "title": "CIS 310: Check Embedded Assembly Engine",
+        "title": "CIS 310: Check Real Assembly Toolchains",
         "category": "SystemStudio"
       },
       {
         "command": "systemstudioCis310.openAssemblyLab",
-        "title": "CIS 310: Open Embedded Assembly Lab",
+        "title": "CIS 310: Open Instruction Trace Tutor",
         "category": "SystemStudio",
         "icon": "$(debug-alt)"
       },
       {
+        "command": "systemstudioCis310.buildRunAssembly",
+        "title": "CIS 310: Build and Run with Real Assembly Toolchain",
+        "category": "SystemStudio",
+        "icon": "$(run)"
+      },
+      {
         "command": "systemstudioCis310.runAssembly",
-        "title": "CIS 310: Run Embedded Assembly",
+        "title": "CIS 310: Run in Instruction Trace Tutor",
         "category": "SystemStudio",
         "icon": "$(run)"
       },
       {
         "command": "systemstudioCis310.stepAssembly",
-        "title": "CIS 310: Step Embedded Assembly",
+        "title": "CIS 310: Step in Instruction Trace Tutor",
         "category": "SystemStudio",
         "icon": "$(debug-step-over)"
       },
       {
         "command": "systemstudioCis310.resetAssembly",
-        "title": "CIS 310: Reset Embedded Assembly",
+        "title": "CIS 310: Reset Instruction Trace Tutor",
         "category": "SystemStudio",
         "icon": "$(debug-restart)"
       },
@@ -303,7 +308,7 @@
         "id": "nasm",
         "aliases": [
           "SystemStudio x86 Assembly",
-          "MASM/NASM Teaching Subset",
+          "x86 Assembly",
           "NASM",
           "MASM"
         ],
@@ -322,8 +327,8 @@
     ],
     "customEditors": [
       {
-        "viewType": "systemstudioCis310.embeddedCircuitEditor",
-        "displayName": "SystemStudio Embedded Circuit Workbench",
+        "viewType": "systemstudioCis310.fullDigitalEditor",
+        "displayName": "Full Digital Simulator",
         "selector": [
           {
             "filenamePattern": "*.dig"
@@ -377,42 +382,62 @@
       {
         "id": "systemstudioCis310.gettingStarted",
         "title": "Get Started with SystemStudio CIS 310",
-        "description": "Learn the Fall 2026 read-watch-practice, Canvas, course-material, embedded circuit, advanced Digital, embedded assembly, and help workflows. The clickable tutorial can be skipped or rerun.",
+        "description": "Learn the Fall 2026 read-watch-practice, Canvas, course-material, Full Digital, real assembly, trace-tutor, and help workflows. The clickable tutorial can be skipped or rerun.",
         "steps": [
           {
             "id": "guidedTour",
             "title": "Take the Clickable Guided Tour",
             "description": "Practice task-first choices based on recurring student concerns. Skip, resume, or rerun it without automatic installation.\n[Start or rerun the guided tutorial](command:systemstudioCis310.startTutorial)",
-            "media": { "markdown": "media/tutorial/01-guided-tour.md" },
-            "completionEvents": ["onCommand:systemstudioCis310.startTutorial"]
+            "media": {
+              "markdown": "media/tutorial/01-guided-tour.md"
+            },
+            "completionEvents": [
+              "onCommand:systemstudioCis310.startTutorial"
+            ]
           },
           {
             "id": "tools",
             "title": "Use the Grouped Student Workflow",
             "description": "Begin with the next Read → Watch → Try module, then expand practice, circuits, assembly, setup, or help only when needed.\n[Open SystemStudio](command:workbench.view.extension.systemstudioCis310)\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)",
-            "media": { "markdown": "media/tutorial/02-tools.md" },
-            "completionEvents": ["onView:systemstudioCis310.explorer"]
+            "media": {
+              "markdown": "media/tutorial/02-tools.md"
+            },
+            "completionEvents": [
+              "onView:systemstudioCis310.explorer"
+            ]
           },
           {
             "id": "materials",
             "title": "Read Before Class; Verify and Submit in Canvas",
             "description": "Use the mapped required open-book sections and official author videos before the 13 bundled lecture PDFs. The syllabus, calendar, presentations, three homework references, and three project references are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
-            "media": { "markdown": "media/tutorial/03-materials.md" },
-            "completionEvents": ["onView:systemstudioCis310.materials"]
+            "media": {
+              "markdown": "media/tutorial/03-materials.md"
+            },
+            "completionEvents": [
+              "onView:systemstudioCis310.materials"
+            ]
           },
           {
             "id": "circuits",
             "title": "Build Guided Circuits from Lecture Concepts",
-            "description": "Start with the Lecture 2 half adder in the embedded VS Code workbench, then continue through Boolean gates, selection, stored state, address decoding, and a small ALU slice. Each lab maps the reading/video, prediction, fresh Digital-compatible circuit, simulation evidence, and explanation.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Create a new embedded circuit](command:systemstudioCis310.createCircuit)",
-            "media": { "markdown": "media/tutorial/04-circuits.md" },
-            "completionEvents": ["onCommand:systemstudioCis310.openGuidedLabs"]
+            "description": "Start with the Lecture 2 half adder in the complete upstream Digital simulator, then continue through Boolean gates, selection, stored state, address decoding, and a small ALU slice. Each lab maps the reading/video, prediction, fresh circuit, simulation evidence, and explanation.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Create a new Digital circuit](command:systemstudioCis310.createCircuit)",
+            "media": {
+              "markdown": "media/tutorial/04-circuits.md"
+            },
+            "completionEvents": [
+              "onCommand:systemstudioCis310.openGuidedLabs"
+            ]
           },
           {
             "id": "assembly",
-            "title": "Trace Guided Assembly Examples or Ask for Help",
-            "description": "Predict and trace register arithmetic, flags/branches, an array loop, a stack frame, and virtual input in the embedded machine. Inspect registers, flags, memory, stack, output, EIP, and trace.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Open U-M Maizey](command:systemstudioCis310.openAiTutor)\n[Ask before class](command:systemstudioCis310.openPreClassQuestion)",
-            "media": { "markdown": "media/tutorial/05-assembly.md" },
-            "completionEvents": ["onCommand:systemstudioCis310.createAssemblyLab"]
+            "title": "Run Real Assembly and Visualize Instructions",
+            "description": "Use an actual assembler/linker/executable when behavior must be exact. Use the separately labeled trace tutor only to predict and inspect registers, flags, memory, stack, and control flow.\n[Create the assembly examples](command:systemstudioCis310.createAssemblyLab)\n[Check real toolchains](command:systemstudioCis310.checkAssemblyEnvironment)\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)",
+            "media": {
+              "markdown": "media/tutorial/05-assembly.md"
+            },
+            "completionEvents": [
+              "onCommand:systemstudioCis310.createAssemblyLab"
+            ]
           }
         ]
       }
@@ -432,14 +457,9 @@
       ],
       "explorer/context": [
         {
-          "command": "systemstudioCis310.openEmbeddedCircuit",
-          "when": "resourceExtname == .dig",
-          "group": "systemstudio@0"
-        },
-        {
           "command": "systemstudioCis310.openDigital",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",
-          "group": "systemstudio@1"
+          "group": "systemstudio@0"
         },
         {
           "command": "systemstudioCis310.testCircuit",
@@ -452,7 +472,7 @@
           "group": "systemstudio@3"
         },
         {
-          "command": "systemstudioCis310.runAssembly",
+          "command": "systemstudioCis310.buildRunAssembly",
           "when": "resourceExtname == .asm",
           "group": "systemstudio@1"
         },
@@ -471,14 +491,9 @@
       ],
       "editor/title": [
         {
-          "command": "systemstudioCis310.openEmbeddedCircuit",
-          "when": "resourceExtname == .dig",
-          "group": "navigation@0"
-        },
-        {
           "command": "systemstudioCis310.openDigital",
           "when": "resourceExtname == .dig && isWorkspaceTrusted",
-          "group": "navigation@1"
+          "group": "navigation@0"
         },
         {
           "command": "systemstudioCis310.testCircuit",
@@ -486,19 +501,14 @@
           "group": "navigation@2"
         },
         {
-          "command": "systemstudioCis310.runAssembly",
+          "command": "systemstudioCis310.buildRunAssembly",
           "when": "resourceExtname == .asm",
           "group": "navigation@1"
         },
         {
-          "command": "systemstudioCis310.stepAssembly",
+          "command": "systemstudioCis310.openAssemblyLab",
           "when": "resourceExtname == .asm",
           "group": "navigation@2"
-        },
-        {
-          "command": "systemstudioCis310.resetAssembly",
-          "when": "resourceExtname == .asm",
-          "group": "navigation@3"
         }
       ]
     },
@@ -516,6 +526,31 @@
           "minimum": 5,
           "maximum": 300,
           "description": "Maximum duration for a headless Digital circuit test or SVG export."
+        },
+        "systemstudioCis310.nasmPath": {
+          "type": "string",
+          "default": "nasm",
+          "description": "Actual NASM executable. On Debian/Ubuntu Linux the extension can install NASM privately when it is absent."
+        },
+        "systemstudioCis310.nasmLinkerPath": {
+          "type": "string",
+          "default": "ld",
+          "description": "GNU linker used for the actual NASM ELF32 path."
+        },
+        "systemstudioCis310.masmPath": {
+          "type": "string",
+          "default": "ml.exe",
+          "description": "Windows path to Microsoft MASM ml.exe. This exact toolchain is never emulated on non-Windows hosts."
+        },
+        "systemstudioCis310.masmLinkerPath": {
+          "type": "string",
+          "default": "link.exe",
+          "description": "Windows path to the Microsoft linker paired with ml.exe."
+        },
+        "systemstudioCis310.irvineRoot": {
+          "type": "string",
+          "default": "C:\\Irvine",
+          "description": "Windows directory containing the official Irvine32.inc, Irvine32.lib, Kernel32.lib, and User32.lib files."
         },
         "systemstudioCis310.promptToInstall": {
           "type": "boolean",
@@ -553,10 +588,15 @@
   "devDependencies": {
     "@types/node": "22.20.1",
     "@types/vscode": "1.100.0",
+    "@types/ws": "^8.18.1",
     "@vscode/vsce": "3.9.2",
     "esbuild": "0.28.2",
     "fflate": "0.8.3",
     "tsx": "4.23.12",
     "typescript": "7.0.2"
+  },
+  "dependencies": {
+    "@novnc/novnc": "^1.7.0",
+    "ws": "^8.21.0"
   }
 }

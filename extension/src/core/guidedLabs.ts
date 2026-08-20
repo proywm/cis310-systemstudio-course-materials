@@ -78,7 +78,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
       circuitStep('pins', 'Create the circuit interface', 'Create and label input pins A and B and output pins Sum and Carry. Arrange Sum above Carry so the paths remain visually separate.', 'Two labeled inputs and two labeled outputs.'),
       circuitStep('sum', 'Build the Sum path', 'Connect A and B to an XOR gate, then connect that output to Sum. Before clicking an input, predict which two rows make XOR high.', 'The Sum path implements “exactly one input is high.”'),
       circuitStep('carry', 'Build the Carry path', 'Connect the same A and B inputs to an AND gate, then connect that output to Carry.', 'The Carry path becomes high only for 1+1.'),
-      circuitStep('test', 'Simulate all four additions', 'Toggle each input pair in the embedded workbench. Record predicted and observed Sum/Carry; repair a mismatch before proceeding.', 'All four observed Carry·Sum pairs match the binary-addition table you wrote before building.'),
+      circuitStep('test', 'Simulate all four additions', 'Toggle each input pair in the complete upstream Digital simulator. Record predicted and observed Sum/Carry; repair a mismatch before proceeding.', 'All four observed Carry·Sum pairs match the binary-addition table you wrote before building.'),
       circuitStep('inspect', 'Inspect and explain the evidence', 'Save the `.dig` file and optionally open Digital’s verified preview. Explain why the two output paths use different gates.', 'A saved Digital-compatible circuit plus a short explanation tied to the truth table.')
     ],
     reflection: 'What additional input and logic would a full adder need, without drawing the full assignment solution?'
@@ -154,8 +154,8 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     boundary: 'The bundled example uses original constants and is not a solution to Homework 3.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/AddTwo.asm', profile: 'irvine32' },
     steps: [
-      circuitStep('predict', 'Predict EAX', 'Before Build, compute EAX after each MOV/ADD instruction and note which flags might change.', 'A line-by-line EAX prediction.'),
-      circuitStep('build', 'Build the source', 'Open the embedded lab with Irvine32 Classroom or Auto-detect and select Build.', 'The next source instruction and initial register state are visible.'),
+      circuitStep('predict', 'Predict EAX', 'Before loading the trace model, compute EAX after each MOV/ADD instruction and note which flags might change.', 'A line-by-line EAX prediction.'),
+      circuitStep('build', 'Load the trace model', 'Open the Instruction Trace Tutor with the Irvine32-style profile or Auto-detect and select Load trace model.', 'The next source instruction and initial teaching-state registers are visible; this is not assembler evidence.'),
       circuitStep('step-mov', 'Step through MOV', 'Step once and compare EAX with your prediction. Explain why moving a value does not perform addition.', 'The observed EAX value after MOV.'),
       circuitStep('step-add', 'Step through ADD', 'Step again and inspect EAX, ZF, SF, CF, and OF.', 'The result and four observed flags.'),
       circuitStep('modify', 'Change one constant', 'Edit one constant, predict the new result, rebuild, and step again.', 'A second prediction/observation pair.'),
@@ -187,7 +187,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     artifact: { kind: 'assembly', relativePath: 'nasm-ia32/LoopSum.asm', profile: 'nasm-ia32' },
     steps: [
       circuitStep('predict', 'Predict the first iteration', 'Record initial ESI, ECX, and EAX, then predict them after one loop body.', 'Three before/after register predictions.'),
-      circuitStep('build', 'Build with NASM IA-32', 'Select NASM IA-32, Build, and locate the declared values in Data symbols.', 'The array address and first value are visible.'),
+      circuitStep('build', 'Load the NASM-style trace', 'Select NASM-style trace model, load it, and locate the declared values in Data symbols.', 'The teaching-model array address and first value are visible; use the real NASM example for executable evidence.'),
       circuitStep('load', 'Observe memory addressing', 'Step ADD EAX,[ESI] and verify the loaded value comes from the address in ESI.', 'A matching address, memory value, and accumulator change.'),
       circuitStep('advance', 'Observe pointer and count changes', 'Step ADD ESI,4 and LOOP. Record the new pointer, ECX, and branch target.', 'Evidence for one complete iteration.'),
       circuitStep('run', 'Run to completion', 'Predict the sum and doubled result, then Run and compare with output and EAX.', 'Final EAX and output match the prediction.'),
@@ -215,7 +215,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
     id: 'assembly-console-input', kind: 'assembly', title: 'Use virtual console input safely',
     lectureLabel: 'Lecture 12', resourceId: 'lecture-12', sourceReadingIndex: 2, sourceVideoIndex: 0,
     purpose: 'Trace Irvine-style input contracts without OS-specific setup or a shared instructor credential.',
-    boundary: 'Input remains in the bounded teaching machine and the example is not a submitted program.',
+    boundary: 'Input remains in the bounded trace-tutor model and the example is not a submitted program.',
     artifact: { kind: 'assembly', relativePath: 'irvine32/ConsoleInput.asm', profile: 'irvine32' },
     steps: [
       circuitStep('contract', 'Read the procedure contracts', 'Identify the register used for ReadInt output and the EDX/ECX inputs plus EAX output used by ReadString.', 'A short input/output register table.'),
@@ -223,7 +223,7 @@ export const GUIDED_LABS: readonly GuidedLab[] = [
       circuitStep('readint', 'Step ReadInt', 'Step through the first call and inspect EAX and OF. Compare with the entered integer.', 'The integer and overflow evidence.'),
       circuitStep('readstring', 'Step ReadString', 'Observe the buffer address, maximum length, returned character count, and Data symbols.', 'EDX, ECX, EAX, and buffer evidence.'),
       circuitStep('invalid', 'Try a controlled invalid integer', 'Rebuild with a nonnumeric first line and observe OF and the badInput branch.', 'A reproducible error-path trace.'),
-      circuitStep('explain', 'Explain portability', 'State why virtual input and embedded procedure contracts run consistently across operating systems.', 'A portability explanation that does not claim native Irvine compatibility.')
+      circuitStep('explain', 'Explain the model boundary', 'State why the tutor’s virtual input is portable and why it is not evidence of native Irvine32 behavior.', 'A portability explanation that explicitly separates the trace model from exact Windows execution.')
     ],
     reflection: 'What evidence shows whether a failure came from input validation or program control flow?'
   }

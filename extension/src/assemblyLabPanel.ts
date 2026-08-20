@@ -36,7 +36,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
   ) {
     this.panel = vscode.window.createWebviewPanel(
       'systemstudioCis310.assemblyLab',
-      `Assembly Lab: ${path.basename(uri.fsPath)}`,
+      `Instruction Trace Tutor: ${path.basename(uri.fsPath)}`,
       { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
       { enableScripts: true, retainContextWhenHidden: true }
     );
@@ -45,6 +45,10 @@ export class AssemblyLabPanel implements vscode.Disposable {
     this.panel.onDidDispose(() => this.dispose(), undefined, this.disposables);
     this.panel.webview.onDidReceiveMessage(
       async (message: unknown) => {
+        if (isRealToolchainRequest(message)) {
+          await vscode.commands.executeCommand('systemstudioCis310.buildRunAssembly', this.uri);
+          return;
+        }
         const request = requestFromMessage(message);
         if (request) {
           this.profile = request.profile;
@@ -125,7 +129,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
-  <title>SystemStudio Embedded Assembly Lab</title>
+  <title>SystemStudio Instruction Trace Tutor</title>
   <style>
     :root { color-scheme: light dark; }
     body { margin: 0; padding: 22px; color: var(--vscode-foreground); background: var(--vscode-editor-background); font-family: var(--vscode-font-family); }
@@ -164,31 +168,32 @@ export class AssemblyLabPanel implements vscode.Disposable {
 <body>
   <header>
     <div>
-      <h1>Embedded Irvine32 / IA-32 Assembly Lab</h1>
+      <h1>IA-32 Instruction Trace Tutor</h1>
       <p id="filename" class="subtle">Loading source…</p>
     </div>
-    <div><span class="badge">No Visual Studio • no Docker • every OS</span></div>
+    <div><span class="badge">Learning simulator — not an assembler</span></div>
   </header>
-  <div class="controls" role="toolbar" aria-label="Assembly controls">
+  <div class="controls" role="toolbar" aria-label="Instruction trace controls">
     <div class="field">
       <label for="profile">Environment profile</label>
       <select id="profile">
         <option value="auto">Auto-detect</option>
-        <option value="irvine32">Irvine32 Classroom (MASM)</option>
-        <option value="nasm-ia32">NASM IA-32</option>
+        <option value="irvine32">Irvine32-style trace model</option>
+        <option value="nasm-ia32">NASM-style trace model</option>
       </select>
     </div>
-    <button data-action="assemble">Build</button>
+    <button data-action="assemble">Load trace model</button>
     <button data-action="step">Step</button>
-    <button data-action="run">Run</button>
-    <button class="secondary" data-action="reset">Rebuild / Reset</button>
+    <button data-action="run">Run trace</button>
+    <button class="secondary" data-action="reset">Reset trace</button>
+    <button class="secondary" data-action="toolchain">Build and run real code</button>
   </div>
   <section class="wide">
     <h2>Virtual console input</h2>
     <textarea id="consoleInput" aria-label="Virtual console input" placeholder="Enter one ReadInt/ReadString value per line, or characters for ReadChar…"></textarea>
-    <p class="subtle">Input is isolated in memory. Changing it starts a fresh build on the next action.</p>
+    <p class="subtle">Input is isolated in the trace model. Changing it resets the model on the next action.</p>
   </section>
-  <div id="message" class="message" role="status">Preparing the embedded engine…</div>
+  <div id="message" class="message" role="status">Preparing the Instruction Trace Tutor…</div>
   <div class="grid">
     <section class="wide current">
       <h2>Next source instruction</h2>
@@ -220,7 +225,7 @@ export class AssemblyLabPanel implements vscode.Disposable {
     </section>
     <section class="wide">
       <h2>Compatibility boundary</h2>
-      <p class="subtle">Irvine32 Classroom is a clean-room source-level compatibility profile; it does not copy Visual Studio, ml.exe, or the book library. EIP uses synthetic teaching addresses. The lab does not emit PE/ELF files or replace complete MASM/NASM, Windows APIs, x87, SIMD, or operating-system behavior.</p>
+      <p class="subtle"><strong>This panel is not MASM or NASM.</strong> It is a bounded source-level visualization used to predict and inspect instruction effects. Choose <em>Build and run real code</em> for an actual assembler, linker, and executable. Exact Microsoft MASM/Irvine32 is offered only when ml.exe, link.exe, and the official Irvine library are present on Windows.</p>
     </section>
   </div>
   <script nonce="${nonce}">
@@ -243,7 +248,13 @@ export class AssemblyLabPanel implements vscode.Disposable {
       if (payload.type === 'busy') {
         buttons.forEach(button => button.disabled = true);
         message.className = 'message';
-        message.textContent = payload.action === 'run' ? 'Running with a 10,000-instruction safety limit…' : payload.action + '…';
+        message.textContent = payload.action === 'run'
+          ? 'Running the trace model with a 10,000-instruction safety limit…'
+          : payload.action === 'assemble'
+            ? 'Loading trace model…'
+            : payload.action === 'reset'
+              ? 'Resetting trace model…'
+              : 'Stepping trace model…';
         return;
       }
       buttons.forEach(button => button.disabled = false);
@@ -254,8 +265,8 @@ export class AssemblyLabPanel implements vscode.Disposable {
       }
       if (payload.type !== 'state') return;
       const state = payload.state;
-      const profileLabel = state.profile === 'irvine32' ? 'Irvine32 Classroom (MASM)'
-        : state.profile === 'nasm-ia32' ? 'NASM IA-32' : 'Generic IA-32';
+      const profileLabel = state.profile === 'irvine32' ? 'Irvine32-style trace model'
+        : state.profile === 'nasm-ia32' ? 'NASM-style trace model' : 'Generic IA-32 trace model';
       document.getElementById('filename').textContent = payload.fileName + ' • ' + profileLabel;
       message.className = 'message';
       message.textContent = state.halted
@@ -295,6 +306,11 @@ interface AssemblyRequest extends AssemblyExecutionOptions {
   action: AssemblyAction;
   profile: AssemblyProfile;
   input: string;
+}
+
+function isRealToolchainRequest(message: unknown): boolean {
+  return typeof message === 'object' && message !== null &&
+    (message as { action?: unknown }).action === 'toolchain';
 }
 
 function requestFromMessage(message: unknown): AssemblyRequest | undefined {

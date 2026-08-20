@@ -1,33 +1,24 @@
-# Irvine32 Classroom Profile
+<!-- systemstudio-irvine-guide: 0.11 -->
+# Exact Microsoft MASM and Irvine32 Setup
 
-Choose **Irvine32 Classroom (MASM)** in the Assembly Lab when a CIS 310 source file follows the 32-bit Visual Studio/Irvine textbook style. **Auto-detect** also selects this profile when it sees directives such as `.386`, `.model`, `PROC`, `INCLUDE Irvine32.inc`, or `INVOKE`.
+The exact course toolchain requires Windows, Microsoft’s 32-bit `ml.exe`, Microsoft `link.exe`, and Kip Irvine’s official 32-bit library. SystemStudio does not call any other engine “MASM.”
 
-This profile is an original, source-level teaching environment inside SystemStudio. It is not Microsoft MASM, Visual Studio, Windows, or the Irvine32 binary library. It makes the register-and-procedure exercises portable while preserving an explicit compatibility boundary.
+## Recommended setup
 
-## Student workflow
+1. Install a licensed Visual Studio edition or Build Tools configuration containing **Desktop development with C++** and the x86/x64 C++ tools.
+2. Open `real-toolchains/masm-irvine/AddTwo.asm`.
+3. Run **CIS 310: Build and Run with Real Assembly Toolchain**.
+4. SystemStudio searches the active `PATH` and Visual Studio Installer metadata for the x86-hosted `ml.exe` and `link.exe`.
+5. If `C:\Irvine` is absent, SystemStudio can download the official `Irvine.zip` educational resources from the author’s pinned GitHub commit. The archive is checksum verified and extracted into private extension storage.
 
-1. Open `irvine32/AddTwo.asm` or another `.asm` file.
-2. Run **CIS 310: Open Embedded Assembly Lab**.
-3. Select **Irvine32 Classroom (MASM)** or leave **Auto-detect** selected.
-4. For `ReadInt`, `ReadString`, or another input procedure, put the planned input in **Virtual console input**, one response per line.
-5. Select **Build**, then **Step** to observe EIP, registers, flags, stack, data, output, and trace. Select **Run** when ready.
+Override discovery only when necessary with these settings:
 
-The virtual console is reset by **Build** or **Rebuild / Reset**. Repeated runs are deterministic, including `Random32` and `RandomRange`, which is useful for demonstrations and automated checking.
+- `systemstudioCis310.masmPath`
+- `systemstudioCis310.masmLinkerPath`
+- `systemstudioCis310.irvineRoot`
 
-## Recognized Irvine-style procedures and macros
+The configured Irvine directory must contain `Irvine32.inc`, `Irvine32.lib`, `Kernel32.lib`, and `User32.lib`.
 
-| Group | Supported classroom calls |
-|---|---|
-| Display | `DumpRegs`, `DumpMem`, `WriteInt`, `WriteDec`, `WriteHex`, `WriteHexB`, `WriteBin`, `WriteBinB`, `WriteChar`, `WriteString`, `Crlf` |
-| Input | `ReadInt`, `ReadDec`, `ReadHex`, `ReadChar`, `ReadKey`, `ReadString` |
-| String/random | `StrLength` / `Str_length`, `Random32`, `RandomRange`, deterministic `Randomize` |
-| Console compatibility | `Clrscr`, `WaitMsg`; `Delay`, `Gotoxy`, and `SetTextColor` are accepted as no-ops because the lab output is not a Windows console |
-| Macros | `mWrite`, `mWriteLn`, `mWriteString`, `EXIT`, and `INVOKE ExitProcess,code` |
+## Non-Windows systems
 
-The implementation follows the register contracts needed by these procedures—for example, `ReadString` uses EDX for the buffer and ECX for its maximum length, and returns the character count in EAX. Invalid `ReadInt` input sets OF; invalid `ReadDec` input sets CF.
-
-## Deliberate limits
-
-SystemStudio does not preprocess the complete MASM macro language, call arbitrary Irvine procedures, create a Windows executable, provide DOS/Windows interrupts, or reproduce Visual Studio's debugger and disassembly window. Displayed EIP values are synthetic teaching addresses, not addresses calculated from encoded instruction sizes. See [COMPATIBILITY.md](COMPATIBILITY.md) for the instruction boundary.
-
-When an assignment assesses exact PE/COFF output, instruction encoding, Windows API linkage, debugger integration, or a source feature outside this profile, use the instructor-approved Windows toolchain instead.
+Microsoft MASM and Irvine32 target the Windows toolchain. SystemStudio reports the exact path as unavailable on Linux and macOS. Use the actual NASM/ELF32 example on an x86 Linux host, or an instructor-approved Windows machine/VM for assignments requiring Irvine32. The Instruction Trace Tutor remains available for prediction practice, but it is not used as an assembler substitute.

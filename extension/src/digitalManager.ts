@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, type ChildProcess } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { access, cp, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -198,34 +198,35 @@ export class DigitalManager {
   }
 
   async launch(circuitPath?: string): Promise<void> {
+    const child = await this.launchAttached(circuitPath);
+    child.unref();
+  }
+
+  /**
+   * Starts the unmodified upstream Digital GUI and leaves lifecycle ownership
+   * with the caller. Used by the streamed desktop integration so the extension
+   * can stop the private X display cleanly on shutdown.
+   */
+  async launchAttached(circuitPath?: string, environment: NodeJS.ProcessEnv = {}): Promise<ChildProcess> {
     await this.assertReady();
-    await mkdir(this.configurationHome, { recursive: true });
-    const args = [
-      `-Duser.home=${this.configurationHome}`,
-      '-Dapple.awt.application.name=SystemStudio Digital',
-      '-jar',
-      this.jarPath
-    ];
     if (circuitPath) {
       await access(circuitPath);
-      args.push(circuitPath);
     }
-
-    this.output.appendLine(`Launching Digital ${DIGITAL_RELEASE.displayVersion}${circuitPath ? ` with ${circuitPath}` : ''}.`);
-    await new Promise<void>((resolve, reject) => {
+    const args = this.guiArguments(circuitPath);
+    this.output.appendLine(
+      `Launching upstream Digital ${DIGITAL_RELEASE.displayVersion}${circuitPath ? ` with ${circuitPath}` : ''}.`
+    );
+    return new Promise<ChildProcess>((resolve, reject) => {
       const child = spawn(this.javaExecutable, args, {
         cwd: this.digitalHome,
-        env: this.digitalEnvironment,
-        detached: true,
+        env: { ...this.digitalEnvironment, ...environment },
+        detached: false,
         shell: false,
         stdio: 'ignore',
         windowsHide: false
       });
       child.once('error', reject);
-      child.once('spawn', () => {
-        child.unref();
-        resolve();
-      });
+      child.once('spawn', () => resolve(child));
     });
   }
 
@@ -361,6 +362,19 @@ export class DigitalManager {
     };
   }
 
+  private guiArguments(circuitPath?: string): string[] {
+    const args = [
+      `-Duser.home=${this.configurationHome}`,
+      '-Dapple.awt.application.name=SystemStudio Digital',
+      '-jar',
+      this.jarPath
+    ];
+    if (circuitPath) {
+      args.push(circuitPath);
+    }
+    return args;
+  }
+
   private get timeoutMs(): number {
     const seconds = vscode.workspace.getConfiguration('systemstudioCis310').get<number>('testTimeoutSeconds', 30);
     return Math.max(5, Math.min(300, seconds)) * 1000;
@@ -433,14 +447,13 @@ function starterReadme(): string {
     `## Start\n\n` +
     `1. Read \`course/README.md\` and the current Canvas assignment.\n` +
     `2. Open \`circuits/reference/HalfAdder.dig\` for an analogous prerequisite example.\n` +
-    `3. Use **Open With → SystemStudio Embedded Circuit Workbench** for supported one-bit construction and simulation inside VS Code.\n` +
+    `3. Open the file with **Full Digital Simulator**. This is the complete upstream Digital application, including its original menus, component library, simulation, dialogs, and save behavior.\n` +
     `4. Use **Open With → SystemStudio Circuit Preview** for Digital's official in-editor SVG view.\n` +
     `5. Run **CIS 310: Run Digital Circuit Tests** or use VS Code Test Explorer.\n` +
-    `6. Use **CIS 310: Open Circuit in Digital** only for buses, memories, subcircuits, HDL, or other advanced features.\n` +
-    `7. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n` +
-    `8. Submit the required files through the current Fall 2026 Canvas assignment.\n\n` +
-    `For assembly programming, read \`assembly/README.md\`. The embedded lab provides a source-level ` +
-    `IA-32 MASM/NASM teaching subset with no Docker or native toolchain requirement.\n\n` +
+    `6. Save your own circuits under \`circuits/work/\`, return to VS Code, and rerun the tests.\n` +
+    `7. Submit the required files through the current Fall 2026 Canvas assignment.\n\n` +
+    `For assembly programming, read \`assembly/README.md\`. Use **Build and Run with Real Assembly Toolchain** ` +
+    `for actual NASM or exact Windows MASM/Irvine32. The separately labeled trace tutor is only a learning visualization.\n\n` +
     `No ALU, register-file, or processor solution is bundled. This protects the learning task while ` +
     `retaining a small half-adder example for tool orientation.\n\n` +
     `## Suggested learning sequence\n\n` +
@@ -457,6 +470,7 @@ function starterThirdPartyNotice(): string {
     `- Release: ${DIGITAL_RELEASE.releaseUrl}\n` +
     `- License: ${DIGITAL_RELEASE.licenseName}\n` +
     `- License text: ${DIGITAL_RELEASE.licenseUrl}\n\n` +
-    `The embedded assembly teaching engine is original SystemStudio code and does not bundle Microsoft MASM, ` +
-    `NASM, Irvine libraries, operating-system SDKs, or course/textbook examples.\n`;
+    `SystemStudio downloads and runs the upstream Digital release rather than reimplementing its editor. The in-editor ` +
+    `Linux display uses noVNC (MPL-2.0) as a transport only. The real assembly path invokes external toolchains; ` +
+    `Microsoft MASM is never bundled or emulated. The separate trace tutor is original SystemStudio code.\n`;
 }

@@ -282,7 +282,7 @@ export function assembleEmbeddedX86(source: string, options: AssemblyOptions = {
     }
 
     if (/^(?:align|\.align|\.file|\.type|\.size|\.globl|\.section|\.cfi_|times\b)/i.test(line)) {
-      diagnostics.push({ line: lineNumber, message: 'This directive is outside the embedded IA-32 teaching subset.' });
+      diagnostics.push({ line: lineNumber, message: 'This directive is outside the IA-32 trace-tutor subset.' });
       continue;
     }
 
@@ -293,7 +293,7 @@ export function assembleEmbeddedX86(source: string, options: AssemblyOptions = {
     }
     const opcode = instructionMatch[1]!.toLowerCase();
     if (!SUPPORTED_OPCODES.has(opcode)) {
-      diagnostics.push({ line: lineNumber, message: `Instruction “${opcode}” is not in the embedded IA-32 teaching subset.` });
+      diagnostics.push({ line: lineNumber, message: `Instruction “${opcode}” is not in the IA-32 trace-tutor subset.` });
       continue;
     }
     instructions.push({

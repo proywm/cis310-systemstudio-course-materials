@@ -7,7 +7,6 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedLab } from './core/guidedLabs';
-import { isHeadlessRemote } from './core/runtimeEnvironment';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import {
   CourseCalendarPanel,
@@ -15,9 +14,11 @@ import {
   openOfficialAcademicCalendar
 } from './courseCalendarPanel';
 import { DigitalManager } from './digitalManager';
+import { FullDigitalEditorProvider } from './fullDigitalEditor';
+import { FullDigitalRuntime } from './fullDigitalRuntime';
 import { DigitalTestController } from './digitalTests';
-import { EmbeddedCircuitEditorProvider } from './embeddedCircuitEditor';
 import { GuidedLabPanel } from './guidedLabPanel';
+import { NativeAssemblyManager } from './nativeAssemblyManager';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
 import { PreClassQuestionPanel } from './preClassQuestionPanel';
@@ -31,11 +32,13 @@ const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
   const manager = new DigitalManager(context, output);
+  const fullDigitalRuntime = new FullDigitalRuntime(context, manager, output);
   const assemblyManager = new AssemblyManager(context, output);
+  const nativeAssemblyManager = new NativeAssemblyManager(context, output);
   const courseMaterials = await CourseMaterials.load(context);
   const practiceStore = new PracticeStore(context.globalState);
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
-  const statusTree = new StatusTreeProvider(manager, assemblyManager, practiceStore);
+  const statusTree = new StatusTreeProvider(manager, assemblyManager, nativeAssemblyManager, practiceStore);
   const tests = new DigitalTestController(manager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
   statusBar.command = 'systemstudioCis310.checkEnvironment';
@@ -128,6 +131,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(
     output,
+    fullDigitalRuntime,
     assemblyManager,
     practiceStore,
     statusTree,
@@ -137,8 +141,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.window.registerTreeDataProvider('systemstudioCis310.explorer', statusTree),
     vscode.window.registerTreeDataProvider('systemstudioCis310.materials', materialsTree),
     vscode.window.registerCustomEditorProvider(
-      EmbeddedCircuitEditorProvider.viewType,
-      new EmbeddedCircuitEditorProvider(),
+      FullDigitalEditorProvider.viewType,
+      new FullDigitalEditorProvider(
+        context,
+        manager,
+        fullDigitalRuntime,
+        () => ensureReady(manager, output, setupDigital),
+        output
+      ),
       { webviewOptions: { retainContextWhenHidden: true }, supportsMultipleEditorsPerDocument: false }
     ),
     vscode.window.registerCustomEditorProvider(
@@ -189,10 +199,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabs', async (labId?: unknown) => {
       await GuidedLabPanel.show(context, typeof labId === 'string' ? labId : undefined);
-    }),
-    vscode.commands.registerCommand('systemstudioCis310.openEmbeddedCircuit', async (candidate?: vscode.Uri) => {
-      const uri = await resolveCircuitUri(candidate);
-      if (uri) await vscode.commands.executeCommand('vscode.openWith', uri, EmbeddedCircuitEditorProvider.viewType);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGuidedLabArtifact', async (labId: unknown) => {
       const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
@@ -291,11 +297,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       if (!requireTrustedWorkspace()) {
         return;
       }
-      const unavailableReason = nativeDigitalUnavailableReason();
-      if (unavailableReason) {
-        await vscode.window.showWarningMessage(unavailableReason);
-        return;
-      }
       const uri = await resolveCircuitUri(candidate);
       if (!uri) {
         return;
@@ -304,8 +305,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         return;
       }
       try {
-        await manager.launch(uri.fsPath);
-        await vscode.window.showInformationMessage(`Opened ${path.basename(uri.fsPath)} in Digital.`);
+        await vscode.commands.executeCommand('vscode.openWith', uri, FullDigitalEditorProvider.viewType);
       } catch (error) {
         await showFailure('Could not launch Digital', error, output);
       }
@@ -428,9 +428,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.createAssemblyLab', async () => {
-      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the embedded assembly lab');
+      const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the assembly examples');
       if (!workspaceFolder) {
-        await vscode.window.showErrorMessage('Open a local folder before creating the embedded assembly lab.');
+        await vscode.window.showErrorMessage('Open a local folder before creating the assembly examples.');
         return;
       }
       const existingGuide = path.join(workspaceFolder.uri.fsPath, 'assembly', 'README.md');
@@ -446,60 +446,114 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           const upgraded = await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
           const action = await vscode.window.showInformationMessage(
             upgraded.addedFiles
-              ? `Added the Irvine32 and NASM embedded starters without overwriting student .asm files.`
-              : `The embedded assembly lab already exists at ${path.dirname(existingGuide)}.`,
+              ? `Added real-toolchain and trace-tutor resources without overwriting student .asm files. Pre-0.11 guides were archived before replacement.`
+              : `The assembly workspace already exists at ${path.dirname(existingGuide)}.`,
             'Open Guide',
-            'Open Assembly Lab'
+            'Open Trace Tutor'
           );
           if (action === 'Open Guide') {
             await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(upgraded.guidePath));
-          } else if (action === 'Open Assembly Lab') {
+          } else if (action === 'Open Trace Tutor') {
             const uri = vscode.Uri.file(upgraded.entryPath);
             await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
             await AssemblyLabPanel.show(context, assemblyManager, uri);
           }
         } catch (error) {
-          await showFailure('Could not update the embedded assembly lab', error, output);
+          await showFailure('Could not update the assembly workspace', error, output);
         }
         return;
       }
       try {
         const created = await assemblyManager.createLab(workspaceFolder.uri.fsPath);
         const action = await vscode.window.showInformationMessage(
-          `Created the embedded assembly lab at ${created}. No toolchain installation is required.`,
+          `Created real-toolchain examples and a separate instruction-trace tutor workspace at ${created}.`,
           'Open Guide',
-          'Open Assembly Lab'
+          'Open Trace Tutor'
         );
         if (action === 'Open Guide') {
           await vscode.commands.executeCommand(
             'markdown.showPreview',
             vscode.Uri.file(path.join(created, 'README.md'))
           );
-        } else if (action === 'Open Assembly Lab') {
+        } else if (action === 'Open Trace Tutor') {
           const uri = vscode.Uri.file(path.join(created, 'irvine32', 'AddTwo.asm'));
           await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
           await AssemblyLabPanel.show(context, assemblyManager, uri);
         }
       } catch (error) {
-        await showFailure('Could not create the embedded assembly lab', error, output);
+        await showFailure('Could not create the assembly workspace', error, output);
       }
     }),
     vscode.commands.registerCommand('systemstudioCis310.checkAssemblyEnvironment', async () => {
-      const status = await assemblyManager.getStatus();
+      const trace = await assemblyManager.getStatus();
+      const real = await nativeAssemblyManager.status();
       output.appendLine([
-        'CIS 310 Embedded Assembly Lab check',
-        `Engine bundled: ${status.embeddedReady ? 'yes' : 'no'}`,
-        'Host toolchain required: no',
-        'Docker required: no',
-        'Administrator access required: no',
-        'Profiles: Irvine32 Classroom (MASM) and NASM IA-32',
-        'Execution model: bounded source-level IA-32 teaching interpreter',
-        `Detail: ${status.detail}`
+        'CIS 310 Assembly Environment',
+        `Actual NASM/ELF32: ${real.nasm.available ? `${real.nasm.executable} + ${real.nasm.linker}` : real.nasm.detail}`,
+        `Exact Microsoft MASM/Irvine32: ${real.masm.available ? real.masm.executable : 'not available'}`,
+        `Trace tutor bundled: ${trace.embeddedReady ? 'yes' : 'no'} (not an assembler)`,
+        `NASM detail: ${real.nasm.detail}`,
+        `MASM detail: ${real.masm.detail}`,
+        `Trace detail: ${trace.detail}`
       ].join('\n'));
       output.show(true);
       await vscode.window.showInformationMessage(
-        'Irvine32 Classroom and NASM IA-32 profiles are ready. They need no Docker, native assembler, SDK, or administrator setup.'
+        `Actual NASM: ${real.nasm.available ? 'ready' : 'not ready on this host'}. Exact Microsoft MASM/Irvine32: ${real.masm.available ? 'ready' : 'not configured on this host'}. See the output for host-specific details. The trace tutor is separate and is not an assembler.`
       );
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.buildRunAssembly', async (candidate?: vscode.Uri) => {
+      if (!requireTrustedWorkspace()) return;
+      const uri = await resolveAssemblyUri(candidate);
+      if (!uri) return;
+      try {
+        const detectedSyntax = await nativeAssemblyManager.detectSyntax(uri);
+        const detectedLabel = detectedSyntax === 'masm'
+          ? 'heuristic result: MASM/Irvine32'
+          : detectedSyntax === 'nasm'
+            ? 'heuristic result: NASM/ELF32'
+            : 'ambiguous—choose explicitly';
+        const toolchain = await vscode.window.showQuickPick(
+          [
+            {
+              label: 'Auto-detect from source',
+              description: detectedLabel,
+              detail: 'This is a syntax heuristic. Ambiguous source is stopped instead of silently routed; choose an explicit toolchain when unsure.',
+              value: 'auto' as const
+            },
+            {
+              label: 'Actual NASM → ELF32',
+              description: 'x86 Linux',
+              detail: 'Runs nasm, GNU ld, and the resulting IA-32 executable.',
+              value: 'nasm-linux' as const
+            },
+            {
+              label: 'Exact Microsoft MASM + Irvine32',
+              description: 'Windows only',
+              detail: 'Runs Microsoft ml.exe/link.exe with the official Irvine32 library.',
+              value: 'masm-irvine-windows' as const
+            }
+          ],
+          {
+            title: 'Choose the real assembly toolchain',
+            placeHolder: 'Cancel makes no changes; no option invokes the Instruction Trace Tutor'
+          }
+        );
+        if (!toolchain) return;
+        const result = await vscode.window.withProgress(
+          { location: vscode.ProgressLocation.Notification, title: 'Building and running with the real assembly toolchain', cancellable: false },
+          () => nativeAssemblyManager.buildAndRun(uri, toolchain.value)
+        );
+        output.show(true);
+        const programOutput = [result.execution.stdout.trim(), result.execution.stderr.trim()].filter(Boolean).join('\n');
+        const message = `${result.toolchain} produced ${path.basename(result.executablePath)} and executed real machine code (exit ${result.execution.code}).`;
+        if (result.execution.timedOut || result.execution.code !== 0) {
+          await vscode.window.showWarningMessage(`${message}${programOutput ? ` Output: ${programOutput}` : ''}`);
+        } else {
+          await vscode.window.showInformationMessage(`${message}${programOutput ? ` Output: ${programOutput}` : ''}`);
+        }
+      } catch (error) {
+        await showFailure('Real assembly build/run failed', error, output);
+      }
     }),
     vscode.commands.registerCommand('systemstudioCis310.openAssemblyLab', async (candidate?: vscode.Uri) => {
       const uri = await resolveAssemblyUri(candidate);
@@ -681,14 +735,6 @@ function requireTrustedWorkspace(): boolean {
   return false;
 }
 
-function nativeDigitalUnavailableReason(): string | undefined {
-  if (isHeadlessRemote(vscode.env.remoteName)) {
-    return `The native Digital editor cannot open on this ${vscode.env.remoteName} host because no graphical display is available. ` +
-      'The embedded circuit workbench, course materials, and starter workspaces remain available. Use local desktop VS Code only for the full advanced Digital editor.';
-  }
-  return undefined;
-}
-
 async function maybePromptForInstall(
   context: vscode.ExtensionContext,
   manager: DigitalManager,
@@ -787,12 +833,9 @@ async function createUniqueCircuit(manager: DigitalManager, directory: string, r
 }
 
 async function offerToOpenCircuit(uri: vscode.Uri, label = 'Created a blank Digital circuit'): Promise<void> {
-  await vscode.commands.executeCommand('vscode.openWith', uri, EmbeddedCircuitEditorProvider.viewType);
-  const actions = nativeDigitalUnavailableReason() ? ['Reveal File'] : ['Open Full Digital', 'Reveal File'];
-  const action = await vscode.window.showInformationMessage(`${label}. Opened in the embedded circuit workbench: ${uri.fsPath}`, ...actions);
-  if (action === 'Open Full Digital') {
-    await vscode.commands.executeCommand('systemstudioCis310.openDigital', uri);
-  } else if (action === 'Reveal File') {
+  await vscode.commands.executeCommand('vscode.openWith', uri, FullDigitalEditorProvider.viewType);
+  const action = await vscode.window.showInformationMessage(`${label}. Opened in the full Digital simulator: ${uri.fsPath}`, 'Reveal File');
+  if (action === 'Reveal File') {
     await vscode.commands.executeCommand('revealInExplorer', uri);
   }
 }
@@ -819,7 +862,7 @@ async function resolveAssemblyUri(candidate?: vscode.Uri): Promise<vscode.Uri | 
   }
   if (!uri) {
     const selected = await vscode.window.showOpenDialog({
-      title: 'Select a MASM/NASM teaching source file',
+      title: 'Select an x86 assembly source file',
       canSelectFiles: true,
       canSelectFolders: false,
       canSelectMany: false,

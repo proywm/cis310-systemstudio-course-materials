@@ -1,4 +1,4 @@
-; NASM-style source executed by the same embedded 32-bit teaching machine.
+; NASM-style source modeled by the non-assembler Instruction Trace Tutor.
 bits 32
 
 section .data

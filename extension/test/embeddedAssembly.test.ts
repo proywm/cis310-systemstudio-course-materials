@@ -9,8 +9,8 @@ import {
   EmbeddedX86Machine
 } from '../src/core/embeddedAssembly';
 
-describe('embedded IA-32 assembly lab', () => {
-  it('runs an Irvine-style MASM AddTwo program without external tools', () => {
+describe('IA-32 instruction-trace tutor', () => {
+  it('models an Irvine-style AddTwo example without claiming to assemble it', () => {
     const source = `
 .386
 .model flat,stdcall
@@ -88,7 +88,7 @@ failed:
     assert.match(snapshot.reason ?? '', /HLT/);
   });
 
-  it('provides embedded Irvine output helpers and data inspection', () => {
+  it('models selected Irvine output helpers and data inspection', () => {
     const source = `
 .386
 .data
@@ -267,17 +267,6 @@ END main
     assert.equal(snapshot.registers.ESI, 4);
     assert.equal(snapshot.registers.ECX, 3);
     assert.equal(snapshot.registers.EAX, 32);
-  });
-
-  it('executes both starter programs shipped in the VSIX', () => {
-    const starter = (name: string) => readFileSync(path.join(process.cwd(), 'assembly-starter', 'embedded', name), 'utf8');
-    const masm = new EmbeddedX86Machine(assembleEmbeddedX86(starter('add-two.asm'))).run();
-    const nasm = new EmbeddedX86Machine(assembleEmbeddedX86(starter('loop-sum.asm'))).run();
-    assert.equal(masm.registers.EAX, 0x50000);
-    assert.match(masm.output, /CIS 310 sum: 00050000/);
-    assert.equal(nasm.registers.EAX, 30);
-    assert.equal(nasm.output, '30\n');
-    assert.ok(nasm.trace.length > 0);
   });
 
   it('executes every assembly example used by the guided labs', () => {

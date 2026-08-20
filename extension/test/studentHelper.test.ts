@@ -53,8 +53,8 @@ describe('student helper', () => {
 
   it('distinguishes Remote SSH from a Digital installation failure', () => {
     const reply = answerStudentQuestion('Why will Digital not open over SSH?');
-    assert.match(JSON.stringify(reply), /embedded workbench/);
-    assert.match(JSON.stringify(reply), /graphical desktop/);
+    assert.match(JSON.stringify(reply), /complete upstream Digital application/);
+    assert.match(JSON.stringify(reply), /private X\/VNC display/);
     assert.ok(reply.actions.some((action) => action.id === 'check-environment'));
   });
 

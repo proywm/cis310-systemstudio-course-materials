@@ -64,6 +64,7 @@ export async function executeStudentHelperAction(action: StudentHelperAction): P
     'setup-digital': 'systemstudioCis310.setupDigital',
     'create-circuit': 'systemstudioCis310.createCircuit',
     'create-assembly-lab': 'systemstudioCis310.createAssemblyLab',
+    'build-run-assembly': 'systemstudioCis310.buildRunAssembly',
     'assembly-guide': 'systemstudioCis310.openMasmGuide'
   };
   await vscode.commands.executeCommand(commands[action]);

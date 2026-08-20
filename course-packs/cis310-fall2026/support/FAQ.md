@@ -24,7 +24,7 @@ Uploading a file is not always the final submission step. Complete **Submit Assi
 
 ## How do I create more than one Digital circuit without overwriting a file?
 
-Use **Create a new blank Digital circuit** and give every file a distinct descriptive name. SystemStudio will not overwrite an existing target and opens it in the embedded VS Code workbench. In full Digital, use **Save As** when branching an existing design. Confirm the title and file path before editing.
+Use **Create a new blank Digital circuit** and give every file a distinct descriptive name. SystemStudio will not overwrite an existing target and opens it in the complete upstream Digital simulator. Use Digital’s **Save As** when branching an existing design. Confirm the title and file path before editing.
 
 ## How should I build a larger adder or processor component?
 
@@ -32,13 +32,17 @@ Write the expected input/output behavior first. Build and test the smallest comp
 
 ## Is there a guided circuit or assembly walkthrough?
 
-Yes. Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. The Lecture 2 half-adder lab first asks for all four predicted Sum/Carry rows, creates a fresh non-overwriting `.dig` file, and opens the embedded circuit workbench. It then walks through labeled pins, the Sum and Carry paths, simulation evidence, optional Digital preview, and explanation. Additional circuit labs cover a Boolean gate path, multiplexer, stored bit, address decoder, and a small arithmetic/logic selector.
+Yes. Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. The Lecture 2 half-adder lab first asks for all four predicted Sum/Carry rows, creates a fresh non-overwriting `.dig` file, and opens Full Digital. It then walks through labeled pins, the Sum and Carry paths, simulation evidence, optional official preview, and explanation. Additional circuit labs cover a Boolean gate path, multiplexer, stored bit, address decoder, and a small arithmetic/logic selector.
 
-## Why are there an embedded workbench and a Full Digital button?
+## Is the circuit editor a simplified copy of Digital?
 
-The embedded workbench is an original, course-scoped editor and simulator for inputs, outputs, AND/OR/XOR/NOT, a manual clock, and one-bit D flip-flops. It runs inside VS Code on Windows, macOS, Linux, and Remote SSH and saves Digital-compatible `.dig` files. **Full Digital** opens the separately managed Java Swing application for buses, memories, subcircuits, HDL, and other advanced components. If an existing `.dig` file contains unsupported features, the embedded workbench refuses to rewrite it and offers Full Digital or a read-only preview.
+No. SystemStudio runs the unmodified upstream Digital v0.31 application. On supported headless Linux/Remote SSH hosts, it transports Digital’s real Swing desktop into the VS Code tab. Windows and macOS use Digital’s native desktop window. The read-only preview is generated separately by Digital’s official exporter.
 
-Five assembly paths open original example code beside the embedded machine-state panel: register arithmetic, flags/branching, an array loop, a stack frame, and virtual input. Predict first and inspect the requested register, flag, memory, stack, EIP, output, or trace evidence. These are formative prerequisite or analogous labs—not completed graded assignment artifacts.
+The transported desktop is a graphical canvas: it forwards keyboard and pointer input but does not expose component-level Swing semantics to a VS Code screen reader. It is not a screen-reader-equivalent circuit editor. If this creates an access barrier, contact the instructor promptly for an accessible alternative and evaluate native Digital with the assistive technology available on your platform.
+
+## What is the Instruction Trace Tutor?
+
+Five assembly paths open original example code beside the Instruction Trace Tutor: register arithmetic, flags/branching, an array loop, a stack frame, and virtual input. Predict first and inspect the requested teaching-model register, flag, memory, stack, EIP, output, or trace evidence. These are formative visualization labs—not assembler verification or completed graded artifacts.
 
 ## Digital says a flip-flop must be connected to the clock, but I see clock wires.
 
@@ -68,7 +72,7 @@ Choose **Ask a Question Before Class**, select the anonymous preference, and pre
 
 ## Which assembly environment should I choose?
 
-Use **Irvine32 Classroom** for the textbook-style MASM/Irvine subset, **NASM IA-32** for NASM syntax, or **Auto-detect** when unsure. The embedded teaching interpreter works consistently across Windows, macOS, Linux, and Remote SSH. It is not a full native assembler or operating-system toolchain.
+Use **Build and Run with Real Assembly Toolchain** for claims about compilation or program behavior. Linux uses actual NASM, GNU `ld`, and an ELF32 executable. Exact MASM/Irvine32 requires Windows, Microsoft `ml.exe`/`link.exe`, and the official Irvine library. The separately labeled **Instruction Trace Tutor** is only a source-level visualization and is not proof that MASM or NASM accepts a file.
 
 ## Where can I get human help?
 

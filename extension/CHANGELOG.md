@@ -1,7 +1,22 @@
 # Change Log
 
+## 0.11.0
+
+- Removed the reduced eight-component circuit renderer from the student path and made the complete upstream Digital v0.31 application the default `.dig` editor.
+- Added a private Xvfb/x11vnc/noVNC transport so the actual Digital Swing desktop—including its full component library, menus, simulation, dialogs, and save behavior—runs inside VS Code on supported headless Linux/Remote SSH hosts.
+- Kept native upstream Digital as the Windows/macOS desktop path and retained Digital’s official SVG exporter and testcase CLI for read-only verification.
+- Added a real NASM → ELF32 → GNU `ld` → IA-32 executable workflow with private Debian/Ubuntu NASM setup after consent.
+- Added exact Windows MASM/Irvine32 discovery and execution using Microsoft `ml.exe`/`link.exe`, plus an optional pinned, checksum-verified download of the author’s official Irvine resources.
+- Added an explicit Auto/NASM/MASM toolchain chooser and removed references to a portable container that the extension does not provide.
+- Renamed and relabeled the former embedded assembly lab as **Instruction Trace Tutor — not an assembler**. Loading there is no longer presented as compilation evidence.
+- Added a safe pre-0.11 workspace migration that archives stale generated assembly guides, installs the corrected toolchain guides, and preserves student `.asm` files.
+- Made NASM readiness require both the real assembler and GNU `ld`, fail closed on ambiguous syntax, and report unsupported hosts explicitly.
+- Disclosed the screen-reader boundary of the graphical noVNC canvas and added a one-click native Digital fallback when the Linux host has a graphical desktop.
+- Added actual-process manual smoke tests for upstream Digital input interaction and a NASM-built ELF32 program that prints `Sum = 15`.
+
 ## 0.10.6
 
+- **Superseded in 0.11.0:** the reduced workbench below was removed from the student path and replaced by the actual upstream Digital application.
 - Added an original embedded circuit workbench that builds and simulates the supported CIS 310 one-bit component set entirely inside desktop or Remote SSH VS Code.
 - Added inputs, outputs, AND/OR/XOR/NOT, a manual clock, one-bit D flip-flops, port-to-port wiring, drag/nudge layout, live values, accessible component navigation, undo/redo, and Digital-compatible `.dig` saves.
 - Made the embedded workbench the default for fresh guided and assignment circuits while retaining Digital v0.31 for official preview/testcases and advanced components.
@@ -12,7 +27,7 @@
 
 - Added a self-paced Hands-on Lab Center mapped to the same reading, author video, and lecture sources as readiness practice.
 - Added six prediction-first Digital circuit builds: a Boolean path, half adder, 2-to-1 selector, stored state bit, address decoder, and small arithmetic/logic selector.
-- Added five guided embedded-assembly traces for register arithmetic, flags/branching, array loops, stack frames, and virtual console input.
+- Added five guided instruction-trace-tutor activities for register arithmetic, flags/branching, array loops, stack frames, and virtual console input.
 - Added fresh non-overwriting guided-circuit creation, lecture-linked lab launch buttons, local checklist progress, and explicit formative-versus-graded boundaries.
 - Extended the guided tutorial, Learning dashboard, sidebar, FAQ, syllabus, student guide, and tests around the new build-and-trace workflow.
 
@@ -96,6 +111,7 @@
 
 ## 0.6.0
 
+- **Clarified in 0.11.0:** the items below describe the source-level Instruction Trace Tutor, not MASM/NASM assembly or executable behavior.
 - Added an explicit Irvine32 Classroom profile alongside NASM IA-32 and auto-detection; the selected profile changes accepted source syntax, not the host toolchain.
 - Added virtual console input and classroom implementations of `ReadInt`, `ReadDec`, `ReadHex`, `ReadChar`, `ReadKey`, and `ReadString`.
 - Expanded Irvine-style compatibility with `DumpMem`, binary/hex display variants, string length, deterministic random calls, `mWrite` macros, and documented console-call behavior.
@@ -105,6 +121,7 @@
 
 ## 0.5.0
 
+- **Clarified in 0.11.0:** the “interpreter” below is now labeled Instruction Trace Tutor and is not used as assembler evidence.
 - Replaced the Docker/NASM container workflow with an original, extension-native IA-32 teaching interpreter that requires no external toolchain or administrator setup.
 - Added a side-by-side Assembly Lab with assemble, run, step, reset, registers, flags, stack, declared data, program output, and a recent source trace.
 - Added classroom MASM wrappers, common Irvine-style output helpers, a documented NASM-style IA-32 subset, exact source-line diagnostics, and bounded execution.

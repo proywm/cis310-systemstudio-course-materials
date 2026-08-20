@@ -1,32 +1,21 @@
-# CIS 310 Embedded Assembly Lab
+<!-- systemstudio-assembly-guide: 0.11 -->
+# CIS 310 Assembly Workspace
 
-Start with `irvine32/AddTwo.asm`, then run **CIS 310: Open Embedded Assembly Lab**. The lab is built into the extension and works in desktop or remote VS Code on Windows, Linux, Intel Mac, and Apple Silicon. It needs no Docker, Visual Studio, native assembler, compiler, SDK, administrator access, or network connection.
+SystemStudio keeps real execution and instructional visualization separate.
 
-Choose one execution profile in the lab:
+## Build and execute real code
 
-- **Irvine32 Classroom (MASM)** accepts the 32-bit Visual Studio/Irvine source shape used in introductory textbook activities and supplies an embedded teaching implementation of common Irvine-style calls.
-- **NASM IA-32** accepts the documented NASM-style classroom subset.
-- **Auto-detect** chooses a profile from the source wrappers and can be overridden at any time.
+Use **CIS 310: Build and Run with Real Assembly Toolchain**.
 
-The side-by-side lab provides four controls:
+- `real-toolchains/nasm-linux/LoopSum.asm` is assembled by the actual NASM executable, linked by GNU `ld` as ELF32, and executed as IA-32 machine code. On Debian/Ubuntu Linux, SystemStudio can install the distribution NASM package into private extension storage without administrator access.
+- `real-toolchains/masm-irvine/AddTwo.asm` is the exact Windows path. SystemStudio invokes Microsoft `ml.exe`, Microsoft `link.exe`, and the official `Irvine32.lib`. It discovers Visual Studio C++ tools when possible and can download the author’s pinned, checksum-verified `Irvine.zip` for educational use. It does not redistribute or emulate Microsoft MASM.
 
-1. **Build** parses the current source and resets the machine and virtual console.
-2. **Step** executes one source instruction and highlights the next source line.
-3. **Run** executes until `EXIT`, `HLT`, program completion, an error, or the 10,000-instruction safety limit.
-4. **Rebuild / Reset** restores registers, flags, data, input, output, and the stack.
+Exact MASM/Irvine32 execution is Windows-only. The verified NASM/ELF32 build-and-execute path is x86 Linux. On macOS, use an instructor-provided Linux or Windows environment; this extension does not ship a VM or container. The extension reports unsupported paths as unavailable instead of silently using a different interpreter.
 
-You can inspect EAX–EIP, arithmetic flags, the top of the stack, declared data, program output, remaining input, and a recent execution trace. The **CIS 310 Hands-on Lab Center** maps each original example to prediction and evidence checkpoints:
+## Visualize instruction effects
 
-- `irvine32/AddTwo.asm`: register arithmetic;
-- `irvine32/FlagsBranch.asm`: `CMP`, flags, and signed conditional branching;
-- `nasm-ia32/LoopSum.asm`: array addressing and a counted loop;
-- `irvine32/StackCall.asm`: `CALL`, a small stack frame, register preservation, and `RET`; and
-- `irvine32/ConsoleInput.asm`: virtual input, procedure contracts, and an invalid-input path.
+Use **CIS 310: Open Instruction Trace Tutor** for the formative files under `irvine32/` and `nasm-ia32/`. The tutor shows predicted source-level changes to registers, flags, memory, stack, input, output, and control flow. Its panel is explicitly labeled **Learning simulator — not an assembler**.
 
-These are formative examples with different values and scope from graded work. Canvas assignment rules remain authoritative.
+The trace examples are useful for prediction and explanation but are not evidence that source assembled successfully. Use the real-toolchain command whenever compilation, linking, binary output, ABI behavior, or executable behavior matters.
 
-## What “embedded” means
-
-SystemStudio interprets a documented classroom subset of 32-bit x86 at the source level in a 1 MiB teaching memory model. It accepts the common instructions used for registers, data, arithmetic, flags, branches, procedures, and stack exercises. It also recognizes the common MASM/Irvine teaching wrappers, input/output procedures, and a NASM-style IA-32 form.
-
-This is intentionally not a claim of full Microsoft MASM, Irvine32, or NASM compatibility. It does not emit PE/ELF objects, run arbitrary native code, or reproduce Windows/Linux ABIs. Read [the Irvine32 profile guide](IRVINE32_PROFILE.md) and [the compatibility guide](COMPATIBILITY.md) before assigning an example that uses the MASM macro language, operating-system calls, external libraries, x87, SIMD, or an unsupported directive.
+Read [COMPATIBILITY.md](COMPATIBILITY.md) for the exact boundary and [IRVINE32_PROFILE.md](IRVINE32_PROFILE.md) for the Windows setup.
