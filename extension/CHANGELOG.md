@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.10.5
+
+- Added a self-paced Hands-on Lab Center mapped to the same reading, author video, and lecture sources as readiness practice.
+- Added six prediction-first Digital circuit builds: a Boolean path, half adder, 2-to-1 selector, stored state bit, address decoder, and small arithmetic/logic selector.
+- Added five guided embedded-assembly traces for register arithmetic, flags/branching, array loops, stack frames, and virtual console input.
+- Added fresh non-overwriting guided-circuit creation, lecture-linked lab launch buttons, local checklist progress, and explicit formative-versus-graded boundaries.
+- Extended the guided tutorial, Learning dashboard, sidebar, FAQ, syllabus, student guide, and tests around the new build-and-trace workflow.
+
 ## 0.10.4
 
 - Added an attempt-first learning-coach checkpoint before SystemStudio opens the external U-M Maizey tutor.

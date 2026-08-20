@@ -24,6 +24,23 @@ Open **Start Here → Prepare Lecture 1** for the next self-paced pre-class modu
 
 The dashboard reports local practice evidence—coverage, accuracy, due questions, practice days, and confidence mismatches. It does not calculate a grade, certify mastery, rank students, or send results to Canvas or the instructor. You can reset the local history at any time.
 
+## Build and trace with the Hands-on Lab Center
+
+Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. Every lab is mapped to the same focused reading, author video, and lecture used by the readiness path. Checkmarks are self-reported, remain on this device, and are not grades.
+
+The six circuit labs create a fresh blank file under `circuits/guided/` and walk through prediction, construction in Digital, simulation, evidence, and explanation:
+
+- Lecture 2 half adder;
+- Lecture 3 Boolean expression to gates;
+- Lecture 5 2-to-1 data selector;
+- Lecture 6 one stored state bit;
+- Lecture 7 2-to-4 address decoder; and
+- Lecture 10 small arithmetic/logic selector.
+
+The five assembly labs open original examples beside the embedded machine-state panel: register arithmetic, flags and signed branching, array addressing with a counted loop, a stack frame with `CALL`/`RET`, and virtual console input. Students predict before stepping and inspect registers, flags, memory, stack, EIP, output, and trace evidence.
+
+These are formative prerequisite or analogous labs. They do not provide the graded four-bit adder, multiplier, counter, register file, ALU, processor, report, or assignment answer. Canvas controls the released task and submission.
+
 ## Read before class: open book and author-video map
 
 The book is required; the targeted videos reinforce rather than replace the reading. Use the focused sections below before opening the presentation slides. Reading/video completion is self-reported and local to your VS Code installation.
@@ -83,16 +100,17 @@ Browse the [official Tarnoff book page](https://faculty.etsu.edu/tarnoff/138292/
 ## Using these materials in SystemStudio
 
 1. Complete the mapped Read → Watch → Try 3 questions module before the related class meeting.
-2. Read the assignment and its mapped lecture topics before opening the simulator.
-3. Create your own circuit under `circuits/work/`; do not modify the reference half-adder.
-4. Build components as separate `.dig` subcircuits.
-5. Add instructor-approved `Testcase` components where provided.
-6. Run tests from VS Code after each milestone and keep the observed evidence for your report.
-7. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for the current requirements and due date.
-8. Submit the required files in Canvas and confirm that Canvas recorded the submission.
+2. Open the mapped formative lab when one is available; predict before creating or running its artifact.
+3. Read the assignment and its mapped lecture topics before opening the simulator.
+4. Keep guided practice under `circuits/guided/` and create assignment work separately under `circuits/work/`.
+5. Build assignment components as separate `.dig` subcircuits.
+6. Add instructor-approved `Testcase` components where provided.
+7. Run tests from VS Code after each milestone and keep the observed evidence for your report.
+8. Open [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for the current requirements and due date.
+9. Submit the required files in Canvas and confirm that Canvas recorded the submission.
 
 ## Assembly programming
 
 Use **CIS 310: Create Embedded Assembly Lab**, open `assembly/irvine32/AddTwo.asm`, and choose **Open Embedded Assembly Lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. The same source-level IA-32 teaching engine runs on Windows, Linux, macOS, and Remote SSH without Docker, Visual Studio, NASM, a linker, administrator access, or another download.
 
-The lab lets you build, step, run, and reset while observing registers, flags, data, stack, virtual-console input, output, and the recent instruction trace. Try `assembly/irvine32/ConsoleInput.asm` with one response per input line, or switch to `assembly/nasm-ia32/LoopSum.asm`. Read `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, the complete macro language, or arbitrary external libraries.
+The lab lets you build, step, run, and reset while observing registers, flags, data, stack, virtual-console input, output, EIP, and the recent instruction trace. Use the Hands-on Lab Center to open `AddTwo.asm`, `FlagsBranch.asm`, `LoopSum.asm`, `StackCall.asm`, or `ConsoleInput.asm` with a prediction-and-evidence walkthrough. Read `assembly/IRVINE32_PROFILE.md` and `assembly/COMPATIBILITY.md`: the embedded lab does not generate binaries or replace a complete MASM/NASM toolchain, operating-system APIs, the complete macro language, or arbitrary external libraries.

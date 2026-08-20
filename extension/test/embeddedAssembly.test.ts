@@ -280,7 +280,7 @@ END main
     assert.ok(nasm.trace.length > 0);
   });
 
-  it('executes the profiled v0.6 starters shipped in the VSIX', () => {
+  it('executes every assembly example used by the guided labs', () => {
     const source = (directory: string, name: string) => readFileSync(
       path.join(process.cwd(), 'assembly-starter', directory, name),
       'utf8'
@@ -292,6 +292,12 @@ END main
       assembleEmbeddedX86(source('irvine32', 'ConsoleInput.asm'), { profile: 'irvine32' }),
       { input: '-42\nAda Lovelace\n' }
     ).run();
+    const flagsBranch = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('irvine32', 'FlagsBranch.asm'), { profile: 'irvine32' })
+    ).run();
+    const stackCall = new EmbeddedX86Machine(
+      assembleEmbeddedX86(source('irvine32', 'StackCall.asm'), { profile: 'irvine32' })
+    ).run();
     const nasm = new EmbeddedX86Machine(
       assembleEmbeddedX86(source('nasm-ia32', 'LoopSum.asm'), { profile: 'nasm-ia32' })
     ).run();
@@ -299,6 +305,9 @@ END main
     assert.match(addTwo.output, /EAX=0x0000002A/);
     assert.match(consoleInput.output, /You entered -42; name=Ada Lovelace/);
     assert.equal(consoleInput.inputRemaining, '');
+    assert.equal(flagsBranch.registers.EBX, 1);
+    assert.equal(stackCall.registers.EAX, 42);
+    assert.equal(stackCall.registers.EBX, 32);
     assert.equal(nasm.output, '30\n');
   });
 });

@@ -57,6 +57,7 @@ export async function executeStudentHelperAction(action: StudentHelperAction): P
     'open-syllabus': 'systemstudioCis310.openSyllabus',
     'open-materials': 'systemstudioCis310.openMaterialsIndex',
     'open-learning': 'systemstudioCis310.openPracticeCenter',
+    'open-guided-labs': 'systemstudioCis310.openGuidedLabs',
     'practice-now': 'systemstudioCis310.startQuickPractice',
     'start-tutorial': 'systemstudioCis310.startTutorial',
     'check-environment': 'systemstudioCis310.checkEnvironment',

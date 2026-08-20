@@ -8,6 +8,7 @@ export type StudentHelperAction =
   | 'open-syllabus'
   | 'open-materials'
   | 'open-learning'
+  | 'open-guided-labs'
   | 'practice-now'
   | 'start-tutorial'
   | 'check-environment'
@@ -35,6 +36,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-syllabus',
   'open-materials',
   'open-learning',
+  'open-guided-labs',
   'practice-now',
   'start-tutorial',
   'check-environment',
@@ -74,6 +76,26 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         { id: 'open-ai-tutor', label: 'Open tutor as a learning coach' },
         { id: 'ask-before-class', label: 'Ask the instructor about this boundary' },
         { id: 'open-canvas', label: 'Check assignment AI rules' }
+      ]
+    };
+  }
+
+  if (matches(text, ['guided lab', 'hands-on lab', 'hands on lab', 'half adder tutorial', 'circuit walkthrough', 'assembly walkthrough'])) {
+    return {
+      title: 'Use the lecture-mapped Hands-on Lab Center',
+      paragraphs: [
+        'The lab center connects the mapped reading, author video, and lecture to a prediction-first circuit build or assembly trace. Its checkmarks stay on this device and are not graded.',
+        'Circuit labs create a fresh blank file under circuits/guided; assembly labs open an original example beside the embedded machine-state panel. These formative labs do not generate a graded deliverable.'
+      ],
+      checklist: [
+        'Choose the lab mapped to the lecture concept.',
+        'Read and watch the displayed sources, then write the requested prediction.',
+        'Create or open the artifact and complete one evidence checkpoint at a time.',
+        'Explain the observed signal, register, flag, memory, stack, EIP, output, or trace before continuing.'
+      ],
+      actions: [
+        { id: 'open-guided-labs', label: 'Open hands-on labs' },
+        { id: 'open-learning', label: 'Open mapped learning path' }
       ]
     };
   }
@@ -326,6 +348,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Compare observed state with the state you predicted before running.'
       ],
       actions: [
+        { id: 'open-guided-labs', label: 'Open guided assembly traces' },
         { id: 'create-assembly-lab', label: 'Create assembly lab' },
         { id: 'assembly-guide', label: 'Open compatibility guide' }
       ]
@@ -423,6 +446,7 @@ function conceptBridge(title: string, source: string, checklist: string[], circu
     actions: [
       { id: 'practice-now', label: 'Practice this material' },
       { id: 'open-materials', label: 'Open mapped materials' },
+      { id: 'open-guided-labs', label: circuit ? 'Open guided circuit labs' : 'Open guided labs' },
       ...(circuit ? [{ id: 'create-circuit' as const, label: 'Create a blank circuit' }] : [])
     ]
   };

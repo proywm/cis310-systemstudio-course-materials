@@ -34,6 +34,9 @@ describe('guided tutorial state', () => {
     assert.deepEqual(parseTutorialRequest({ type: 'action', action: 'ask-before-class' }), {
       type: 'action', action: 'ask-before-class'
     });
+    assert.deepEqual(parseTutorialRequest({ type: 'action', action: 'open-half-adder-lab' }), {
+      type: 'action', action: 'open-half-adder-lab'
+    });
     assert.equal(parseTutorialRequest({ type: 'action', action: 'workbench.action.terminal.kill' }), undefined);
   });
 
@@ -49,6 +52,8 @@ describe('guided tutorial state', () => {
     assert.match(source, /id="lessonNav"/);
     assert.match(source, /Choose any lesson/);
     assert.match(source, /Work in any order/);
+    assert.match(source, /Start the half-adder build/);
+    assert.match(source, /Start the register-arithmetic trace/);
     assert.match(source, /next\.disabled = false/);
     assert.doesNotMatch(source, /if \(!requirementMet\(steps\[current\]\)\) return/);
   });

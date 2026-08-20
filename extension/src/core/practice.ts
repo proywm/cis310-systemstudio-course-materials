@@ -1,4 +1,5 @@
 import { preparationModule } from './learningResources';
+import { guidedLab } from './guidedLabs';
 
 export const PRACTICE_PROGRESS_VERSION = 1;
 
@@ -140,6 +141,7 @@ export type PracticePanelRequest =
   | { type: 'open-preparation'; resourceId: string; target: 'reading' | 'video' | 'lecture' | 'book-home' | 'author-channel' | 'oer-series'; readingIndex: number }
   | { type: 'toggle-preparation'; resourceId: string; field: 'read' | 'watched' }
   | { type: 'open-help'; destination: 'faq' | 'ai-tutor' | 'before-class' }
+  | { type: 'open-guided-lab'; labId: string }
   | { type: 'home' }
   | { type: 'reset' };
 
@@ -872,6 +874,9 @@ export function parsePracticePanelRequest(value: unknown): PracticePanelRequest 
   }
   if (value.type === 'open-help' && (value.destination === 'faq' || value.destination === 'ai-tutor' || value.destination === 'before-class')) {
     return { type: 'open-help', destination: value.destination };
+  }
+  if (value.type === 'open-guided-lab' && typeof value.labId === 'string' && guidedLab(value.labId)) {
+    return { type: 'open-guided-lab', labId: value.labId };
   }
   if (value.type === 'ready' || value.type === 'next' || value.type === 'home' || value.type === 'reset') return { type: value.type };
   return undefined;

@@ -1,4 +1,4 @@
-export const TUTORIAL_VERSION = 8;
+export const TUTORIAL_VERSION = 9;
 
 export const TUTORIAL_STEP_IDS = [
   'choose-environment',
@@ -30,6 +30,9 @@ export type TutorialAction =
   | 'ask-before-class'
   | 'open-learning'
   | 'practice-now'
+  | 'open-guided-labs'
+  | 'open-half-adder-lab'
+  | 'open-assembly-guided-labs'
   | 'check-digital'
   | 'setup-digital'
   | 'create-circuit'
@@ -56,6 +59,9 @@ const TUTORIAL_ACTIONS = new Set<TutorialAction>([
   'ask-before-class',
   'open-learning',
   'practice-now',
+  'open-guided-labs',
+  'open-half-adder-lab',
+  'open-assembly-guided-labs',
   'check-digital',
   'setup-digital',
   'create-circuit',

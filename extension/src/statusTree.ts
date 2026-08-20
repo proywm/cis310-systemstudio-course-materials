@@ -88,6 +88,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'beaker'
           ),
           describedActionItem(
+            'Build with guided labs',
+            '6 circuits · 5 assembly traces · self-paced',
+            'systemstudioCis310.openGuidedLabs',
+            'tools'
+          ),
+          describedActionItem(
             'Review due and saved questions',
             'spaced local review',
             'systemstudioCis310.reviewPractice',
@@ -171,6 +177,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
     return [
       digital,
+      actionItem('Open guided circuit labs', 'systemstudioCis310.openGuidedLabs', 'map', ['circuit-half-adder']),
       actionItem('Create a new blank Digital circuit', 'systemstudioCis310.createCircuit', 'new-file'),
       open,
       actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder')
@@ -189,6 +196,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
     };
     return [
       status,
+      actionItem('Open guided assembly labs', 'systemstudioCis310.openGuidedLabs', 'map', ['assembly-register-arithmetic']),
       actionItem('Create Irvine32 / NASM assembly lab', 'systemstudioCis310.createAssemblyLab', 'new-folder'),
       actionItem('Open assembly lab', 'systemstudioCis310.openAssemblyLab', 'debug-alt'),
       actionItem('Run assembly file', 'systemstudioCis310.runAssembly', 'run'),
@@ -244,10 +252,10 @@ function informationItem(label: string, description: string, icon: string): Stat
   return item;
 }
 
-function actionItem(label: string, command: string, icon: string): StatusNode {
+function actionItem(label: string, command: string, icon: string, args?: unknown[]): StatusNode {
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
-  item.command = { command, title: label };
+  item.command = { command, title: label, ...(args ? { arguments: args } : {}) };
   return item;
 }
 

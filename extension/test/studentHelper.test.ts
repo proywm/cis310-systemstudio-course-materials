@@ -41,6 +41,16 @@ describe('student helper', () => {
     assert.ok(reply.actions.some((action) => action.id === 'open-learning'));
   });
 
+  it('routes half-adder and hands-on questions to mapped guided labs', () => {
+    const reply = answerStudentQuestion('Is there a half adder tutorial or circuit walkthrough?');
+    assert.match(reply.title, /Hands-on Lab Center/);
+    assert.match(JSON.stringify(reply), /fresh blank file/);
+    assert.ok(reply.actions.some((action) => action.id === 'open-guided-labs'));
+    assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'open-guided-labs' }), {
+      type: 'action', action: 'open-guided-labs'
+    });
+  });
+
   it('distinguishes Remote SSH from a Digital installation failure', () => {
     const reply = answerStudentQuestion('Why will Digital not open over SSH?');
     assert.match(JSON.stringify(reply), /local desktop VS Code/);

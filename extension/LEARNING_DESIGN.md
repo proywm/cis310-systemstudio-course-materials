@@ -30,6 +30,7 @@ The design combines established student-support patterns: a clean starting point
 | Custom sessions by amount or topic | Five, 10, or 15 questions across six course topics | A bounded commitment and student control |
 | Practice and quiz modes | Immediate explanation in practice; explanation withheld until quiz completion | Support during learning and a more independent retrieval check |
 | Explanations and related lessons | Original text explanation, one-sentence takeaway, mapped open-book focus, mapped official author-video focus, and packaged lecture | Connect an answer to the underlying concept without claiming a page- or timestamp-specific deep link when the source opens at document/video level |
+| Guided deliberate practice | Six circuit builds and five assembly traces, each mapped to the lecture sources and structured as predict → construct/step → inspect → explain | Bridge declarative lecture knowledge to visible signal or machine-state evidence without supplying a graded artifact |
 | Flagging and review filters | Save for review; due, saved, topic, and recommended filters | Make unresolved items easy to find again |
 | Adaptive/spaced flashcard review | Transparent 1, 2, 4, 7, 14, and 30-day local schedule | Revisit material over time rather than only once |
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
@@ -56,6 +57,7 @@ The extension links to authoritative sources instead of redistributing the book 
 - Confidence judgments can reveal calibration gaps. A high-confidence miss is surfaced for review; a correct-but-uncertain answer is treated as useful evidence that the concept still deserves attention.
 - Interleaving can improve discrimination among related problem types. Recommended sessions rotate among course topics when appropriate rather than exhausting one category by default.
 - Worked explanations and metacognitive prompts can help novices bridge concepts and procedures. Each item includes a hint, explanation, takeaway, related lesson, and optional error category.
+- Scaffolding and worked-example fading support novices when a complete project is too large to diagnose. Guided labs begin with a bounded prerequisite or analogous example, require a prediction, and then shift the explanation back to the student; they do not bundle the larger graded solution.
 
 The implemented scheduler and recommendation weights are conservative instructional heuristics, not a validated cognitive model. They should be evaluated and revised using course evidence.
 
@@ -68,11 +70,12 @@ The implemented scheduler and recommendation weights are conservative instructio
 - Setup, Digital, assembly, learning, and help are separate groups so a tool failure is not mistaken for a content failure.
 - Student-facing course files open as rendered documents, not raw Markdown.
 - Sessions remain skippable; practice does not block access to assignments, tools, or Canvas.
+- Hands-on labs use one stable six-checkpoint pattern, create non-overwriting circuit files, and open code directly beside the embedded assembly state panel.
 - Status labels use neutral language such as **building**, **review**, and **steady**, not pass/fail or mastered/not mastered.
 
 ## Progress model and privacy
 
-Progress is stored in VS Code's local extension storage. The record contains self-reported reading/video completion, question-level attempt counts, correctness, confidence, hint use, review date, saved state, optional reflection categories, and a bounded recent-attempt log. It is not transmitted to Canvas, the instructor, an AI provider, or an analytics service. Students can reset it from the dashboard.
+Progress is stored in VS Code's local extension storage. The record contains self-reported reading/video completion, guided-lab checkmarks, question-level attempt counts, correctness, confidence, hint use, review date, saved state, optional reflection categories, and a bounded recent-attempt log. It is not transmitted to Canvas, the instructor, an AI provider, or an analytics service. Students can reset practice from the dashboard and reset each lab checklist from the Lab Center.
 
 The chat-style help entry does not change this boundary. Local FAQ questions are processed in the extension and are not retained. Selecting U-M Maizey or the Canvas question queue opens a U-M service outside the local extension boundary; its U-M privacy notice and course rules apply. The extension does not contain a faculty LLM credential, Canvas token, or automatic posting authority.
 
@@ -84,11 +87,13 @@ Before classroom release, the instructor should:
 
 1. verify every reading section, author video, question, option, explanation, and lecture mapping against the Fall 2026 materials, following the [content alignment audit](CONTENT_ALIGNMENT_AUDIT.md);
 2. check that no practice item exposes a graded assignment answer or hidden assessment content;
-3. run keyboard, screen-reader, contrast, zoom, and reduced-motion checks on each Learning Center screen;
-4. smoke-test the packaged VSIX on Windows, macOS, and Linux;
-5. pilot the language and session length with a small student group;
-6. compare pre/post concept evidence and confidence calibration without treating dashboard labels as outcomes; and
-7. revise or retire questions that are ambiguous, misleading, or poorly discriminating.
+3. verify every guided lab against its reading/video/lecture mapping and confirm its artifact and constants remain distinct from graded deliverables;
+4. complete each circuit lab in Digital and execute every assembly example in the embedded interpreter;
+5. run keyboard, screen-reader, contrast, zoom, and reduced-motion checks on each Learning Center screen;
+6. smoke-test the packaged VSIX on Windows, macOS, and Linux;
+7. pilot the language and session length with a small student group;
+8. compare pre/post concept evidence and confidence calibration without treating dashboard labels as outcomes; and
+9. revise or retire questions or labs that are ambiguous, misleading, or poorly aligned.
 
 ## Sources
 

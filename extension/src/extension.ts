@@ -6,6 +6,7 @@ import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { guidedLab } from './core/guidedLabs';
 import { isHeadlessRemote } from './core/runtimeEnvironment';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
 import {
@@ -15,6 +16,7 @@ import {
 } from './courseCalendarPanel';
 import { DigitalManager } from './digitalManager';
 import { DigitalTestController } from './digitalTests';
+import { GuidedLabPanel } from './guidedLabPanel';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
 import { PreClassQuestionPanel } from './preClassQuestionPanel';
@@ -178,6 +180,57 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openGuidedLabs', async (labId?: unknown) => {
+      await GuidedLabPanel.show(context, typeof labId === 'string' ? labId : undefined);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openGuidedLabArtifact', async (labId: unknown) => {
+      const lab = typeof labId === 'string' ? guidedLab(labId) : undefined;
+      if (!lab) {
+        await vscode.window.showErrorMessage('The selected guided lab is invalid.');
+        return;
+      }
+      const workspaceFolder = await chooseWorkspaceFolder(`Choose a workspace for “${lab.title}”`);
+      if (!workspaceFolder) {
+        await vscode.window.showErrorMessage('Open a local folder before creating or opening a guided lab artifact.');
+        return;
+      }
+      if (lab.artifact.kind === 'circuit') {
+        try {
+          const target = await createUniqueCircuit(
+            manager,
+            path.join(workspaceFolder.uri.fsPath, 'circuits', 'guided'),
+            lab.artifact.fileName
+          );
+          await offerToOpenCircuit(vscode.Uri.file(target), `Created a fresh circuit for “${lab.title}”`);
+        } catch (error) {
+          await showFailure('Could not create the guided circuit', error, output);
+        }
+        return;
+      }
+      try {
+        const assemblyRoot = path.join(workspaceFolder.uri.fsPath, 'assembly');
+        const guide = path.join(assemblyRoot, 'README.md');
+        let assemblyLabExists = false;
+        try {
+          await access(guide);
+          assemblyLabExists = true;
+        } catch {
+          assemblyLabExists = false;
+        }
+        if (assemblyLabExists) {
+          await assemblyManager.upgradeLab(workspaceFolder.uri.fsPath);
+        } else {
+          await assemblyManager.createLab(workspaceFolder.uri.fsPath);
+        }
+        const target = path.join(assemblyRoot, ...lab.artifact.relativePath.split('/'));
+        await access(target);
+        const uri = vscode.Uri.file(target);
+        await vscode.window.showTextDocument(uri, { viewColumn: vscode.ViewColumn.One, preview: false });
+        await AssemblyLabPanel.show(context, assemblyManager, uri, 'assemble');
+      } catch (error) {
+        await showFailure('Could not open the guided assembly lab', error, output);
+      }
     }),
     vscode.commands.registerCommand('systemstudioCis310.startQuickPractice', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials, {

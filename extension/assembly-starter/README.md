@@ -15,7 +15,15 @@ The side-by-side lab provides four controls:
 3. **Run** executes until `EXIT`, `HLT`, program completion, an error, or the 10,000-instruction safety limit.
 4. **Rebuild / Reset** restores registers, flags, data, input, output, and the stack.
 
-You can inspect EAX–EIP, arithmetic flags, the top of the stack, declared data, program output, remaining input, and a recent execution trace. Try `irvine32/ConsoleInput.asm` with two virtual-console lines, then compare it with `nasm-ia32/LoopSum.asm`.
+You can inspect EAX–EIP, arithmetic flags, the top of the stack, declared data, program output, remaining input, and a recent execution trace. The **CIS 310 Hands-on Lab Center** maps each original example to prediction and evidence checkpoints:
+
+- `irvine32/AddTwo.asm`: register arithmetic;
+- `irvine32/FlagsBranch.asm`: `CMP`, flags, and signed conditional branching;
+- `nasm-ia32/LoopSum.asm`: array addressing and a counted loop;
+- `irvine32/StackCall.asm`: `CALL`, a small stack frame, register preservation, and `RET`; and
+- `irvine32/ConsoleInput.asm`: virtual input, procedure contracts, and an invalid-input path.
+
+These are formative examples with different values and scope from graded work. Canvas assignment rules remain authoritative.
 
 ## What “embedded” means
 

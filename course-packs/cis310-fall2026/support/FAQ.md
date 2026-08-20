@@ -30,6 +30,12 @@ Use **Create a new blank Digital circuit** and give every file a distinct descri
 
 Write the expected input/output behavior first. Build and test the smallest component, save it as a named subcircuit, then connect verified components one layer at a time. A circuit opening successfully is not evidence that every input case works.
 
+## Is there a guided circuit or assembly walkthrough?
+
+Yes. Open **Learn and Practice → Build with guided labs** or run **CIS 310: Open Hands-on Circuit and Assembly Labs**. The Lecture 2 half-adder lab first asks for all four predicted Sum/Carry rows, creates a fresh non-overwriting `.dig` file, then walks through labeled pins, the Sum and Carry paths, simulation evidence, preview, and explanation. Additional circuit labs cover a Boolean gate path, multiplexer, stored bit, address decoder, and a small arithmetic/logic selector.
+
+Five assembly paths open original example code beside the embedded machine-state panel: register arithmetic, flags/branching, an array loop, a stack frame, and virtual input. Predict first and inspect the requested register, flag, memory, stack, EIP, output, or trace evidence. These are formative prerequisite or analogous labs—not completed graded assignment artifacts.
+
 ## Digital says a flip-flop must be connected to the clock, but I see clock wires.
 
 The unconnected element may be inside a nested subcircuit. Check every flip-flop and register, verify that the signal reaches the clock pin rather than data or enable, and analyze the smallest sequential subcircuit that reproduces the error. Include the exact diagnostic and a screenshot in a help request.

@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, open-textbook/author-video preparation map, presentation PDFs, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, guided circuit builds, embedded assembly traces, local learning progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -42,8 +42,10 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
+- six lecture-mapped guided circuit builds, including a step-by-step half adder, with fresh non-overwriting files and local checklist progress;
 - circuit preview and deterministic testcase support;
 - a cross-platform embedded Irvine32 Classroom/NASM IA-32 teaching lab;
+- five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
 - an attempt-first AI learning-coach checkpoint and graded-work boundary before the U-M Maizey handoff; and

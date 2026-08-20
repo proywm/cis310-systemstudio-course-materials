@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 open-book preparation, practice, course materials, managed Digital circuits, and embedded IA-32 assembly inside Visual Studio Code.",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -49,6 +49,7 @@
     "onCommand:systemstudioCis310.openAiTutor",
     "onCommand:systemstudioCis310.openPreClassQuestion",
     "onCommand:systemstudioCis310.openPracticeCenter",
+    "onCommand:systemstudioCis310.openGuidedLabs",
     "onCommand:systemstudioCis310.startQuickPractice",
     "onCommand:systemstudioCis310.reviewPractice",
     "onCommand:systemstudioCis310.openCanvas",
@@ -122,6 +123,12 @@
         "title": "CIS 310: Open Learning Dashboard",
         "category": "SystemStudio",
         "icon": "$(graph)"
+      },
+      {
+        "command": "systemstudioCis310.openGuidedLabs",
+        "title": "CIS 310: Open Hands-on Circuit and Assembly Labs",
+        "category": "SystemStudio",
+        "icon": "$(tools)"
       },
       {
         "command": "systemstudioCis310.startQuickPractice",
@@ -341,7 +348,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Start with one recommended learning action, then open details only when needed. Reading/video checkmarks and practice progress stay on this device and are not graded.\n[Prepare with book, video, and 3 questions](command:systemstudioCis310.openPracticeCenter)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Start with one recommended learning action, then open details only when needed. Reading/video checkmarks, practice progress, and guided-lab checkmarks stay on this device and are not graded.\n[Prepare with book, video, and 3 questions](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or trace assembly](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
@@ -377,15 +384,15 @@
           },
           {
             "id": "circuits",
-            "title": "Bridge Concepts to Circuit Evidence",
-            "description": "Check setup, predict a small behavior, create a circuit, then use preview/tests as evidence.\n[Check the environment](command:systemstudioCis310.checkEnvironment)\n[Create a circuit](command:systemstudioCis310.createCircuit)",
+            "title": "Build Guided Circuits from Lecture Concepts",
+            "description": "Start with the Lecture 2 half adder, then continue through Boolean gates, selection, stored state, address decoding, and a small ALU slice. Each lab maps the reading/video, prediction, fresh circuit, simulation evidence, and explanation.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Check the environment](command:systemstudioCis310.checkEnvironment)",
             "media": { "markdown": "media/tutorial/04-circuits.md" },
-            "completionEvents": ["onCommand:systemstudioCis310.checkEnvironment"]
+            "completionEvents": ["onCommand:systemstudioCis310.openGuidedLabs"]
           },
           {
             "id": "assembly",
-            "title": "Trace Assembly or Ask for Help",
-            "description": "Compare assembly profiles, predict state, then inspect registers, flags, stack, output, and trace. Use local FAQ chat for routing, U-M Maizey for source-grounded explanation, or Questions Before Class for instructor review.\n[Create the assembly lab](command:systemstudioCis310.createAssemblyLab)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Open U-M Maizey](command:systemstudioCis310.openAiTutor)\n[Ask before class](command:systemstudioCis310.openPreClassQuestion)",
+            "title": "Trace Guided Assembly Examples or Ask for Help",
+            "description": "Predict and trace register arithmetic, flags/branches, an array loop, a stack frame, and virtual input in the embedded machine. Inspect registers, flags, memory, stack, output, EIP, and trace.\n[Open the hands-on lab center](command:systemstudioCis310.openGuidedLabs)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Open U-M Maizey](command:systemstudioCis310.openAiTutor)\n[Ask before class](command:systemstudioCis310.openPreClassQuestion)",
             "media": { "markdown": "media/tutorial/05-assembly.md" },
             "completionEvents": ["onCommand:systemstudioCis310.createAssemblyLab"]
           }

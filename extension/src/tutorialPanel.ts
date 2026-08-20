@@ -119,26 +119,30 @@ export class TutorialPanel implements vscode.Disposable {
 }
 
 async function executeTutorialAction(action: TutorialAction): Promise<void> {
-  const command: Record<TutorialAction, string> = {
-    'show-tools': 'workbench.view.extension.systemstudioCis310',
-    'show-materials': 'systemstudioCis310.openMaterialsIndex',
-    'open-canvas': 'systemstudioCis310.openCanvas',
-    'open-calendar': 'systemstudioCis310.openCourseCalendar',
-    'open-syllabus': 'systemstudioCis310.openSyllabus',
-    'open-helper': 'systemstudioCis310.openStudentHelper',
-    'open-ai-tutor': 'systemstudioCis310.openAiTutor',
-    'ask-before-class': 'systemstudioCis310.openPreClassQuestion',
-    'open-learning': 'systemstudioCis310.openPracticeCenter',
-    'practice-now': 'systemstudioCis310.startQuickPractice',
-    'check-digital': 'systemstudioCis310.checkEnvironment',
-    'setup-digital': 'systemstudioCis310.setupDigital',
-    'create-circuit': 'systemstudioCis310.createCircuit',
-    'create-workspace': 'systemstudioCis310.createStarterWorkspace',
-    'create-assembly-lab': 'systemstudioCis310.createAssemblyLab',
-    'assembly-guide': 'systemstudioCis310.openMasmGuide',
-    'native-walkthrough': 'systemstudioCis310.openGettingStarted'
+  const command: Record<TutorialAction, { id: string; args?: unknown[] }> = {
+    'show-tools': { id: 'workbench.view.extension.systemstudioCis310' },
+    'show-materials': { id: 'systemstudioCis310.openMaterialsIndex' },
+    'open-canvas': { id: 'systemstudioCis310.openCanvas' },
+    'open-calendar': { id: 'systemstudioCis310.openCourseCalendar' },
+    'open-syllabus': { id: 'systemstudioCis310.openSyllabus' },
+    'open-helper': { id: 'systemstudioCis310.openStudentHelper' },
+    'open-ai-tutor': { id: 'systemstudioCis310.openAiTutor' },
+    'ask-before-class': { id: 'systemstudioCis310.openPreClassQuestion' },
+    'open-learning': { id: 'systemstudioCis310.openPracticeCenter' },
+    'practice-now': { id: 'systemstudioCis310.startQuickPractice' },
+    'open-guided-labs': { id: 'systemstudioCis310.openGuidedLabs' },
+    'open-half-adder-lab': { id: 'systemstudioCis310.openGuidedLabs', args: ['circuit-half-adder'] },
+    'open-assembly-guided-labs': { id: 'systemstudioCis310.openGuidedLabs', args: ['assembly-register-arithmetic'] },
+    'check-digital': { id: 'systemstudioCis310.checkEnvironment' },
+    'setup-digital': { id: 'systemstudioCis310.setupDigital' },
+    'create-circuit': { id: 'systemstudioCis310.createCircuit' },
+    'create-workspace': { id: 'systemstudioCis310.createStarterWorkspace' },
+    'create-assembly-lab': { id: 'systemstudioCis310.createAssemblyLab' },
+    'assembly-guide': { id: 'systemstudioCis310.openMasmGuide' },
+    'native-walkthrough': { id: 'systemstudioCis310.openGettingStarted' }
   };
-  await vscode.commands.executeCommand(command[action]);
+  const selected = command[action];
+  await vscode.commands.executeCommand(selected.id, ...(selected.args ?? []));
 }
 
 function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
@@ -381,29 +385,31 @@ function tutorialStepsHtml(): string {
     <div class="actions"><button data-action="check-digital" class="secondary">Try: Check environment</button><button data-action="setup-digital" class="secondary">Try: Install / verify</button></div>
   </div></section>
   <section class="step" data-step="3" data-require="all"><div class="focus-card">
-    <h2 tabindex="-1">Bridge a concept to a circuit</h2>
-    <p>Use smaller, scaffolded practice and an explicit concept-to-implementation loop for homework and projects.</p>
-    <div class="instruction"><strong>Follow or sample the stages:</strong> each should produce evidence before project work continues.</div>
+    <h2 tabindex="-1">Build a half adder, then extend the pattern</h2>
+    <p>The Hands-on Lab Center keeps the lecture source, prediction, Digital build steps, evidence checks, and explanation together. It creates a fresh file and never fills in a graded assignment.</p>
+    <div class="instruction"><strong>Start with Lecture 2:</strong> predict all four one-bit additions, build separate Sum and Carry paths, simulate every row, and explain the evidence.</div>
     <div class="choices">
-      ${choice('read', 'Read and watch before building', 'Open the mapped Tarnoff sections and author video; use the bundled PDF and matching homework/project reference after them.')}
-      ${choice('predict', 'Predict a small behavior', 'Write inputs, expected outputs, states, or transitions before simulating.')}
-      ${choice('build', 'Create and build one component', 'Use the assignment button or create a blank `.dig`; existing work is never overwritten.')}
-      ${choice('evidence', 'Preview and test', 'Compare visible output or a deterministic testcase with your prediction.')}
-      ${choice('integrate', 'Integrate only after it works', 'Keep subcircuits small so an error has a clear location.')}
+      ${choice('read', 'Read §8.1 and watch binary addition', 'Use the mapped open-book section and author video before adding gates.')}
+      ${choice('predict', 'Predict Sum and Carry', 'Record 00, 01, 10, and 11 before the simulator can influence the answer.')}
+      ${choice('build', 'Build inside a fresh `.dig` file', 'Place A/B, Sum/Carry, XOR, and AND through the guided checklist; existing work is never overwritten.')}
+      ${choice('evidence', 'Simulate and record four rows', 'Compare each observed Carry·Sum pair with the prediction, then preview the saved structure in VS Code.')}
+      ${choice('extend', 'Choose the next circuit lab', 'Continue with Boolean gates, a 2-to-1 selector, one stored bit, address decoding, or a small ALU slice.')}
     </div>
-    <div class="actions"><button data-action="show-materials" class="secondary">Open mapped materials</button><button data-action="create-circuit" class="secondary">Create a blank circuit</button></div>
+    <div class="actions"><button data-action="open-half-adder-lab" class="primary">Start the half-adder build</button><button data-action="open-guided-labs" class="secondary">Browse all circuit labs</button><button data-action="show-materials" class="secondary">Open mapped materials</button></div>
   </div></section>
   <section class="step" data-step="4" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Bridge a concept to assembly</h2>
-    <p>The embedded lab uses one consistent source-level IA-32 teaching machine across Windows, macOS, Linux, and Remote SSH.</p>
-    <div class="instruction"><strong>Explore the profile you expect to use:</strong> return later to compare the alternatives.</div>
+    <p>The embedded lab uses one consistent source-level IA-32 teaching machine across Windows, macOS, Linux, and Remote SSH. The new guided traces tell you what to predict and which register, flag, memory, stack, output, or EIP evidence to inspect after each step.</p>
+    <div class="instruction"><strong>Begin with register arithmetic:</strong> then continue with flags/branches, an array loop, a stack frame, or virtual console input.</div>
     <div class="choices">
       ${choice('predict', 'Predict register or memory state', 'Write what should change before executing the instruction.')}
-      ${choice('auto', 'Auto-detect', 'Select Irvine32 Classroom or NASM IA-32 from the source wrappers.')}
-      ${choice('irvine', 'Irvine32 Classroom', 'Use documented MASM-style syntax and selected Irvine procedure contracts.')}
-      ${choice('nasm', 'NASM IA-32', 'Use documented NASM-style 32-bit classroom syntax on the same teaching machine.')}
+      ${choice('arithmetic', 'Register arithmetic', 'Step MOV and ADD; compare EAX and flags with a line-by-line prediction.')}
+      ${choice('branch', 'Flags and a conditional branch', 'Step CMP and JL; use the flag snapshot and EIP path as evidence.')}
+      ${choice('memory', 'Array and counted loop', 'Observe ESI addresses, ECX, memory values, and the EAX accumulator.')}
+      ${choice('stack', 'CALL, stack frame, and RET', 'Watch ESP, EBP, the return address, preserved EBX, and returned EAX.')}
+      ${choice('input', 'Virtual console input', 'Trace procedure register contracts and a controlled invalid-input path.')}
     </div>
-    <div class="actions"><button data-action="create-assembly-lab" class="secondary">Try: Create assembly lab</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
+    <div class="actions"><button data-action="open-assembly-guided-labs" class="primary">Start the register-arithmetic trace</button><button data-action="open-guided-labs" class="secondary">Browse all hands-on labs</button><button data-action="assembly-guide" class="secondary">Open compatibility guide</button></div>
   </div></section>
   <section class="step" data-step="5" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Inspect evidence, not just “it ran”</h2>

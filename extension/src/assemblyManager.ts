@@ -127,6 +127,8 @@ export class AssemblyManager implements vscode.Disposable {
       ['embedded', 'loop-sum.asm'],
       ['irvine32', 'AddTwo.asm'],
       ['irvine32', 'ConsoleInput.asm'],
+      ['irvine32', 'FlagsBranch.asm'],
+      ['irvine32', 'StackCall.asm'],
       ['nasm-ia32', 'LoopSum.asm']
     ];
     for (const [directory, fileName] of starterFiles) {
@@ -163,8 +165,8 @@ export class AssemblyManager implements vscode.Disposable {
           await cp(path.join(source, 'README.md'), guidePath, { force: false, errorOnExist: true });
           addedFiles = true;
         }
-      } else if (!currentGuide.includes('Irvine32 Classroom profile')) {
-        resolvedGuidePath = path.join(target, 'README-v0.6.md');
+      } else if (!currentGuide.includes('FlagsBranch.asm')) {
+        resolvedGuidePath = path.join(target, 'README-HANDS-ON.md');
         addedFiles = await copyIfMissing(
           path.join(source, 'README.md'),
           resolvedGuidePath

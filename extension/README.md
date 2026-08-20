@@ -28,8 +28,9 @@ The [Reading–Video–Practice Alignment Audit](CONTENT_ALIGNMENT_AUDIT.md) rec
 - rendered, student-facing previews for the course guide and assignments rather than raw Markdown source;
 - local, SHA-256-verified assignment references copied into generated starter workspaces;
 - a starter-workspace generator with one upstream half-adder orientation example, an empty `circuits/work/` area, and assembly guides;
+- a **Hands-on Lab Center** with six lecture-mapped circuit builds—Boolean gates, half adder, multiplexer, stored state, address decoder, and a small ALU slice—using fresh non-overwriting files and self-reported checkpoints;
 - an explicit **Irvine32 Classroom (MASM)** profile and a **NASM IA-32** profile on one no-setup, source-level embedded machine, with build, step, run, reset, registers, flags, memory, stack, virtual-console input, output, and trace views;
-- Irvine-style input/output, display, string, random, and macro helpers needed by introductory activities, plus starter programs and an explicit boundary separating the classroom profiles from full native toolchains; and
+- Irvine-style input/output, display, string, random, and macro helpers needed by introductory activities, plus five guided assembly traces for arithmetic, flags/branches, array loops, stack frames, and virtual input, with an explicit boundary separating the classroom profiles from full native toolchains; and
 - a self-paced, skippable, resumable, and rerunnable eight-lesson tutorial with a visible lesson navigator, free lesson selection, and guidance for setup-vs-work diagnosis, concept-to-implementation scaffolding, evidence inspection, submission clarity, and safer help-seeking;
 - a keyboard-accessible collapsible chat entry, local FAQ for topic/tool/submission routing, attempt-first AI learning-coach checkpoint and U-M Maizey handoff, and structured Questions Before Class draft; and
 - restricted-mode controls that prevent workspace circuit execution before trust is granted.
@@ -84,13 +85,15 @@ Open the **SystemStudio CIS 310** activity-bar view and select **Install/Verify 
 7. Use **Learn and Practice** for the complete book/video map, a short topic session, a 10-question quiz, or review of due and saved questions. State confidence before seeing feedback, then use the explanation, visibly labeled mapped book/video focus, and related lecture.
 8. Before opening the AI tutor, confirm the learning-coach boundary. Attempt ungraded practice first; for graded work, request a hint, analogous example, source, or critique of your own reasoning—not a final answer or submission artifact. Canvas controls assignment-specific AI permission.
 9. Run **CIS 310: Check Environment** before changing circuit work in response to a tool failure.
-10. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten.
-11. Predict one behavior, then use preview/tests as evidence before integrating a larger component.
-12. Use **Open in Digital** for graphical editing on local desktop VS Code.
-13. Open the chat-style help bubble: use the local FAQ for routing, U-M Maizey in Canvas for a source-grounded conversational hint, or **Ask a Question Before Class** to prepare a named or Canvas-enabled anonymous discussion post.
-14. Submit the required deliverables through Canvas and confirm that Canvas recorded the submission.
+10. Open **Hands-on Circuit and Assembly Labs**. For Lecture 2, predict all four one-bit additions, create the fresh half-adder circuit, build Sum and Carry paths, simulate every row, and explain the evidence.
+11. Continue with a mapped Boolean, selector, state, decoder, ALU-slice, or assembly trace as the related lecture reaches that concept. Guided checkmarks stay local and are not grades.
+12. Create a starter workspace, a blank circuit, or an assignment-specific circuit. Existing work is never overwritten; keep guided practice separate from assignment work.
+13. Predict one behavior, then use preview/tests or machine-state evidence before integrating a larger component.
+14. Use **Open in Digital** for graphical editing on local desktop VS Code.
+15. Open the chat-style help bubble: use the local FAQ for routing, U-M Maizey in Canvas for a source-grounded conversational hint, or **Ask a Question Before Class** to prepare a named or Canvas-enabled anonymous discussion post.
+16. Submit the required deliverables through Canvas and confirm that Canvas recorded the submission.
 
-For assembly, select **Create Irvine32 / NASM assembly lab**, open `assembly/irvine32/AddTwo.asm`, and select **Open assembly lab**. Leave **Auto-detect** selected or choose **Irvine32 Classroom (MASM)**. Use **Build**, **Step**, **Run**, and **Rebuild / Reset** beside the editor while inspecting registers, flags, stack, data, virtual-console input, output, and the execution trace. `assembly/irvine32/ConsoleInput.asm` demonstrates `ReadInt` and `ReadString`; `assembly/nasm-ia32/LoopSum.asm` demonstrates the alternate NASM source profile. Read the two assembly guides before using a file that depends on a full native assembler or OS runtime.
+For assembly, select a mapped Hands-on Lab Center trace. It opens `AddTwo.asm`, `FlagsBranch.asm`, `LoopSum.asm`, `StackCall.asm`, or `ConsoleInput.asm` beside the embedded panel. Leave **Auto-detect** selected or use the lab's Irvine32 Classroom/NASM IA-32 profile. Predict first, then use **Build**, **Step**, **Run**, and **Rebuild / Reset** while inspecting registers, flags, stack, data, virtual-console input, output, EIP, and the execution trace. Read the two assembly guides before using a file that depends on a full native assembler or OS runtime.
 
 Course guides and assignments open as rendered documents. Instructors and developers can use **Open With → Text Editor** when they intentionally need to inspect or edit the Markdown source.
 
@@ -115,6 +118,7 @@ See [LEARNING_DESIGN.md](LEARNING_DESIGN.md) for the usability audit, research b
 | Command | Purpose |
 |---|---|
 | `CIS 310: Open Learning and Practice` | Opens the pre-class book/video path, local practice dashboard, topic selector, quiz mode, confidence insights, and review controls |
+| `CIS 310: Open Hands-on Circuit and Assembly Labs` | Opens six circuit builds and five assembly traces mapped to the related reading, author video, lecture, predictions, and evidence checkpoints |
 | `CIS 310: Start 5-Question Practice` | Starts the recommended short practice session |
 | `CIS 310: Review Due or Saved Questions` | Opens due review first, then saved or recommended practice when nothing is due |
 | `CIS 310: Start or Rerun Guided Tutorial` | Walks through required student choices; can be skipped, resumed, or rerun |
