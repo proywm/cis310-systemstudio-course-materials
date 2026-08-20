@@ -83,7 +83,7 @@ export const FALL_2026_ACADEMIC_EVENTS: readonly AcademicCalendarEvent[] = [
     start: '2026-12-10',
     endExclusive: '2026-12-17',
     kind: 'exam',
-    note: 'Students will present and demonstrate an 8-bit processor implementation and assembly programming during final examination week. The exact date, time, room, presentation order, and submission deadline are to be announced in Canvas.'
+    note: 'Students will present and demonstrate the cumulative 4-bit processor built through Implementations 1–3 and its released assembly program during final examination week. The exact date, time, room, presentation order, and submission deadline are to be announced in Canvas.'
   },
   {
     id: 'commencement',

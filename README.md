@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, final-project progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, cumulative 4-bit final-presentation progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, a U-M Maizey tutor handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -15,6 +15,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
 | Verified reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
+| Independent validation of the public circuit preflights | [Circuit-preflight validation](docs/CIRCUIT_PREFLIGHT_VALIDATION.md) |
 | AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
 
@@ -32,7 +33,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 ## Fall 2026 calendar
 
-CIS 310 meets on Mondays and Wednesdays from 10:00–11:45 a.m. in ELB 1329. The first class is Wednesday, August 26, and the final regular class is Monday, December 7. The extension shows all 27 regular meetings and the official holiday, recess, study-day, and examination periods. The 8-bit processor and assembly-program presentation occurs during final examination week; its exact date, time, room, order, and deadline are to be announced in Canvas.
+CIS 310 meets on Mondays and Wednesdays from 10:00–11:45 a.m. in ELB 1329. The first class is Wednesday, August 26, and the final regular class is Monday, December 7. The extension shows all 27 regular meetings and the official holiday, recess, study-day, and examination periods. The cumulative 4-bit processor and assembly-program presentation occurs during final examination week; its exact date, time, room, order, and deadline are to be announced in Canvas.
 
 Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar. The `.ics` exporter creates confirmed 10:00–11:45 a.m. events in ELB 1329 and includes the final-project examination-week window without inventing its exact logistics or assignment deadlines.
 
@@ -43,19 +44,19 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - 13 primary responsive HTML lectures, grounded in verified source material, with novice explanations, examples, self-checks, and bounded tutor prompts;
 - a self-paced Accessible lesson → Read → Watch → Practice → Build/trace path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
 - 13 integrity-checked legacy presentation PDFs retained as optional visual archives;
-- three homework references, three processor-project milestones, and a separate 8-bit processor/assembly-program final-project planning reference;
+- three homework references, three cumulative 4-bit processor-project milestones, a final-presentation planning reference, and public executable circuit-preflight contracts;
 - 104 short, evidence-mapped practice questions—exactly eight for each of the 13 presentation resources—with Bloom-level labels and full explanation/justification;
 - five-question recommended sessions, topic practice, and 10-question quiz mode;
 - explanations, related-lesson links, confidence checks, saved questions, and spaced review;
 - a local learning dashboard that reports practice evidence without claiming mastery;
-- Assignment Mission Control with local progress, pre-submission file checks and planning ZIPs, Canvas receipt confirmation, a final-project progression bar and self-evaluation, opt-in Canvas-calendar import, missed-class recovery, Digital diagnostics, and structured feedback/release helpers;
-- a separately labeled manual grade estimate that applies the 15% / 65% / 20% syllabus weights and drops the two lowest participation-quiz scores, while keeping instructor/GSI evaluation in Canvas visibly distinct;
+- Assignment Mission Control with local progress, executable public circuit preflights, pre-submission file checks and planning ZIPs, Canvas receipt confirmation, a final-presentation progression bar and self-evaluation, opt-in Canvas-calendar import, missed-class recovery, Digital diagnostics, and structured feedback/release helpers;
+- a separately labeled manual grade estimate that applies the 15% / 65% / 20% syllabus weights and drops the two lowest participation-quiz scores, while keeping instructor evaluation in Canvas visibly distinct;
 - a clickable Monday/Wednesday calendar with `.ics` export;
 - managed installation and verification of Digital v0.31;
 - blank and assignment-specific Digital circuit creation;
 - the complete upstream Digital v0.31 editor and simulator, streamed into a VS Code tab from a private Linux display or an extension-managed Docker Desktop runtime on Windows/macOS, with the native window retained only as an explicit fallback;
 - seven lecture-mapped guided circuit builds, including a step-by-step half adder and K-map implementation, with fresh non-overwriting files and local checklist progress;
-- circuit preview and deterministic testcase support;
+- circuit preview, embedded-test support, and local public preflight suites for the 4-bit register, program counter, 16×4 memory, 4×4 register file, and all 2,048 ALU input combinations;
 - actual NASM/ELF32 build, link, and execution on Linux; exact Microsoft MASM/Irvine32 routing on a configured Windows host; and a separately labeled non-assembler instruction trace tutor;
 - five lecture-mapped assembly walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, and virtual input;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;

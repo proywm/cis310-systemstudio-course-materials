@@ -131,6 +131,14 @@ By the end of this assignment, you will:
 4. **Collaboration (confirm in Fall 2026 Canvas):**
    - Follow the current Canvas rules for group size, individual work, and contribution reporting.
 
+## 5. Local formative preflight and final-presentation continuity
+
+Before Canvas submission, open **Coursework and Final Presentation** in SystemStudio and rerun the public component suites for the register, PC, memory, register file, and ALU. For the integrated processor, add Digital `Testcase` elements that exercise the instruction encoding and test program released in Canvas, then choose **Integrated 4-bit processor — embedded tests**. See [Local circuit preflight contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
+
+The final-examination-week presentation demonstrates this same cumulative 4-bit processor and its program. It is not a new processor-width redesign. Keep the component and integrated evidence you generate here for that presentation.
+
+Passing local tests is private formative evidence only. It is not a grade, cannot assess all rubric criteria, and does not submit anything. Canvas requirements and instructor evaluation remain authoritative.
+
 ---
 
 ## Conclusion

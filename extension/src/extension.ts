@@ -230,7 +230,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await PracticePanel.show(context, practiceStore, courseMaterials);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openCourseworkCenter', async () => {
-      CourseworkPanel.show(context, practiceStore, courseMaterials);
+      CourseworkPanel.show(context, practiceStore, courseMaterials, manager);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openLessonText', async (resourceId: unknown) => {
       if (typeof resourceId !== 'string' || !preparationModule(resourceId)) {

@@ -51,7 +51,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         groupItem('start', 'Start Here', 'home', true),
         groupItem('team', 'Course Team and Schedule', 'organization', false),
         groupItem('modules', `Course Modules (${complete}/${learningPath.length})`, 'list-tree', true),
-        groupItem('coursework', 'Coursework and Final Project', 'checklist', true),
+        groupItem('coursework', 'Coursework and Final Presentation', 'checklist', true),
         groupItem('learn', 'Practice and Progress', 'mortar-board', false),
         groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
         groupItem('assembly', 'Assembly Programming', 'terminal', false),
@@ -83,7 +83,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Open coursework roadmap',
-            'requirements · checks · final-project progress · grade estimate',
+            'requirements · preflights · final-presentation progress · grade estimate',
             'systemstudioCis310.openCourseworkCenter',
             'checklist'
           ),
@@ -112,14 +112,14 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'checklist'
           ),
           describedActionItem(
-            'Final: 8-bit processor + assembly program',
+            'Final: cumulative 4-bit processor + assembly program',
             'presentation during final examination week · exact logistics TBA in Canvas',
             'systemstudioCis310.openCourseworkCenter',
             'circuit-board'
           ),
           describedActionItem(
             'Open Canvas for official evaluation',
-            'instructor/GSI grades and submission receipts',
+            'instructor grades and submission receipts',
             'systemstudioCis310.openCanvas',
             'cloud'
           )

@@ -50,8 +50,8 @@ You will create four 4-bit registers: **R0**, **R1**, **R2**, **R3**. The regist
 3. **Write Register (2 bits)**  
    - Selects which register (R0–R3) will be written to (when the write enable signal is active).
 
-4. **Ctrl Registers (8 bit)**  
-   - Selects operations on the registers. We split 8 bit into 4 chunks. Each chunk represents corresponding register's operations.
+4. **Per-register control word (four 2-bit fields)**
+   - The control word has eight control bits because it contains one 2-bit field for each of the four registers. This is control encoding; the processor data path and each register remain 4 bits wide.
 
 5. **Write Data (4 bits)**  
    - The 4-bit input value to be written into the selected register (if Write Enable is active).
@@ -71,7 +71,7 @@ You will create four 4-bit registers: **R0**, **R1**, **R2**, **R3**. The regist
 
 3. **Writing to a Register**  
    - Decode the 2-bit **Write Register** input to generate four enable signals (one per register).  
-   - Combine each decoded enable signal with the **Ctrl Registers** line to determine if a particular register should latch the **Write Data**.
+   - Combine each decoded enable signal with the appropriate **per-register control** field to determine if a particular register should latch the **Write Data**.
 
 4. **Testing the Register File**  
    - Drive **Read Register 1** and **Read Register 2** with test values (00, 01, 10, 11).
@@ -147,6 +147,12 @@ Your ALU should implement the following operations based on the 3-bit control si
 
 4. **Collaboration (confirm in Fall 2026 Canvas)**
    - Follow the current Canvas rules for group size, individual work, and contribution reporting.
+
+### Local formative preflight before Canvas
+
+Open **Coursework and Final Presentation** in SystemStudio and choose **Run local circuit preflight**. The public register-file suite checks selective writes, write-disable behavior, and both independent read ports. The public ALU suite checks all eight published operations for all 256 pairs of 4-bit operands—2,048 vectors total. Use the exact top-level port names and widths in [Local circuit preflight contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
+
+Passing is private practice evidence only: it is not a grade, does not inspect your internal architecture or report, and does not submit anything. Canvas requirements and instructor evaluation remain authoritative.
 
 ---
 

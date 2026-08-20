@@ -84,21 +84,41 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     };
   }
 
-  if (matches(text, ['final project', 'final presentation', 'final demo', '8-bit processor', '8 bit processor', 'grade calculator', 'grade estimate', 'drop two', 'lowest quiz', 'coursework progress'])) {
+  if (matches(text, ['circuit preflight', 'local preflight', 'self test', 'self-test', 'test assignment circuit', 'test before canvas'])) {
+    return {
+      title: 'Run a public local circuit contract before Canvas',
+      paragraphs: [
+        'Open Coursework and Final Presentation, choose the implementation card, and select Run local circuit preflight. Choose the component contract and its .dig file. SystemStudio runs the unmodified Digital CLI against public expected behavior and reports the actual evidence.',
+        'The register, program-counter, memory, register-file, and ALU contracts use documented labels and widths. The integrated 4-bit processor runs its own embedded tests because the assignment does not define one universal opcode encoding. A pass is formative evidence—not a grade, rubric decision, or Canvas submission.'
+      ],
+      checklist: [
+        'Use the exact public interface labels shown in the preflight guide.',
+        'Fix the earliest mismatch before interpreting later failures.',
+        'Add embedded tests for reset, four-nibble fetch, PC behavior, representative execution/writeback, and released program control flow.',
+        'Open the current Canvas assignment, submit the released files there, and confirm the receipt.'
+      ],
+      actions: [
+        { id: 'open-coursework', label: 'Open coursework preflights' },
+        { id: 'open-canvas', label: 'Open official Canvas assignment' }
+      ]
+    };
+  }
+
+  if (matches(text, ['final project', 'final presentation', 'final demo', '4-bit processor', '4 bit processor', 'grade calculator', 'grade estimate', 'drop two', 'lowest quiz', 'coursework progress'])) {
     return {
       title: 'Use the coursework roadmap; Canvas remains the official record',
       paragraphs: [
-        'The separate final project culminates in an 8-bit processor implementation, assembly programming, and a presentation/demonstration during final examination week. The exact date, time, room, order, released specification, and deadline are to be announced in Canvas.',
-        'SystemStudio can track your local planning status, file checks, receipt confirmation, and self-evaluation. Those indicators are not instructor/GSI grades. Its manual grade estimate applies the published 15/65/20 weights and drops two lowest participation-quiz percentages from scores you enter; Canvas remains official.'
+        'The final presentation demonstrates the same cumulative 4-bit processor built through Implementations 1–3, its released assembly program, and expected-versus-observed evidence during final examination week. It is not a separate processor redesign. The exact date, time, room, order, released specification, and deadline are to be announced in Canvas.',
+        'SystemStudio can run formative circuit preflights and track local planning status, file checks, receipt confirmation, and self-evaluation. Those indicators are not instructor grades. Its manual grade estimate applies the published 15/65/20 weights and drops two lowest participation-quiz percentages from scores you enter; Canvas remains official.'
       ],
       checklist: [
-        'Use the 4-bit integrated processor milestone as preparation for the separate 8-bit capstone.',
-        'Check Canvas to learn which ISA/toolchain and artifacts the final release requires.',
+        'Carry forward the tested registers/memory and register-file/ALU into the integrated 4-bit processor.',
+        'Check Canvas to learn the released program, ISA expectations, and required artifacts.',
         'Test the processor and assembly program, retain expected/observed evidence, and rehearse the explanation.',
         'Submit in Canvas and confirm its receipt before the announced final-week presentation.'
       ],
       actions: [
-        { id: 'open-coursework', label: 'Open coursework and final project' },
+        { id: 'open-coursework', label: 'Open coursework and final presentation' },
         { id: 'open-canvas', label: 'Open official Canvas record' }
       ]
     };
@@ -226,7 +246,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Fall 2026 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329',
       paragraphs: [
         'The department-confirmed schedule and verified university calendar yield 27 regular CIS 310 meetings: 13 Mondays and 14 Wednesdays, from Wednesday, August 26 through Monday, December 7. Each regular meeting is 10:00–11:45 a.m. in ELB 1329.',
-        'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The 8-bit processor and assembly-program presentation occurs during final examination week; its exact date, time, room, order, and deadline are to be announced in Canvas.'
+        'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The cumulative 4-bit processor and assembly-program presentation occurs during final examination week; its exact date, time, room, order, and deadline are to be announced in Canvas.'
       ],
       checklist: [
         'Open the visual calendar to see every meeting date.',

@@ -68,19 +68,19 @@ export const COURSEWORK_CATALOG: readonly CourseworkItem[] = [
   },
   {
     id: 'project-03', title: 'Implementation 3 · Integrated 4-bit Processor', kind: 'implementation', resourceId: 'project-03',
-    stage: 'Integrate the milestone processor', summary: 'Integrate the packaged 4-bit processor milestone before the separate 8-bit capstone.',
+    stage: 'Integrate the cumulative processor', summary: 'Reuse the tested storage, register-file, and ALU components to complete the cumulative 4-bit processor.',
     preparation: ['Lectures 5–7 and 10–12', 'Prior implementation components'], expectedExtensions: ['dig', 'pdf', 'docx', 'md', 'png'],
     checks: [{ id: 'fetch-decode-execute', label: 'Fetch, decode, execute, register writeback, memory, and PC behavior are demonstrated.' }, { id: 'processor-program', label: 'A released test program has expected and observed state evidence.' }, ...COMMON_CANVAS_CHECKS]
   },
   {
-    id: 'final-project', title: 'Final Project · 8-bit Processor and Assembly-Program Demonstration', kind: 'final', resourceId: 'final-project-8bit',
-    stage: 'Demonstrate the complete system',
-    summary: 'A separate culminating 8-bit processor implementation, assembly programming, and presentation during final examination week. Exact date, time, room, order, required artifacts, and deadline are to be announced in Canvas.',
+    id: 'final-project', title: 'Final Presentation · Cumulative 4-bit Processor and Assembly Program', kind: 'final', resourceId: 'final-project-4bit',
+    stage: 'Demonstrate the cumulative system',
+    summary: 'Present and demonstrate the same 4-bit processor built through Implementations 1–3, together with the released assembly program, during final examination week. Exact date, time, room, order, required artifacts, and deadline are to be announced in Canvas.',
     preparation: ['All processor milestones', 'Lecture 10 CPU/instruction cycle', 'Lecture 12 assembly', 'Presentation rehearsal'],
     expectedExtensions: ['dig', 'asm', 'pdf', 'pptx', 'ppt', 'docx', 'md', 'png'],
     checks: [
       { id: 'released-spec', label: 'I checked the released Canvas specification and know which ISA/toolchain, files, tests, and presentation format are required.' },
-      { id: 'architecture', label: 'I can explain the 8-bit datapath, registers, memory, ALU, instruction behavior, and control sequence.' },
+      { id: 'architecture', label: 'I can explain the cumulative 4-bit datapath, registers, memory, ALU, instruction behavior, and control sequence.' },
       { id: 'processor-tests', label: 'The processor has a documented test plan with expected and observed state changes.' },
       { id: 'assembly-program', label: 'The required assembly program is tested with the released ISA/toolchain, and I can explain every instruction used.' },
       { id: 'integration-demo', label: 'The demonstration connects processor behavior, program behavior, and visible evidence.' },
@@ -93,10 +93,10 @@ export const COURSEWORK_CATALOG: readonly CourseworkItem[] = [
 
 export const LOCAL_SELF_EVALUATION_SOURCE = 'Local student planning and self-evaluation — not graded and not sent to Canvas or course staff.';
 export const MANUAL_CANVAS_GRADE_ESTIMATE_SOURCE = 'Manual planning estimate from scores entered by the student — not an official Canvas grade.';
-export const CANVAS_INSTRUCTOR_GSI_GRADE_SOURCE = 'Official evaluated performance is assigned by the instructor/GSI and recorded in Canvas.';
+export const CANVAS_INSTRUCTOR_GSI_GRADE_SOURCE = 'Official evaluated performance is assigned by the instructor and recorded in Canvas. No GSI or grader is currently confirmed for CIS 310.';
 
 export const FINAL_PROJECT_SELF_EVALUATION_DIMENSIONS = [
-  { id: 'architecture', label: 'Explain the 8-bit architecture and instruction behavior' },
+  { id: 'architecture', label: 'Explain the cumulative 4-bit architecture and instruction behavior' },
   { id: 'circuit-evidence', label: 'Build, test, and diagnose processor circuit behavior' },
   { id: 'assembly', label: 'Explain and test the required assembly program' },
   { id: 'integration', label: 'Connect program instructions to processor-state evidence' },
@@ -305,7 +305,7 @@ export function diagnoseDigitalErrors(text: string): DigitalDiagnosis[] {
   return matches.length ? matches : [{
     id: 'general', title: 'Capture a minimal reproducible Digital problem',
     explanation: 'This message does not match a known recurring error. Preserve the exact evidence before changing the circuit.',
-    checks: ['Save a copy, then identify the smallest failing subcircuit.', 'Write the expected input/output or state transition and the observed result.', 'Capture the full error, relevant labels/widths, and one attempted fix for the instructor/GSI.']
+    checks: ['Save a copy, then identify the smallest failing subcircuit.', 'Write the expected input/output or state transition and the observed result.', 'Capture the full error, relevant labels/widths, and one attempted fix for the instructor.']
   }];
 }
 

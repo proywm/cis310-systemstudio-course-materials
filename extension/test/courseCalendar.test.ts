@@ -25,7 +25,7 @@ describe('Fall 2026 CIS 310 calendar', () => {
     assert.match(calendar, /LOCATION:ELB 1329/);
     assert.match(calendar, /CIS Building\\, Room 230/);
     assert.match(calendar, /Labor Day \\— no CIS 310 class|Labor Day — no CIS 310 class/);
-    assert.match(calendar, /8-bit processor implementation and assembly programming/);
+    assert.match(calendar, /cumulative 4-bit processor built through Implementations 1–3/);
     assert.ok(calendar.includes('exact date\\, time\\, room'));
     assert.match(calendar, /to be announced in Canvas/i);
     assert.doesNotMatch(calendar, /Homework \d.+due/i);

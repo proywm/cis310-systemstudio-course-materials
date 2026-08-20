@@ -122,6 +122,12 @@ By the end of this assignment, you will:
 3. **Fall 2026 deadline and submission:** Open the current Project Assignment 1 page in Canvas. Submit the required files there and confirm that Canvas recorded the submission.
 4. **Collaboration:** Confirm the current Fall 2026 collaboration and individual-report rules in Canvas before working with others.
 
+### 5. Local formative preflight before Canvas
+
+Open **Coursework and Final Presentation** in SystemStudio and choose **Run local circuit preflight**. The public suites can check your 4-bit load/reset register, program counter, and 16-address × 4-bit memory before you submit. Use the exact top-level port names, widths, and precedence rules in [Local circuit preflight contracts](LOCAL_CIRCUIT_PREFLIGHT.md).
+
+Passing is private practice evidence only: it is not a grade, does not inspect your design process or report, and does not submit anything. Canvas requirements and instructor evaluation remain authoritative.
+
 ---
 
 ### Conclusion

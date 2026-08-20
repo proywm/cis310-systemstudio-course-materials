@@ -129,7 +129,8 @@ describe('course-material manifest', () => {
     assert.match(syllabusHtml, /Three written homework assignments and three implementation assignments\/processor milestones<\/td>\s*<td[^>]*>65%<\/td>/i);
     assert.match(syllabusHtml, /Final processor project and demonstration<\/td>\s*<td[^>]*>20%<\/td>/i);
     assert.match(syllabusHtml, /<strong>Total<\/strong><\/td>\s*<td[^>]*><strong>100%<\/strong><\/td>/i);
-    assert.match(syllabusHtml, /8-bit processor and assembly-program presentation\/demonstration/i);
+    assert.match(syllabusHtml, /cumulative 4-bit processor and assembly-program presentation\/demonstration/i);
+    assert.doesNotMatch(syllabusHtml, /Final 8-bit processor|separate 8-bit/i);
     assert.doesNotMatch(syllabusHtml, /<script\b/i);
     const calendarHtml = syllabusHtml.split('id="tentative-fall-2026-course-calendar"')[1] ?? '';
     assert.equal((calendarHtml.match(/<td style="text-align: left;">(?:[1-9]|1\d|2[0-7])<\/td>/g) ?? []).length, 27);

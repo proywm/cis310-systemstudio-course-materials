@@ -6,7 +6,7 @@ SystemStudio includes these resources inside the extension:
 
 - 13 primary accessible HTML lectures and 13 optional, integrity-checked visual PDF archives;
 - Homework 1, Homework 2, and Homework 3 references; and
-- three processor-project milestone references and a separate 8-bit processor/assembly-program final-project planning reference.
+- three processor-project milestones that build one cumulative 4-bit processor and a final-presentation planning reference.
 
 The Learning Center maps focused open-book sections, transcript-checked author videos, and lecture-slide evidence to all 13 presentation resources, then adds 104 formative questions—exactly eight for every module. It supports immediate-feedback practice, end-of-session quiz review, confidence checks, saved questions, and local spaced review.
 

@@ -249,6 +249,22 @@ export class DigitalManager {
     return { passed: result.code === 0 && !result.timedOut && !result.cancelled, output, process: result };
   }
 
+  async runExternalTests(
+    circuitPath: string,
+    testsPath: string,
+    token?: vscode.CancellationToken
+  ): Promise<CircuitTestResult> {
+    await this.assertReady();
+    await access(circuitPath);
+    await access(testsPath);
+    const result = await this.runCli(['test', '-circ', circuitPath, '-tests', testsPath, '-verbose'], token);
+    const output = normalizeOutput(result);
+    this.output.appendLine(`Digital external preflight: ${circuitPath}`);
+    this.output.appendLine(`Public test contract: ${testsPath}`);
+    this.output.appendLine(output);
+    return { passed: result.code === 0 && !result.timedOut && !result.cancelled, output, process: result };
+  }
+
   async exportSvg(circuitPath: string, token?: vscode.CancellationToken): Promise<string> {
     await this.assertReady();
     const sourceStat = await stat(circuitPath);

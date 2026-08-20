@@ -17,11 +17,13 @@ import {
 } from '../src/core/coursework';
 
 describe('coursework roadmap', () => {
-  it('separates the 4-bit implementation milestone from the 8-bit final demonstration', () => {
+  it('keeps the implementation sequence and final presentation cumulative and 4-bit', () => {
     assert.equal(COURSEWORK_CATALOG.length, 7);
     assert.match(COURSEWORK_CATALOG.find((item) => item.id === 'project-03')?.title ?? '', /4-bit/);
     const final = COURSEWORK_CATALOG.find((item) => item.id === 'final-project');
-    assert.match(final?.title ?? '', /8-bit Processor/);
+    assert.match(final?.title ?? '', /Cumulative 4-bit Processor/);
+    assert.match(final?.summary ?? '', /same 4-bit processor built through Implementations 1–3/i);
+    assert.doesNotMatch(final?.summary ?? '', /separate|8-bit/i);
     assert.match(final?.summary ?? '', /final examination week/i);
     assert.match(final?.summary ?? '', /to be announced in Canvas/i);
     assert.match(final?.checks.find((check) => check.id === 'assembly-program')?.label ?? '', /assembly program/i);

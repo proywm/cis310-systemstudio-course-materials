@@ -14,9 +14,9 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 - a Canvas publication bundle at [`canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip`](canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip), containing 13 Canvas-safe bodies, 13 standalone pages, a page map, and a validation manifest;
 - 13 SHA-256-verified legacy presentation PDFs covering Lectures 1--12, including the Lecture 8 companion, retained as optional visual archives;
 - three homework study references;
-- three processor-project study and implementation references plus a separate 8-bit processor and assembly-program final-project planning reference;
+- three cumulative 4-bit processor study/implementation references plus a final-presentation planning reference;
 - 104 formative practice questions, exactly eight mapped to each of the 13 presentation resources, delivered through the extension's local Learning Center;
-- the complete upstream Digital v0.31 application for circuit editing and simulation, plus six mapped circuit builds; actual NASM/ELF32 execution, exact Windows MASM/Irvine32 routing, and five separately labeled trace-tutor activities;
+- the complete upstream Digital v0.31 application for circuit editing and simulation, plus seven mapped circuit builds; actual NASM/ELF32 execution, exact Windows MASM/Irvine32 routing, and five separately labeled trace-tutor activities;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
 - an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
@@ -34,7 +34,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 8. Submit every required file in Canvas and confirm the submission receipt.
 9. Use the local FAQ for recurring questions, U-M Maizey for source-grounded conversational help, or **Ask a Question Before Class** when the instructor should address an issue in the next meeting.
 
-Learning Center reading/video checkmarks, guided-lab checkmarks, coursework planning states, and practice progress stay on the student's machine. They are ungraded and self-reported and do not certify mastery. A separately labeled manual grade estimator can calculate a planning estimate from scores the student copies from Canvas; it is not an instructor/GSI evaluation or official Canvas grade.
+Learning Center reading/video checkmarks, guided-lab checkmarks, coursework planning states, and practice progress stay on the student's machine. They are ungraded and self-reported and do not certify mastery. A separately labeled manual grade estimator can calculate a planning estimate from scores the student copies from Canvas; it is not an instructor evaluation or official Canvas grade.
 
 ## Circuit tool
 

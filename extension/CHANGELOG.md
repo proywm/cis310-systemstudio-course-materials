@@ -1,15 +1,22 @@
 # Change Log
 
+## 0.17.0
+
+- Standardized Implementation 3, the syllabus, calendar, roadmap, FAQ, and final-presentation guide around one cumulative 4-bit processor built through Implementations 1–3.
+- Added assignment-aware local circuit preflights backed by the unmodified Digital CLI: public register, program-counter, memory, register-file, and exhaustive 2,048-vector ALU contracts plus circuit-owned embedded tests for the integrated processor.
+- Added an accessible public interface/preflight guide and explicit boundaries: local passes are formative evidence, not grades, rubric decisions, current Canvas-requirement checks, or submissions.
+- Updated all active evaluation wording for the currently confirmed no-GSI/no-grader staffing state; Canvas and instructor evaluation remain authoritative.
+
 ## 0.16.0
 
-- Added **Coursework and Final Project** with Assignment Mission Control for all three homework assignments, three implementation milestones, and the separate 8-bit processor/assembly-program final project.
+- Added **Coursework and Final Presentation** with Assignment Mission Control for all three homework assignments, three implementation milestones, and the final presentation.
 - Added local status and receipt tracking, assignment-specific checklists, selected-file validation, and safe planning ZIP creation; every surface states that Canvas remains the only submission and official evaluation record.
-- Added a final-project progression bar and five-dimension self-evaluation that remain local and visibly distinct from instructor/GSI performance in Canvas.
+- Added a final-project progression bar and five-dimension self-evaluation that remain local and visibly distinct from instructor performance in Canvas.
 - Added a manual grade planning estimate using student-entered Canvas scores, the published 15/65/20 category weights, the two-lowest participation-item drop rule, retained earned/possible point aggregation, and unrounded syllabus letter boundaries.
 - Added opt-in local Canvas `.ics` import with course filtering, file-size limits, time-zone-aware deadlines, and all-day handling; also added meeting-to-module missed-class recovery, deterministic Digital error diagnosis, a structured private review request, and a course-staff Canvas release checklist.
 - Made a responsive, navigable HTML syllabus the primary packaged syllabus and retained the matching untagged PDF only as an optional print copy.
-- Updated the syllabus and calendar for the 8-bit processor and assembly-program presentation during final examination week; exact date, time, room, order, released requirements, and deadline remain to be announced in Canvas.
-- Added a separate final-project planning reference while retaining Project 3 as the integrated 4-bit processor milestone and explicitly labeling the width-upgrade path.
+- Updated the syllabus and calendar for the processor and assembly-program presentation during final examination week; exact date, time, room, order, released requirements, and deadline remain to be announced in Canvas.
+- Added a final-presentation planning reference connected to the integrated processor milestone.
 - Corrected the Fall 2026 staffing display after the department confirmed the previously proposed students were assigned to other courses; the extension now assumes no CIS 310 GSI or grader is assigned or confirmed and removes the earlier unverified course-assignment claim.
 
 ## 0.15.1

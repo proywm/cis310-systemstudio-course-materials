@@ -4,7 +4,7 @@
 
 ## Start with the Fall 2026 course documents
 
-- Open the primary [accessible CIS 310 Fall 2026 HTML syllabus](syllabus/CIS310_Fall_2026_Syllabus.html). An [optional print PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf) contains the same syllabus content but is not tagged for assistive technology. The syllabus contains the required texts, course structure, learning outcomes, technology workflow, policy links, and 27-meeting topic sequence. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. The 8-bit processor and assembly-program final presentation occurs during final examination week; Canvas will announce its exact date, time, room, order, requirements, and deadline.
+- Open the primary [accessible CIS 310 Fall 2026 HTML syllabus](syllabus/CIS310_Fall_2026_Syllabus.html). An [optional print PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf) contains the same syllabus content but is not tagged for assistive technology. The syllabus contains the required texts, course structure, learning outcomes, technology workflow, policy links, and 27-meeting topic sequence. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. The cumulative 4-bit processor and assembly-program final presentation occurs during final examination week; Canvas will announce its exact date, time, room, order, requirements, and deadline.
 - In the SystemStudio sidebar, select **Open Fall 2026 course calendar** to see every Monday/Wednesday meeting and the official holiday, recess, study-day, and examination periods. Its `.ics` export uses the department-confirmed 10:00–11:45 a.m. meeting time and ELB 1329 location.
 - **Course team:** Dr. Probir Roy (`probirr@umich.edu`), instructor, CIS Building Room 230. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; check Canvas and department announcements for any future staffing update. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment.
 - Use [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for live course details and submission.
@@ -27,7 +27,7 @@ Instructors can publish the same lectures to Canvas from the [accessible HTML le
 
 The HTML lesson is the direct-text alternative to the visual slide deck. It reflows with zoom, uses semantic headings and native controls, does not depend on color alone, and offers previous/next navigation. Each **Ask the course tutor** button copies a source-bounded, attempt-first prompt and opens the configured U-M tutor; the student must paste the prompt and should verify the response against the mapped course source.
 
-The Learning dashboard reports local practice evidence—coverage, accuracy, due questions, practice days, and confidence mismatches. It does not calculate a grade, certify mastery, rank students, or send results to Canvas or the instructor. The separate **Coursework and Final Project** panel provides local planning status, self-evaluation, and an explicitly nonofficial manual grade estimate using student-entered Canvas scores; instructor/GSI evaluation in Canvas remains distinct and authoritative. You can reset the local history at any time.
+The Learning dashboard reports local practice evidence—coverage, accuracy, due questions, practice days, and confidence mismatches. It does not calculate a grade, certify mastery, rank students, or send results to Canvas or the instructor. The separate **Coursework and Final Presentation** panel provides local planning status, self-evaluation, executable public circuit preflights, and an explicitly nonofficial manual grade estimate using student-entered Canvas scores; instructor evaluation in Canvas remains distinct and authoritative. You can reset the local history at any time.
 
 ## Build and trace with the Hands-on Lab Center
 
@@ -86,9 +86,9 @@ Browse the [official Tarnoff book page](https://faculty.etsu.edu/tarnoff/138292/
 | 2 | [Register File and ALU](assignments/project-2-register-file-alu.md) | Lectures 2, 5, and 10 |
 | 3 | [Integrated 4-bit Processor](assignments/project-3-processor.md) | Lectures 5--7 and 10--12 |
 
-## Final project and presentation
+## Cumulative final presentation
 
-The [Final Project: 8-bit Processor and Assembly-Program Demonstration](assignments/final-project-8-bit-processor.md) is a separate culminating assessment after the three implementation milestones. Its presentation and demonstration occur during final examination week. The exact date, time, room, order, released specification, required files, and submission deadline are to be announced in Canvas.
+The [Final Presentation: Cumulative 4-bit Processor and Assembly-Program Demonstration](assignments/final-project-4-bit-processor.md) presents the same processor built through the three implementation milestones; it is not a separate width-upgrade project. Use the [public local circuit preflight contracts](assignments/LOCAL_CIRCUIT_PREFLIGHT.md) before submitting. The presentation and demonstration occur during final examination week. The exact date, time, room, order, released program/specification, required files, and submission deadline are to be announced in Canvas.
 
 ## Bundled offline presentation sequence
 

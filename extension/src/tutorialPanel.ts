@@ -369,7 +369,7 @@ function tutorialStepsHtml(): string {
       ${choice('openbook', 'Required open book and author videos', 'Focused Tarnoff chapters and official author videos come before the related class and slides.')}
       ${choice('presentations', '13 accessible HTML lectures', 'Each primary lecture provides objectives, explanations, examples, self-checks, and source-bounded tutor prompts; the legacy PDF is an optional visual archive.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
-      ${choice('projects', 'Three milestones + final project', 'Registers/DRAM, Register File/ALU, and the integrated 4-bit processor lead to the separate 8-bit processor/assembly-program final presentation.')}
+      ${choice('projects', 'Three milestones + final presentation', 'Registers/DRAM, Register File/ALU, and the integrated 4-bit processor build one cumulative processor for the final assembly-program demonstration.')}
       ${choice('mission', 'Assignment Mission Control', 'Use local status, checklists, file inspection, receipt confirmation, final-project self-evaluation, and the manual grade estimate without confusing them with Canvas evaluation.')}
       ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
