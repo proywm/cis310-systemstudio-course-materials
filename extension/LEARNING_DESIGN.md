@@ -37,7 +37,7 @@ The design combines established student-support patterns: a clean starting point
 | Progress and pacing summaries | Coverage, practice accuracy, due items, practice days, and confidence mismatches | Show evidence of effort and guide the next study action |
 | Human-help escalation | Local deterministic FAQ chat, U-M Maizey course-tutor handoff, optional error reflection, and a structured Canvas Questions Before Class draft | Turn confusion into a specific next step, a source-grounded tutor dialogue, or an actionable instructor question without implying live expert staffing |
 
-The extension does not guarantee an exam score, grade increase, mastery, or learning outcome. It also excludes estimated course scores, peer comparison, competitive ranking, mandatory streaks, cloud accounts, and automated deadline reminders. Those features can introduce false precision, anxiety, privacy costs, or another source of course deadlines. Canvas remains the only authority for deadlines, grades, and submission.
+The extension does not guarantee an exam score, grade increase, mastery, or learning outcome. It excludes peer comparison, competitive ranking, mandatory streaks, cloud accounts, and invented deadlines. A separate manual calculator may apply the published 15/65/20 weights and two-lowest participation-item drop rule to scores a student copies from Canvas. It identifies the lowest rows by percentage and combines retained earned/possible points so unequal point values are not silently equalized. It remains labeled as a planning estimate—not an instructor/GSI evaluation, official Canvas grade, or prediction. Canvas remains the only authority for deadlines, grades, policies, and submission.
 
 ## Open-book and author-video pathway
 
@@ -78,11 +78,11 @@ The implemented scheduler and recommendation weights are conservative instructio
 
 ## Progress model and privacy
 
-Progress is stored in VS Code's local extension storage. The record contains self-reported reading/video completion, guided-lab checkmarks, question-level attempt counts, correctness, confidence, hint use, review date, saved state, optional reflection categories, and a bounded recent-attempt log. It is not transmitted to Canvas, the instructor, an AI provider, or an analytics service. Students can reset practice from the dashboard and reset each lab checklist from the Lab Center.
+Progress is stored in VS Code's local extension storage. The record contains self-reported reading/video completion, guided-lab and coursework-planning checkmarks, final-project self-evaluation, imported Canvas-calendar events, question-level attempt counts, correctness, confidence, hint use, review date, saved state, optional reflection categories, and a bounded recent-attempt log. It is not transmitted to Canvas, the instructor, an AI provider, or an analytics service. Students can reset local records from the relevant dashboard.
 
 The chat-style help entry does not change this boundary. Local FAQ questions are processed in the extension and are not retained. Selecting U-M Maizey or the Canvas question queue opens a U-M service outside the local extension boundary; its U-M privacy notice and course rules apply. The extension does not contain a faculty LLM credential, Canvas token, or automatic posting authority.
 
-The dashboard is descriptive. Accuracy means correct responses divided by local attempts. Coverage means unique questions encountered. Practice days count local calendar dates with an attempt. Topic labels summarize those same attempts. None is a grade, accommodation decision, mastery estimate, or prediction of future performance.
+The learning dashboard is descriptive. Accuracy means correct responses divided by local attempts. Coverage means unique questions encountered. Practice days count local calendar dates with an attempt. Topic labels summarize those same attempts. Coursework status and self-evaluation are also local student judgments. None is an instructor/GSI grade, accommodation decision, mastery certification, or official Canvas record. The manual grade estimator is kept in a visually separate section and displays its assumptions with every result.
 
 ## Content and classroom validation checklist
 

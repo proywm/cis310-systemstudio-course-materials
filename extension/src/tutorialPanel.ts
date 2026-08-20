@@ -33,7 +33,7 @@ export class TutorialPanel implements vscode.Disposable {
     if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
     if (context.globalState.get<TutorialProgress>(PROGRESS_KEY)) return false;
     const action = await vscode.window.showInformationMessage(
-      'Welcome to Fall 2026 CIS 310. Start the clickable tour of open-book preparation, learning practice, Canvas, bundled materials, Full Digital, real assembly, the trace tutor, and help?',
+      'Welcome to Fall 2026 CIS 310. Start the clickable tour of preparation, coursework/final-project planning, Canvas, Full Digital, real assembly, the trace tutor, and help?',
       'Start Guided Tutorial',
       'Skip for now'
     );
@@ -129,6 +129,7 @@ async function executeTutorialAction(action: TutorialAction): Promise<void> {
     'open-ai-tutor': { id: 'systemstudioCis310.openAiTutor' },
     'ask-before-class': { id: 'systemstudioCis310.openPreClassQuestion' },
     'open-learning': { id: 'systemstudioCis310.openPracticeCenter' },
+    'open-coursework': { id: 'systemstudioCis310.openCourseworkCenter' },
     'practice-now': { id: 'systemstudioCis310.startQuickPractice' },
     'open-guided-labs': { id: 'systemstudioCis310.openGuidedLabs' },
     'open-half-adder-lab': { id: 'systemstudioCis310.openGuidedLabs', args: ['circuit-half-adder'] },
@@ -363,15 +364,16 @@ function tutorialStepsHtml(): string {
     <div class="instruction"><strong>Explore the resources you need:</strong> each has one clear job, and you can return to the others later.</div>
     <div class="choices">
       ${choice('canvas', 'Fall 2026 Canvas', 'Authoritative deadlines, grading rules, required files, announcements, and submission.')}
-      ${choice('syllabus', 'Fall 2026 syllabus PDF', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as a packaged PDF.')}
+      ${choice('syllabus', 'Accessible Fall 2026 syllabus', 'Active course structure, outcomes, tools, policies, and Canvas-controlled details open as primary accessible HTML.')}
       ${choice('calendar', 'Monday/Wednesday calendar', '27 verified regular meetings starting August 26, with holidays and recess identified.')}
       ${choice('openbook', 'Required open book and author videos', 'Focused Tarnoff chapters and official author videos come before the related class and slides.')}
       ${choice('presentations', '13 accessible HTML lectures', 'Each primary lecture provides objectives, explanations, examples, self-checks, and source-bounded tutor prompts; the legacy PDF is an optional visual archive.')}
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
-      ${choice('projects', 'Three project assignments', 'Registers/DRAM, Register File/ALU, and the integrated processor.')}
+      ${choice('projects', 'Three milestones + final project', 'Registers/DRAM, Register File/ALU, and the integrated 4-bit processor lead to the separate 8-bit processor/assembly-program final presentation.')}
+      ${choice('mission', 'Assignment Mission Control', 'Use local status, checklists, file inspection, receipt confirmation, final-project self-evaluation, and the manual grade estimate without confusing them with Canvas evaluation.')}
       ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/trace, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
-    <div class="actions"><button data-action="open-learning" class="primary">Open course preparation path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open syllabus PDF</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
+    <div class="actions"><button data-action="open-coursework" class="primary">Open coursework and final project</button><button data-action="open-learning" class="secondary">Open preparation path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open accessible syllabus</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>

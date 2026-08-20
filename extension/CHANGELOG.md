@@ -1,9 +1,20 @@
 # Change Log
 
+## 0.16.0
+
+- Added **Coursework and Final Project** with Assignment Mission Control for all three homework assignments, three implementation milestones, and the separate 8-bit processor/assembly-program final project.
+- Added local status and receipt tracking, assignment-specific checklists, selected-file validation, and safe planning ZIP creation; every surface states that Canvas remains the only submission and official evaluation record.
+- Added a final-project progression bar and five-dimension self-evaluation that remain local and visibly distinct from instructor/GSI performance in Canvas.
+- Added a manual grade planning estimate using student-entered Canvas scores, the published 15/65/20 category weights, the two-lowest participation-item drop rule, retained earned/possible point aggregation, and unrounded syllabus letter boundaries.
+- Added opt-in local Canvas `.ics` import with course filtering, file-size limits, time-zone-aware deadlines, and all-day handling; also added meeting-to-module missed-class recovery, deterministic Digital error diagnosis, a structured private review request, and a course-staff Canvas release checklist.
+- Made a responsive, navigable HTML syllabus the primary packaged syllabus and retained the matching untagged PDF only as an optional print copy.
+- Updated the syllabus and calendar for the 8-bit processor and assembly-program presentation during final examination week; exact date, time, room, order, released requirements, and deadline remain to be announced in Canvas.
+- Added a separate final-project planning reference while retaining Project 3 as the integrated 4-bit processor milestone and explicitly labeling the width-upgrade path.
+- Corrected the Fall 2026 staffing display after the department confirmed the previously proposed students were assigned to other courses; the extension now assumes no CIS 310 GSI or grader is assigned or confirmed and removes the earlier unverified course-assignment claim.
+
 ## 0.15.1
 
-- Added a dedicated **Course Team and Schedule** sidebar section with the instructor, CIS 310 GSI, confirmed class time/room, and instructor office hours/location.
-- Added Md Abul Kalam Azad as the CIS 310 Graduate Student Instructor in the syllabus, calendar, student guide, FAQ, and local helper.
+- Added a dedicated **Course Team and Schedule** sidebar section with the instructor, course-staff status, confirmed class time/room, and instructor office hours/location.
 - Changed calendar export from all-day placeholders to the department-confirmed Monday/Wednesday 10:00–11:45 a.m. meetings in ELB 1329 while retaining official academic milestones and avoiding inferred deadlines.
 - Corrected instructor office information to CIS Building, Room 230 throughout the active materials.
 

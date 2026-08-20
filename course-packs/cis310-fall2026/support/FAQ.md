@@ -4,7 +4,7 @@ These answers address recurring, anonymized themes in prior CIS 310 student ques
 
 ## Who are the instructor and GSI, and where is the class?
 
-CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. The instructor is Dr. Probir Roy (`probirr@umich.edu`), whose office is CIS Building, Room 230. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment. The Graduate Student Instructor is Md Abul Kalam Azad, who goes by Azad (`akazad@umich.edu`). Check Canvas announcements for any change or for GSI office hours.
+CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. The instructor is Dr. Probir Roy (`probirr@umich.edu`), whose office is CIS Building, Room 230. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; check Canvas and department announcements for any future staffing update.
 
 ## Where do I begin?
 

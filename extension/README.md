@@ -1,10 +1,10 @@
 # SystemStudio CIS 310 VS Code Extension
 
-SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages the syllabus, calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, local FAQ, U-M Maizey handoff, and Canvas question workflow.
+SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, final-project planning, local FAQ, U-M Maizey handoff, and Canvas question workflow.
 
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
-The **Course Team and Schedule** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor, and Md Abul Kalam Azad (“Azad,” `akazad@umich.edu`), Graduate Student Instructor. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment. Canvas announcements provide any change and GSI office hours.
+The **Course Team and Schedule** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; Canvas and department announcements provide any future staffing update. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment.
 
 ## Tool integrity: no reduced substitutes
 
@@ -41,17 +41,21 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 
 1. Open **SystemStudio CIS 310 → Start Here**.
 2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Accessible HTML lecture → Read → Watch → Practice 8 questions → guided activity** sequence plus an optional visual PDF archive. Five distinct questions form the readiness checkpoint; all eight form the confidence set.
-3. Check Canvas for live requirements and submission.
-4. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
-5. For assembly, choose **Build and Run with Real Assembly Toolchain** for executable evidence. Use **Instruction Trace Tutor** only for prediction practice.
-6. Use the local FAQ, U-M Maizey learning-coach handoff, or structured Canvas Question Before Class when help is needed.
+3. Open **Coursework and Final Project** for the assignment roadmap, local file checks, final-project self-evaluation, opt-in Canvas-calendar import, missed-class recovery, diagnostics, and the manual grade estimate. These local indicators are not instructor/GSI grades.
+4. Check Canvas for live requirements, instructor/GSI evaluation, submission, and receipt.
+5. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
+6. For assembly, choose **Build and Run with Real Assembly Toolchain** for executable evidence. Use **Instruction Trace Tutor** only for prediction practice.
+7. Use the local FAQ, U-M Maizey learning-coach handoff, or structured Canvas Question Before Class when help is needed.
 
 ## Included learning features
 
 - an always-visible, sequential 13-module sidebar outline with direct navigation to a novice-facing accessible HTML lecture, focused open-textbook reading, official author video, readiness check, mapped guided lab, and optional visual PDF archive;
 - 13 evidence-bounded HTML lectures with objectives, definitions, explanations, worked examples, self-checks, presentation evidence, and attempt-first AI tutor prompts;
 - 104 evidence-mapped questions—eight per module—with a five-question readiness checkpoint, Bloom-level labels, quiz mode, confidence checks, explanation/justification, and spaced local review;
-- 13 packaged legacy presentation PDFs retained as optional visual archives, three homework references, and three processor-project references;
+- 13 packaged legacy presentation PDFs retained as optional visual archives, three homework references, three processor-project milestones, and a separate 8-bit processor/assembly-program final-project planning reference;
+- Assignment Mission Control with requirements-oriented checklists, actual selected-file inspection, a safe local planning ZIP, Canvas receipt confirmation, final-project progression and self-evaluation, deterministic Digital diagnostics, structured private grading-review requests, and a course-staff release checklist;
+- a manual grade estimate using student-entered Canvas scores, published 15/65/20 weights, two-lowest participation-item drops, retained earned/possible point aggregation, and syllabus letter boundaries—visually separated from official instructor/GSI evaluation in Canvas;
+- opt-in local Canvas `.ics` import and a 27-meeting missed-class recovery route to the mapped accessible lesson;
 - 27-meeting Monday/Wednesday Fall 2026 calendar with confirmed 10:00–11:45 a.m., ELB 1329 `.ics` events;
 - seven guided circuit builds and five assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
@@ -82,6 +86,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Create Assembly Toolchain and Trace Examples` | Adds real NASM/MASM examples plus separate trace examples and guides |
 | `CIS 310: Open Hands-on Circuit and Assembly Labs` | Opens lecture-mapped guided builds and traces |
 | `CIS 310: Open Learning and Practice` | Opens preparation, practice, quiz, confidence, and review tools |
+| `CIS 310: Open Coursework and Final Project` | Opens assignment checklists, final-project progression, grade estimate, Canvas-calendar import, recovery, and diagnostics |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page |
 | `CIS 310: Start or Rerun Guided Tutorial` | Opens the self-paced tutorial |
 
@@ -103,7 +108,7 @@ See the generated `assembly/COMPATIBILITY.md` and `assembly/IRVINE32_PROFILE.md`
 - Child processes use argument arrays with `shell: false`.
 - Real assembly execution has time and output bounds.
 - The Instruction Trace Tutor has no filesystem, shell, process, or network instruction.
-- Learning history and FAQ conversations stay in VS Code local storage; the extension sends no telemetry or student artifacts to an AI service.
+- Learning history, coursework planning, imported calendar events, self-evaluation, and FAQ conversations stay in VS Code local storage; the extension sends no telemetry or student artifacts to an AI service.
 - U-M Maizey and Canvas open only after student action and are governed by U-M service notices.
 
 ## Verification

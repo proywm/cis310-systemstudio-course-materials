@@ -34,14 +34,14 @@ describe('student helper', () => {
     assert.match(JSON.stringify(reply), /9:30–10:00 a.m./);
   });
 
-  it('identifies the instructor and CIS 310 GSI without guessing office hours', () => {
+  it('identifies the instructor and does not claim an unassigned CIS 310 GSI or grader', () => {
     const reply = answerStudentQuestion('Who is the instructor and TA for CIS 310?');
     const text = JSON.stringify(reply);
     assert.match(text, /Dr. Probir Roy/);
     assert.match(text, /probirr@umich.edu/);
-    assert.match(text, /Md Abul Kalam Azad/);
-    assert.match(text, /akazad@umich.edu/);
-    assert.match(text, /Canvas remains authoritative for any announced GSI office hours/);
+    assert.match(text, /No Graduate Student Instructor \(GSI\) or grader is currently assigned or confirmed/);
+    assert.doesNotMatch(text, /Md Abul Kalam Azad|akazad@umich.edu/);
+    assert.match(text, /Check Canvas and department announcements/);
   });
 
   it('routes pre-class preparation to the required open book and author video path', () => {

@@ -1,8 +1,8 @@
 {
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
-  "description": "Active Fall 2026 CIS 310 learning materials with primary accessible HTML lectures, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
-  "version": "0.15.1",
+  "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, Assignment Mission Control, final-project progression, Full Digital, and real assembly toolchain routing.",
+  "version": "0.16.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -51,6 +51,7 @@
     "onCommand:systemstudioCis310.openLessonText",
     "onCommand:systemstudioCis310.openPreClassQuestion",
     "onCommand:systemstudioCis310.openPracticeCenter",
+    "onCommand:systemstudioCis310.openCourseworkCenter",
     "onCommand:systemstudioCis310.openGuidedLabs",
     "onCommand:systemstudioCis310.startQuickPractice",
     "onCommand:systemstudioCis310.reviewPractice",
@@ -137,6 +138,12 @@
         "title": "CIS 310: Open Learning Dashboard",
         "category": "SystemStudio",
         "icon": "$(graph)"
+      },
+      {
+        "command": "systemstudioCis310.openCourseworkCenter",
+        "title": "CIS 310: Open Coursework and Final Project",
+        "category": "SystemStudio",
+        "icon": "$(checklist)"
       },
       {
         "command": "systemstudioCis310.openGuidedLabs",
@@ -378,11 +385,11 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Start with one recommended learning action, then open details only when needed. Expand Course Team and Schedule for the instructor, GSI, class room/time, and office location. Reading/video checkmarks, practice progress, and guided-lab checkmarks stay on this device and are not graded.\n[Open the accessible course preparation path](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or trace assembly](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Start with one recommended learning action, then open details only when needed. Expand Course Team and Schedule for the instructor, GSI, class room/time, and office location. Reading/video checkmarks, practice progress, guided-lab checkmarks, coursework status, and self-evaluation stay on this device and are not instructor/GSI grades.\n[Open Coursework and Final Project](command:systemstudioCis310.openCourseworkCenter)\n[Open the accessible course preparation path](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or trace assembly](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
-        "contents": "Active Fall 2026 lessons and assignments: every lecture has a primary accessible HTML page, mapped open-book reading, official author video, readiness practice, hands-on work where appropriate, and an optional visual PDF archive; three homework and three project references are also packaged. Canvas is authoritative for current requirements and submission.\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus PDF](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
+        "contents": "Active Fall 2026 lessons and assignments: every lecture has a primary accessible HTML page, mapped open-book reading, official author video, readiness practice, hands-on work where appropriate, and an optional visual PDF archive; three homework references, three processor milestones, and a separate final-project reference are packaged. Canvas is authoritative for current requirements and submission.\n[Prepare before class](command:systemstudioCis310.openPracticeCenter)\n[Open the accessible syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Canvas to verify and submit](command:systemstudioCis310.openCanvas)"
       }
     ],
     "walkthroughs": [
@@ -416,7 +423,7 @@
           {
             "id": "materials",
             "title": "Read Before Class; Verify and Submit in Canvas",
-            "description": "Begin with the 13 primary accessible HTML lectures, then use the mapped required open-book sections, official author videos, questions, and hands-on work. Optional visual PDF archives, the syllabus, calendar, three homework references, and three project references are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
+            "description": "Begin with the 13 primary accessible HTML lectures, then use the mapped required open-book sections, official author videos, questions, and hands-on work. Optional visual PDF archives, the accessible syllabus, calendar, three homework references, three processor milestones, and a separate final-project reference are packaged locally. Use Canvas for current requirements and submission.\n[Open the learning path](command:systemstudioCis310.openPracticeCenter)\n[Open the syllabus](command:systemstudioCis310.openSyllabus)\n[Open the course calendar](command:systemstudioCis310.openCourseCalendar)\n[Open the material guide](command:systemstudioCis310.openMaterialsIndex)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)",
             "media": {
               "markdown": "media/tutorial/03-materials.md"
             },

@@ -8,8 +8,7 @@ export const CIS310_INSTRUCTOR = {
 } as const;
 
 export const CIS310_GSI = {
-  name: 'Md Abul Kalam Azad',
-  preferredName: 'Azad',
-  role: 'Graduate Student Instructor',
-  email: 'akazad@umich.edu'
+  assigned: false,
+  label: 'No CIS 310 GSI or grader is currently assigned or confirmed',
+  detail: 'Check Canvas and department announcements for any future instructional-staff update.'
 } as const;

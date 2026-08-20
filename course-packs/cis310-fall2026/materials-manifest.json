@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -17,11 +17,11 @@
       "kind": "syllabus",
       "order": 0,
       "title": "CIS 310 Fall 2026 Syllabus",
-      "sourceTitle": "CIS 310 Fall 2026 active course syllabus",
-      "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.pdf",
+      "sourceTitle": "CIS 310 Fall 2026 accessible HTML syllabus",
+      "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.html",
       "modifiedAt": "2026-08-20T16:48:08Z",
-      "localPath": "syllabus/CIS310_Fall_2026_Syllabus.pdf",
-      "sha256": "ce6cb7962750ffe5d3581d340885207193e5448a1bebf5fa61f815110b05dbf5",
+      "localPath": "syllabus/CIS310_Fall_2026_Syllabus.html",
+      "sha256": "b30f609c85e519ba29bc241202fc5cf7f8724bc9c7bddf51c96739b46ae3198f",
       "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
     },
     {
@@ -87,7 +87,7 @@
       "localPath": "presentations/lecture-05.pdf",
       "sha256": "2824a3c32491ff756e7ef84d9b071e18148b7ccb2f605223afe411e5d3d8f899",
       "concepts": ["combinational-logic", "decoder", "multiplexer", "demultiplexer"],
-      "relatedAssignmentIds": ["homework-01", "project-02", "project-03"]
+      "relatedAssignmentIds": ["homework-01", "project-02", "project-03", "final-project-8bit"]
     },
     {
       "id": "lecture-06",
@@ -100,7 +100,7 @@
       "localPath": "presentations/lecture-06.pdf",
       "sha256": "1e8cf6599887475531b82b96fe28e52b1f52a5db0241821cb7cefea72864d5fc",
       "concepts": ["latches", "flip-flops", "clock", "sequential-logic", "counter"],
-      "relatedAssignmentIds": ["homework-02", "project-01", "project-03"]
+      "relatedAssignmentIds": ["homework-02", "project-01", "project-03", "final-project-8bit"]
     },
     {
       "id": "lecture-07",
@@ -113,7 +113,7 @@
       "localPath": "presentations/lecture-07.pdf",
       "sha256": "5122915853a1307f1eb70cab25d9635a67b34cb63285df4e02a3f9d8ca07b50c",
       "concepts": ["memory-organization", "buses", "memory-map", "address-decoding"],
-      "relatedAssignmentIds": ["project-01", "project-03"]
+      "relatedAssignmentIds": ["project-01", "project-03", "final-project-8bit"]
     },
     {
       "id": "lecture-08",
@@ -165,7 +165,7 @@
       "localPath": "presentations/lecture-10.pdf",
       "sha256": "3e53000ba0b33597f35e5c6283a03b0dce6c253c9e164c7de4bac808b87eeeab",
       "concepts": ["rtl", "arithmetic-unit", "alu", "control-unit", "instruction-cycle"],
-      "relatedAssignmentIds": ["homework-03", "project-01", "project-02", "project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-01", "project-02", "project-03", "final-project-8bit"]
     },
     {
       "id": "lecture-11",
@@ -178,7 +178,7 @@
       "localPath": "presentations/lecture-11.pdf",
       "sha256": "4746d21b1008718043f413f5797acd5c837b6c27da08c8ffb235543ecd871dbb",
       "concepts": ["processor-components", "pipelining"],
-      "relatedAssignmentIds": ["project-03"]
+      "relatedAssignmentIds": ["project-03", "final-project-8bit"]
     },
     {
       "id": "lecture-12",
@@ -191,7 +191,7 @@
       "localPath": "presentations/lecture-12.pdf",
       "sha256": "6a1984eb9aca6a658688fcc47970f4a5a2d517754417a363fb17a6b697676ae9",
       "concepts": ["address-space", "memory-segments", "x86-registers", "assembly"],
-      "relatedAssignmentIds": ["homework-03", "project-03"]
+      "relatedAssignmentIds": ["homework-03", "project-03", "final-project-8bit"]
     },
     {
       "id": "homework-01",
@@ -306,6 +306,24 @@
         "lecture-11",
         "lecture-12"
       ]
+    },
+    {
+      "id": "final-project-8bit",
+      "kind": "assignment",
+      "assignmentCategory": "project",
+      "order": 204,
+      "title": "Final Project: 8-bit Processor and Assembly-Program Demonstration",
+      "sourceTitle": "Fall 2026 final-project planning reference",
+      "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/assignments/final-project-8-bit-processor.md",
+      "modifiedAt": "2026-08-20T20:00:00Z",
+      "localPath": "assignments/final-project-8-bit-processor.md",
+      "sha256": "7a1b862806ce962488258830619361834264bd2d64ac3544b254267510dbf7a9",
+      "concepts": ["8-bit-processor", "datapath", "control-unit", "instruction-set", "assembly-programming", "testing", "presentation"],
+      "circuitStarter": {
+        "fileName": "final-8-bit-processor.dig",
+        "label": "Create Final 8-bit Processor circuit"
+      },
+      "relatedPresentationIds": ["lecture-05", "lecture-06", "lecture-07", "lecture-10", "lecture-11", "lecture-12"]
     }
   ]
 }

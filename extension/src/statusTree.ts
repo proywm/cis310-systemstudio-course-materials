@@ -17,7 +17,7 @@ import type { DigitalManager } from './digitalManager';
 import type { NativeAssemblyManager } from './nativeAssemblyManager';
 import type { PracticeStore } from './practiceStore';
 
-type StatusGroup = 'start' | 'team' | 'modules' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusGroup = 'start' | 'team' | 'modules' | 'coursework' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
 type StatusNode = vscode.TreeItem & { groupId?: StatusGroup; module?: CourseModuleNavigation };
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
@@ -51,6 +51,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         groupItem('start', 'Start Here', 'home', true),
         groupItem('team', 'Course Team and Schedule', 'organization', false),
         groupItem('modules', `Course Modules (${complete}/${learningPath.length})`, 'list-tree', true),
+        groupItem('coursework', 'Coursework and Final Project', 'checklist', true),
         groupItem('learn', 'Practice and Progress', 'mortar-board', false),
         groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
         groupItem('assembly', 'Assembly Programming', 'terminal', false),
@@ -81,6 +82,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'sparkle'
           ),
           describedActionItem(
+            'Open coursework roadmap',
+            'requirements · checks · final-project progress · grade estimate',
+            'systemstudioCis310.openCourseworkCenter',
+            'checklist'
+          ),
+          describedActionItem(
             'Open Canvas — submit coursework here',
             'Fall 2026 authority',
             'systemstudioCis310.openCanvas',
@@ -96,6 +103,27 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       }
       case 'modules':
         return buildCourseModuleNavigation(this.practiceStore.getLearningPath()).map(moduleItem);
+      case 'coursework':
+        return [
+          describedActionItem(
+            'Open Assignment Mission Control',
+            'local planning and validation · Canvas remains authoritative',
+            'systemstudioCis310.openCourseworkCenter',
+            'checklist'
+          ),
+          describedActionItem(
+            'Final: 8-bit processor + assembly program',
+            'presentation during final examination week · exact logistics TBA in Canvas',
+            'systemstudioCis310.openCourseworkCenter',
+            'circuit-board'
+          ),
+          describedActionItem(
+            'Open Canvas for official evaluation',
+            'instructor/GSI grades and submission receipts',
+            'systemstudioCis310.openCanvas',
+            'cloud'
+          )
+        ];
       case 'team':
         return [
           describedInfoItem(
@@ -104,8 +132,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'person'
           ),
           describedInfoItem(
-            `GSI: ${CIS310_GSI.name} (${CIS310_GSI.preferredName})`,
-            CIS310_GSI.email,
+            CIS310_GSI.label,
+            CIS310_GSI.detail,
             'account'
           ),
           describedInfoItem(
@@ -147,13 +175,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Open Fall 2026 syllabus',
-            'active PDF · Canvas current',
+            'primary accessible HTML · Canvas current',
             'systemstudioCis310.openSyllabus',
-            'file-pdf'
+            'file-code'
           ),
           describedActionItem(
             'Open bundled course-material guide',
-            'open-book map · 3 homework · 3 projects · 13 PDFs',
+            'open-book map · 3 homework · 3 milestones + final · 13 PDFs',
             'systemstudioCis310.openMaterialsIndex',
             'library'
           )

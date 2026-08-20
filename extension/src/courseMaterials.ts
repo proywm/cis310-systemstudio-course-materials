@@ -53,7 +53,18 @@ export class CourseMaterials {
   async openResource(resource: CourseMaterialResource): Promise<void> {
     if (resource.localPath) {
       const uri = vscode.Uri.file(resolveCoursePackPath(this.rootPath, resource.localPath));
-      const command = path.extname(uri.fsPath).toLowerCase() === '.md' ? 'markdown.showPreview' : 'vscode.open';
+      const extension = path.extname(uri.fsPath).toLowerCase();
+      if (extension === '.html') {
+        const panel = vscode.window.createWebviewPanel(
+          'systemstudioCis310.accessibleCourseMaterial',
+          resource.title,
+          vscode.ViewColumn.One,
+          { enableScripts: false }
+        );
+        panel.webview.html = await readFile(uri.fsPath, 'utf8');
+        return;
+      }
+      const command = extension === '.md' ? 'markdown.showPreview' : 'vscode.open';
       await vscode.commands.executeCommand(command, uri);
       return;
     }
@@ -121,18 +132,18 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     }
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
     item.description = element.resource.kind === 'syllabus'
-      ? 'Fall 2026 PDF · Canvas current'
+      ? 'primary accessible HTML · Canvas current'
       : element.resource.kind === 'presentation'
         ? 'optional visual PDF archive · HTML lecture is primary'
         : 'packaged reference';
     item.tooltip = element.resource.kind === 'syllabus'
-      ? 'Active Fall 2026 syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission.'
+      ? 'Primary accessible Fall 2026 HTML syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission. An optional print PDF is also packaged.'
       : element.resource.kind === 'presentation'
       ? `${element.resource.sourceTitle}\nOptional visual PDF archive paired with a primary responsive HTML lecture. The PDF is not represented as independently remediated.`
       : `${element.resource.sourceTitle}\nUse this study reference with the current Canvas assignment.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(
-      element.resource.kind === 'syllabus' ? 'file-pdf' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'
+      element.resource.kind === 'syllabus' ? 'file-code' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'
     );
     item.command = {
       command: 'systemstudioCis310.openCourseMaterial',

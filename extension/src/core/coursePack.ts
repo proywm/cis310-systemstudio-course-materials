@@ -142,8 +142,8 @@ function parseResource(value: unknown, index: number): CourseMaterialResource {
   if (kind === 'presentation' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.pdf')) {
     throw new Error(`resources[${index}] must provide a packaged PDF presentation.`);
   }
-  if (kind === 'syllabus' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.pdf')) {
-    throw new Error(`resources[${index}] must provide a packaged PDF syllabus.`);
+  if (kind === 'syllabus' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.html')) {
+    throw new Error(`resources[${index}] must provide a packaged accessible HTML syllabus.`);
   }
   if (sha256 && !/^[a-f0-9]{64}$/i.test(sha256)) {
     throw new Error(`resources[${index}].sha256 is invalid.`);

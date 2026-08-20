@@ -108,11 +108,32 @@ describe('course-material manifest', () => {
     const manifest = parseCourseMaterialsManifest(
       JSON.parse(await readFile(path.join(packRoot, 'materials-manifest.json'), 'utf8')) as unknown
     );
+    const extensionPackage = JSON.parse(await readFile(path.resolve('package.json'), 'utf8')) as { version: string };
+    assert.equal(manifest.version, extensionPackage.version);
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'presentation').length, 13);
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'syllabus').length, 1);
     assert.equal(manifest.course.deliveryTerm, 'Fall 2026');
-    assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 6);
+    assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 7);
     assert.equal(manifest.resources.filter((resource) => resource.assignmentCategory === 'homework').length, 3);
+    assert.equal(manifest.resources.filter((resource) => resource.assignmentCategory === 'project').length, 4);
+    const syllabus = manifest.resources.find((resource) => resource.kind === 'syllabus');
+    assert.ok(syllabus?.localPath);
+    const syllabusHtml = await readFile(resolveCoursePackPath(packRoot, syllabus.localPath), 'utf8');
+    assert.match(syllabusHtml, /<html[^>]+lang="en-US"/i);
+    assert.match(syllabusHtml, /class="skip-link"[^>]+href="#main-content"/i);
+    assert.match(syllabusHtml, /<main id="main-content">/i);
+    assert.match(syllabusHtml, /<caption>Course contact and meeting information<\/caption>/i);
+    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>Instructor<\/strong><\/th>/i);
+    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>SystemStudio CIS 310<\/strong><\/th>/i);
+    assert.match(syllabusHtml, /Participation quizzes and in-class evidence checks<\/td>\s*<td[^>]*>15%<\/td>/i);
+    assert.match(syllabusHtml, /Three written homework assignments and three implementation assignments\/processor milestones<\/td>\s*<td[^>]*>65%<\/td>/i);
+    assert.match(syllabusHtml, /Final processor project and demonstration<\/td>\s*<td[^>]*>20%<\/td>/i);
+    assert.match(syllabusHtml, /<strong>Total<\/strong><\/td>\s*<td[^>]*><strong>100%<\/strong><\/td>/i);
+    assert.match(syllabusHtml, /8-bit processor and assembly-program presentation\/demonstration/i);
+    assert.doesNotMatch(syllabusHtml, /<script\b/i);
+    const calendarHtml = syllabusHtml.split('id="tentative-fall-2026-course-calendar"')[1] ?? '';
+    assert.equal((calendarHtml.match(/<td style="text-align: left;">(?:[1-9]|1\d|2[0-7])<\/td>/g) ?? []).length, 27);
+    assert.match(await readFile(path.join(packRoot, 'syllabus', 'CIS310_Fall_2026_Syllabus.pdf'), 'utf8'), /^%PDF/);
     for (const resource of manifest.resources) {
       assert.ok(resource.localPath && resource.sha256);
       const digest = await sha256File(resolveCoursePackPath(packRoot, resource.localPath));
@@ -120,7 +141,7 @@ describe('course-material manifest', () => {
       if (resource.kind === 'presentation') {
         assert.equal(path.extname(resource.localPath).toLowerCase(), '.pdf');
       } else if (resource.kind === 'syllabus') {
-        assert.equal(path.extname(resource.localPath).toLowerCase(), '.pdf');
+        assert.equal(path.extname(resource.localPath).toLowerCase(), '.html');
         assert.equal(resource.id, 'syllabus-fall-2026');
       } else {
         assert.ok(resource.relatedPresentationIds?.length);

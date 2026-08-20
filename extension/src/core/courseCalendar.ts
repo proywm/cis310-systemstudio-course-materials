@@ -78,20 +78,12 @@ export const FALL_2026_ACADEMIC_EVENTS: readonly AcademicCalendarEvent[] = [
     note: 'Tuesday and Wednesday study days.'
   },
   {
-    id: 'exams-first',
-    title: 'University examination period',
+    id: 'cis310-final-project-window',
+    title: 'CIS 310 final project presentation window',
     start: '2026-12-10',
-    endExclusive: '2026-12-12',
-    kind: 'exam',
-    note: 'First examination block; verify the CIS 310 final-exam slot, time, and room in Canvas.'
-  },
-  {
-    id: 'exams-second',
-    title: 'University examination period',
-    start: '2026-12-14',
     endExclusive: '2026-12-17',
     kind: 'exam',
-    note: 'Second examination block; verify the CIS 310 final-exam slot, time, and room in Canvas.'
+    note: 'Students will present and demonstrate an 8-bit processor implementation and assembly programming during final examination week. The exact date, time, room, presentation order, and submission deadline are to be announced in Canvas.'
   },
   {
     id: 'commencement',

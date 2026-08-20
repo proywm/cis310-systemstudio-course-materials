@@ -15,6 +15,7 @@ import {
   type PreparationField
 } from './core/learningResources';
 import { CourseMaterials, CourseMaterialsTreeProvider } from './courseMaterials';
+import { CourseworkPanel } from './courseworkPanel';
 import {
   CourseCalendarPanel,
   exportFall2026CourseCalendar,
@@ -227,6 +228,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPracticeCenter', async () => {
       await PracticePanel.show(context, practiceStore, courseMaterials);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openCourseworkCenter', async () => {
+      CourseworkPanel.show(context, practiceStore, courseMaterials);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openLessonText', async (resourceId: unknown) => {
       if (typeof resourceId !== 'string' || !preparationModule(resourceId)) {

@@ -8,6 +8,7 @@ export type StudentHelperAction =
   | 'open-syllabus'
   | 'open-materials'
   | 'open-learning'
+  | 'open-coursework'
   | 'open-guided-labs'
   | 'practice-now'
   | 'start-tutorial'
@@ -37,6 +38,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-syllabus',
   'open-materials',
   'open-learning',
+  'open-coursework',
   'open-guided-labs',
   'practice-now',
   'start-tutorial',
@@ -78,6 +80,26 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         { id: 'open-ai-tutor', label: 'Open tutor as a learning coach' },
         { id: 'ask-before-class', label: 'Ask the instructor about this boundary' },
         { id: 'open-canvas', label: 'Check assignment AI rules' }
+      ]
+    };
+  }
+
+  if (matches(text, ['final project', 'final presentation', 'final demo', '8-bit processor', '8 bit processor', 'grade calculator', 'grade estimate', 'drop two', 'lowest quiz', 'coursework progress'])) {
+    return {
+      title: 'Use the coursework roadmap; Canvas remains the official record',
+      paragraphs: [
+        'The separate final project culminates in an 8-bit processor implementation, assembly programming, and a presentation/demonstration during final examination week. The exact date, time, room, order, released specification, and deadline are to be announced in Canvas.',
+        'SystemStudio can track your local planning status, file checks, receipt confirmation, and self-evaluation. Those indicators are not instructor/GSI grades. Its manual grade estimate applies the published 15/65/20 weights and drops two lowest participation-quiz percentages from scores you enter; Canvas remains official.'
+      ],
+      checklist: [
+        'Use the 4-bit integrated processor milestone as preparation for the separate 8-bit capstone.',
+        'Check Canvas to learn which ISA/toolchain and artifacts the final release requires.',
+        'Test the processor and assembly program, retain expected/observed evidence, and rehearse the explanation.',
+        'Submit in Canvas and confirm its receipt before the announced final-week presentation.'
+      ],
+      actions: [
+        { id: 'open-coursework', label: 'Open coursework and final project' },
+        { id: 'open-canvas', label: 'Open official Canvas record' }
       ]
     };
   }
@@ -166,7 +188,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'CIS 310 instructional team',
       paragraphs: [
         'The instructor is Dr. Probir Roy (probirr@umich.edu), Assistant Professor. His office is CIS Building, Room 230; instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment.',
-        'The Graduate Student Instructor (GSI) for CIS 310 is Md Abul Kalam Azad, who goes by Azad (akazad@umich.edu). Canvas remains authoritative for any announced GSI office hours or changes.'
+        'No Graduate Student Instructor (GSI) or grader is currently assigned or confirmed for CIS 310. Check Canvas and department announcements for any future instructional-staff update.'
       ],
       checklist: [
         'Include CIS 310 and a specific topic or assignment name in an email.',
@@ -174,7 +196,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Use Canvas announcements for any updated contact or office-hour information.'
       ],
       actions: [
-        { id: 'open-syllabus', label: 'Open syllabus PDF' },
+        { id: 'open-syllabus', label: 'Open accessible syllabus' },
         { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
       ]
     };
@@ -188,12 +210,12 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in the CIS Building, Room 230. The packaged syllabus contains the remaining stable course structure; Canvas controls announced changes and live assignment details.'
       ],
       checklist: [
-        'Open the syllabus PDF for the stable course structure.',
+        'Open the accessible HTML syllabus for the stable course structure.',
         'For office hours, go to CIS Building, Room 230 during either listed interval or arrange an appointment.',
         'Open Canvas for announcements, assignment requirements, deadlines, and schedule changes.'
       ],
       actions: [
-        { id: 'open-syllabus', label: 'Open syllabus PDF' },
+        { id: 'open-syllabus', label: 'Open accessible syllabus' },
         { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
       ]
     };
@@ -204,12 +226,12 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Fall 2026 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329',
       paragraphs: [
         'The department-confirmed schedule and verified university calendar yield 27 regular CIS 310 meetings: 13 Mondays and 14 Wednesdays, from Wednesday, August 26 through Monday, December 7. Each regular meeting is 10:00–11:45 a.m. in ELB 1329.',
-        'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The university exam period is December 10–11 and 14–16; Canvas must confirm the CIS 310 final-exam slot.'
+        'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The 8-bit processor and assembly-program presentation occurs during final examination week; its exact date, time, room, order, and deadline are to be announced in Canvas.'
       ],
       checklist: [
         'Open the visual calendar to see every meeting date.',
         'Export the confirmed timed class meetings directly to an .ics calendar.',
-        'Use Canvas for assignment deadlines, announced schedule changes, and the final exam.'
+        'Use Canvas for assignment deadlines, announced schedule changes, and the final-project presentation logistics.'
       ],
       actions: [
         { id: 'open-calendar', label: 'Open Fall 2026 calendar' },
@@ -232,6 +254,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Ask the instructor which interpretation is required.'
       ],
       actions: [
+        { id: 'open-coursework', label: 'Open assignment checklist' },
         { id: 'open-canvas', label: 'Open the current Canvas prompt' },
         { id: 'ask-before-class', label: 'Ask for clarification' }
       ]
@@ -252,7 +275,10 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Submit in Canvas; do not stop after uploading a file.',
         'Reopen the assignment and confirm that Canvas shows a recorded submission or receipt.'
       ],
-      actions: [{ id: 'open-canvas', label: 'Open Fall 2026 Canvas' }]
+      actions: [
+        { id: 'open-coursework', label: 'Open coursework checklist' },
+        { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
+      ]
     };
   }
 

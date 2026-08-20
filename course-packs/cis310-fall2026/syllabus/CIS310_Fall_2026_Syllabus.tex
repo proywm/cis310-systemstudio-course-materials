@@ -53,7 +53,7 @@ Instructor & Dr. Probir Roy\\
 Email & \href{mailto:probirr@umich.edu}{probirr@umich.edu}\\
 Office & CIS Building, Room 230\\
 Phone & 313-583-6620\\
-Graduate Student Instructor & Md Abul Kalam Azad (Azad), \href{mailto:akazad@umich.edu}{akazad@umich.edu}\\
+GSI or grader & None currently assigned or confirmed; check Canvas and department announcements for any future staffing update\\
 Class meetings & Mondays and Wednesdays, 10:00--11:45 a.m., ELB 1329\\
 Delivery format & In-person lecture; first meeting Wednesday, August 26, 2026\\
 Instructor office hours & Mondays and Wednesdays, 9:30--10:00 a.m. and noon--1:00 p.m., CIS Building, Room 230; or by appointment\\
@@ -96,14 +96,14 @@ Before each topic, use SystemStudio's self-paced sequence \textbf{accessible HTM
 
 \begin{tabularx}{\textwidth}{>{\bfseries}p{0.23\textwidth}X}
 Canvas & The authoritative course site and the only submission destination. Confirm every due date and submission receipt there.\\
-SystemStudio CIS 310 & The VS Code extension maps all 13 lecture topics to primary accessible HTML lectures, focused open-book readings, transcript-checked author videos, eight-question confidence sets, and hands-on work where appropriate. It also provides Full Digital, seven guided circuit builds, actual assembly-toolchain routing, five instruction-trace activities, quiz mode, confidence checks, explanation and justification, review, the syllabus, calendar, 13 optional offline visual PDF archives, six assignment references, setup checks, a guided tutorial, and a local help router.\\
+SystemStudio CIS 310 & The VS Code extension maps all 13 lecture topics to primary accessible HTML lectures, focused open-book readings, transcript-checked author videos, eight-question confidence sets, and hands-on work where appropriate. It also provides Full Digital, seven guided circuit builds, actual assembly-toolchain routing, five instruction-trace activities, quiz mode, confidence checks, explanation and justification, review, the syllabus, calendar, 13 optional offline visual PDF archives, seven coursework/final-project references, Assignment Mission Control, setup checks, a guided tutorial, and a local help router.\\
 Digital v0.31 & The extension installs and checksum-verifies the complete upstream application. Linux hosts transport its actual Swing desktop into the VS Code tab. Windows and macOS use an extension-managed Docker Desktop runtime to stream the same application into the tab; its native window is an explicit fallback. Java 8 or newer is required on Linux and for native/CLI use; the Windows/macOS container supplies Java. The read-only preview and testcase runner also use Digital's official tools.\\
 Real assembly toolchains & Linux NASM activities invoke actual NASM, GNU \texttt{ld}, and the resulting ELF32 executable. Exact MASM/Irvine32 activities require Windows, Microsoft \texttt{ml.exe}/\texttt{link.exe}, and the official Irvine library. SystemStudio does not emulate or relabel MASM on other systems.\\
 Instruction Trace Tutor & A separately labeled, bounded source-level visualization supports prediction practice with registers, flags, memory, stack, virtual input/output, and control flow. It is not MASM or NASM, emits no machine code, and cannot establish that source assembled successfully.\\
 Student computer & A current desktop version of VS Code and enough access to install the course extension. Contact the instructor promptly if hardware, Java, accessibility, or installation creates a barrier.\\
 \end{tabularx}
 
-The Learning Center's reading/video checkmarks, retrieval practice, and guided-lab checkmarks are ungraded and self-reported. Its local dashboard describes attempts, accuracy, confidence mismatches, and items due for review; it does not certify mastery, predict a course grade, or send learning history to Canvas or the instructor. Use the mapped book/video focus shown with each question or lab, its explanation, and the lecture to decide what to review, then ask for human help when uncertainty remains. External PDFs and videos may open at their beginning rather than at an exact page or timestamp.
+The Learning Center's reading/video checkmarks, retrieval practice, guided-lab checkmarks, coursework status, and final-project self-evaluation are ungraded and self-reported. Its local dashboards describe preparation and practice evidence; they do not certify mastery or send learning history to Canvas or the instructor. A visually separate manual grade estimator applies the published category weights and two-lowest participation-quiz drop rule only to scores a student enters from Canvas. Its result is a planning estimate, not an instructor/GSI evaluation or official Canvas grade. Use the mapped sources and visible evidence to decide what to review, then ask for human help when uncertainty remains. External PDFs and videos may open at their beginning rather than at an exact page or timestamp.
 
 \subsection{Technology recovery plan}
 
@@ -134,7 +134,7 @@ The mapped companion videos come from Tarnoff's \href{https://www.youtube.com/@I
 \toprule
 \textbf{Assessment category} & \textbf{Course weight}\\
 \midrule
-Class participation and in-class evidence checks & 15\%\\
+Participation quizzes and in-class evidence checks & 15\%\\
 Three written homework assignments and three implementation assignments/processor milestones & 65\%\\
 Final processor project and demonstration & 20\%\\
 \midrule
@@ -142,7 +142,7 @@ Final processor project and demonstration & 20\%\\
 \bottomrule
 \end{tabularx}
 
-Canvas provides the released questions, point values within each category, due dates, required files, and submission format. The three implementation assignments correspond to the packaged processor milestones: registers/DRAM, register file/ALU, and the integrated 4-bit processor. The final processor project is a separate culminating deliverable; its current specification will be released in Canvas.
+Canvas provides the released questions, point values within each category, due dates, required files, and submission format. The three implementation assignments correspond to the packaged processor milestones: registers/DRAM, register file/ALU, and the integrated 4-bit processor. The final processor project is a separate culminating deliverable in which students demonstrate an \textbf{8-bit processor implementation and assembly programming}. Its released specification, required evidence, presentation format, and submission details will appear in Canvas.
 
 \subsection{Letter-grade scale}
 
@@ -163,16 +163,16 @@ E & $<60.0$ & & & &\\
 \subsection{Course-specific assessment policies}
 
 \begin{itemize}
-  \item \textbf{Participation:} Complete participation activities during the class meeting in which they are assigned. Late participation is not accepted. The two lowest participation scores are dropped.
+  \item \textbf{Participation quizzes:} Complete participation quizzes and in-class evidence checks during the class meeting in which they are assigned. Late participation work is not accepted. The two lowest quiz scores are dropped when the participation category is calculated.
   \item \textbf{Homework:} Written homework is individual work unless the released Canvas instructions explicitly authorize collaboration. Late homework is accepted with a 10\% deduction from the earned score.
   \item \textbf{Implementation assignments:} These may be completed individually or in an instructor-authorized team of no more than two students. Each student must be able to explain the submitted design and evidence. Late implementation work is accepted with a 10\% deduction from the earned score.
-  \item \textbf{Final project and demonstration:} The final project may be completed individually or in an instructor-authorized team of no more than two students. Every team member must participate in and explain the demonstration. The final deliverable and demonstration are not accepted late except when the instructor approves an accommodation or documented extenuating circumstance.
+  \item \textbf{Final 8-bit processor project and demonstration:} The final project integrates an 8-bit processor implementation with assembly programming and a live presentation/demonstration during final examination week. It may be completed individually or in an instructor-authorized team of no more than two students. Every team member must participate in and explain the processor, assembly program, test evidence, and demonstration. The exact date, time, room, required artifacts, and presentation format will be announced in Canvas. The final deliverable and demonstration are not accepted late except when the instructor approves an accommodation or documented extenuating circumstance.
   \item \textbf{Make-up work:} Contact the instructor as soon as possible about a serious circumstance affecting an assessment. Make-up arrangements are not automatic and must be approved by the instructor consistently with university policy and any approved accommodation. Do not email sensitive medical documentation; ask where it should be sent.
 \end{itemize}
 
 \textbf{Submission rule:} Submit every required deliverable in Canvas and verify that Canvas recorded it. A local file, simulator run, email attachment, or SystemStudio preview is not a course submission unless the current Canvas assignment explicitly says otherwise.
 
-\textbf{Final examination/project demonstration:} Wednesday, December 16, 2026, 8:00--11:00 a.m., normally in ELB 1329 unless the Registrar or instructor announces another room. This is the official examination slot for a Monday 10:00 a.m. class. Do not make travel plans that conflict with it.
+\textbf{Final examination/project demonstration:} The 8-bit processor and assembly-program presentation/demonstration will take place during Fall 2026 final examination week. The \textbf{exact date, time, room, presentation order, and submission deadline are to be announced in Canvas}. Students should keep the examination period available until the official course announcement is posted.
 
 \section{Communication, feedback, and help}
 
@@ -254,7 +254,7 @@ The university dates below are verified against the official Fall 2026 calendar.
 26 & Wed Dec 2 & Instruction-trace visualization: registers, flags, stack, and memory; Homework 3 / Project 3 preparation checkpoint\\
 27 & Mon Dec 7 & Integration, review, and last regular class\\
 -- & Dec 8--9 & Study days\\
--- & Wed Dec 16, 8:00--11:00 a.m. & Official final project/examination slot; demonstration and submission requirements in Canvas\\
+-- & Final examination week & 8-bit processor and assembly-program presentation/demonstration; exact date, time, room, order, and submission requirements to be announced in Canvas\\
 \bottomrule
 \end{longtable}
 
@@ -264,6 +264,6 @@ Use this syllabus for the stable course structure, grading framework, and polici
 
 \vfill
 \footnotesize
-\textbf{Source note.} Updated August 20, 2026. This document follows the component order of the current UM-Dearborn syllabus template and preserves the applicable structure and course policies of the Fall 2025 CIS 310 syllabus. The current catalog supplies the title, credits, description, and prerequisites; the Fall 2026 class schedule supplies section 001, meeting time, room, and format; the 2026--2027 academic calendar and Fall 2026 final-exam schedule supply term and examination dates. Canvas is authoritative for released assignment details and submission.
+\textbf{Source note.} Updated August 20, 2026. This document follows the component order of the current UM-Dearborn syllabus template and preserves the applicable structure and course policies of the Fall 2025 CIS 310 syllabus. The current catalog supplies the title, credits, description, and prerequisites; the Fall 2026 class schedule supplies section 001, meeting time, room, and format; and the 2026--2027 academic calendar supplies term and examination-period dates. Canvas is authoritative for the announced CIS 310 final-project demonstration date/time, released assignment details, and submission.
 
 \end{document}

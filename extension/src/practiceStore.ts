@@ -33,9 +33,23 @@ import {
   type PracticeReflection,
   type PracticeSelectionOptions
 } from './core/practice';
+import {
+  createCourseworkProgress,
+  normalizeCourseworkProgress,
+  replaceCanvasEvents,
+  toggleCourseworkCheck,
+  updateCourseworkStatus,
+  updateFinalProjectSelfEvaluation,
+  type CanvasCalendarEvent,
+  type CourseworkId,
+  type CourseworkProgress,
+  type CourseworkStatus,
+  type FinalSelfEvaluationDimension
+} from './core/coursework';
 
 const PRACTICE_PROGRESS_KEY = 'practice.progress.v1';
 const PREPARATION_PROGRESS_KEY = 'preparation.progress.v1';
+const COURSEWORK_PROGRESS_KEY = 'coursework.progress.v1';
 
 export class PracticeStore implements vscode.Disposable {
   private readonly changeEmitter = new vscode.EventEmitter<void>();
@@ -89,6 +103,30 @@ export class PracticeStore implements vscode.Disposable {
     });
   }
 
+  getCourseworkProgress(): CourseworkProgress {
+    return normalizeCourseworkProgress(this.state.get<unknown>(COURSEWORK_PROGRESS_KEY));
+  }
+
+  async setCourseworkStatus(id: CourseworkId, status: CourseworkStatus): Promise<void> {
+    await this.saveCoursework(updateCourseworkStatus(this.getCourseworkProgress(), id, status));
+  }
+
+  async toggleCourseworkCheck(id: CourseworkId, checkId: string): Promise<void> {
+    await this.saveCoursework(toggleCourseworkCheck(this.getCourseworkProgress(), id, checkId));
+  }
+
+  async setFinalProjectSelfEvaluation(dimension: FinalSelfEvaluationDimension, rating: number): Promise<void> {
+    await this.saveCoursework(updateFinalProjectSelfEvaluation(this.getCourseworkProgress(), dimension, rating));
+  }
+
+  async setCanvasEvents(events: readonly CanvasCalendarEvent[]): Promise<void> {
+    await this.saveCoursework(replaceCanvasEvents(this.getCourseworkProgress(), events));
+  }
+
+  async resetCoursework(): Promise<void> {
+    await this.saveCoursework(createCourseworkProgress());
+  }
+
   select(options: PracticeSelectionOptions, now = new Date()): PracticeQuestion[] {
     return selectPracticeQuestions(this.getProgress(), options, now);
   }
@@ -119,7 +157,8 @@ export class PracticeStore implements vscode.Disposable {
     await Promise.all([
       this.state.update(PRACTICE_PROGRESS_KEY, emptyPracticeProgress()),
       this.state.update(PREPARATION_PROGRESS_KEY, emptyPreparationProgress()),
-      this.state.update(GUIDED_LAB_PROGRESS_KEY, emptyGuidedLabProgress())
+      this.state.update(GUIDED_LAB_PROGRESS_KEY, emptyGuidedLabProgress()),
+      this.state.update(COURSEWORK_PROGRESS_KEY, createCourseworkProgress())
     ]);
     this.changeEmitter.fire();
   }
@@ -134,6 +173,11 @@ export class PracticeStore implements vscode.Disposable {
 
   private async save(progress: PracticeProgress): Promise<void> {
     await this.state.update(PRACTICE_PROGRESS_KEY, progress);
+    this.changeEmitter.fire();
+  }
+
+  private async saveCoursework(progress: CourseworkProgress): Promise<void> {
+    await this.state.update(COURSEWORK_PROGRESS_KEY, progress);
     this.changeEmitter.fire();
   }
 }
