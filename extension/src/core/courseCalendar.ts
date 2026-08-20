@@ -2,6 +2,12 @@ export const FALL_2026_TERM = 'Fall 2026';
 export const FALL_2026_CANVAS_URL = 'https://canvas.umd.umich.edu/courses/552144';
 export const FALL_2026_ACADEMIC_CALENDAR_URL =
   'https://umdearborn.edu/sites/default/files/unmanaged/pdf/registrar/2026-2027-academic-calendar.pdf';
+export const FALL_2026_CLASS_START_TIME = '10:00';
+export const FALL_2026_CLASS_DURATION_MINUTES = 105;
+export const FALL_2026_CLASS_TIME_LABEL = '10:00–11:45 a.m.';
+export const FALL_2026_CLASS_LOCATION = 'ELB 1329';
+export const FALL_2026_OFFICE_HOURS_LABEL = 'Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m.; or by appointment';
+export const FALL_2026_OFFICE_LOCATION = 'CIS Building, Room 230';
 
 export interface CourseMeeting {
   number: number;
@@ -119,21 +125,20 @@ export function fall2026CourseMeetings(): CourseMeeting[] {
 }
 
 export function buildFall2026CourseCalendar(options: TimedCalendarOptions = {}): string {
-  const timed = options.startTime !== undefined || options.durationMinutes !== undefined;
-  if (timed && (!isValidTime(options.startTime) || !isValidDuration(options.durationMinutes))) {
+  const startTime = options.startTime ?? FALL_2026_CLASS_START_TIME;
+  const durationMinutes = options.durationMinutes ?? FALL_2026_CLASS_DURATION_MINUTES;
+  if (!isValidTime(startTime) || !isValidDuration(durationMinutes)) {
     throw new Error('Timed calendar export requires a valid HH:MM start time and a duration from 1 to 480 minutes.');
   }
 
   const events = fall2026CourseMeetings().map((meeting) => {
-    const description = 'Regular Monday/Wednesday CIS 310 meeting. Verify time, room, topics, and any changes in Fall 2026 Canvas.';
-    const timing = timed
-      ? timedEvent(meeting.isoDate, options.startTime as string, options.durationMinutes as number)
-      : `DTSTART;VALUE=DATE:${compactDate(meeting.isoDate)}\r\nDTEND;VALUE=DATE:${compactDate(nextIsoDate(meeting.isoDate))}`;
+    const description = `Regular Monday/Wednesday CIS 310 meeting, ${FALL_2026_CLASS_TIME_LABEL}, ${FALL_2026_CLASS_LOCATION}. Office hours: ${FALL_2026_OFFICE_HOURS_LABEL}, ${FALL_2026_OFFICE_LOCATION}. Check Fall 2026 Canvas for topic, assignment, or schedule changes.`;
     return calendarEvent(
       `meeting-${String(meeting.number).padStart(2, '0')}`,
       `CIS 310 class meeting ${meeting.number} of 27`,
       description,
-      timing
+      timedEvent(meeting.isoDate, startTime, durationMinutes),
+      FALL_2026_CLASS_LOCATION
     );
   });
 
@@ -151,7 +156,7 @@ export function buildFall2026CourseCalendar(options: TimedCalendarOptions = {}):
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'X-WR-CALNAME:CIS 310 Fall 2026',
-    ...(timed ? timeZoneBlock() : []),
+    ...timeZoneBlock(),
     ...events,
     ...academicEvents,
     'END:VCALENDAR',
@@ -159,13 +164,14 @@ export function buildFall2026CourseCalendar(options: TimedCalendarOptions = {}):
   ].join('\r\n');
 }
 
-function calendarEvent(id: string, summary: string, description: string, timing: string): string {
+function calendarEvent(id: string, summary: string, description: string, timing: string, location?: string): string {
   return [
     'BEGIN:VEVENT',
     `UID:cis310-fall2026-${id}@systemstudio`,
     'DTSTAMP:20260819T000000Z',
     timing,
     `SUMMARY:${escapeIcs(summary)}`,
+    ...(location ? [`LOCATION:${escapeIcs(location)}`] : []),
     `DESCRIPTION:${escapeIcs(description)}`,
     `URL:${FALL_2026_CANVAS_URL}`,
     'END:VEVENT'
@@ -217,12 +223,6 @@ function isValidDuration(value: number | undefined): value is number {
 
 function dateAtNoonUtc(isoDate: string): Date {
   return new Date(`${isoDate}T12:00:00Z`);
-}
-
-function nextIsoDate(isoDate: string): string {
-  const date = dateAtNoonUtc(isoDate);
-  date.setUTCDate(date.getUTCDate() + 1);
-  return formatIsoDate(date);
 }
 
 function formatIsoDate(date: Date): string {

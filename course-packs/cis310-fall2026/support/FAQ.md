@@ -2,6 +2,10 @@
 
 These answers address recurring, anonymized themes in prior CIS 310 student questions. They do not reproduce private correspondence. Canvas remains authoritative for Fall 2026 deadlines, released instructions, grades, and submission requirements.
 
+## Who are the instructor and GSI, and where is the class?
+
+CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. The instructor is Dr. Probir Roy (`probirr@umich.edu`), whose office is CIS Building, Room 230. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment. The Graduate Student Instructor is Md Abul Kalam Azad, who goes by Azad (`akazad@umich.edu`). Check Canvas announcements for any change or for GSI office hours.
+
 ## Where do I begin?
 
 Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/trace** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
@@ -82,4 +86,4 @@ Use **Build and Run with Real Assembly Toolchain** for claims about compilation 
 
 ## Where can I get human help?
 
-Use instructor/TA office hours and the Engineering Learning Center when appropriate. Send a specific evidence-based question early. The AI tutor and local FAQ supplement human support; they do not make deadline exceptions, grade work, or replace the instructional team.
+Use the listed instructor office hours, any GSI office hours announced in Canvas, and the Engineering Learning Center when appropriate. Send a specific evidence-based question early. The AI tutor and local FAQ supplement human support; they do not make deadline exceptions, grade work, or replace the instructional team.

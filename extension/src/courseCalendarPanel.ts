@@ -4,9 +4,14 @@ import {
   buildFall2026CourseCalendar,
   FALL_2026_ACADEMIC_CALENDAR_URL,
   FALL_2026_ACADEMIC_EVENTS,
+  FALL_2026_CLASS_LOCATION,
+  FALL_2026_CLASS_TIME_LABEL,
+  FALL_2026_OFFICE_HOURS_LABEL,
+  FALL_2026_OFFICE_LOCATION,
   fall2026CourseMeetings,
   type CourseMeeting
 } from './core/courseCalendar';
+import { CIS310_GSI, CIS310_INSTRUCTOR } from './core/courseContacts';
 
 type CalendarAction = 'open-canvas' | 'open-syllabus' | 'open-official-calendar' | 'export-calendar';
 
@@ -61,50 +66,6 @@ export class CourseCalendarPanel implements vscode.Disposable {
 }
 
 export async function exportFall2026CourseCalendar(): Promise<void> {
-  const exportMode = await vscode.window.showQuickPick(
-    [
-      {
-        label: 'All-day meeting placeholders',
-        description: 'Recommended — does not guess the class time',
-        value: 'all-day' as const
-      },
-      {
-        label: 'Timed class meetings',
-        description: 'Enter the confirmed Canvas start time and duration',
-        value: 'timed' as const
-      }
-    ],
-    { placeHolder: 'Choose how class meetings should appear in the exported calendar' }
-  );
-  if (!exportMode) return;
-
-  let startTime: string | undefined;
-  let durationMinutes: number | undefined;
-  if (exportMode.value === 'timed') {
-    startTime = await vscode.window.showInputBox({
-      title: 'Confirmed CIS 310 start time',
-      prompt: 'Enter the local Detroit time shown in Canvas (24-hour HH:MM).',
-      placeHolder: 'Example: 10:00',
-      validateInput: (value) => /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)
-        ? undefined
-        : 'Enter a 24-hour time such as 10:00 or 16:30.'
-    });
-    if (!startTime) return;
-    const durationText = await vscode.window.showInputBox({
-      title: 'Confirmed class duration',
-      prompt: 'Enter the meeting length in minutes.',
-      placeHolder: 'Use the duration shown in Canvas',
-      validateInput: (value) => {
-        const parsed = Number(value);
-        return Number.isInteger(parsed) && parsed >= 1 && parsed <= 480
-          ? undefined
-          : 'Enter a whole number from 1 to 480.';
-      }
-    });
-    if (!durationText) return;
-    durationMinutes = Number(durationText);
-  }
-
   const workspace = vscode.workspace.workspaceFolders?.find((folder) => folder.uri.scheme === 'file');
   const target = await vscode.window.showSaveDialog({
     title: 'Export the CIS 310 Fall 2026 calendar',
@@ -116,10 +77,10 @@ export async function exportFall2026CourseCalendar(): Promise<void> {
   });
   if (!target) return;
 
-  const content = buildFall2026CourseCalendar({ startTime, durationMinutes });
+  const content = buildFall2026CourseCalendar();
   await vscode.workspace.fs.writeFile(target, Buffer.from(content, 'utf8'));
   const action = await vscode.window.showInformationMessage(
-    'Exported 27 Monday/Wednesday meetings and official term milestones. Assignment deadlines and the CIS 310 final-exam slot are not inferred.',
+    `Exported 27 confirmed Monday/Wednesday class meetings, ${FALL_2026_CLASS_TIME_LABEL}, ${FALL_2026_CLASS_LOCATION}, plus official term milestones. Assignment deadlines and the final-exam slot are not inferred.`,
     'Open File'
   );
   if (action === 'Open File') {
@@ -164,6 +125,9 @@ function calendarHtml(webview: vscode.Webview): string {
   h2 span { color: var(--vscode-descriptionForeground); font-size: .8rem; font-weight: 400; margin-left: 6px; }
   p { line-height: 1.55; } .summary { color: var(--vscode-descriptionForeground); margin: 0; }
   .notice { border-left: 4px solid var(--vscode-editorWarning-foreground); padding: 10px 13px; margin: 18px 0 0; background: var(--vscode-textBlockQuote-background); }
+  .schedule-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 16px; }
+  .schedule-detail { border: 1px solid var(--vscode-panel-border); border-radius: 7px; padding: 12px; }
+  .schedule-detail h2 { margin-bottom: 6px; font-size: 1rem; } .schedule-detail p { margin: 0; }
   .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
   button { cursor: pointer; border: 0; border-radius: 4px; padding: 8px 13px; font: inherit; color: var(--vscode-button-foreground); background: var(--vscode-button-background); }
   button:hover { background: var(--vscode-button-hoverBackground); } button.secondary { color: var(--vscode-button-secondaryForeground); background: var(--vscode-button-secondaryBackground); }
@@ -174,17 +138,18 @@ function calendarHtml(webview: vscode.Webview): string {
   footer { margin-top: 28px; color: var(--vscode-descriptionForeground); font-size: .84rem; }
   @media (max-width: 620px) { td:first-child { width: auto; white-space: normal; } }
 </style></head><body><main>
-  <header><h1>CIS 310 · Fall 2026</h1><p class="summary">Computer Organization and Assembly Language · Mondays and Wednesdays · 27 regular meetings</p>
-  <div class="notice"><strong>Starts Wednesday, August 26.</strong> The university calendar determines term dates. Canvas remains authoritative for the class time, room, topics, deadlines, changes, and final-exam slot.</div>
+  <header><h1>CIS 310 · Fall 2026</h1><p class="summary">Computer Organization and Assembly Language · Section 001 · 27 regular meetings</p>
+  <div class="schedule-details"><section class="schedule-detail"><h2>Class meetings</h2><p>Mondays and Wednesdays, <strong>${FALL_2026_CLASS_TIME_LABEL}</strong><br><strong>${FALL_2026_CLASS_LOCATION}</strong></p></section><section class="schedule-detail"><h2>Instructor</h2><p><strong>${CIS310_INSTRUCTOR.name}</strong>, ${CIS310_INSTRUCTOR.title}<br>${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.phone}<br>${FALL_2026_OFFICE_LOCATION}</p></section><section class="schedule-detail"><h2>Graduate Student Instructor</h2><p><strong>${CIS310_GSI.name} (${CIS310_GSI.preferredName})</strong><br>${CIS310_GSI.email}</p></section><section class="schedule-detail"><h2>Instructor office hours</h2><p>${FALL_2026_OFFICE_HOURS_LABEL}<br><strong>${FALL_2026_OFFICE_LOCATION}</strong></p></section></div>
+  <div class="notice"><strong>Starts Wednesday, August 26.</strong> The department's August 14, 2026 schedule confirms the class time and room. Canvas remains authoritative for announced changes, topics, deadlines, and the final-exam slot.</div>
   <div class="actions"><button data-action="open-canvas">Open Canvas</button><button data-action="open-syllabus">Open syllabus PDF</button><button class="secondary" data-action="export-calendar">Export .ics</button><button class="secondary" data-action="open-official-calendar">Official academic calendar</button></div></header>
   ${monthSections}
   <section class="milestones"><h2>Official term milestones</h2><table><thead><tr><th>Date</th><th>Event</th></tr></thead><tbody>${milestones}</tbody></table></section>
-  <footer>Source: University of Michigan-Dearborn 2026–2027 Academic Calendar, approved September 19, 2024. University dates are subject to change by the Board of Regents. The exported all-day option deliberately avoids guessing the class time.</footer>
+  <footer>Sources: the CIS department Fall 2026 class schedule generated August 14, 2026 supplies the class time and room; the University of Michigan-Dearborn 2026–2027 Academic Calendar supplies term dates. Check Canvas for announced changes.</footer>
 </main><script nonce="${nonce}">const vscode=acquireVsCodeApi();document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>vscode.postMessage({action:button.dataset.action})));</script></body></html>`;
 }
 
 function meetingCard(meeting: CourseMeeting): string {
-  return `<article class="meeting"><span class="date">${meeting.day}, ${meeting.month} ${meeting.dayOfMonth}</span><span class="number">Meeting ${meeting.number} of 27</span></article>`;
+  return `<article class="meeting"><span class="date">${meeting.day}, ${meeting.month} ${meeting.dayOfMonth}</span><span class="number">${FALL_2026_CLASS_TIME_LABEL} · ${FALL_2026_CLASS_LOCATION}<br>Meeting ${meeting.number} of 27</span></article>`;
 }
 
 function formatDateRange(start: string, endExclusive: string): string {

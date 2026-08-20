@@ -4,8 +4,9 @@
 
 ## Start with the Fall 2026 course documents
 
-- Open the [CIS 310 Fall 2026 syllabus PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf). It contains the required texts, course structure, learning outcomes, technology workflow, policy links, and 27-meeting topic sequence. Canvas supplies section-specific time, room, office hours, updated Irvine access instructions, grading details, deadlines, and the final-exam slot.
-- In the SystemStudio sidebar, select **Open Fall 2026 course calendar** to see every Monday/Wednesday meeting and the official holiday, recess, study-day, and examination periods. The extension can export these as `.ics` events without guessing the class time.
+- Open the [CIS 310 Fall 2026 syllabus PDF](syllabus/CIS310_Fall_2026_Syllabus.pdf). It contains the required texts, course structure, learning outcomes, technology workflow, policy links, and 27-meeting topic sequence. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Canvas supplies grading details, deadlines, announced changes, and the final-exam slot.
+- In the SystemStudio sidebar, select **Open Fall 2026 course calendar** to see every Monday/Wednesday meeting and the official holiday, recess, study-day, and examination periods. Its `.ics` export uses the department-confirmed 10:00–11:45 a.m. meeting time and ELB 1329 location.
+- **Course team:** Dr. Probir Roy (`probirr@umich.edu`), instructor, CIS Building Room 230; Md Abul Kalam Azad (“Azad,” `akazad@umich.edu`), Graduate Student Instructor. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment. Check Canvas for any announced change and for GSI office hours.
 - Use [Fall 2026 Canvas](https://canvas.umd.umich.edu/courses/552144) for live course details and submission.
 
 ## Questions, AI tutor, and help before class

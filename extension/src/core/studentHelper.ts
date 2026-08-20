@@ -161,17 +161,36 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     };
   }
 
+  if (matches(text, ['instructor', 'professor', 'teacher', 'gsi', 'teaching assistant', 'course staff', 'course team', 'who is the ta', 'who is my ta'])) {
+    return {
+      title: 'CIS 310 instructional team',
+      paragraphs: [
+        'The instructor is Dr. Probir Roy (probirr@umich.edu), Assistant Professor. His office is CIS Building, Room 230; instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment.',
+        'The Graduate Student Instructor (GSI) for CIS 310 is Md Abul Kalam Azad, who goes by Azad (akazad@umich.edu). Canvas remains authoritative for any announced GSI office hours or changes.'
+      ],
+      checklist: [
+        'Include CIS 310 and a specific topic or assignment name in an email.',
+        'For a technical problem, include the exact error, expected result, observed result, and one step you tried.',
+        'Use Canvas announcements for any updated contact or office-hour information.'
+      ],
+      actions: [
+        { id: 'open-syllabus', label: 'Open syllabus PDF' },
+        { id: 'open-canvas', label: 'Open Fall 2026 Canvas' }
+      ]
+    };
+  }
+
   if (matches(text, ['syllabus', 'grading policy', 'grade scale', 'course policy', 'office hour', 'textbook'])) {
     return {
-      title: 'Open the Fall 2026 syllabus and verify Canvas-controlled fields',
+      title: 'Fall 2026 course details and instructor office hours',
       paragraphs: [
-        'The packaged PDF includes the course description, learning outcomes, tools, workflow, university-policy links, and the verified Monday/Wednesday term calendar.',
-        'Class time, room, office hours, the current Irvine edition/access instructions, grade weights, detailed deadlines, and the final-exam slot remain instructor-confirmed fields in Canvas.'
+        'CIS 310 section 001 meets Mondays and Wednesdays from 10:00–11:45 a.m. in ELB 1329.',
+        'Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in the CIS Building, Room 230. The packaged syllabus contains the remaining stable course structure; Canvas controls announced changes and live assignment details.'
       ],
       checklist: [
         'Open the syllabus PDF for the stable course structure.',
-        'Open Canvas for current section details and announcements.',
-        'Ask the instructor if a highlighted field has not yet been finalized.'
+        'For office hours, go to CIS Building, Room 230 during either listed interval or arrange an appointment.',
+        'Open Canvas for announcements, assignment requirements, deadlines, and schedule changes.'
       ],
       actions: [
         { id: 'open-syllabus', label: 'Open syllabus PDF' },
@@ -182,15 +201,15 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
 
   if (matches(text, ['calendar', 'semester start', 'classes begin', 'first class', 'labor day', 'thanksgiving', 'recess', 'study day', 'exam period', 'class meeting', 'meet on'])) {
     return {
-      title: 'Fall 2026 meets Mondays and Wednesdays starting August 26',
+      title: 'Fall 2026 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329',
       paragraphs: [
-        'The verified university calendar yields 27 regular CIS 310 meetings: 13 Mondays and 14 Wednesdays, from Wednesday, August 26 through Monday, December 7.',
+        'The department-confirmed schedule and verified university calendar yield 27 regular CIS 310 meetings: 13 Mondays and 14 Wednesdays, from Wednesday, August 26 through Monday, December 7. Each regular meeting is 10:00–11:45 a.m. in ELB 1329.',
         'There is no class Monday, September 7, or during Thanksgiving recess November 21–29. The university exam period is December 10–11 and 14–16; Canvas must confirm the CIS 310 final-exam slot.'
       ],
       checklist: [
         'Open the visual calendar to see every meeting date.',
-        'Export all-day placeholders, or enter the confirmed Canvas time for timed events.',
-        'Use Canvas for assignment deadlines, room, changes, and the final exam.'
+        'Export the confirmed timed class meetings directly to an .ics calendar.',
+        'Use Canvas for assignment deadlines, announced schedule changes, and the final exam.'
       ],
       actions: [
         { id: 'open-calendar', label: 'Open Fall 2026 calendar' },

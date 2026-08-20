@@ -4,6 +4,8 @@ SystemStudio is the active Fall 2026 learning environment for CIS 310. It packag
 
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
+The **Course Team and Schedule** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor, and Md Abul Kalam Azad (“Azad,” `akazad@umich.edu`), Graduate Student Instructor. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment. Canvas announcements provide any change and GSI office hours.
+
 ## Tool integrity: no reduced substitutes
 
 ### Circuit design
@@ -50,7 +52,7 @@ The command asks students to choose **Auto-detect**, **Actual NASM → ELF32**, 
 - 13 evidence-bounded HTML lectures with objectives, definitions, explanations, worked examples, self-checks, presentation evidence, and attempt-first AI tutor prompts;
 - 104 evidence-mapped questions—eight per module—with a five-question readiness checkpoint, Bloom-level labels, quiz mode, confidence checks, explanation/justification, and spaced local review;
 - 13 packaged legacy presentation PDFs retained as optional visual archives, three homework references, and three processor-project references;
-- 27-meeting Monday/Wednesday Fall 2026 calendar with `.ics` export;
+- 27-meeting Monday/Wednesday Fall 2026 calendar with confirmed 10:00–11:45 a.m., ELB 1329 `.ics` events;
 - seven guided circuit builds and five assembly trace activities, each mapped to reading, video, lecture, prediction, evidence, and explanation;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
 - local FAQ routing, attempt-first AI tutor guardrails, and Canvas Questions Before Class support; and

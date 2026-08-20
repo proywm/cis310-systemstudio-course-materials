@@ -30,7 +30,18 @@ describe('student helper', () => {
   it('opens the packaged syllabus while routing live fields to Canvas', () => {
     const reply = answerStudentQuestion('Where is the syllabus and office hours?');
     assert.ok(reply.actions.some((action) => action.id === 'open-syllabus'));
-    assert.match(JSON.stringify(reply), /instructor-confirmed fields in Canvas/);
+    assert.match(JSON.stringify(reply), /CIS Building, Room 230/);
+    assert.match(JSON.stringify(reply), /9:30–10:00 a.m./);
+  });
+
+  it('identifies the instructor and CIS 310 GSI without guessing office hours', () => {
+    const reply = answerStudentQuestion('Who is the instructor and TA for CIS 310?');
+    const text = JSON.stringify(reply);
+    assert.match(text, /Dr. Probir Roy/);
+    assert.match(text, /probirr@umich.edu/);
+    assert.match(text, /Md Abul Kalam Azad/);
+    assert.match(text, /akazad@umich.edu/);
+    assert.match(text, /Canvas remains authoritative for any announced GSI office hours/);
   });
 
   it('routes pre-class preparation to the required open book and author video path', () => {

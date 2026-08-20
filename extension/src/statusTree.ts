@@ -6,11 +6,18 @@ import {
   type CourseModuleNavigation,
   type ModuleNavigationItem
 } from './core/moduleNavigation';
+import { CIS310_GSI, CIS310_INSTRUCTOR } from './core/courseContacts';
+import {
+  FALL_2026_CLASS_LOCATION,
+  FALL_2026_CLASS_TIME_LABEL,
+  FALL_2026_OFFICE_HOURS_LABEL,
+  FALL_2026_OFFICE_LOCATION
+} from './core/courseCalendar';
 import type { DigitalManager } from './digitalManager';
 import type { NativeAssemblyManager } from './nativeAssemblyManager';
 import type { PracticeStore } from './practiceStore';
 
-type StatusGroup = 'start' | 'modules' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusGroup = 'start' | 'team' | 'modules' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
 type StatusNode = vscode.TreeItem & { groupId?: StatusGroup; module?: CourseModuleNavigation };
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
@@ -42,6 +49,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       const complete = learningPath.filter((module) => module.complete).length;
       return [
         groupItem('start', 'Start Here', 'home', true),
+        groupItem('team', 'Course Team and Schedule', 'organization', false),
         groupItem('modules', `Course Modules (${complete}/${learningPath.length})`, 'list-tree', true),
         groupItem('learn', 'Practice and Progress', 'mortar-board', false),
         groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
@@ -80,7 +88,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Open Fall 2026 course calendar',
-            '27 M/W meetings · starts Aug 26',
+            'M/W 10:00–11:45 a.m. · ELB 1329',
             'systemstudioCis310.openCourseCalendar',
             'calendar'
           )
@@ -88,6 +96,29 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       }
       case 'modules':
         return buildCourseModuleNavigation(this.practiceStore.getLearningPath()).map(moduleItem);
+      case 'team':
+        return [
+          describedInfoItem(
+            `Instructor: ${CIS310_INSTRUCTOR.name}`,
+            `${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.office}`,
+            'person'
+          ),
+          describedInfoItem(
+            `GSI: ${CIS310_GSI.name} (${CIS310_GSI.preferredName})`,
+            CIS310_GSI.email,
+            'account'
+          ),
+          describedInfoItem(
+            `Class: M/W ${FALL_2026_CLASS_TIME_LABEL}`,
+            FALL_2026_CLASS_LOCATION,
+            'calendar'
+          ),
+          describedInfoItem(
+            'Instructor office hours: M/W',
+            `${FALL_2026_OFFICE_HOURS_LABEL} · ${FALL_2026_OFFICE_LOCATION}`,
+            'clock'
+          )
+        ];
       case 'learn':
         return [
           describedActionItem(
@@ -347,6 +378,14 @@ function describedActionItem(
   args?: unknown[]
 ): StatusNode {
   const item = actionItem(label, command, icon, args);
+  item.description = description;
+  item.tooltip = `${label}\n${description}`;
+  return item;
+}
+
+function describedInfoItem(label: string, description: string, icon: string): StatusNode {
+  const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
+  item.iconPath = new vscode.ThemeIcon(icon);
   item.description = description;
   item.tooltip = `${label}\n${description}`;
   return item;

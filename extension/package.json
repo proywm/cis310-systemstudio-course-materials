@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with primary accessible HTML lectures, the complete upstream Digital simulator, real Linux NASM and Windows MASM/Irvine toolchain routing, and a separate instruction trace tutor.",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -378,7 +378,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Start with one recommended learning action, then open details only when needed. Reading/video checkmarks, practice progress, and guided-lab checkmarks stay on this device and are not graded.\n[Open the accessible course preparation path](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or trace assembly](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Start with one recommended learning action, then open details only when needed. Expand Course Team and Schedule for the instructor, GSI, class room/time, and office location. Reading/video checkmarks, practice progress, and guided-lab checkmarks stay on this device and are not graded.\n[Open the accessible course preparation path](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or trace assembly](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Open the U-M Maizey course tutor](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",

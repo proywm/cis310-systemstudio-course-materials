@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.15.1
+
+- Added a dedicated **Course Team and Schedule** sidebar section with the instructor, CIS 310 GSI, confirmed class time/room, and instructor office hours/location.
+- Added Md Abul Kalam Azad as the CIS 310 Graduate Student Instructor in the syllabus, calendar, student guide, FAQ, and local helper.
+- Changed calendar export from all-day placeholders to the department-confirmed Monday/Wednesday 10:00–11:45 a.m. meetings in ELB 1329 while retaining official academic milestones and avoiding inferred deadlines.
+- Corrected instructor office information to CIS Building, Room 230 throughout the active materials.
+
 ## 0.15.0
 
 - Made 13 accessible HTML lectures the primary course format in SystemStudio and retained the original untagged PDFs only as optional visual archives.

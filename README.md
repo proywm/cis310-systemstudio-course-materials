@@ -20,6 +20,8 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
 
+**Course team and meeting:** Dr. Probir Roy (`probirr@umich.edu`), instructor, CIS Building Room 230; Md Abul Kalam Azad (“Azad,” `akazad@umich.edu`), Graduate Student Instructor. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., or by appointment. Check Canvas announcements for any change and for GSI office hours.
+
 ![SystemStudio CIS 310 Learning Center showing all 13 course modules and the accessible lesson, reading, video, eight-question practice, and hands-on preparation path](docs/images/systemstudio-learning-center.svg)
 
 ![SystemStudio CIS 310 accessible lesson reader showing the module sequence, direct explanations, objectives, key terms, practice, hands-on work, and tutor prompt](docs/images/systemstudio-accessible-lesson.svg)
@@ -30,9 +32,9 @@ This repository is the student-facing home for the course syllabus, semester cal
 
 ## Fall 2026 calendar
 
-CIS 310 meets on Mondays and Wednesdays. The first class is Wednesday, August 26, and the final regular class is Monday, December 7. The extension shows all 27 regular meetings and the official holiday, recess, study-day, and examination periods.
+CIS 310 meets on Mondays and Wednesdays from 10:00–11:45 a.m. in ELB 1329. The first class is Wednesday, August 26, and the final regular class is Monday, December 7. The extension shows all 27 regular meetings and the official holiday, recess, study-day, and examination periods.
 
-Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar. The `.ics` exporter uses all-day placeholders by default so it does not guess the class time; timed export requires the confirmed Canvas start time and duration.
+Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar. The `.ics` exporter creates confirmed 10:00–11:45 a.m. events in ELB 1329 and includes official term milestones; it does not infer assignment deadlines or the final-exam slot.
 
 ## What students receive
 
