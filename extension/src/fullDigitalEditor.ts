@@ -96,7 +96,7 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
         const nativeReady = nativeDigitalFallbackAvailable(process.platform, process.env, status);
         const diagnosis = diagnoseDigitalLaunchFailure(detail);
         panel.webview.html = failureHtml(panel.webview, diagnosis, nativeReady);
-        await vscode.window.showErrorMessage(
+        void vscode.window.showErrorMessage(
           `${diagnosis.title}. Your circuit was not changed; use the recovery choices in the Digital tab.`
         );
       }

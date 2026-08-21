@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, Full Digital, and an integrated actual NASM/ELF32 workbench.",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",

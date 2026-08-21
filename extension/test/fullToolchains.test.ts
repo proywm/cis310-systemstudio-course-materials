@@ -73,6 +73,15 @@ describe('full Digital and real assembly declarations', () => {
     assert.match(editor, /screen-reader-equivalent circuit editor/);
   });
 
+  it('renders Full Digital recovery controls before issuing a non-blocking notification', () => {
+    const editor = readFileSync(path.join(root, 'src', 'fullDigitalEditor.ts'), 'utf8');
+    const recovery = editor.indexOf('panel.webview.html = failureHtml');
+    const notification = editor.indexOf('void vscode.window.showErrorMessage', recovery);
+    assert.ok(recovery >= 0);
+    assert.ok(notification > recovery);
+    assert.doesNotMatch(editor.slice(recovery, notification + 50), /await vscode\.window\.showErrorMessage/);
+  });
+
   it('archives pre-0.20 assembly guides during a safe workspace upgrade', () => {
     const upgrader = readFileSync(path.join(root, 'src', 'core', 'assemblyGuideUpgrade.ts'), 'utf8');
     assert.match(upgrader, /systemstudio-assembly-guide: 0\.20/);

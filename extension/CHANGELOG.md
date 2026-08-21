@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.22.1
+
+- Fixed new-circuit creation so the workspace `circuits/work` directory is prepared before the save dialog opens, with a visible workspace-root fallback if directory preparation fails.
+- Replaced client-only Docker assumptions with a bounded Docker server-version probe shared by environment checks, the status bar/tree, setup messaging, and the Full Digital runtime.
+- Made the Full Digital recovery page interactive immediately instead of waiting for the error notification to be dismissed.
+- Added regression tests for stopped/missing Docker, circuit save-parent fallback, and non-blocking recovery controls.
+
 ## 0.22.0
 
 - Added required GitHub Actions integration on Ubuntu 24.04, Windows Server 2025, and macOS 15. Every OS now runs deterministic checks, activates the extension in a real VS Code Stable Extension Development Host, navigates critical student panels, builds/audits a VSIX, and uploads the package as evidence.

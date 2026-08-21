@@ -7,8 +7,10 @@ import { CircuitPreviewProvider } from './circuitPreview';
 import { CopilotCoachPanel } from './copilotCoachPanel';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { classifyTutorDestination } from './core/aiCoach';
+import { prepareSaveParent } from './core/circuitSave';
 import { circuitTutorPrompt } from './core/circuitPreflight';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import { probeDockerEngine } from './core/dockerReadiness';
 import { guidedAssemblyTutorPrompt, guidedLab } from './core/guidedLabs';
 import { lessonTutorPrompt } from './core/lessonNarratives';
 import {
@@ -56,7 +58,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const courseMaterials = await CourseMaterials.load(context);
   const practiceStore = new PracticeStore(context.globalState);
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
-  const statusTree = new StatusTreeProvider(manager, assemblyManager, nativeAssemblyManager, practiceStore);
+  const statusTree = new StatusTreeProvider(
+    manager,
+    assemblyManager,
+    nativeAssemblyManager,
+    practiceStore,
+    () => probeDockerEngine()
+  );
   const tests = new DigitalTestController(manager);
   const nasmTests = new NasmTestController(nativeAssemblyManager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
@@ -65,17 +73,21 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   const updateStatus = async (): Promise<void> => {
     const status = await manager.getStatus();
-    if (status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM)) {
+    const docker = await probeDockerEngine();
+    const dockerReady = docker.state === 'ready';
+    if (status.integrityVerified && (status.java.supported || dockerReady)) {
       statusBar.text = `$(circuit-board) CIS 310: Digital ${status.version}`;
-      statusBar.tooltip = status.java.supported
-        ? 'Digital is installed and host Java is ready.'
-        : 'Digital is installed; the embedded Docker Desktop runtime supplies Java.';
+      statusBar.tooltip = dockerReady
+        ? `Digital is installed; Docker engine ${docker.serverVersion ?? ''} is ready for the in-tab simulator.`
+        : `Digital and host Java are ready for the native simulator. ${docker.detail}`;
       statusBar.backgroundColor = undefined;
     } else {
       statusBar.text = '$(warning) CIS 310: setup required';
       statusBar.tooltip = !status.integrityVerified
         ? `Install Digital ${status.version}`
-        : `Java ${MINIMUM_JAVA_MAJOR}+ is required on this host`;
+        : EMBEDDED_CONTAINER_PLATFORM
+          ? `${docker.detail} Alternatively install Java ${MINIMUM_JAVA_MAJOR}+ for the native simulator.`
+          : `Java ${MINIMUM_JAVA_MAJOR}+ is required on this host`;
       statusBar.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
     }
   };
@@ -90,10 +102,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       );
       if (action === 'Verify host Java') {
         await checkEnvironment(manager, output);
-        return existing.java.supported || EMBEDDED_CONTAINER_PLATFORM;
+        return existing.java.supported || (await probeDockerEngine()).state === 'ready';
       }
       if (action !== 'Reinstall') {
-        return existing.java.supported || EMBEDDED_CONTAINER_PLATFORM;
+        return existing.java.supported || (await probeDockerEngine()).state === 'ready';
       }
     }
 
@@ -123,9 +135,20 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       );
       const status = await manager.getStatus();
       if (!status.java.supported && EMBEDDED_CONTAINER_PLATFORM) {
-        await vscode.window.showInformationMessage(
-          `Digital ${DIGITAL_RELEASE.displayVersion} is installed. The embedded Docker Desktop runtime supplies Java; host Java is needed only for native fallback and CLI tools.`
-        );
+        const docker = await probeDockerEngine();
+        if (docker.state === 'ready') {
+          await vscode.window.showInformationMessage(
+            `Digital ${DIGITAL_RELEASE.displayVersion} is installed. Docker engine ${docker.serverVersion} is ready for the in-tab simulator; host Java is needed only for native fallback and CLI tools.`
+          );
+        } else {
+          const action = await vscode.window.showWarningMessage(
+            `Digital ${DIGITAL_RELEASE.displayVersion} is installed, but it cannot run yet. ${docker.detail}`,
+            'Open setup guide'
+          );
+          if (action === 'Open setup guide') {
+            await vscode.commands.executeCommand('systemstudioCis310.openSetupGuide');
+          }
+        }
       } else if (!status.java.supported) {
         const action = await vscode.window.showWarningMessage(
           `Digital is installed, but Java ${MINIMUM_JAVA_MAJOR}+ was not found.`,
@@ -145,7 +168,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       statusTree.refresh();
       await tests.refresh();
       await updateStatus();
-      return status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM);
+      return status.integrityVerified && (
+        status.java.supported || (await probeDockerEngine()).state === 'ready'
+      );
     } catch (error) {
       output.appendLine(errorMessage(error));
       output.show(true);
@@ -444,9 +469,21 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.createCircuit', async () => {
       const workspaceFolder = await chooseWorkspaceFolder('Choose a workspace for the new Digital circuit');
-      const defaultUri = workspaceFolder
-        ? vscode.Uri.joinPath(workspaceFolder.uri, 'circuits', 'work', 'new-circuit.dig')
-        : undefined;
+      let defaultUri: vscode.Uri | undefined;
+      if (workspaceFolder) {
+        const preferred = vscode.Uri.joinPath(workspaceFolder.uri, 'circuits', 'work');
+        const prepared = await prepareSaveParent(
+          preferred,
+          workspaceFolder.uri,
+          (target) => vscode.workspace.fs.createDirectory(target)
+        );
+        defaultUri = vscode.Uri.joinPath(prepared.parent, 'new-circuit.dig');
+        if (prepared.usedFallback) {
+          void vscode.window.showWarningMessage(
+            `SystemStudio could not prepare circuits/work, so the save dialog will start at the workspace root. ${prepared.reason ?? ''}`.trim()
+          );
+        }
+      }
       const uri = await vscode.window.showSaveDialog({
         title: 'Create a new Digital circuit',
         defaultUri,
@@ -772,6 +809,8 @@ export function deactivate(): void {
 
 async function checkEnvironment(manager: DigitalManager, output: vscode.OutputChannel): Promise<void> {
   const status = await manager.getStatus();
+  const docker = await probeDockerEngine();
+  const dockerReady = docker.state === 'ready';
   const lines = [
     `SystemStudio CIS 310 environment check`,
     `Digital release: ${DIGITAL_RELEASE.displayVersion}`,
@@ -782,28 +821,36 @@ async function checkEnvironment(manager: DigitalManager, output: vscode.OutputCh
     `Java available: ${status.java.available ? 'yes' : 'no'}`,
     `Java version: ${status.java.version?.raw ?? 'not detected'}`,
     `Java supported: ${status.java.supported ? 'yes' : `no (requires ${MINIMUM_JAVA_MAJOR}+)`}`,
-    `Embedded Docker runtime: ${EMBEDDED_CONTAINER_PLATFORM ? 'used for in-tab Digital; supplies Java' : 'not used on this platform'}`,
+    `Embedded Docker runtime: ${docker.state}`,
+    `Docker detail: ${docker.detail}`,
     `Workspace trusted: ${vscode.workspace.isTrusted ? 'yes' : 'no'}`
   ];
   output.appendLine(lines.join('\n'));
   output.show(true);
 
-  if (status.integrityVerified && (status.java.supported || EMBEDDED_CONTAINER_PLATFORM)) {
+  if (status.integrityVerified && (status.java.supported || dockerReady)) {
     await vscode.window.showInformationMessage(
-      status.java.supported
-        ? `CIS 310 environment ready: Digital ${status.version}, Java ${status.java.version?.raw}.`
-        : `Digital ${status.version} is ready for the embedded Docker Desktop runtime. Host Java is still needed for native fallback and CLI tools.`
+      dockerReady
+        ? `CIS 310 environment ready: Digital ${status.version}, Docker engine ${docker.serverVersion}.`
+        : `Digital ${status.version} and Java ${status.java.version?.raw} are ready for the native simulator. The in-tab simulator is unavailable: ${docker.detail}`
     );
     return;
   }
+  const suggestedAction = !status.integrityVerified
+    ? 'Install Digital'
+    : EMBEDDED_CONTAINER_PLATFORM
+      ? 'Open setup guide'
+      : 'Download Java';
   const action = await vscode.window.showWarningMessage(
-    'The CIS 310 environment needs attention. See the SystemStudio output for details.',
-    !status.integrityVerified ? 'Install Digital' : 'Download Java'
+    `The CIS 310 environment needs attention. ${docker.detail} See the SystemStudio output for details.`,
+    suggestedAction
   );
   if (action === 'Install Digital') {
     await vscode.commands.executeCommand('systemstudioCis310.setupDigital');
   } else if (action === 'Download Java') {
     await vscode.env.openExternal(JAVA_DOWNLOAD);
+  } else if (action === 'Open setup guide') {
+    await vscode.commands.executeCommand('systemstudioCis310.openSetupGuide');
   }
 }
 

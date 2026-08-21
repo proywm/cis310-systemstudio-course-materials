@@ -8,6 +8,7 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { WebSocket } from 'ws';
 import type { DigitalManager } from './digitalManager';
+import { probeDockerEngine } from './core/dockerReadiness';
 import { runProcess } from './core/processRunner';
 import { createVncWebSocketBridge } from './core/vncWebSocketBridge';
 
@@ -274,17 +275,11 @@ export class FullDigitalRuntime implements vscode.Disposable {
   }
 
   private async ensureContainerImage(): Promise<string> {
-    const docker = await findExecutable('docker');
-    if (!docker) {
-      throw new Error('Embedded Full Digital on Windows/macOS requires Docker Desktop. Install and start Docker Desktop, then reopen the circuit. Native Digital remains available as an explicit fallback.');
+    const dockerStatus = await probeDockerEngine();
+    if (dockerStatus.state !== 'ready' || !dockerStatus.executable) {
+      throw new Error(`${dockerStatus.detail} Native Digital remains available as an explicit fallback when host Java is ready.`);
     }
-    const server = await runProcess(docker, ['version', '--format', '{{.Server.Version}}'], {
-      timeoutMs: 20_000,
-      maxOutputBytes: 256 * 1024
-    });
-    if (server.code !== 0 || server.timedOut) {
-      throw new Error(`Docker Desktop is installed but its engine is not ready. Start Docker Desktop and retry.\n${server.stderr || server.stdout}`);
-    }
+    const docker = dockerStatus.executable;
     const existing = await runProcess(docker, ['image', 'inspect', CONTAINER_IMAGE], {
       timeoutMs: 20_000,
       maxOutputBytes: 256 * 1024

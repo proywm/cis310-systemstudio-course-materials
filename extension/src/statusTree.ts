@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { AssemblyManager } from './assemblyManager';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
+import type { DockerEngineStatus } from './core/dockerReadiness';
 import {
   buildCourseModuleNavigation,
   type CourseModuleNavigation,
@@ -19,6 +20,7 @@ import type { PracticeStore } from './practiceStore';
 
 type StatusGroup = 'start' | 'team' | 'modules' | 'coursework' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
 type StatusNode = vscode.TreeItem & { groupId?: StatusGroup; module?: CourseModuleNavigation };
+type DockerStatusProvider = () => Promise<DockerEngineStatus>;
 
 export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   private readonly changeEmitter = new vscode.EventEmitter<StatusNode | undefined>();
@@ -28,7 +30,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
     private readonly manager: DigitalManager,
     private readonly assemblyManager: AssemblyManager,
     private readonly nativeAssemblyManager: NativeAssemblyManager,
-    private readonly practiceStore: PracticeStore
+    private readonly practiceStore: PracticeStore,
+    private readonly dockerStatus: DockerStatusProvider
   ) {
     this.practiceSubscription = practiceStore.onDidChange(() => this.refresh());
   }
@@ -292,6 +295,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
   private async environmentItems(): Promise<StatusNode[]> {
     const status = await this.manager.getStatus();
     const containerPlatform = process.platform === 'win32' || process.platform === 'darwin';
+    const docker = await this.dockerStatus();
     const java = new vscode.TreeItem(
       status.java.supported
         ? `Java ${status.java.version?.raw ?? ''}: ready`
@@ -317,9 +321,23 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
     trust.iconPath = new vscode.ThemeIcon(vscode.workspace.isTrusted ? 'shield' : 'lock');
     trust.description = vscode.workspace.isTrusted ? 'simulation enabled' : 'execution disabled';
 
+    const dockerItem = new vscode.TreeItem(
+      docker.state === 'ready'
+        ? `Docker engine ${docker.serverVersion ?? ''}: ready`
+        : docker.state === 'not-required'
+          ? 'Docker: not required on this host'
+          : 'Docker engine: not ready',
+      vscode.TreeItemCollapsibleState.None
+    );
+    dockerItem.iconPath = new vscode.ThemeIcon(docker.state === 'ready' ? 'pass-filled' : docker.state === 'not-required' ? 'info' : 'warning');
+    dockerItem.description = docker.state === 'ready' ? 'in-tab Digital enabled' : docker.detail;
+    dockerItem.tooltip = docker.detail;
+    dockerItem.command = { command: 'systemstudioCis310.checkEnvironment', title: 'Check Docker and Digital environment' };
+
     return [
       actionItem('Run complete environment check', 'systemstudioCis310.checkEnvironment', 'pulse'),
       actionItem('Open setup and first-task guide', 'systemstudioCis310.openSetupGuide', 'question'),
+      dockerItem,
       java,
       trust
     ];
