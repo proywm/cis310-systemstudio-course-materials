@@ -105,13 +105,15 @@ describe('student helper', () => {
 
   it('ships an optional animated companion without replacing accessible text controls', async () => {
     const panel = await readFile(path.resolve('src', 'studentHelperPanel.ts'), 'utf8');
-    const image = await readFile(path.resolve('media', 'tutor-companion.png'));
+    const image = await readFile(path.resolve('media', 'orbit-anime-v1.png'));
     assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
     assert.match(panel, /Orbit is ready for your CIS 310 questions/);
     assert.match(panel, /aria-label="Open CIS 310 question assistant"/);
     assert.match(panel, /Pause companion motion/);
     assert.match(panel, /prefers-reduced-motion:reduce/);
     assert.match(panel, /The animated companion is only a visual guide/);
+    assert.match(panel, /orbit-anime-v1\.png/);
+    assert.match(panel, /open-unit-tests/);
     assert.match(panel, /img-src \$\{webview\.cspSource\}/);
   });
 });

@@ -33,11 +33,16 @@ practice. The tutor is not an assembler and cannot prove that source builds.
 - `StackCall.asm` — stack frame, arguments, `CALL`, and `RET`;
 - `LinearSearch.asm` — found, boundary, and absent cases;
 - `BinarySearchIterative.asm` — loop invariants and midpoint updates; and
-- `BinarySearchRecursive.asm` — recursive frames and base cases.
+- `BinarySearchRecursive.asm` — recursive frames and base cases; and
+- `StudentUnitTest.test.asm` — a small exit-code self-test discovered in VS
+  Code's Testing view (exit 0 passes; any other exit code fails).
 
 The search examples are self-checking: exit code 0 and `PASS` require all
 included cases to succeed. Passing formative tests is not an instructor/GSI
 grade; Canvas remains authoritative for graded requirements and submission.
+Use **CIS 310: Open Student Unit Test Center** to discover Digital Testcase
+components, NASM `*.test.asm` programs, and the assignment public preflights in
+one place.
 
 Read [COMPATIBILITY.md](COMPATIBILITY.md) for the execution boundary and
 [OPEN_BOOK.md](OPEN_BOOK.md) for the accessible reading map.

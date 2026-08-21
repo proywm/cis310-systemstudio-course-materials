@@ -60,21 +60,23 @@ The unconnected element may be inside a nested subcircuit. Check every flip-flop
 
 ## I am stuck partway through a homework question.
 
-Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, U-M Maizey for one source-grounded hint, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
+Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, the published U-M Maizey App for one course-grounded hint, the optional GitHub Copilot coach for a student-typed general prompt, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
 
 ## What is the AI tutor?
 
-U-M Maizey is the optional course-grounded conversational tutor inside Canvas. Ask it to diagnose your uncertainty, give one hint, explain a related example, or check your reasoning. It may be wrong. Open and verify the source it cites, and do not use it to generate a graded submission.
+U-M Maizey is the preferred course-grounded conversational tutor after the instructor indexes visible Canvas sources and publishes a student-facing App. Ask it to diagnose your uncertainty, give one hint, explain a related example, or check your reasoning. It may be wrong. Open and verify the source it cites, and do not use it to generate a graded submission. A Maizey Project `detail/overview` page is an instructor-management page, not the student chat.
+
+SystemStudio also offers an optional GitHub Copilot coach through VS Code. It uses a model available to the student's own signed-in account, receives only the text the student submits, and has no automatic Canvas, grade, or file access. It is not course-grounded unless the relevant allowed source is included in the prompt, so Maizey remains preferred when available.
 
 ## Can I paste a SystemStudio practice question into the AI tutor?
 
 You may use the tutor to learn from an ungraded readiness or tutorial question, but answer first. State your choice and one reason, then request a hint or feedback. Asking the tutor for the answer before attempting the question defeats the retrieval activity even when it is not an academic-integrity violation. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule. The tutor should not generate a final answer, finished circuit, complete program, report, or submission-ready artifact.
 
-SystemStudio shows a learning-coach checkpoint before opening Maizey, but it cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
+SystemStudio shows a learning-coach checkpoint before either AI route and blocks obvious direct-solution requests before its optional Copilot panel sends a prompt. It cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
 
 ## Does the extension use the instructor's private AI account or API key?
 
-No. The extension opens the U-M Maizey course tutor, where each student authenticates with a U-M account. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token or a faculty LLM key.
+No. Maizey uses each student's U-M authentication. The optional Copilot coach uses a model available to the student's signed-in VS Code account. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token or faculty LLM key and does not attach student files automatically.
 
 ## Can I ask something anonymously before class?
 
@@ -83,6 +85,16 @@ Choose **Ask a Question Before Class**, select the anonymous preference, and pre
 ## Which assembly environment should I choose?
 
 Use the **Actual NASM Debug Workbench** for claims about compilation or program behavior. It invokes actual NASM, GNU `ld`, an ELF32 executable, and GDB: host tools on x86 Linux or the portable course container on Windows/macOS. The separately labeled **Instruction Trace Tutor** is only an optional source-level visualization and is not proof that NASM accepts a file.
+
+## How do I run unit tests before Canvas submission?
+
+Open **Student Unit Test Center**. Digital files that contain upstream `Testcase`
+components and NASM files named `*.test.asm` appear in VS Code's Testing view.
+Digital tests run through Digital's official CLI; NASM tests assemble, link, and
+execute actual ELF32 code, where exit status 0 passes and a nonzero status fails.
+Use Assignment Mission Control for the published register, PC, memory,
+register-file, ALU, and integrated-processor contracts. These are private
+formative checks—not grades, rubric decisions, or Canvas submissions.
 
 ## Where can I get human help?
 

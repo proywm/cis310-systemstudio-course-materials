@@ -129,7 +129,7 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     actionButton('lab', `${lab.requiredForModule ? 'Required' : 'Optional'} ${lab.kind} activity: ${lab.title}`, { labId: lab.id })
   ).join('');
   const tutorButtons = lesson.tutorPrompts.map((prompt, index) =>
-    `<li><p>${escapeHtml(prompt)}</p>${actionButton('tutor', `Copy this prompt and open the U-M AI tutor`, { promptIndex: index })}</li>`
+    `<li><p>${escapeHtml(prompt)}</p>${actionButton('tutor', 'Use this prompt with a learning coach', { promptIndex: index })}</li>`
   ).join('');
 
   return `<!doctype html>
@@ -222,8 +222,8 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     ${labs.length > 0 ? `<section aria-labelledby="hands-on-heading"><h2 id="hands-on-heading">Apply it hands-on</h2><p>Use the guided activity after making your own prediction. Required and optional status is written in each button label and is not communicated by color alone.</p><div class="actions">${labButtons}</div></section>` : ''}
 
     <aside class="tutor" aria-labelledby="tutor-heading">
-      <h2 id="tutor-heading">Ask the U-M AI tutor</h2>
-      <p>Choose a source-bounded prompt. SystemStudio will copy it to your clipboard and open the configured U-M tutor. The tutor should ask for your attempt, use hints and analogous examples, and avoid producing graded work.</p>
+      <h2 id="tutor-heading">Ask a learning coach</h2>
+      <p>Choose a source-bounded prompt, then select the preferred course-grounded U-M Maizey tutor or the optional GitHub Copilot coach in VS Code. The coach should ask for your attempt, use hints and analogous examples, and avoid producing graded work.</p>
       <ol>${tutorButtons}</ol>
     </aside>
 

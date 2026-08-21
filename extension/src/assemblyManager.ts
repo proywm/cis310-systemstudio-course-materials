@@ -131,6 +131,7 @@ export class AssemblyManager implements vscode.Disposable {
       ['nasm-elf32', 'LinearSearch.asm'],
       ['nasm-elf32', 'BinarySearchIterative.asm'],
       ['nasm-elf32', 'BinarySearchRecursive.asm'],
+      ['nasm-elf32', 'StudentUnitTest.test.asm'],
       ['trace-tutor-examples', 'RegisterArithmetic.asm'],
       ['trace-tutor-examples', 'FlagsBranch.asm'],
       ['trace-tutor-examples', 'LoopSum.asm'],

@@ -9,6 +9,7 @@ export type StudentHelperAction =
   | 'open-materials'
   | 'open-learning'
   | 'open-coursework'
+  | 'open-unit-tests'
   | 'open-guided-labs'
   | 'practice-now'
   | 'start-tutorial'
@@ -39,6 +40,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-materials',
   'open-learning',
   'open-coursework',
+  'open-unit-tests',
   'open-guided-labs',
   'practice-now',
   'start-tutorial',
@@ -99,6 +101,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'Open the current Canvas assignment, submit the released files there, and confirm the receipt.'
       ],
       actions: [
+        { id: 'open-unit-tests', label: 'Open Student Unit Test Center' },
         { id: 'open-coursework', label: 'Open coursework preflights' },
         { id: 'open-canvas', label: 'Open official Canvas assignment' }
       ]
@@ -147,10 +150,10 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
 
   if (matches(text, ['ai tutor', 'maizey', 'chatbot', 'artificial intelligence', 'llm'])) {
     return {
-      title: 'Use the U-M Maizey course tutor for conversational help',
+      title: 'Choose the right learning coach for the question',
       paragraphs: [
         'An AI tutor is a conversational learning coach that uses course sources to diagnose uncertainty, offer a small hint or explanation, ask a check-for-understanding question, and connect the student back to evidence. It is not simply an answer-generating chatbot.',
-        'For CIS 310, U-M Maizey in Canvas is the preferred AI layer. Students authenticate with their own U-M account, so the extension does not receive your prompt and does not use the instructor’s personal LLM account or API key. AI can still be wrong: verify technical claims against the cited course source.'
+        'For CIS 310, U-M Maizey in Canvas is preferred after the instructor indexes visible course sources and publishes a student App. The optional GitHub Copilot coach instead uses a model available to the student’s signed-in VS Code account and receives only what the student types—no automatic Canvas, grade, or file access. Neither uses the instructor’s personal LLM key. AI can still be wrong: verify technical claims against the mapped course source.'
       ],
       checklist: [
         'Attempt the question first; state your prediction and the exact step that is unclear.',
@@ -159,7 +162,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'For a graded task, use the tutor to learn the method—not to produce a submission.'
       ],
       actions: [
-        { id: 'open-ai-tutor', label: 'Open U-M Maizey in Canvas' },
+        { id: 'open-ai-tutor', label: 'Choose Maizey or GitHub Copilot' },
         { id: 'ask-before-class', label: 'Ask the instructor before class' }
       ]
     };

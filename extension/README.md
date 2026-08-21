@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, local FAQ, U-M Maizey handoff, and Canvas question workflow.
+SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, a Student Unit Test Center, local FAQ, U-M Maizey handoff, an optional GitHub Copilot learning coach, and the Canvas question workflow.
 
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
@@ -39,7 +39,7 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 4. Check Canvas for live requirements, instructor evaluation, submission, and receipt.
 5. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
 6. For assembly, use the **Actual NASM Debug Workbench**: predict, build/run, break at an inspect label, compare machine state, step, and explain. Use **Instruction Trace Tutor** only for optional conceptual practice.
-7. Use the local FAQ, U-M Maizey learning-coach handoff, or structured Canvas Question Before Class when help is needed.
+7. Use the local FAQ, published U-M Maizey student App, optional GitHub Copilot coach, or structured Canvas Question Before Class when help is needed.
 
 ## Included learning features
 
@@ -53,9 +53,10 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 - 27-meeting Monday/Wednesday Fall 2026 calendar with confirmed 10:00–11:45 a.m., ELB 1329 `.ics` events;
 - seven guided circuit builds and seven actual NASM/GDB labs, each mapped to reading, video, lecture, prediction, executable evidence, and explanation;
 - seven retained self-checking NASM programs covering arithmetic, flags/branches, array loops, stack/calls, linear search, and iterative/recursive binary search;
+- a Student Unit Test Center backed by VS Code's Testing view: Digital files with upstream Testcase components are discovered automatically, NASM `*.test.asm` programs are assembled/linked/run as actual ELF32, and assignment public preflights remain available in Mission Control;
 - an original optional animated tutor companion with a text-equivalent interface, pause control, and automatic reduced-motion behavior;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
-- local FAQ routing, attempt-first AI tutor guardrails, and Canvas Questions Before Class support; and
+- local FAQ routing, a published-student-App check for Maizey, optional student-account GitHub Copilot coaching with deterministic attempt-first guardrails, and Canvas Questions Before Class support; and
 - no Google Drive dependency for the packaged syllabus, presentations, or assignments.
 
 ## Installation
@@ -76,6 +77,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Create a New Digital Circuit` | Creates a non-overwriting blank `.dig` and opens Full Digital |
 | `CIS 310: Preview Digital Circuit` | Generates a read-only view with Digital’s official exporter |
 | `CIS 310: Run Digital Circuit Tests` | Runs embedded Digital testcases with the official CLI |
+| `CIS 310: Open Student Unit Test Center` | Opens Digital Testcase discovery, NASM `*.test.asm` discovery, and assignment public preflight routes |
 | `CIS 310: Build and Run Actual NASM` | Assembles, links, and executes actual NASM ELF32 code |
 | `CIS 310: Open Actual NASM Debug Workbench` | Opens actual GDB registers, flags, stack, memory, disassembly, breakpoints, stepping, and output |
 | `CIS 310: Open Instruction Trace Tutor` | Opens the non-assembler learning visualization |
@@ -84,6 +86,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Open Hands-on Circuit and Assembly Labs` | Opens lecture-mapped guided builds and traces |
 | `CIS 310: Open Learning and Practice` | Opens preparation, practice, quiz, confidence, and review tools |
 | `CIS 310: Open Coursework and Final Presentation` | Opens assignment checklists, circuit preflights, final-presentation progression, grade estimate, Canvas-calendar import, recovery, and diagnostics |
+| `CIS 310: Choose AI Learning Coach` | Chooses a published U-M Maizey App or the optional student-account GitHub Copilot coach |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page |
 | `CIS 310: Start or Rerun Guided Tutorial` | Opens the self-paced tutorial |
 
@@ -105,7 +108,8 @@ See the generated `assembly/README.md`, `assembly/COMPATIBILITY.md`, and `assemb
 - Real assembly execution has time and output bounds.
 - The Instruction Trace Tutor has no filesystem, shell, process, or network instruction.
 - Learning history, coursework planning, imported calendar events, self-evaluation, and FAQ conversations stay in VS Code local storage; the extension sends no telemetry or student artifacts to an AI service.
-- U-M Maizey and Canvas open only after student action and are governed by U-M service notices.
+- U-M Maizey and Canvas open only after student action and are governed by U-M service notices. A Maizey management/detail URL is rejected rather than presented as student chat.
+- The optional Copilot coach calls a model available to the student's signed-in VS Code account only after an explicit prompt submission. It does not attach files, Canvas content, grades, or course records, and the extension has no hard Copilot dependency.
 
 ## Verification
 
@@ -117,7 +121,7 @@ npm run check
 npm run package
 ```
 
-Release verification includes unit tests, manifest/resource checks, packaging, the official Digital CLI, an actual upstream Digital GUI session on Xvfb/x11vnc, and `npm run smoke:nasm`. The NASM smoke assembles, links, and executes all seven retained programs, then verifies an actual GDB breakpoint, registers, flags, stack, memory, disassembly, step, and output. Docker image configuration is statically checked here; a host with Docker daemon access is still required for the cross-platform runtime smoke.
+Release verification includes unit tests, manifest/resource checks, packaging, the official Digital CLI, an actual upstream Digital GUI session on Xvfb/x11vnc, and `npm run smoke:nasm`. The NASM smoke assembles, links, and executes all seven retained programs plus the student unit-test template, then verifies an actual GDB breakpoint, registers, flags, stack, memory, disassembly, step, and output. Docker image configuration is statically checked here; a host with Docker daemon access is still required for the cross-platform runtime smoke.
 
 ## Remaining platform boundaries
 

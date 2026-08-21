@@ -4,7 +4,9 @@ import * as vscode from 'vscode';
 import { AssemblyLabPanel } from './assemblyLabPanel';
 import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
+import { CopilotCoachPanel } from './copilotCoachPanel';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
+import { classifyTutorDestination } from './core/aiCoach';
 import { circuitTutorPrompt } from './core/circuitPreflight';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { guidedAssemblyTutorPrompt, guidedLab } from './core/guidedLabs';
@@ -29,6 +31,7 @@ import { DigitalTestController } from './digitalTests';
 import { GuidedLabPanel } from './guidedLabPanel';
 import { LessonTextPanel } from './lessonTextPanel';
 import { NativeAssemblyManager } from './nativeAssemblyManager';
+import { NasmTestController } from './nasmTests';
 import { NasmWorkbenchPanel } from './nasmWorkbenchPanel';
 import { PracticePanel } from './practicePanel';
 import { PracticeStore } from './practiceStore';
@@ -36,11 +39,12 @@ import { PreClassQuestionPanel } from './preClassQuestionPanel';
 import { StatusTreeProvider } from './statusTree';
 import { StudentHelperPanel } from './studentHelperPanel';
 import { TutorialPanel } from './tutorialPanel';
+import { UnitTestCenterPanel } from './unitTestCenterPanel';
 
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
 const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 const EMBEDDED_CONTAINER_PLATFORM = process.platform === 'win32' || process.platform === 'darwin';
-const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Copy Prompt and Open Tutor';
+const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Choose Learning Coach';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -53,6 +57,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
   const statusTree = new StatusTreeProvider(manager, assemblyManager, nativeAssemblyManager, practiceStore);
   const tests = new DigitalTestController(manager);
+  const nasmTests = new NasmTestController(nativeAssemblyManager);
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 60);
   statusBar.command = 'systemstudioCis310.checkEnvironment';
   statusBar.show();
@@ -156,6 +161,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     statusTree,
     materialsTree,
     tests,
+    nasmTests,
     statusBar,
     vscode.window.registerTreeDataProvider('systemstudioCis310.explorer', statusTree),
     vscode.window.registerTreeDataProvider('systemstudioCis310.materials', materialsTree),
@@ -184,15 +190,23 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
       await StudentHelperPanel.show(context);
     }),
+    vscode.commands.registerCommand('systemstudioCis310.openUnitTestCenter', async () => {
+      await tests.refresh();
+      await nasmTests.refresh();
+      UnitTestCenterPanel.show();
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openCopilotCoach', async (starterPrompt?: unknown) => {
+      await CopilotCoachPanel.show(typeof starterPrompt === 'string' ? starterPrompt : undefined);
+    }),
     vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async (launchContext?: unknown) => {
       const starterPrompt = contextualTutorPrompt(launchContext);
       const openLabel = starterPrompt ? CONTEXTUAL_TUTOR_OPEN_LABEL : AI_TUTOR_PREFLIGHT.openLabel;
       const decision = await vscode.window.showInformationMessage(
-        starterPrompt ? 'Copy this lesson prompt and open the CIS 310 AI tutor?' : AI_TUTOR_PREFLIGHT.message,
+        starterPrompt ? 'Use this lesson prompt with a CIS 310 learning coach?' : AI_TUTOR_PREFLIGHT.message,
         {
           modal: true,
           detail: starterPrompt
-            ? `The source-bounded prompt will be copied to your clipboard so you can paste it into the U-M tutor. ${AI_TUTOR_PREFLIGHT.detail}`
+            ? `For Maizey, the source-bounded prompt is copied to the clipboard; for the optional Copilot coach, it is placed in the local prompt box for review before sending. ${AI_TUTOR_PREFLIGHT.detail}`
             : AI_TUTOR_PREFLIGHT.detail
         },
         openLabel,
@@ -203,22 +217,58 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         return;
       }
       if (decision !== openLabel) return;
-      if (starterPrompt) {
-        await vscode.env.clipboard.writeText(starterPrompt);
+      const provider = await vscode.window.showQuickPick([
+        {
+          label: '$(mortar-board) U-M Maizey in Canvas (Recommended)',
+          description: 'course-grounded after the instructor publishes and indexes the tutor',
+          provider: 'maizey' as const
+        },
+        {
+          label: '$(github) GitHub Copilot in VS Code',
+          description: 'optional fallback using the student’s signed-in VS Code account',
+          provider: 'copilot' as const
+        },
+        {
+          label: '$(info) How the two choices differ',
+          description: 'Maizey uses indexed course sources; Copilot receives only what the student types',
+          provider: 'explain' as const
+        }
+      ], { placeHolder: 'Choose the learning coach for this question' });
+      if (!provider) return;
+      if (provider.provider === 'explain') {
+        await vscode.window.showInformationMessage(
+          'Maizey is the preferred course-grounded tutor after its student App is published and its Canvas sources are indexed. The optional Copilot coach uses a model available to the student’s VS Code account, sends only the typed prompt, and has no automatic access to Canvas, grades, files, or private course data.'
+        );
+        return;
       }
+      if (provider.provider === 'copilot') {
+        await CopilotCoachPanel.show(starterPrompt);
+        return;
+      }
+      if (starterPrompt) await vscode.env.clipboard.writeText(starterPrompt);
       const configured = vscode.workspace.getConfiguration('systemstudioCis310')
         .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
-      const uri = safeUmTutorUri(configured) ?? vscode.Uri.parse(DEFAULT_CANVAS_COURSE);
-      if (!safeUmTutorUri(configured)) {
-        await vscode.window.showWarningMessage(
-          'The configured U-M AI tutor URL is invalid. Opening the Fall 2026 Canvas course instead.'
+      const destination = classifyTutorDestination(configured);
+      if (destination.kind === 'maizey-management') {
+        const action = await vscode.window.showWarningMessage(
+          'That URL is a Maizey project-management page, not a student chat App. It will not be opened. Publish an App after indexing course data, then configure its student-facing share URL.',
+          'Open Canvas Course',
+          'Configure Student App URL'
         );
-      } else if (uri.toString().replace(/\/$/, '') === DEFAULT_CANVAS_COURSE) {
+        if (action === 'Configure Student App URL') {
+          await vscode.commands.executeCommand('workbench.action.openSettings', 'systemstudioCis310.maizeyTutorUrl');
+          return;
+        }
+        if (action !== 'Open Canvas Course') return;
+        await vscode.env.openExternal(vscode.Uri.parse(DEFAULT_CANVAS_COURSE));
+      } else if (destination.kind === 'maizey-app') {
+        await vscode.env.openExternal(vscode.Uri.parse(destination.url));
+      } else {
         await vscode.window.showInformationMessage(
-          'The exact CIS 310 Maizey link has not been configured yet. Canvas will open; choose U-M Maizey in the course navigation. The instructor can copy the direct tutor link into the SystemStudio setting.'
+          'A published student Maizey App URL is not configured yet. Opening the CIS 310 Canvas course; use the Maizey course-navigation item after the instructor enables it.'
         );
+        await vscode.env.openExternal(vscode.Uri.parse(DEFAULT_CANVAS_COURSE));
       }
-      await vscode.env.openExternal(uri);
       if (starterPrompt) {
         await vscode.window.showInformationMessage(
           'The lesson prompt is on your clipboard. Paste it into the U-M tutor, make an attempt, and ask for one hint at a time.'
@@ -407,8 +457,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
       const target = uri.fsPath.toLowerCase().endsWith('.dig') ? uri.fsPath : `${uri.fsPath}.dig`;
       try {
-        await manager.createBlankCircuit(target);
-        await offerToOpenCircuit(vscode.Uri.file(target));
+        const created = await createUniqueCircuit(manager, path.dirname(target), path.basename(target));
+        const label = created === target
+          ? 'Created a blank Digital circuit'
+          : `The selected filename already existed, so SystemStudio safely created ${path.basename(created)}`;
+        await offerToOpenCircuit(vscode.Uri.file(created), label);
       } catch (error) {
         await showFailure('Could not create the Digital circuit', error, output);
       }
@@ -669,6 +722,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('systemstudioCis310.refresh', async () => {
       statusTree.refresh();
       await tests.refresh();
+      await nasmTests.refresh();
       await updateStatus();
     }),
     vscode.commands.registerCommand('systemstudioCis310.openDocumentation', async () => {
@@ -852,21 +906,6 @@ function safeHttpsUri(value: string): vscode.Uri | undefined {
   try {
     const parsed = new URL(value);
     return parsed.protocol === 'https:' ? vscode.Uri.parse(parsed.toString()) : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function safeUmTutorUri(value: string): vscode.Uri | undefined {
-  try {
-    const parsed = new URL(value);
-    const allowedHosts = new Set(['canvas.umd.umich.edu', 'maizey.umich.edu']);
-    if (parsed.protocol !== 'https:' || !allowedHosts.has(parsed.hostname)) {
-      return undefined;
-    }
-    parsed.username = '';
-    parsed.password = '';
-    return vscode.Uri.parse(parsed.toString());
   } catch {
     return undefined;
   }

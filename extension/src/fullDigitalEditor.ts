@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { nativeDigitalFallbackAvailable } from './core/fullDigitalFallback';
 import type { DigitalManager } from './digitalManager';
 import type { FullDigitalRuntime, FullDigitalSession } from './fullDigitalRuntime';
 
@@ -77,6 +78,15 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
     } catch (error) {
       const detail = errorText(error);
       this.output.appendLine(`Full Digital editor failed: ${detail}`);
+      const status = await this.manager.getStatus();
+      if (nativeDigitalFallbackAvailable(process.platform, process.env, status)) {
+        this.output.appendLine('Embedded Digital transport was unavailable; starting the verified native Digital fallback.');
+        await vscode.window.showWarningMessage(
+          'The embedded Digital transport is unavailable (for example, Docker Desktop is stopped). Opening the same verified upstream Digital application in its native window instead.'
+        );
+        await this.openNative(document.uri, panel);
+        return;
+      }
       panel.webview.html = messageHtml(panel.webview, 'Embedded Full Digital could not start', detail, true);
       await vscode.window.showErrorMessage(`Full Digital could not start: ${detail}`);
     }

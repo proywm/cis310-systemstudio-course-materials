@@ -20,7 +20,7 @@ async function main(): Promise<void> {
   await mkdir(buildDirectory, { recursive: true });
 
   const sources = (await readdir(starterDirectory)).filter((name) => name.endsWith('.asm')).sort();
-  assert.equal(sources.length, 7, 'Release smoke expects seven actual NASM lab programs.');
+  assert.equal(sources.length, 8, 'Release smoke expects seven actual NASM lab programs plus one student unit-test template.');
 
   for (const name of sources) {
     const stem = name.slice(0, -4);
@@ -30,7 +30,11 @@ async function main(): Promise<void> {
     await mustRun(nasm, ['-f', 'elf32', '-g', '-F', 'dwarf', '-o', object, source], `${name}: assemble`);
     await mustRun(linker, ['-m', 'elf_i386', '-o', executable, object], `${name}: link`);
     const run = await mustRun(executable, [], `${name}: execute`);
-    assert.match(run.stdout, /PASS|Sum = 15/, `${name}: self-check output`);
+    if (name === 'StudentUnitTest.test.asm') {
+      assert.equal(run.stdout, '', `${name}: passes through exit status without invented output`);
+    } else {
+      assert.match(run.stdout, /PASS|Sum = 15/, `${name}: self-check output`);
+    }
   }
 
   const debugExecutable = path.join(buildDirectory, 'RegisterArithmetic');
@@ -63,7 +67,7 @@ async function main(): Promise<void> {
     await session.close();
   }
 
-  process.stdout.write(`NASM/GDB workbench smoke passed: ${sources.length} actual programs plus register, flag, stack, memory, disassembly, breakpoint, step, and output inspection.\n`);
+  process.stdout.write(`NASM/GDB workbench smoke passed: seven retained programs plus one unit-test template, register, flag, stack, memory, disassembly, breakpoint, step, and output inspection.\n`);
 }
 
 void main();

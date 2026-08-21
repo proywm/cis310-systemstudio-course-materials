@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.21.0
+
+- Replaced the broken Maizey project-management handoff with an explicit tutor chooser. SystemStudio rejects Project `detail/overview` URLs, opens a published student-facing Maizey App or Canvas, and documents the required data indexing/App publication step.
+- Added an optional in-VS-Code GitHub Copilot learning coach through the VS Code Language Model API. It uses the student's signed-in account, sends only submitted text, has no hard Copilot dependency, and blocks direct-solution requests before model access.
+- Added a Student Unit Test Center and NASM Test Controller. Digital files with upstream Testcase components and NASM `*.test.asm` programs appear in VS Code's Testing view; assignment public preflights remain linked from the same center.
+- Added an actual self-checking NASM test template and retained exit-code evidence (0 passes, nonzero fails) in generated student workspaces.
+- Replaced the generic companion image with original anime-style Orbit artwork and made it visibly animated in the Help Center and Learning dashboard while preserving text controls, pause, keyboard, and reduced-motion behavior.
+- Added automatic verified-native-Digital fallback when Docker Desktop is stopped but host Java is ready, and changed new-circuit creation to allocate a non-overwriting filename instead of failing with `EEXIST`.
+
 ## 0.20.0
 
 - Replaced the dual MASM/NASM student path with one NASM 32-bit workflow using actual ELF32 assembly/link/execution and a persistent actual GDB/MI session.

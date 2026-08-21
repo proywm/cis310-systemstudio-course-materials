@@ -88,6 +88,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'checklist'
           ),
           describedActionItem(
+            'Open Student Unit Test Center',
+            'Digital Testcases · NASM self-tests · assignment preflights',
+            'systemstudioCis310.openUnitTestCenter',
+            'beaker'
+          ),
+          describedActionItem(
             'Open Canvas — submit coursework here',
             'Fall 2026 authority',
             'systemstudioCis310.openCanvas',
@@ -195,8 +201,8 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       case 'help':
         return [
           describedActionItem(
-            'Open U-M Maizey AI course tutor',
-            'attempt first · hints, not deliverables',
+            'Choose an AI learning coach',
+            'Maizey course tutor · optional GitHub Copilot',
             'systemstudioCis310.openAiTutor',
             'sparkle'
           ),
@@ -249,6 +255,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       actionItem('Open guided circuit labs', 'systemstudioCis310.openGuidedLabs', 'map', ['circuit-half-adder']),
       actionItem('Create a circuit in Full Digital', 'systemstudioCis310.createCircuit', 'new-file'),
       actionItem('Open an existing circuit in Full Digital', 'systemstudioCis310.openDigital', 'circuit-board'),
+      actionItem('Open Student Unit Test Center', 'systemstudioCis310.openUnitTestCenter', 'beaker'),
       actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder')
     ];
   }
@@ -272,6 +279,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       status,
       actionItem('Open actual NASM debug workbench', 'systemstudioCis310.openNasmWorkbench', 'debug-alt'),
       actionItem('Build and run actual NASM code', 'systemstudioCis310.buildRunAssembly', 'run'),
+      actionItem('Open NASM self-tests', 'systemstudioCis310.openUnitTestCenter', 'beaker'),
       tutor,
       actionItem('Open guided assembly labs', 'systemstudioCis310.openGuidedLabs', 'map', ['assembly-register-arithmetic']),
       actionItem('Create NASM lab workspace', 'systemstudioCis310.createAssemblyLab', 'new-folder'),

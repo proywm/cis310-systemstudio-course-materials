@@ -2,13 +2,14 @@
 
 ## Recommendation
 
-Use **U-M Maizey in Canvas** as the generative tutor and keep SystemStudio's local FAQ as a deterministic first line of support. The extension should open the course tutor; it should not embed a faculty API key, proxy prompts through the instructor's account, or ask students for personal Canvas/API tokens.
+Use a published **U-M Maizey App in Canvas** as the preferred course-grounded tutor and keep SystemStudio's local FAQ as a deterministic first line of support. Offer the VS Code Language Model API as an optional GitHub Copilot fallback using a model available to the student's own signed-in account. The extension does not embed a faculty API key, proxy prompts through the instructor's account, or ask students for personal Canvas/API tokens.
 
-This separation gives students three clear paths:
+This separation gives students four clear paths:
 
 1. **Local FAQ chat:** private routing for setup, Digital, assembly, course navigation, submission checks, and known recurring problems.
-2. **U-M Maizey tutor:** conversational, course-grounded hints and explanations with U-M authentication.
-3. **Questions Before Class:** a structured Canvas discussion request that helps the instructor adjust the next lecture.
+2. **U-M Maizey tutor:** conversational, course-grounded hints and explanations with U-M authentication after visible Canvas data are indexed and a student-facing App is published.
+3. **Optional GitHub Copilot coach:** a user-initiated fallback inside VS Code. It receives only the text the student submits and has no automatic Canvas, grade, or file access.
+4. **Questions Before Class:** a structured Canvas discussion request that helps the instructor adjust the next lecture.
 
 ## What an AI tutor is
 
@@ -48,6 +49,8 @@ The boundary depends on the activity, not simply on whether a question appears i
 
 SystemStudio adds three layers: student-facing attempt-first language, a modal learning-coach checkpoint before opening Maizey, and the instructor-controlled Maizey system prompt. The local FAQ also intercepts obvious “give me the answer/do my assignment” requests and redirects them to a safe help format. These are educational and service-level safeguards, not digital-rights controls: the extension does not transmit or automatically paste a question into Maizey, cannot prevent copying, cannot control another AI website, and cannot guarantee that an external model will always comply. Instructor configuration, assignment-specific policy, source curation, adversarial testing, and student accountability are still required.
 
+The optional Copilot panel applies the same deterministic direct-solution check before a prompt reaches the VS Code Language Model API, supplies the course coaching boundary on every request, and sends no file or Canvas context automatically. It is intentionally not a hard extension dependency: if the student's account exposes no Copilot model, SystemStudio reports that condition and leaves Maizey/Canvas and the local FAQ available. Live model output is nondeterministic, so release tests validate URL classification, prompt construction, direct-solution interception, and UI behavior rather than calling a production model.
+
 Assignment Mission Control also offers a circuit-specific design/debugging handoff. It copies only the selected **public interface contract** and coaching boundary—not the student’s `.dig` file, circuit topology, or local test output. After a failed preflight, the prompt asks the student to supply the earliest mismatch, their prediction, and one attempted change. It then requests one diagnostic question, hint, or smaller analogous example at a time and explicitly prohibits a finished wiring plan, `.dig` artifact, report, or sequence that reconstructs the deliverable.
 
 ## Canvas Questions Before Class setup
@@ -86,7 +89,7 @@ The local FAQ converts those themes into concise checklists without including st
 4. Enable returned data sources/citations and test at least one supported and one unsupported question per lecture.
 5. Run adversarial guardrail tests: paste an ungraded multiple-choice item and request only its letter; request a full current homework solution, a completed circuit, end-to-end assembly code, and report prose; try role-change/prompt-injection wording; verify attempt-first tutoring or a bounded refusal each time.
 6. Create the pinned partially anonymous **Questions Before Class** discussion and set its exact URL in extension configuration.
-7. Put the exact Canvas Maizey link in `systemstudioCis310.maizeyTutorUrl`.
+7. Create and publish a student-facing Maizey **App** after its data source finishes indexing. Copy the App/share URL—not the Project `detail/overview`, data-source, settings, or billing URL—into `systemstudioCis310.maizeyTutorUrl`. Test it from a student account. Until then, leave the Canvas course URL configured.
 8. Tell students that anonymous means Canvas displays the anonymous option—not that the extension guarantees identity removal.
 9. Pilot with students, monitor recurring misconceptions, and revise sources/FAQ/practice items. Do not treat chat counts or local accuracy as grades.
 
@@ -98,6 +101,7 @@ The local FAQ converts those themes into concise checklists without including st
 - U-M ITS, [AI Services Privacy Notice](https://its.umich.edu/computing/ai/privacy-notice)
 - U-M ITS, [Google Gemini and Gemini Notebook](https://its.umich.edu/computing/ai/google-gemini-and-gemini-notebook)
 - U-M ITS, [Maizey System Prompts](https://its.umich.edu/computing/ai/maizey-system-prompt-library)
+- VS Code, [Language Model API](https://code.visualstudio.com/api/extension-guides/ai/language-model)
 - Instructure, [Canvas Discussion Topics API](https://developerdocs.instructure.com/services/canvas/resources/discussion_topics)
 - Instructure, [Canvas OAuth2 Overview](https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth)
 - Instructure, [View and Sort Discussion Replies](https://community.canvaslms.com/en/kb/articles/661292-how-do-i-view-and-sort-discussion-replies-as-a-student)
