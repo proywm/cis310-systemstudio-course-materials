@@ -12,6 +12,21 @@ describe('U-M Codex CLI readiness', () => {
     assert.match(UM_CODEX_CLASSROOM_URL, /^https:\/\/www\.its\.umich\.edu\//);
   });
 
+  it('executes both readiness probes through the fixed Windows command shim', async () => {
+    const calls: string[][] = [];
+    const fake = ((command: string, args: readonly string[], _options: object, callback: Function) => {
+      calls.push([command, ...args]);
+      callback(null, args.at(-1)?.endsWith('--version') ? 'codex-cli test\n' : 'Logged in using ChatGPT\n', '');
+      return undefined;
+    }) as unknown as Parameters<typeof probeCodexCli>[1];
+    const status = await probeCodexCli(['codex.cmd'], fake, 'win32');
+    assert.equal(status.ready, true);
+    assert.deepEqual(calls.map((call) => call.slice(1)), [
+      ['/d', '/s', '/c', 'codex.cmd --version'],
+      ['/d', '/s', '/c', 'codex.cmd login status']
+    ]);
+  });
+
   it('reports ready only after the fixed login-status check succeeds', async () => {
     const calls: string[][] = [];
     const fake = ((command: string, args: readonly string[], _options: object, callback: Function) => {
@@ -19,7 +34,7 @@ describe('U-M Codex CLI readiness', () => {
       callback(null, args.includes('--version') ? `codex-cli test via ${command}\n` : 'Logged in using ChatGPT\n', '');
       return undefined;
     }) as unknown as Parameters<typeof probeCodexCli>[1];
-    const status = await probeCodexCli(['codex'], fake);
+    const status = await probeCodexCli(['codex'], fake, 'linux');
     assert.equal(status.ready, true);
     assert.equal(status.installed, true);
     assert.equal(status.authenticated, true);
@@ -34,7 +49,7 @@ describe('U-M Codex CLI readiness', () => {
       callback(args.includes('--version') ? null : new Error('Not logged in'), args.includes('--version') ? 'codex-cli test' : '', '');
       return undefined;
     }) as unknown as Parameters<typeof probeCodexCli>[1];
-    const status = await probeCodexCli(['codex'], fake);
+    const status = await probeCodexCli(['codex'], fake, 'linux');
     assert.equal(status.ready, false);
     assert.equal(status.installed, true);
     assert.equal(status.authenticated, false);

@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.25.2
+
+- Made Codex readiness probes explicitly platform-injectable so the Windows command-shim path and Unix direct-executable path are tested deterministically on every host.
+- Added a full Windows-shim regression covering both `codex --version` and `codex login status`; this fixes the Windows CI failure caused by host-dependent test assumptions without weakening the authentication check.
+
 ## 0.25.1
 
 - Added the Fall 2026 0-point beginning-of-course pre-test to Start Here, the course-material tree, and the local FAQ; the AI coach blocks all requests to answer, solve, check, or transform its items so the unaided baseline remains meaningful.
