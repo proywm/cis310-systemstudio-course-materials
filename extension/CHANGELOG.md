@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.25.3
+
+- Removed internal slide-audit provenance and product-specific instructions from all generated Canvas lecture pages while retaining the mapped readings, videos, examples, accessibility note, and course-tool requirements.
+- Made the Canvas exporter describe simulator, assembly, practice, and hands-on work in student-facing course language so regeneration cannot reintroduce development wording.
+- Added an export regression that rejects internal provenance and SystemStudio branding in the standalone Canvas package.
+
 ## 0.25.2
 
 - Made Codex readiness probes explicitly platform-injectable so the Windows command-shim path and Unix direct-executable path are tested deterministically on every host.

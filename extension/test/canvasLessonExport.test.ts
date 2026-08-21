@@ -14,6 +14,7 @@ describe('Canvas accessible lecture export', () => {
       assert.ok((page.canvasBody.match(/<h3>/g) ?? []).length >= 4);
       assert.doesNotMatch(page.canvasBody, /<(?:script|style|img|table|iframe)\b/i);
       assert.doesNotMatch(page.canvasBody, /\b(?:click here|read more|follow this link)\b/i);
+      assert.doesNotMatch(page.canvasBody, /SystemStudio|Presentation evidence used to prepare/i);
       assert.match(page.canvasBody, /This Canvas Page is the primary lecture format designed for digital accessibility/);
       assert.match(page.standaloneHtml, /<!doctype html>/i);
       assert.match(page.standaloneHtml, /<html lang="en">/);

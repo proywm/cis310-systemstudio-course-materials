@@ -50,9 +50,9 @@ function renderCanvasBody(lesson: LessonNarrative, index: number): string {
   ).join('\n');
   const labSection = labs.length > 0 ? `
 <h2>Apply the concept hands-on</h2>
-<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<p>Make a prediction before opening the course simulator or assembly tool. These activities are formative and do not provide a completed graded artifact.</p>
 <ul>
-${labs.map((lab) => `<li><strong>${lab.requiredForModule ? 'Required' : 'Optional'} ${escapeHtml(lab.kind)} activity:</strong> ${escapeHtml(lab.title)}. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>`).join('\n')}
+${labs.map((lab) => `<li><strong>${lab.requiredForModule ? 'Required' : 'Optional'} ${escapeHtml(lab.kind)} activity:</strong> ${escapeHtml(lab.title)}. Follow the matching hands-on instructions provided with this course.</li>`).join('\n')}
 </ul>` : '';
 
   return `<!-- Canvas Page title: ${escapeHtml(`${lesson.lectureLabel}: ${lesson.title} — Accessible Lecture`)} -->
@@ -86,7 +86,7 @@ ${example.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('\n')}
 <p><strong>Conclusion:</strong> ${escapeHtml(example.conclusion)}</p>`).join('\n\n')}
 
 <h2>Check your understanding</h2>
-<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<p>Answer these questions in your own words before opening the module practice set.</p>
 <ol>
 ${lesson.selfChecks.map((question) => `<li>${escapeHtml(question)}</li>`).join('\n')}
 </ol>
@@ -109,8 +109,7 @@ ${readingItems}
 ${videoItems}
 </ul>
 
-<h2>Source evidence and format note</h2>
-<p><strong>Presentation evidence used to prepare this page:</strong> ${escapeHtml(lesson.slideEvidence)}</p>
+<h2>Using this lecture page</h2>
 <p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
 <p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>`;
 }

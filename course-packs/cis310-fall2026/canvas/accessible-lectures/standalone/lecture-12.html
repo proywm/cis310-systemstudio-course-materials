@@ -74,7 +74,7 @@
 
 <h2>Trace one instruction before running many</h2>
 <p>For MOV, identify source and destination and predict the destination value. For ADD or SUB, predict the result and which flags may change. CMP updates flags as if subtraction occurred but does not store the arithmetic result in either operand. A conditional jump reads relevant flags and may update EIP.</p>
-<p>CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A useful debug record includes before-state, instruction, after-state, and evidence. SystemStudio’s NASM Workbench assembles and links the actual ELF32 source, then reads registers, EFLAGS, stack, memory, and Intel disassembly from an actual GDB session. The optional Instruction Trace Tutor remains a conceptual model and is not build evidence.</p>
+<p>CALL transfers control while saving a return address on the stack; RET uses that saved address to continue at the caller. A useful debug record includes before-state, instruction, after-state, and evidence. The course NASM/GDB workflow assembles and links actual ELF32 source, then reads registers, EFLAGS, stack, memory, and Intel disassembly from an actual debugger session. A conceptual instruction trace remains useful for prediction, but it is not build evidence.</p>
 
 
 <h2>Worked examples</h2>
@@ -100,7 +100,7 @@
 <p><strong>Conclusion:</strong> ESP must be restored before RET. An unmatched push makes RET treat saved data as an instruction address, so the crash appears at the return rather than at the original stack mistake.</p>
 
 <h2>Check your understanding</h2>
-<p>Answer these questions in your own words before opening the SystemStudio practice set.</p>
+<p>Answer these questions in your own words before opening the module practice set.</p>
 <ol>
 <li>Why can identical virtual addresses in two processes map differently?</li>
 <li>How do assembly text, machine bytes, and instruction addresses describe one program?</li>
@@ -109,15 +109,15 @@
 <p>Then complete the module’s five-question preparation checkpoint and continue through all eight questions for broader practice. The attempt threshold is not a readiness or mastery claim.</p>
 
 <h2>Apply the concept hands-on</h2>
-<p>Make a prediction before opening SystemStudio. These activities are formative and do not provide a completed graded artifact.</p>
+<p>Make a prediction before opening the course simulator or assembly tool. These activities are formative and do not provide a completed graded artifact.</p>
 <ul>
-<li><strong>Required assembly activity:</strong> Build and debug register arithmetic. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Inspect flags and a signed branch. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Walk and sum an array. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Test linear search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Test iterative binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Inspect recursive binary search. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
-<li><strong>Optional assembly activity:</strong> Inspect a call and stack frame. Open the matching activity in SystemStudio’s Hands-on Lab Center.</li>
+<li><strong>Required assembly activity:</strong> Build and debug register arithmetic. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Inspect flags and a signed branch. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Walk and sum an array. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Test linear search. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Test iterative binary search. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Inspect recursive binary search. Follow the matching hands-on instructions provided with this course.</li>
+<li><strong>Optional assembly activity:</strong> Inspect a call and stack frame. Follow the matching hands-on instructions provided with this course.</li>
 </ul>
 
 <h2>Ask the approved U-M course tutor</h2>
@@ -145,8 +145,7 @@
 <li><a href="https://www.youtube.com/watch?v=7eaTT8PekE0">Open author video 4: Ep 083: The Flags Register</a>. Focus: Zero, sign, carry, and overflow flags</li>
 </ul>
 
-<h2>Source evidence and format note</h2>
-<p><strong>Presentation evidence used to prepare this page:</strong> Lecture 12 PDF, slides 2–25.</p>
+<h2>Using this lecture page</h2>
 <p>This Canvas Page is the primary lecture format designed for digital accessibility. The legacy presentation PDF may be retained in Canvas Files as an optional visual archive, but it should not be the only way to obtain the lecture content.</p>
 <p>Canvas remains authoritative for graded work, deadlines, accommodations, and submission requirements. If any diagram, equation, video, or simulator interaction presents an access barrier, contact the instructor promptly for an equivalent format or activity.</p>
   </main>
