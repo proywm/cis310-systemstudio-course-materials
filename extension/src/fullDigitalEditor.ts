@@ -1,7 +1,9 @@
 import { randomBytes } from 'node:crypto';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { diagnoseDigitalLaunchFailure, type DigitalLaunchDiagnosis } from './core/digitalLaunchDiagnosis';
 import { nativeDigitalFallbackAvailable } from './core/fullDigitalFallback';
+import { SetupGuidePanel } from './setupGuidePanel';
 import type { DigitalManager } from './digitalManager';
 import type { FullDigitalRuntime, FullDigitalSession } from './fullDigitalRuntime';
 
@@ -23,6 +25,7 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
     panel: vscode.WebviewPanel,
     _token: vscode.CancellationToken
   ): Promise<void> {
+    let retryEmbedded: (() => Promise<void>) | undefined;
     panel.onDidDispose(() => {
       void this.runtime.disposeSession(document.uri.fsPath);
     });
@@ -42,6 +45,11 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
       } else if (action === 'native') {
         await this.runtime.disposeSession(document.uri.fsPath);
         await this.openNative(document.uri, panel);
+      } else if (action === 'retry' && retryEmbedded) {
+        await this.runtime.disposeSession(document.uri.fsPath);
+        await retryEmbedded();
+      } else if (action === 'guide') {
+        await SetupGuidePanel.show(this.context);
       }
     });
     panel.webview.html = messageHtml(
@@ -72,24 +80,28 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
       return;
     }
 
-    try {
-      const session = await this.runtime.open(document.uri.fsPath);
-      panel.webview.html = desktopHtml(this.context, panel.webview, session);
-    } catch (error) {
-      const detail = errorText(error);
-      this.output.appendLine(`Full Digital editor failed: ${detail}`);
-      const status = await this.manager.getStatus();
-      if (nativeDigitalFallbackAvailable(process.platform, process.env, status)) {
-        this.output.appendLine('Embedded Digital transport was unavailable; starting the verified native Digital fallback.');
-        await vscode.window.showWarningMessage(
-          'The embedded Digital transport is unavailable (for example, Docker Desktop is stopped). Opening the same verified upstream Digital application in its native window instead.'
+    retryEmbedded = async () => {
+      panel.webview.html = messageHtml(
+        panel.webview,
+        'Starting Full Digital…',
+        'Checking the private display and opening the unmodified upstream Digital application.'
+      );
+      try {
+        const session = await this.runtime.open(document.uri.fsPath);
+        panel.webview.html = desktopHtml(this.context, panel.webview, session);
+      } catch (error) {
+        const detail = errorText(error);
+        this.output.appendLine(`Full Digital editor failed: ${detail}`);
+        const status = await this.manager.getStatus();
+        const nativeReady = nativeDigitalFallbackAvailable(process.platform, process.env, status);
+        const diagnosis = diagnoseDigitalLaunchFailure(detail);
+        panel.webview.html = failureHtml(panel.webview, diagnosis, nativeReady);
+        await vscode.window.showErrorMessage(
+          `${diagnosis.title}. Your circuit was not changed; use the recovery choices in the Digital tab.`
         );
-        await this.openNative(document.uri, panel);
-        return;
       }
-      panel.webview.html = messageHtml(panel.webview, 'Embedded Full Digital could not start', detail, true);
-      await vscode.window.showErrorMessage(`Full Digital could not start: ${detail}`);
-    }
+    };
+    await retryEmbedded();
   }
 
   private async openNative(uri: vscode.Uri, panel: vscode.WebviewPanel): Promise<void> {
@@ -202,21 +214,24 @@ function desktopHtml(
 </html>`;
 }
 
-function messageHtml(webview: vscode.Webview, title: string, detail: string, offerNativeFallback = false): string {
+function messageHtml(webview: vscode.Webview, title: string, detail: string): string {
   const nonce = randomBytes(16).toString('base64');
-  const button = offerNativeFallback && canOpenNativeWindow()
-    ? '<button id="native">Open native Digital instead</button>'
-    : '';
-  const script = button
-    ? `<script nonce="${nonce}">const vscode=acquireVsCodeApi();document.getElementById('native').addEventListener('click',()=>vscode.postMessage({action:'native'}));</script>`
-    : '';
-  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';"><style nonce="${nonce}">body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font-family:var(--vscode-font-family)}h1{font-size:1.35rem}p{line-height:1.55;max-width:760px;color:var(--vscode-descriptionForeground)}button{font:inherit;color:var(--vscode-button-foreground);background:var(--vscode-button-background);border:0;border-radius:3px;padding:8px 12px;cursor:pointer}</style></head><body><h1>${escapeHtml(title)}</h1><p>${escapeHtml(detail)}</p>${button}${script}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}';"><style nonce="${nonce}">body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font-family:var(--vscode-font-family)}h1{font-size:1.35rem}p{line-height:1.55;max-width:760px;color:var(--vscode-descriptionForeground)}</style></head><body><h1>${escapeHtml(title)}</h1><p>${escapeHtml(detail)}</p></body></html>`;
 }
 
-function webviewAction(message: unknown): 'stop' | 'native' | undefined {
+function failureHtml(webview: vscode.Webview, diagnosis: DigitalLaunchDiagnosis, nativeReady: boolean): string {
+  const nonce = randomBytes(16).toString('base64');
+  const nativeButton = nativeReady ? '<button class="secondary" data-action="native">Open verified native Digital</button>' : '';
+  const steps = diagnosis.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('');
+  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';"><style nonce="${nonce}">
+:root{color-scheme:light dark}body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font:1rem/1.55 var(--vscode-font-family)}main{max-width:780px}h1{font-size:1.5rem}.safe{border-left:5px solid var(--vscode-testing-iconPassed);padding:11px 14px;background:var(--vscode-textBlockQuote-background)}ol{padding-left:1.4rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}button{min-height:40px;font:inherit;color:var(--vscode-button-foreground);background:var(--vscode-button-background);border:0;border-radius:4px;padding:8px 13px;cursor:pointer}.secondary{color:var(--vscode-button-secondaryForeground);background:var(--vscode-button-secondaryBackground)}button:focus-visible{outline:3px solid var(--vscode-focusBorder);outline-offset:2px}details{margin-top:22px;border:1px solid var(--vscode-panel-border);border-radius:5px;padding:10px 13px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--vscode-descriptionForeground)}
+</style></head><body><main><h1>${escapeHtml(diagnosis.title)}</h1><p class="safe"><strong>${escapeHtml(diagnosis.summary)}</strong></p><p>${escapeHtml(diagnosis.explanation)}</p><h2>What to do</h2><ol>${steps}</ol><div class="actions"><button data-action="retry">Retry embedded Digital</button>${nativeButton}<button class="secondary" data-action="guide">Open setup guide</button></div><details><summary>Technical detail for troubleshooting</summary><pre>${escapeHtml(diagnosis.technicalDetail)}</pre></details></main><script nonce="${nonce}">const vscode=acquireVsCodeApi();document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(button)vscode.postMessage({action:button.dataset.action});});</script></body></html>`;
+}
+
+function webviewAction(message: unknown): 'stop' | 'native' | 'retry' | 'guide' | undefined {
   if (!message || typeof message !== 'object') return undefined;
   const action = (message as { action?: unknown }).action;
-  return action === 'stop' || action === 'native' ? action : undefined;
+  return action === 'stop' || action === 'native' || action === 'retry' || action === 'guide' ? action : undefined;
 }
 
 function canOpenNativeWindow(): boolean {

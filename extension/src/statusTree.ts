@@ -220,6 +220,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           actionItem('Start or rerun guided tutorial', 'systemstudioCis310.startTutorial', 'lightbulb'),
           actionItem('Open native Getting Started', 'systemstudioCis310.openGettingStarted', 'map'),
+          actionItem('Open setup and first-task guide', 'systemstudioCis310.openSetupGuide', 'question'),
           actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book')
         ];
       default:
@@ -318,6 +319,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
 
     return [
       actionItem('Run complete environment check', 'systemstudioCis310.checkEnvironment', 'pulse'),
+      actionItem('Open setup and first-task guide', 'systemstudioCis310.openSetupGuide', 'question'),
       java,
       trust
     ];

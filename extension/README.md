@@ -2,6 +2,8 @@
 
 SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, a Student Unit Test Center, local FAQ, U-M Maizey handoff, an optional GitHub Copilot learning coach, and the Canvas question workflow.
 
+For the platform setup, the first circuit, the first assembly lab, and a plain-language explanation of Docker Desktop errors, open **CIS 310: Open Setup and First-Task Guide**. The accessible HTML guide is packaged inside the extension and does not require a browser or external account.
+
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
 The **Course Team and Schedule** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; Canvas and department announcements provide any future staffing update. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment.
@@ -89,6 +91,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Choose AI Learning Coach` | Chooses a published U-M Maizey App or the optional student-account GitHub Copilot coach |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page |
 | `CIS 310: Start or Rerun Guided Tutorial` | Opens the self-paced tutorial |
+| `CIS 310: Open Setup and First-Task Guide` | Explains platform setup, Docker messages, the first circuit, the first NASM lab, tests, and submission checks |
 
 ## Assembly settings
 
@@ -118,10 +121,12 @@ Run:
 ```bash
 npm ci
 npm run check
+npm run test:integration:vscode
 npm run package
+npm run audit:vsix
 ```
 
-Release verification includes unit tests, manifest/resource checks, packaging, the official Digital CLI, an actual upstream Digital GUI session on Xvfb/x11vnc, and `npm run smoke:nasm`. The NASM smoke assembles, links, and executes all seven retained programs plus the student unit-test template, then verifies an actual GDB breakpoint, registers, flags, stack, memory, disassembly, step, and output. Docker image configuration is statically checked here; a host with Docker daemon access is still required for the cross-platform runtime smoke.
+GitHub release verification runs the extension inside a real VS Code Extension Host on Windows, macOS, and Ubuntu, audits an installable VSIX from each runner, tests minimum VS Code 1.100 on Ubuntu, starts an actual upstream Digital GUI through Xvfb/x11vnc/noVNC, runs `npm run smoke:nasm`, and builds and executes both course containers on Ubuntu's Docker engine. The NASM smoke assembles, links, and executes all seven retained programs plus the student unit-test template, then verifies an actual GDB breakpoint, registers, flags, stack, memory, disassembly, step, and output. GitHub-hosted Windows/macOS machines do not run Docker Desktop itself; see [`docs/CROSS_PLATFORM_INTEGRATION.md`](../docs/CROSS_PLATFORM_INTEGRATION.md) for the exact automated/manual boundary.
 
 ## Remaining platform boundaries
 

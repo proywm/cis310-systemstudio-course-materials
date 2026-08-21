@@ -13,6 +13,8 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Primary accessible HTML lectures, open-book readings, author videos, homework, projects, and optional visual archives | [Student course-material guide](course-packs/cis310-fall2026/STUDENT_MATERIALS.md) |
 | Canvas-ready HTML bodies, standalone pages, page map, and validation manifest | [Accessible HTML lecture bundle](course-packs/cis310-fall2026/canvas/CIS310_Fall2026_Accessible_HTML_Lectures.zip) |
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
+| Setup, first circuit/assembly tasks, and Docker message explanation | [Packaged setup and first-task guide](extension/GETTING_STARTED.html) |
+| Windows/macOS/Linux automated integration coverage and limits | [Cross-platform integration verification](docs/CROSS_PLATFORM_INTEGRATION.md) |
 | Verified reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | Independent validation of the public circuit preflights | [Circuit-preflight validation](docs/CIRCUIT_PREFLIGHT_VALIDATION.md) |
@@ -100,7 +102,9 @@ For a course requirement or deadline, check Canvas first. For a technical questi
 cd extension
 npm ci
 npm run check
+npm run test:integration:vscode
 npm run package
+npm run audit:vsix
 ```
 
-The course pack and packaged extension verify local material hashes before use.
+The course pack and packaged extension verify local material hashes before use. GitHub Actions runs the packaged extension in a real VS Code Extension Host on Windows, macOS, and Ubuntu, then separately exercises actual Digital/noVNC, NASM/GDB, and both portable course containers on Ubuntu. See the [cross-platform verification boundary](docs/CROSS_PLATFORM_INTEGRATION.md).

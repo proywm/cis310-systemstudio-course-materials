@@ -1,0 +1,199 @@
+name: Cross-platform extension integration
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cis310-integration-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extension-host:
+    name: VS Code + VSIX (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            label: Ubuntu 24.04
+            artifact: ubuntu
+          - os: windows-2025
+            label: Windows Server 2025
+            artifact: windows
+          - os: macos-15
+            label: macOS 15
+            artifact: macos
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - name: Check out the private course repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run deterministic course and extension checks
+        run: npm run check
+
+      - name: Install Linux display libraries for VS Code
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends xvfb
+        working-directory: .
+
+      - name: Exercise the actual VS Code Extension Host on Linux
+        if: runner.os == 'Linux'
+        run: xvfb-run -a --server-args="-screen 0 1440x900x24" npm run test:integration:vscode
+
+      - name: Exercise the actual VS Code Extension Host on Windows/macOS
+        if: runner.os != 'Linux'
+        run: npm run test:integration:vscode
+
+      - name: Build and audit the installable VSIX
+        run: npm run package && npm run audit:vsix
+
+      - name: Check production dependency vulnerabilities
+        run: npm audit --omit=dev
+
+      - name: Upload this operating system's VSIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: systemstudio-cis310-${{ matrix.artifact }}
+          path: extension/systemstudio-cis310.vsix
+          if-no-files-found: error
+          retention-days: 14
+
+  minimum-vscode:
+    name: Minimum supported VS Code 1.100
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - run: npm ci
+      - run: npm run compile
+      - name: Install Extension Host display libraries
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends xvfb
+        working-directory: .
+      - name: Activate and navigate on the declared minimum VS Code
+        run: xvfb-run -a --server-args="-screen 0 1440x900x24" npm run test:integration:vscode
+        env:
+          VSCODE_TEST_VERSION: 1.100.0
+
+  real-linux-tools:
+    name: Actual Digital GUI + NASM/GDB (Ubuntu)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - run: npm ci
+      - name: Install actual course toolchains and private-display tools
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends nasm binutils gdb openjdk-17-jre xvfb x11vnc
+        working-directory: .
+      - name: Assemble, link, run, break, inspect, and step actual ELF32 programs
+        run: npm run smoke:nasm
+      - name: Download and checksum-verify upstream Digital v0.31
+        run: npm run prepare:smoke:digital -- "$RUNNER_TEMP/digital"
+      - name: Locate the hosted runner browser
+        id: browser
+        shell: bash
+        run: |
+          browser="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          test -n "$browser"
+          echo "path=$browser" >> "$GITHUB_OUTPUT"
+      - name: Start upstream Digital and send graphical input through noVNC
+        shell: bash
+        run: >-
+          npx tsx test/manual/fullDigitalNoVncSmoke.ts
+          --jar "$RUNNER_TEMP/digital/Digital/Digital.jar"
+          --circuit "$RUNNER_TEMP/digital/blank-smoke.dig"
+          --xvfb /usr/bin/Xvfb
+          --x11vnc /usr/bin/x11vnc
+          --firefox "${{ steps.browser.outputs.path }}"
+          --screenshot "$RUNNER_TEMP/systemstudio-full-digital.png"
+      - name: Upload actual Digital transport evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cis310-full-digital-linux-smoke
+          path: ${{ runner.temp }}/systemstudio-full-digital.png
+          if-no-files-found: error
+          retention-days: 14
+
+  portable-containers:
+    name: Portable course containers (Ubuntu Docker engine)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - run: npm ci
+      - name: Download and checksum-verify upstream Digital v0.31
+        run: npm run prepare:smoke:digital -- "$RUNNER_TEMP/digital"
+      - name: Allow the non-root Digital container to write the temporary circuit
+        run: chmod -R a+rwX "$RUNNER_TEMP/digital"
+      - name: Build and execute the NASM and Full Digital course containers
+        run: npm run smoke:containers -- "$RUNNER_TEMP/digital"
+
+  required-summary:
+    name: Required cross-platform summary
+    if: always()
+    needs:
+      - extension-host
+      - minimum-vscode
+      - real-linux-tools
+      - portable-containers
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fail unless every required integration job passed
+        env:
+          EXTENSION_HOST: ${{ needs.extension-host.result }}
+          MINIMUM_VSCODE: ${{ needs.minimum-vscode.result }}
+          REAL_LINUX_TOOLS: ${{ needs.real-linux-tools.result }}
+          PORTABLE_CONTAINERS: ${{ needs.portable-containers.result }}
+        run: |
+          printf 'Extension Host matrix: %s\nMinimum VS Code: %s\nReal Linux tools: %s\nPortable containers: %s\n' "$EXTENSION_HOST" "$MINIMUM_VSCODE" "$REAL_LINUX_TOOLS" "$PORTABLE_CONTAINERS"
+          test "$EXTENSION_HOST" = success
+          test "$MINIMUM_VSCODE" = success
+          test "$REAL_LINUX_TOOLS" = success
+          test "$PORTABLE_CONTAINERS" = success

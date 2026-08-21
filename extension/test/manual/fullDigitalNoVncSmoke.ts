@@ -27,6 +27,8 @@ async function main(): Promise<void> {
   const children: ChildProcess[] = [];
   let bridge: Awaited<ReturnType<typeof createVncWebSocketBridge>> | undefined;
   let webServer: ReturnType<typeof createServer> | undefined;
+  let connected = false;
+  let inputSent = false;
   try {
     const xvfb = spawn(options.xvfb, [
       display, '-screen', '0', '1440x900x24', '-nolisten', 'tcp', '-noreset'
@@ -66,6 +68,18 @@ async function main(): Promise<void> {
           }, 5_000);
           return;
         }
+        if (request.method === 'POST' && request.url === '/connected') {
+          connected = true;
+          response.writeHead(204, { 'Cache-Control': 'no-store' });
+          response.end();
+          return;
+        }
+        if (request.method === 'POST' && request.url === '/input-sent') {
+          inputSent = true;
+          response.writeHead(204, { 'Cache-Control': 'no-store' });
+          response.end();
+          return;
+        }
         const relative = request.url?.replace(/^\/novnc\//, '') ?? '';
         if (!/^(?:core|vendor)\/[A-Za-z0-9_./-]+$/.test(relative) || relative.includes('..')) {
           response.writeHead(404).end();
@@ -97,6 +111,8 @@ async function main(): Promise<void> {
     if (firefoxCode !== 0) throw new Error(`Firefox screenshot exited with code ${firefoxCode}.`);
     const screenshot = await stat(options.screenshot);
     if (screenshot.size < 20_000) throw new Error(`Screenshot is unexpectedly small (${screenshot.size} bytes).`);
+    if (!connected) throw new Error('The browser never completed the noVNC connection to upstream Digital.');
+    if (!inputSent) throw new Error('The browser did not send the simulated pointer input through noVNC.');
     process.stdout.write(`Full Digital noVNC screenshot: ${options.screenshot} (${screenshot.size} bytes)\n`);
   } finally {
     if (webServer) await new Promise<void>((resolve) => webServer?.close(() => resolve()));
@@ -111,7 +127,7 @@ async function main(): Promise<void> {
 }
 
 function html(websocketPort: number): string {
-  return `<!doctype html><html><head><meta charset="utf-8"><style>html,body,#screen{width:100%;height:100%;margin:0;overflow:hidden;background:#202020}#label{position:fixed;z-index:2;top:0;left:0;padding:6px 10px;background:#111;color:#fff;font:14px sans-serif}</style></head><body><div id="label">Connecting to actual upstream Digital…</div><div id="screen"></div><img src="/wait" hidden alt=""><script type="module">import RFB from '/novnc/core/rfb.js';const label=document.getElementById('label');const screen=document.getElementById('screen');const rfb=new RFB(screen,'ws://127.0.0.1:${websocketPort}/manual-smoke',{shared:true});rfb.scaleViewport=true;rfb.resizeSession=false;const click=(canvas,x,y)=>{for(const type of ['mousemove','mousedown','mouseup'])canvas.dispatchEvent(new MouseEvent(type,{bubbles:true,clientX:x,clientY:y,button:0,buttons:type==='mousedown'?1:0}));};rfb.addEventListener('connect',()=>{label.textContent='CONNECTED — upstream Digital through noVNC';document.title='CONNECTED';setTimeout(()=>{const canvas=screen.querySelector('canvas');click(canvas,674,106);setTimeout(()=>{click(canvas,418,236);label.textContent='CONNECTED + SIMULATION INPUT SENT THROUGH noVNC';},500);},1500);});rfb.addEventListener('disconnect',()=>{label.textContent='DISCONNECTED';});</script></body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>html,body,#screen{width:100%;height:100%;margin:0;overflow:hidden;background:#202020}#label{position:fixed;z-index:2;top:0;left:0;padding:6px 10px;background:#111;color:#fff;font:14px sans-serif}</style></head><body><div id="label">Connecting to actual upstream Digital…</div><div id="screen"></div><img src="/wait" hidden alt=""><script type="module">import RFB from '/novnc/core/rfb.js';const label=document.getElementById('label');const screen=document.getElementById('screen');const rfb=new RFB(screen,'ws://127.0.0.1:${websocketPort}/manual-smoke',{shared:true});rfb.scaleViewport=true;rfb.resizeSession=false;const mark=path=>fetch(path,{method:'POST'});const click=(canvas,x,y)=>{for(const type of ['mousemove','mousedown','mouseup'])canvas.dispatchEvent(new MouseEvent(type,{bubbles:true,clientX:x,clientY:y,button:0,buttons:type==='mousedown'?1:0}));};rfb.addEventListener('connect',()=>{void mark('/connected');label.textContent='CONNECTED — upstream Digital through noVNC';document.title='CONNECTED';setTimeout(()=>{const canvas=screen.querySelector('canvas');click(canvas,674,106);setTimeout(()=>{click(canvas,418,236);label.textContent='CONNECTED + SIMULATION INPUT SENT THROUGH noVNC';void mark('/input-sent');},500);},1500);});rfb.addEventListener('disconnect',()=>{label.textContent='DISCONNECTED';});</script></body></html>`;
 }
 
 function parseOptions(args: string[]): Options {

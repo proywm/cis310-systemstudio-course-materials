@@ -13,6 +13,7 @@ export type StudentHelperAction =
   | 'open-guided-labs'
   | 'practice-now'
   | 'start-tutorial'
+  | 'open-setup-guide'
   | 'check-environment'
   | 'setup-digital'
   | 'create-circuit'
@@ -44,6 +45,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-guided-labs',
   'practice-now',
   'start-tutorial',
+  'open-setup-guide',
   'check-environment',
   'setup-digital',
   'create-circuit',
@@ -342,6 +344,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       actions: [
         { id: 'check-environment', label: 'Check environment' },
         { id: 'setup-digital', label: 'Install/verify Digital' },
+        { id: 'open-setup-guide', label: 'Open setup and first-task guide' },
         { id: 'start-tutorial', label: 'Walk through setup' }
       ]
     };

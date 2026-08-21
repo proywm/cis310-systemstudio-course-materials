@@ -69,6 +69,7 @@ export async function executeStudentHelperAction(action: StudentHelperAction): P
     'open-guided-labs': 'systemstudioCis310.openGuidedLabs',
     'practice-now': 'systemstudioCis310.startQuickPractice',
     'start-tutorial': 'systemstudioCis310.startTutorial',
+    'open-setup-guide': 'systemstudioCis310.openSetupGuide',
     'check-environment': 'systemstudioCis310.checkEnvironment',
     'setup-digital': 'systemstudioCis310.setupDigital',
     'create-circuit': 'systemstudioCis310.createCircuit',

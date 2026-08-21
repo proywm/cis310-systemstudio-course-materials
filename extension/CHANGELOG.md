@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.22.0
+
+- Added required GitHub Actions integration on Ubuntu 24.04, Windows Server 2025, and macOS 15. Every OS now runs deterministic checks, activates the extension in a real VS Code Stable Extension Development Host, navigates critical student panels, builds/audits a VSIX, and uploads the package as evidence.
+- Added a minimum-version Extension Host run on VS Code 1.100.0, a real Ubuntu NASM/GDB run, an actual upstream Digital/Xvfb/x11vnc/noVNC browser-input run, and executable NASM and Full Digital course-container smokes.
+- Added a fail-closed VSIX boundary audit that requires student release assets and rejects development tests/scripts, internal fixtures, answer-key/solution paths, environment files, and student-data paths.
+- Replaced the raw stopped-Docker failure with a student-facing diagnosis that states the circuit is safe, explains why Windows/macOS need the container for in-tab Digital, preserves technical evidence, and offers retry, setup, and only-valid native-fallback choices.
+- Added a packaged accessible HTML setup and first-task guide for Windows, macOS, and Linux, including the first half-adder circuit, first NASM/GDB lab, student unit tests, Canvas submission checks, and Docker named-pipe recovery.
+- Strengthened the actual Full Digital GUI smoke so it must prove that a browser connected through noVNC and sent pointer input, rather than accepting screenshot size alone.
+
 ## 0.21.0
 
 - Replaced the broken Maizey project-management handoff with an explicit tutor chooser. SystemStudio rejects Project `detail/overview` URLs, opens a published student-facing Maizey App or Canvas, and documents the required data indexing/App publication step.

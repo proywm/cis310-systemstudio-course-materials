@@ -38,6 +38,7 @@ import { PracticeStore } from './practiceStore';
 import { PreClassQuestionPanel } from './preClassQuestionPanel';
 import { StatusTreeProvider } from './statusTree';
 import { StudentHelperPanel } from './studentHelperPanel';
+import { SetupGuidePanel } from './setupGuidePanel';
 import { TutorialPanel } from './tutorialPanel';
 import { UnitTestCenterPanel } from './unitTestCenterPanel';
 
@@ -728,6 +729,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('systemstudioCis310.openDocumentation', async () => {
       const document = await vscode.workspace.openTextDocument(vscode.Uri.joinPath(context.extensionUri, 'README.md'));
       await vscode.window.showTextDocument(document, { preview: true });
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openSetupGuide', async () => {
+      await SetupGuidePanel.show(context);
     }),
     vscode.workspace.onDidGrantWorkspaceTrust(() => {
       statusTree.refresh();

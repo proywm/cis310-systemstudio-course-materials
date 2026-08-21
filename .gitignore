@@ -11,6 +11,7 @@ course-packs/**/syllabus/*.out
 coverage/
 .DS_Store
 *.vsix
+.vscode-test/
 *.code-workspace
 local-data/
 student-data/

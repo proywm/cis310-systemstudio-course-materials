@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+  <title>SystemStudio CIS 310 setup and first tasks</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--vscode-foreground); background: var(--vscode-editor-background); font: 1rem/1.6 var(--vscode-font-family); }
+    main { width: min(100% - 2rem, 88ch); margin: auto; padding: 28px 0 60px; }
+    h1 { line-height: 1.2; }
+    h2 { margin-top: 2.2rem; border-bottom: 1px solid var(--vscode-panel-border); padding-bottom: .3rem; }
+    h3 { margin-top: 1.6rem; }
+    .start, .safe, .boundary { padding: 14px 16px; border-left: 5px solid var(--vscode-focusBorder); background: var(--vscode-textBlockQuote-background); }
+    .safe { border-left-color: var(--vscode-testing-iconPassed); }
+    .boundary { border-left-color: var(--vscode-editorWarning-foreground); }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid var(--vscode-panel-border); padding: 9px 11px; text-align: left; vertical-align: top; }
+    th { background: var(--vscode-sideBar-background); }
+    code { background: var(--vscode-textCodeBlock-background); padding: .08rem .25rem; border-radius: 3px; }
+    li + li { margin-top: .45rem; }
+    kbd { border: 1px solid var(--vscode-panel-border); border-bottom-width: 2px; border-radius: 3px; padding: .05rem .3rem; }
+    .checklist li::marker { content: "✓  "; color: var(--vscode-testing-iconPassed); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>SystemStudio CIS 310: setup and first tasks</h1>
+  <p class="start"><strong>Shortest path:</strong> open the SystemStudio activity-bar icon, expand <strong>Course Modules</strong>, and follow one module’s Accessible lesson → Read → Watch → Practice → Build/debug path. Use Canvas for official instructions, submission, receipts, and instructor evaluation.</p>
+
+  <h2>1. One-time setup</h2>
+  <table>
+    <thead><tr><th scope="col">Computer</th><th scope="col">Full Digital inside VS Code</th><th scope="col">NASM/GDB labs</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Windows</th><td>Install and start Docker Desktop. SystemStudio uses it to supply Java and a private graphical display.</td><td>The same course container supplies NASM, GNU ld, GDB, and QEMU-i386.</td></tr>
+      <tr><th scope="row">macOS</th><td>Install and start Docker Desktop. SystemStudio uses the same course runtime as Windows.</td><td>The course container supplies the consistent 32-bit Linux assembly environment.</td></tr>
+      <tr><th scope="row">x86 Linux</th><td>Java 8+ is required. SystemStudio uses Xvfb/x11vnc for the in-tab display and can prepare those tools on supported Debian/Ubuntu hosts after permission.</td><td>Install NASM, GNU ld, and GDB, or approve the course-container fallback.</td></tr>
+    </tbody>
+  </table>
+  <ol>
+    <li>Open a local folder in VS Code and trust it only if it contains files you recognize.</li>
+    <li>Run <strong>CIS 310: Check Environment</strong>.</li>
+    <li>Run <strong>CIS 310: Install/Verify Digital Simulator</strong>. The pinned download and JAR are SHA-256 verified.</li>
+    <li>Open <strong>Student Unit Test Center</strong> once so you know where local formative checks appear.</li>
+  </ol>
+
+  <h2>2. Why “Docker Desktop is not running” appears</h2>
+  <p class="safe"><strong>Your circuit is safe and was not changed.</strong> The message is about the simulator runtime, not the <code>.dig</code> file.</p>
+  <p>Digital is a Java/Swing desktop application. A VS Code webview cannot directly host a native Swing window. On Windows and macOS, SystemStudio starts the complete upstream Digital application inside a course container, then streams that private desktop into the tab. Seeing the Docker command on the computer only proves that the client is installed; the background Docker engine must also be running.</p>
+  <p>The Windows text <code>open //./pipe/docker_engine: The system cannot find the file specified</code> means the expected Docker engine named pipe does not exist yet—usually because Docker Desktop is closed or still starting.</p>
+  <ol>
+    <li>Open Docker Desktop from the Start menu.</li>
+    <li>Wait until Docker Desktop reports that its engine is running. The first startup can take a minute.</li>
+    <li>Return to the Digital tab and choose <strong>Retry embedded Digital</strong>.</li>
+    <li>If it still fails, run <strong>CIS 310: Check Environment</strong> and retain the expandable technical detail when requesting help.</li>
+  </ol>
+  <p>Use <strong>Open verified native Digital</strong> only when the button is shown. That button appears only when the pinned Digital installation, a supported Java runtime, and a local graphical desktop are all available.</p>
+
+  <h2>3. First circuit</h2>
+  <ol>
+    <li>Open <strong>Hands-on Circuit and Assembly Labs</strong> and choose <strong>Build and verify a half adder</strong>.</li>
+    <li>Write your prediction for Sum and Carry before wiring.</li>
+    <li>Choose <strong>Create circuit</strong>. SystemStudio never overwrites an existing file; if a name exists, it creates a numbered sibling.</li>
+    <li>In upstream Digital, place components, wire them, and test all four input combinations.</li>
+    <li>Save the <code>.dig</code> file, then use <strong>Run Digital Circuit Tests</strong> or the assignment public preflight when one is provided.</li>
+    <li>Explain expected versus observed evidence in your own words. A local pass is formative evidence, not an instructor grade or Canvas submission.</li>
+  </ol>
+
+  <h2>4. First assembly lab</h2>
+  <ol>
+    <li>Run <strong>CIS 310: Create NASM Assembly Workspace</strong>.</li>
+    <li>Open <code>RegisterArithmetic.asm</code> and predict the register values.</li>
+    <li>Run <strong>CIS 310: Open Actual NASM Debug Workbench</strong>.</li>
+    <li>Build/run, stop at an inspection label, then compare EAX–EDI, EFLAGS, stack, memory, Intel disassembly, program output, and exit status.</li>
+    <li>Files named <code>*.test.asm</code> appear in VS Code’s Testing view and pass only when the assembled ELF32 program returns exit code 0.</li>
+  </ol>
+  <p class="boundary"><strong>Tool boundary:</strong> the optional Instruction Trace Tutor is a conceptual visualization. It does not assemble code, create machine-code evidence, or replace the NASM/GDB workbench.</p>
+
+  <h2>5. Before submitting</h2>
+  <ul class="checklist">
+    <li>Review the current Canvas assignment and rubric.</li>
+    <li>Run the smallest relevant unit test, then the published public preflight.</li>
+    <li>Add your own boundary and failure cases; public checks are not hidden grading tests.</li>
+    <li>Open the saved artifact again and verify it is the intended version.</li>
+    <li>Submit in Canvas and verify the Canvas submission receipt.</li>
+  </ul>
+
+  <h2>6. Getting help</h2>
+  <p>Open <strong>Local FAQ Chat</strong> for course/tool routing. When reporting a tool problem, include your operating system, the first failing step, what you expected, what happened, and the expandable technical detail. Use the AI learning coach only after an attempt and ask for one hint or diagnostic question; do not ask it to produce graded work.</p>
+</main>
+</body>
+</html>
