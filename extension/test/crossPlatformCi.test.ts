@@ -4,6 +4,9 @@ import { readFileSync } from 'node:fs';
 import * as path from 'node:path';
 
 const workflow = readFileSync(path.resolve('..', '.github', 'workflows', 'cross-platform-integration.yml'), 'utf8');
+const integrationRunner = readFileSync(path.resolve('scripts', 'run-vscode-integration.mjs'), 'utf8');
+const gitAttributes = readFileSync(path.resolve('..', '.gitattributes'), 'utf8');
+const containerSmoke = readFileSync(path.resolve('scripts', 'smoke-containers.mjs'), 'utf8');
 
 describe('cross-platform GitHub integration workflow', () => {
   it('runs a real VS Code Extension Host and VSIX audit on three operating systems', () => {
@@ -21,5 +24,17 @@ describe('cross-platform GitHub integration workflow', () => {
     assert.match(workflow, /npm run smoke:containers/);
     assert.match(workflow, /required-summary:/);
     assert.doesNotMatch(workflow, /continue-on-error:\s*true/);
+  });
+
+  it('uses a short macOS temporary path so VS Code IPC sockets fit the OS limit', () => {
+    assert.match(integrationRunner, /process\.platform === 'darwin' \? '\/tmp'/);
+    assert.match(integrationRunner, /c310-vscode-/);
+  });
+
+  it('keeps resource hashes stable on Windows and bounds every RFB connection attempt', () => {
+    assert.match(gitAttributes, /\* text=auto eol=lf/);
+    assert.match(gitAttributes, /\*\.pdf binary/);
+    assert.match(containerSmoke, /connection closed before RFB greeting/);
+    assert.match(containerSmoke, /clearTimeout\(timer\)/);
   });
 });

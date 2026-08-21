@@ -60,10 +60,19 @@ async function waitForRfb(port, timeoutMs) {
     try {
       return await new Promise((resolve, reject) => {
         const socket = createConnection({ host: '127.0.0.1', port });
-        socket.setTimeout(2_000);
-        socket.once('data', (chunk) => { socket.destroy(); resolve(chunk.toString('ascii')); });
-        socket.once('timeout', () => { socket.destroy(); reject(new Error('timeout')); });
-        socket.once('error', reject);
+        let settled = false;
+        const finish = (callback) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          socket.destroy();
+          callback();
+        };
+        const timer = setTimeout(() => finish(() => reject(new Error('timeout'))), 2_000);
+        socket.once('data', (chunk) => finish(() => resolve(chunk.toString('ascii'))));
+        socket.once('end', () => finish(() => reject(new Error('connection ended before RFB greeting'))));
+        socket.once('close', () => finish(() => reject(new Error('connection closed before RFB greeting'))));
+        socket.once('error', (error) => finish(() => reject(error)));
       });
     } catch {
       await new Promise((resolve) => setTimeout(resolve, 250));

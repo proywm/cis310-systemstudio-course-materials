@@ -6,7 +6,11 @@ import { runTests } from '@vscode/test-electron';
 
 const extensionDevelopmentPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const extensionTestsPath = path.join(extensionDevelopmentPath, 'test', 'integration', 'suite.cjs');
-const temporaryRoot = await mkdtemp(path.join(tmpdir(), 'systemstudio-cis310-vscode-'));
+// macOS limits Unix-domain socket paths to roughly 104 bytes. The hosted
+// runner's os.tmpdir() lives under a long /var/folders/... path, and VS Code
+// appends its own IPC filename. Use the conventional short /tmp alias there.
+const integrationTempBase = process.platform === 'darwin' ? '/tmp' : tmpdir();
+const temporaryRoot = await mkdtemp(path.join(integrationTempBase, 'c310-vscode-'));
 const workspace = path.join(temporaryRoot, 'workspace');
 const userData = path.join(temporaryRoot, 'user-data');
 const extensions = path.join(temporaryRoot, 'extensions');

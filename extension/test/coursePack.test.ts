@@ -153,7 +153,10 @@ describe('course-material manifest', () => {
     for (const resource of manifest.resources) {
       assert.ok(resource.localPath && resource.sha256);
       const digest = await sha256File(resolveCoursePackPath(packRoot, resource.localPath));
-      assert.ok(equalsSha256(digest, resource.sha256));
+      assert.ok(
+        equalsSha256(digest, resource.sha256),
+        `${resource.localPath}: expected ${resource.sha256}, received ${digest}`
+      );
       if (resource.kind === 'presentation') {
         assert.equal(path.extname(resource.localPath).toLowerCase(), '.pdf');
       } else if (resource.kind === 'syllabus') {
