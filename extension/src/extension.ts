@@ -4,7 +4,13 @@ import * as vscode from 'vscode';
 import { AssemblyLabPanel } from './assemblyLabPanel';
 import { AssemblyManager } from './assemblyManager';
 import { CircuitPreviewProvider } from './circuitPreview';
-import { CopilotCoachPanel } from './copilotCoachPanel';
+import {
+  AI_ASSISTANCE_ONBOARDING_VERSION,
+  aiAssistanceLabel,
+  aiAssistanceState,
+  normalizeAiAssistanceState,
+  type AiAssistancePreference
+} from './core/aiOnboarding';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
 import { classifyTutorDestination } from './core/aiCoach';
 import { prepareSaveParent } from './core/circuitSave';
@@ -48,6 +54,9 @@ const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/')
 const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 const EMBEDDED_CONTAINER_PLATFORM = process.platform === 'win32' || process.platform === 'darwin';
 const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Choose Learning Coach';
+const AI_ASSISTANCE_STATE_KEY = 'aiAssistance.state';
+const FIRST_RUN_SETUP_KEY = 'orbitSetupOnboarding.version';
+const UM_GPT_URL = 'https://umgpt.umich.edu/';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -302,8 +311,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await nasmTests.refresh();
       UnitTestCenterPanel.show();
     }),
-    vscode.commands.registerCommand('systemstudioCis310.openCopilotCoach', async (starterPrompt?: unknown) => {
-      await CopilotCoachPanel.show(typeof starterPrompt === 'string' ? starterPrompt : undefined);
+    vscode.commands.registerCommand('systemstudioCis310.configureAiAssistance', async () => {
+      await configureAiAssistance(context, true);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openAiTutor', async (launchContext?: unknown) => {
       const starterPrompt = contextualTutorPrompt(launchContext);
@@ -313,7 +322,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         {
           modal: true,
           detail: starterPrompt
-            ? `For Maizey, the source-bounded prompt is copied to the clipboard; for the optional Copilot coach, it is placed in the local prompt box for review before sending. ${AI_TUTOR_PREFLIGHT.detail}`
+            ? `For Maizey or U-M GPT, the source-bounded prompt is copied to the clipboard for review before sending. ${AI_TUTOR_PREFLIGHT.detail}`
             : AI_TUTOR_PREFLIGHT.detail
         },
         openLabel,
@@ -324,32 +333,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         return;
       }
       if (decision !== openLabel) return;
-      const provider = await vscode.window.showQuickPick([
-        {
-          label: '$(mortar-board) U-M Maizey in Canvas (Recommended)',
-          description: 'course-grounded after the instructor publishes and indexes the tutor',
-          provider: 'maizey' as const
-        },
-        {
-          label: '$(github) GitHub Copilot in VS Code',
-          description: 'optional fallback using the student’s signed-in VS Code account',
-          provider: 'copilot' as const
-        },
-        {
-          label: '$(info) How the two choices differ',
-          description: 'Maizey uses indexed course sources; Copilot receives only what the student types',
-          provider: 'explain' as const
-        }
-      ], { placeHolder: 'Choose the learning coach for this question' });
+      const provider = await chooseQuestionProvider(context);
       if (!provider) return;
-      if (provider.provider === 'explain') {
+      if (provider === 'explain') {
         await vscode.window.showInformationMessage(
-          'Maizey is the preferred course-grounded tutor after its student App is published and its Canvas sources are indexed. The optional Copilot coach uses a model available to the student’s VS Code account, sends only the typed prompt, and has no automatic access to Canvas, grades, files, or private course data.'
+          'Maizey is the preferred course-grounded tutor after its Canvas integration is enabled and visible sources are indexed. U-M GPT is the no-cost U-M general assistant for broader troubleshooting. The private offline Orbit helper remains available without an AI service. None receives grades, private files, or Canvas records automatically.'
         );
         return;
       }
-      if (provider.provider === 'copilot') {
-        await CopilotCoachPanel.show(starterPrompt);
+      if (provider === 'offline') {
+        await StudentHelperPanel.show(context, starterPrompt);
+        return;
+      }
+      if (provider === 'umgpt') {
+        if (starterPrompt) await vscode.env.clipboard.writeText(starterPrompt);
+        await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
+        if (starterPrompt) {
+          await vscode.window.showInformationMessage('The reviewed course prompt is on your clipboard. Paste it into U-M GPT, include your attempt, and ask for one hint at a time.');
+        }
         return;
       }
       if (starterPrompt) await vscode.env.clipboard.writeText(starterPrompt);
@@ -861,8 +862,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   void (async () => {
     await updateStatus();
-    const tutorialPromptHandled = await TutorialPanel.promptOnFirstRun(context);
-    if (!tutorialPromptHandled) {
+    const setupOnboardingHandled = await promptForOrbitSetupOnFirstRun(context);
+    if (!setupOnboardingHandled) {
+      const tutorialPromptHandled = await TutorialPanel.promptOnFirstRun(context);
+      if (tutorialPromptHandled) return;
       await maybePromptForInstall(context, manager, setupDigital);
     }
   })();
@@ -1051,6 +1054,174 @@ function requireTrustedWorkspace(): boolean {
   }
   void vscode.window.showErrorMessage('Trust this workspace before launching Digital or running circuit files.');
   return false;
+}
+
+type QuestionProvider = AiAssistancePreference | 'explain';
+
+async function chooseQuestionProvider(context: vscode.ExtensionContext): Promise<QuestionProvider | undefined> {
+  const saved = normalizeAiAssistanceState(context.globalState.get(AI_ASSISTANCE_STATE_KEY));
+  if (saved) {
+    const selected = await vscode.window.showQuickPick([
+      {
+        label: `$(sparkle) Use ${aiAssistanceLabel(saved.preference)}`,
+        description: 'saved during first-run setup; change it at any time',
+        provider: saved.preference as QuestionProvider
+      },
+      {
+        label: '$(settings-gear) Choose or check a different helper',
+        description: 'verify Maizey, U-M GPT, or private offline support',
+        provider: 'configure' as const
+      },
+      {
+        label: '$(info) Compare the choices',
+        description: 'course grounding, general troubleshooting, availability, and privacy',
+        provider: 'explain' as const
+      }
+    ], { placeHolder: 'Use the saved Orbit assistance route or choose another' });
+    if (!selected) return undefined;
+    if (selected.provider === 'configure') return configureAiAssistance(context, false);
+    return selected.provider;
+  }
+  return configureAiAssistance(context, false);
+}
+
+async function configureAiAssistance(
+  context: vscode.ExtensionContext,
+  offerTest: boolean
+): Promise<AiAssistancePreference | 'explain' | undefined> {
+  const selection = await vscode.window.showQuickPick([
+    {
+      label: '$(mortar-board) U-M Maizey in Canvas (Recommended for course questions)',
+      description: 'U-M sign-in · indexed visible Canvas sources · setup guidance after indexing',
+      preference: 'maizey' as const
+    },
+    {
+      label: '$(comment-discussion) U-M GPT (General U-M assistant)',
+      description: 'no-cost U-M access · broad troubleshooting · not automatically course-grounded',
+      preference: 'umgpt' as const
+    },
+    {
+      label: '$(shield) Private offline Orbit helper',
+      description: 'always available · deterministic FAQ and setup routing · no AI service',
+      preference: 'offline' as const
+    },
+    {
+      label: '$(info) Compare before choosing',
+      description: 'Maizey for course grounding; U-M GPT for broad help; offline for no-network support',
+      preference: 'explain' as const
+    }
+  ], { placeHolder: 'Choose the assistance Orbit should use during setup and learning' });
+  if (!selection) return undefined;
+  if (selection.preference === 'explain') return 'explain';
+
+  if (selection.preference === 'offline') {
+    await context.globalState.update(
+      AI_ASSISTANCE_STATE_KEY,
+      aiAssistanceState('offline', 'local-ready')
+    );
+    await vscode.window.showInformationMessage('Private offline Orbit support is ready. It can route setup errors and course questions without sending data to an AI service.');
+    return 'offline';
+  }
+
+  if (selection.preference === 'umgpt') {
+    await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
+    const confirmation = await vscode.window.showInformationMessage(
+      'After signing in with your U-M uniqname and MFA, can you open U-M GPT? Orbit cannot inspect your browser session, so only you can confirm access.',
+      { modal: true },
+      'Yes, U-M GPT opens',
+      'Use offline Orbit'
+    );
+    if (confirmation === 'Yes, U-M GPT opens') {
+      await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('umgpt', 'student-confirmed'));
+      if (offerTest) {
+        const testPrompt = 'I am checking my CIS 310 learning-coach setup. Ask me one short, ungraded binary-conversion question and wait for my attempt before giving feedback.';
+        await vscode.env.clipboard.writeText(testPrompt);
+        await vscode.window.showInformationMessage('U-M GPT is selected. A reviewed test prompt is on your clipboard; nothing was sent automatically.');
+      }
+      return 'umgpt';
+    }
+    if (confirmation === 'Use offline Orbit') {
+      await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('offline', 'local-ready'));
+      return 'offline';
+    }
+    return undefined;
+  }
+
+  const configured = vscode.workspace.getConfiguration('systemstudioCis310')
+    .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
+  const destination = classifyTutorDestination(configured);
+  if (destination.kind === 'maizey-management' || destination.kind === 'invalid') {
+    await vscode.window.showWarningMessage(
+      'The configured Maizey destination is not a student tutor. Use the Fall 2026 Canvas course or configure a published student-facing App—not a project overview, settings, data-source, or billing page.'
+    );
+    return undefined;
+  }
+  const target = destination.kind === 'maizey-app' ? destination.url : DEFAULT_CANVAS_COURSE;
+  await vscode.env.openExternal(vscode.Uri.parse(target));
+  const confirmation = await vscode.window.showInformationMessage(
+    'After U-M sign-in, can you open the CIS 310 Maizey tutor from the Canvas course navigation or this published App? The extension cannot inspect your browser session, so only you can confirm access.',
+    { modal: true },
+    'Yes, Maizey opens',
+    'Use U-M GPT instead',
+    'Use offline Orbit'
+  );
+  if (confirmation === 'Yes, Maizey opens') {
+    await context.globalState.update(
+      AI_ASSISTANCE_STATE_KEY,
+      aiAssistanceState('maizey', 'student-confirmed')
+    );
+    await vscode.window.showInformationMessage('U-M Maizey is selected as Orbit’s course and installation coach. Setup diagnostics are copied for your review; no files, credentials, grades, or unrestricted logs are sent automatically.');
+    return 'maizey';
+  }
+  if (confirmation === 'Use U-M GPT instead') {
+    await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
+    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('umgpt', 'student-confirmed'));
+    return 'umgpt';
+  }
+  if (confirmation === 'Use offline Orbit') {
+    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('offline', 'local-ready'));
+    return 'offline';
+  }
+  return undefined;
+}
+
+async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): Promise<boolean> {
+  if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
+  if (context.globalState.get<number>(FIRST_RUN_SETUP_KEY) === AI_ASSISTANCE_ONBOARDING_VERSION) return false;
+  await context.globalState.update(FIRST_RUN_SETUP_KEY, AI_ASSISTANCE_ONBOARDING_VERSION);
+  const action = await vscode.window.showInformationMessage(
+    'Welcome to CIS 310. Orbit will first help you choose a private support route, verify it when possible, and then guide the course-environment setup. AI is optional and never blocks course access.',
+    { modal: true },
+    'Begin assisted setup',
+    'Use offline support',
+    'Not now'
+  );
+  if (action === 'Not now' || !action) return true;
+  let preference: AiAssistancePreference | 'explain' | undefined;
+  if (action === 'Use offline support') {
+    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('offline', 'local-ready'));
+    preference = 'offline';
+  } else {
+    preference = await configureAiAssistance(context, true);
+    if (preference === 'explain') {
+      await vscode.window.showInformationMessage('Use Maizey for indexed course and setup guidance, U-M GPT for broader troubleshooting, or offline Orbit when you prefer no network service. You can change this choice later.');
+      preference = await configureAiAssistance(context, true);
+    }
+  }
+  const saved = normalizeAiAssistanceState(context.globalState.get(AI_ASSISTANCE_STATE_KEY));
+  const next = await vscode.window.showInformationMessage(
+    `${saved ? aiAssistanceLabel(saved.preference) : 'Orbit offline guidance'} is available. Next, let Orbit run the verified Digital and NASM environment setup; if it stops, the selected helper will receive only the short diagnostic you review.`,
+    { modal: true },
+    'Set up course environment',
+    'Open guided tutorial',
+    'Continue later'
+  );
+  if (next === 'Set up course environment') {
+    await vscode.commands.executeCommand('systemstudioCis310.setupCourseEnvironment');
+  } else if (next === 'Open guided tutorial') {
+    await TutorialPanel.show(context, true);
+  }
+  return true;
 }
 
 async function maybePromptForInstall(

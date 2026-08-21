@@ -155,7 +155,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Choose the right learning coach for the question',
       paragraphs: [
         'An AI tutor is a conversational learning coach that uses course sources to diagnose uncertainty, offer a small hint or explanation, ask a check-for-understanding question, and connect the student back to evidence. It is not simply an answer-generating chatbot.',
-        'For CIS 310, U-M Maizey in Canvas is preferred after the instructor indexes visible course sources and publishes a student App. The optional GitHub Copilot coach instead uses a model available to the student’s signed-in VS Code account and receives only what the student types—no automatic Canvas, grade, or file access. Neither uses the instructor’s personal LLM key. AI can still be wrong: verify technical claims against the mapped course source.'
+        'For CIS 310, U-M Maizey in Canvas is preferred after the instructor indexes visible course sources and publishes a student App. U-M GPT is the university-supported general assistant for broader troubleshooting. Both use student U-M access and receive only what the student deliberately submits—no automatic grade or local-file access. No instructor LLM key or private instructor-hosted model is used. AI can still be wrong: verify technical claims against the mapped course source.'
       ],
       checklist: [
         'Attempt the question first; state your prediction and the exact step that is unclear.',
@@ -164,7 +164,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
         'For a graded task, use the tutor to learn the method—not to produce a submission.'
       ],
       actions: [
-        { id: 'open-ai-tutor', label: 'Choose Maizey or GitHub Copilot' },
+        { id: 'open-ai-tutor', label: 'Choose Maizey, U-M GPT, or offline Orbit' },
         { id: 'ask-before-class', label: 'Ask the instructor before class' }
       ]
     };

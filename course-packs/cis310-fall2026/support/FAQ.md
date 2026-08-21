@@ -60,23 +60,29 @@ The unconnected element may be inside a nested subcircuit. Check every flip-flop
 
 ## I am stuck partway through a homework question.
 
-Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, the published U-M Maizey App for one course-grounded hint, the optional GitHub Copilot coach for a student-typed general prompt, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
+Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, the published U-M Maizey App for one course-grounded hint, U-M GPT for a student-typed general troubleshooting prompt, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
 
 ## What is the AI tutor?
 
 U-M Maizey is the preferred course-grounded conversational tutor after the instructor indexes visible Canvas sources and publishes a student-facing App. Ask it to diagnose your uncertainty, give one hint, explain a related example, or check your reasoning. It may be wrong. Open and verify the source it cites, and do not use it to generate a graded submission. A Maizey Project `detail/overview` page is an instructor-management page, not the student chat.
 
-SystemStudio also offers an optional GitHub Copilot coach through VS Code. It uses a model available to the student's own signed-in account, receives only the text the student submits, and has no automatic Canvas, grade, or file access. It is not course-grounded unless the relevant allowed source is included in the prompt, so Maizey remains preferred when available.
+SystemStudio also links to U-M GPT, the university-supported general assistant available to active students. It receives only what the student deliberately submits and has no automatic Canvas, grade, or local-file access. It is not course-grounded unless the relevant allowed source is included in the prompt, so Maizey remains preferred when available.
+
+## Can Maizey help install or repair the course tools?
+
+Yes, after the instructor enables the CIS 310 Canvas Maizey integration and indexes the current SystemStudio setup guide and FAQ. Orbit can copy a short sanitized diagnostic for the student to review, and Maizey can explain what it means, distinguish a host requirement from a course-container dependency, recommend one documented next step, and describe what successful verification should show.
+
+Maizey cannot inspect or control the laptop, install software, start Docker Desktop, authorize administrator or virtualization changes, run commands, or confirm that setup succeeded. Those actions and checks remain local in SystemStudio. Never paste passwords, Duo codes, tokens, private files, grades, unrestricted logs, or another student's work.
 
 ## Can I paste a SystemStudio practice question into the AI tutor?
 
 You may use the tutor to learn from an ungraded preparation, practice, or tutorial question, but answer first. State your choice and one reason, then request a hint or feedback. Asking the tutor for the answer before attempting the question defeats the retrieval activity even when it is not an academic-integrity violation. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule. The tutor should not generate a final answer, finished circuit, complete program, report, or submission-ready artifact.
 
-SystemStudio shows a learning-coach checkpoint before either AI route and blocks obvious direct-solution requests before its optional Copilot panel sends a prompt. It cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
+SystemStudio shows a learning-coach checkpoint before either U-M AI route and does not send a prompt automatically. It cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
 
 ## Does the extension use the instructor's private AI account or API key?
 
-No. Maizey uses each student's U-M authentication. The optional Copilot coach uses a model available to the student's signed-in VS Code account. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token or faculty LLM key and does not attach student files automatically.
+No. Maizey and U-M GPT use each student's U-M authentication. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token, faculty LLM key, or private instructor-hosted model endpoint and does not attach student files automatically.
 
 ## Can I ask something anonymously before class?
 

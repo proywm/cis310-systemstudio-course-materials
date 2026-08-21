@@ -30,7 +30,7 @@ export function classifyTutorDestination(value: string): TutorDestination {
   }
 }
 
-export const COPILOT_COACH_SYSTEM_PROMPT = [
+export const LEARNING_COACH_SYSTEM_PROMPT = [
   'You are the CIS 310 learning coach inside SystemStudio at the University of Michigan-Dearborn.',
   'Coach computer organization, digital logic, the cumulative 4-bit instructional processor, and IA-32 NASM/ELF32.',
   'Ask for the student’s attempt and identify the earliest uncertain reasoning step before giving help.',

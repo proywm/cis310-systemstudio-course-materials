@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.25.0
+
+- Added a first-run Orbit workflow that establishes optional student assistance before running the verified Digital and NASM environment setup.
+- Made the published U-M Maizey App the recommended course-grounded learning and installation coach, with bounded setup instructions, one-step recovery, verification evidence, privacy limits, and assessed-work guardrails.
+- Added no-cost U-M GPT as the university-supported general troubleshooting fallback and retained private offline Orbit; removed GitHub Copilot from student setup and learning paths.
+- Kept every U-M AI handoff student-reviewed: SystemStudio copies a bounded prompt but never sends files, grades, Canvas records, credentials, full logs, or an instructor-owned key/model endpoint.
+
 ## 0.24.0
 
 - Replaced dense learning pages with remembered, wrapping, keyboard-operable tabs for lesson concepts/examples/practice/sources and dashboard next-work/practice/module/progress views.

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   classifyTutorDestination,
-  COPILOT_COACH_SYSTEM_PROMPT,
+  LEARNING_COACH_SYSTEM_PROMPT,
   prepareCoachRequest
 } from '../src/core/aiCoach';
 
@@ -18,7 +18,7 @@ describe('AI coach routing and prompt boundaries', () => {
     assert.equal(classifyTutorDestination('https://evil.example/apps/cis310-chat').kind, 'invalid');
   });
 
-  it('blocks direct deliverables before an optional Copilot request', () => {
+  it('blocks direct deliverables before an optional external tutor request', () => {
     const blocked = prepareCoachRequest('Write my complete assembly assignment code');
     assert.equal(blocked.allowed, false);
     assert.match(blocked.allowed ? '' : blocked.explanation, /will not produce/);
@@ -28,9 +28,9 @@ describe('AI coach routing and prompt boundaries', () => {
   });
 
   it('keeps the instructional processor and NASM environments distinct', () => {
-    assert.match(COPILOT_COACH_SYSTEM_PROMPT, /4-bit instructional processor/);
-    assert.match(COPILOT_COACH_SYSTEM_PROMPT, /32-bit IA-32 NASM/);
-    assert.match(COPILOT_COACH_SYSTEM_PROMPT, /Never provide a finished graded answer/);
-    assert.match(COPILOT_COACH_SYSTEM_PROMPT, /Do not claim access to Canvas/);
+    assert.match(LEARNING_COACH_SYSTEM_PROMPT, /4-bit instructional processor/);
+    assert.match(LEARNING_COACH_SYSTEM_PROMPT, /32-bit IA-32 NASM/);
+    assert.match(LEARNING_COACH_SYSTEM_PROMPT, /Never provide a finished graded answer/);
+    assert.match(LEARNING_COACH_SYSTEM_PROMPT, /Do not claim access to Canvas/);
   });
 });

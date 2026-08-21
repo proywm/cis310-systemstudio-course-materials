@@ -443,11 +443,11 @@ function tutorialStepsHtml(): string {
   </div></section>
   <section class="step" data-step="7" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Choose the right kind of conversation</h2>
-    <p>The chat bubble separates a private local FAQ, the preferred course-grounded U-M Maizey App, the optional GitHub Copilot coach, and a Canvas question for the instructor.</p>
+    <p>The chat bubble separates a private local FAQ, the preferred course-grounded U-M Maizey App, the U-M GPT general assistant, and a Canvas question for the instructor.</p>
     <div class="instruction"><strong>Explore the support path that fits today:</strong> you do not need to open every service.</div>
     <div class="choices">
       ${choice('faq', 'Local FAQ chat', 'Use recurring setup, navigation, Digital, assembly, or submission-process checklists without calling an AI service.')}
-      ${choice('tutor', 'AI learning coach choice', 'Prefer the indexed U-M Maizey App for course grounding. The optional Copilot fallback receives only what you type through your signed-in VS Code account. Attempt first and request a hint—not a deliverable.')}
+      ${choice('tutor', 'AI learning coach choice', 'Prefer the indexed U-M Maizey App for course grounding. Use U-M GPT for broader troubleshooting. Both receive only what you deliberately submit through your U-M account. Attempt first and request a hint—not a deliverable.')}
       ${choice('before', 'Questions Before Class', 'Send a complex concept or unclear decision point early so the instructor can adapt the next lecture.')}
       ${choice('anonymous', 'Canvas controls anonymity', 'Choose anonymous only when the Canvas discussion displays that option; SystemStudio cannot promise anonymity.')}
       ${choice('evidence', 'Make the question answerable', 'Include expected, observed, exact evidence, and what you already tried—never credentials, private grades, or another student’s work.')}
