@@ -635,7 +635,7 @@
     "prepare:smoke:digital": "node scripts/prepare-digital-smoke.mjs",
     "smoke:containers": "node scripts/smoke-containers.mjs",
     "audit:vsix": "node scripts/audit-vsix.mjs",
-    "check": "npm run export:canvas && npm run stage-course-pack && npm run typecheck && npm test && npm run compile",
+    "check": "npm run export:canvas && npm run stage-course-pack && npm run typecheck && npm run compile && npm test",
     "package": "npm run check && vsce package --out systemstudio-cis310.vsix",
     "vscode:prepublish": "npm run compile"
   },
