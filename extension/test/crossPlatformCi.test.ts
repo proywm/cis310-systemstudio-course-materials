@@ -16,6 +16,8 @@ describe('cross-platform GitHub integration workflow', () => {
     assert.match(workflow, /npm run test:integration:vscode/);
     assert.match(workflow, /npm run package && npm run audit:vsix/);
     assert.match(workflow, /VSCODE_TEST_VERSION: 1\.100\.0/);
+    assert.match(workflow, /actions\/upload-artifact@v6/);
+    assert.doesNotMatch(workflow, /actions\/upload-artifact@v4/);
   });
 
   it('keeps actual Digital, NASM/GDB, and container execution required', () => {

@@ -75,7 +75,7 @@ jobs:
         run: npm audit --omit=dev
 
       - name: Upload this operating system's VSIX
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: systemstudio-cis310-${{ matrix.artifact }}
           path: extension/systemstudio-cis310.vsix
@@ -146,7 +146,7 @@ jobs:
           --firefox "${{ steps.browser.outputs.path }}"
           --screenshot "$RUNNER_TEMP/systemstudio-full-digital.png"
       - name: Upload actual Digital transport evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cis310-full-digital-linux-smoke
           path: ${{ runner.temp }}/systemstudio-full-digital.png
