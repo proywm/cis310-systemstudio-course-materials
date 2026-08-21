@@ -48,7 +48,7 @@ The implementation follows the instructor-supplied UM-Dearborn digital-accessibi
 
 ## Assessment structure
 
-- Each module has **eight** questions. Five distinct attempts form the readiness checkpoint; completing all eight provides the broader confidence set.
+- Each module has **eight** questions. Five distinct attempts complete the preparation checkpoint; completing all eight provides broader practice. These counts do not certify readiness or mastery.
 - The selected-response bank spans **Remember, Understand, Apply, Analyze, and Evaluate**. **Create** is assessed through guided circuit construction and assembly-state work because selecting an option is not credible evidence of creating an artifact.
 - Answer positions are deterministically balanced across the 104-item bank (26 in each position) to remove an authoring-order cue.
 - Every response reveals the correct answer, an explanation and justification, a concise takeaway, mapped source buttons, and lecture-slide locators where available.

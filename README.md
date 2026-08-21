@@ -15,10 +15,12 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Extension installation and commands | [SystemStudio extension guide](extension/README.md) |
 | Setup, first circuit/assembly tasks, and Docker message explanation | [Packaged setup and first-task guide](extension/GETTING_STARTED.html) |
 | Windows/macOS/Linux automated integration coverage and limits | [Cross-platform integration verification](docs/CROSS_PLATFORM_INTEGRATION.md) |
-| Verified reading/video support for every readiness and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
+| Verified reading/video support for every preparation and practice item | [Content alignment audit](extension/CONTENT_ALIGNMENT_AUDIT.md) |
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | Independent validation of the public circuit preflights | [Circuit-preflight validation](docs/CIRCUIT_PREFLIGHT_VALIDATION.md) |
 | AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
+| Six-persona usability/readability/TMI evaluation and iteration results | [Iterative usability evaluation](docs/USABILITY_EVALUATION.md) |
+| Implementation-confidence versus learner-evidence gates | [Feature confidence scorecard](docs/FEATURE_CONFIDENCE_SCORECARD.md) |
 | Professional learning-platform feature and release-boundary audit | [Professional learning-experience audit](docs/PROFESSIONAL_LEARNING_PLATFORM_AUDIT.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
 
@@ -43,9 +45,9 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 ## What students receive
 
 - a locally packaged accessible Fall 2026 HTML syllabus, with an optional print PDF carrying the same content;
-- an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their accessible HTML lecture, reading, video, optional visual archive, readiness-practice, and guided-lab links;
+- an expanded, sequential **Course Modules** sidebar showing all 13 modules, their local progress, and their accessible HTML lecture, reading, video, optional visual archive, preparation-practice, and guided-lab links;
 - 13 primary responsive HTML lectures, grounded in verified source material, with novice explanations, examples, self-checks, and bounded tutor prompts;
-- a self-paced Accessible lesson → Read → Watch → Practice → Build/debug path for every module, with five distinct questions for readiness, eight for the full confidence set, mapped explanations, and required hands-on work where appropriate;
+- a self-paced Accessible lesson → Read → Watch → Practice → Build/debug path for every module, with a five-attempt preparation checkpoint, all eight questions for broader practice, mapped explanations, and required hands-on work where appropriate; these counts do not certify readiness or mastery;
 - 13 integrity-checked legacy presentation PDFs retained as optional visual archives;
 - three homework references, three cumulative 4-bit processor-project milestones, a final-presentation planning reference, and public executable circuit-preflight contracts;
 - 104 short, evidence-mapped practice questions—exactly eight for each of the 13 presentation resources—with Bloom-level labels and full explanation/justification;

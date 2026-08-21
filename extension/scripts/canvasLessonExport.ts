@@ -90,7 +90,7 @@ ${example.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('\n')}
 <ol>
 ${lesson.selfChecks.map((question) => `<li>${escapeHtml(question)}</li>`).join('\n')}
 </ol>
-<p>Then complete the module’s five-question readiness checkpoint and continue through all eight questions for the confidence set.</p>
+<p>Then complete the module’s five-question preparation checkpoint and continue through all eight questions for broader practice. The attempt threshold is not a readiness or mastery claim.</p>
 ${labSection}
 
 <h2>Ask the approved U-M course tutor</h2>

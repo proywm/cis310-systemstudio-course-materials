@@ -165,6 +165,10 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     ol, ul { padding-left: 1.4rem; }
     li + li { margin-top: .45rem; }
     .actions, nav { display: flex; flex-wrap: wrap; gap: .65rem; margin-block: 1rem; }
+    .lesson-tabs { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0; padding: .45rem; border: .0625rem solid var(--vscode-panel-border); border-radius: .45rem; background: var(--vscode-editor-background); }
+    .lesson-tabs button { flex: 1 1 9rem; text-align: center; color: var(--vscode-foreground); background: transparent; border-color: transparent; }
+    .lesson-tabs button[aria-selected="true"] { color: var(--vscode-button-foreground); background: var(--vscode-button-background); }
+    .lesson-panel[hidden] { display: none; }
     button { min-height: 2.75rem; max-width: 100%; padding: .55rem .85rem; border: .0625rem solid var(--vscode-button-border, transparent); border-radius: .25rem; color: var(--vscode-button-foreground); background: var(--vscode-button-background); font: inherit; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
     button:hover { background: var(--vscode-button-hoverBackground); }
     button.secondary { color: var(--vscode-secondaryButton-foreground); background: var(--vscode-secondaryButton-background); }
@@ -172,7 +176,7 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     a:focus-visible, button:focus-visible, summary:focus-visible, main:focus-visible { outline: .2rem solid var(--vscode-focusBorder); outline-offset: .2rem; }
     .source-note { color: var(--vscode-descriptionForeground); }
     code { padding: .08rem .25rem; border-radius: .2rem; font-family: var(--vscode-editor-font-family); background: var(--vscode-textCodeBlock-background); }
-    @media (max-width: 34rem) { header, main, footer { width: min(100% - 1rem, 78ch); } button { width: 100%; } }
+    @media (max-width: 34rem) { header, main, footer { width: min(100% - 1rem, 78ch); } button { width: 100%; } .lesson-tabs { position: static; } }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     @media (forced-colors: active) { .notice, .example, .tutor, .sources, button { border: .125rem solid ButtonText; } }
   </style>
@@ -194,6 +198,14 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
       <span>${escapeHtml(lesson.scopeBoundary)}</span>
     </aside>
 
+    <div class="lesson-tabs" role="tablist" aria-label="Lesson sections">
+      <button id="lesson-tab-concepts" type="button" role="tab" aria-selected="true" aria-controls="lesson-panel-concepts" data-lesson-tab="concepts">Concepts</button>
+      <button id="lesson-tab-examples" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel-examples" data-lesson-tab="examples" tabindex="-1">Worked examples</button>
+      <button id="lesson-tab-practice" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel-practice" data-lesson-tab="practice" tabindex="-1">Practice &amp; hands-on</button>
+      <button id="lesson-tab-sources" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel-sources" data-lesson-tab="sources" tabindex="-1">Sources &amp; coach</button>
+    </div>
+
+    <section id="lesson-panel-concepts" class="lesson-panel" role="tabpanel" aria-labelledby="lesson-tab-concepts" data-lesson-panel="concepts">
     <section aria-labelledby="objectives-heading">
       <h2 id="objectives-heading">Learning objectives</h2>
       <p>After studying the lesson and attempting its examples, you should be able to:</p>
@@ -206,12 +218,14 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     </section>
 
     ${lesson.sections.map((section, index) => `<section aria-labelledby="concept-${index}"><h2 id="concept-${index}">${escapeHtml(section.heading)}</h2>${section.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('')}${section.points ? `<ul>${section.points.map((point) => `<li>${escapeHtml(point)}</li>`).join('')}</ul>` : ''}</section>`).join('')}
+    </section>
 
-    <section aria-labelledby="examples-heading">
+    <section id="lesson-panel-examples" class="lesson-panel" role="tabpanel" aria-labelledby="lesson-tab-examples" data-lesson-panel="examples" hidden>
       <h2 id="examples-heading">Worked examples</h2>
       ${lesson.examples.map((example, index) => `<article class="example" aria-labelledby="example-${index}"><h3 id="example-${index}">${escapeHtml(example.title)}</h3><p>${escapeHtml(example.setup)}</p><ol>${example.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol><p><strong>Conclusion:</strong> ${escapeHtml(example.conclusion)}</p></article>`).join('')}
     </section>
 
+    <section id="lesson-panel-practice" class="lesson-panel" role="tabpanel" aria-labelledby="lesson-tab-practice" data-lesson-panel="practice" hidden>
     <section aria-labelledby="check-heading">
       <h2 id="check-heading">Check your understanding</h2>
       <p>Answer these in your own words before opening the practice set.</p>
@@ -220,7 +234,9 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     </section>
 
     ${labs.length > 0 ? `<section aria-labelledby="hands-on-heading"><h2 id="hands-on-heading">Apply it hands-on</h2><p>Use the guided activity after making your own prediction. Required and optional status is written in each button label and is not communicated by color alone.</p><div class="actions">${labButtons}</div></section>` : ''}
+    </section>
 
+    <section id="lesson-panel-sources" class="lesson-panel" role="tabpanel" aria-labelledby="lesson-tab-sources" data-lesson-panel="sources" hidden>
     <aside class="tutor" aria-labelledby="tutor-heading">
       <h2 id="tutor-heading">Ask a learning coach</h2>
       <p>Choose a source-bounded prompt, then select the preferred course-grounded U-M Maizey tutor or the optional GitHub Copilot coach in VS Code. The coach should ask for your attempt, use hints and analogous examples, and avoid producing graded work.</p>
@@ -236,10 +252,37 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
         ${sourceButtons}
       </div>
     </section>
+    </section>
   </main>
   <footer><p>Canvas remains authoritative for graded work, deadlines, and accommodations. If this lesson format presents a barrier, contact the instructor or the UM-Dearborn Digital Accessibility team.</p></footer>
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
+    const lessonId = ${JSON.stringify(lesson.resourceId)};
+    const savedState = vscode.getState() || {};
+    const tabButtons = [...document.querySelectorAll('[data-lesson-tab]')];
+    const tabPanels = [...document.querySelectorAll('[data-lesson-panel]')];
+    function activateLessonTab(id, moveFocus = false) {
+      if (!tabButtons.some((button) => button.dataset.lessonTab === id)) id = 'concepts';
+      tabButtons.forEach((button) => {
+        const selected = button.dataset.lessonTab === id;
+        button.setAttribute('aria-selected', String(selected));
+        button.tabIndex = selected ? 0 : -1;
+        if (selected && moveFocus) button.focus();
+      });
+      tabPanels.forEach((panel) => { panel.hidden = panel.dataset.lessonPanel !== id; });
+      vscode.setState({ ...savedState, lessonId, lessonTab: id });
+    }
+    tabButtons.forEach((button) => button.addEventListener('click', () => activateLessonTab(button.dataset.lessonTab)));
+    document.querySelector('.lesson-tabs').addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      const current = tabButtons.indexOf(document.activeElement);
+      if (current < 0) return;
+      event.preventDefault();
+      const index = event.key === 'Home' ? 0 : event.key === 'End' ? tabButtons.length - 1
+        : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabButtons.length) % tabButtons.length;
+      activateLessonTab(tabButtons[index].dataset.lessonTab, true);
+    });
+    activateLessonTab(savedState.lessonId === lessonId ? savedState.lessonTab : 'concepts');
     document.addEventListener('click', (event) => {
       const button = event.target.closest('button[data-request]');
       if (!button) return;

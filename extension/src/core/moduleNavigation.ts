@@ -91,8 +91,8 @@ export function buildCourseModuleNavigation(
       },
       {
         kind: 'practice',
-        label: `Practice the ${MODULE_CONFIDENCE_QUESTION_TARGET}-question confidence set`,
-        description: `${Math.min(module.practiceQuestionsAttempted, MODULE_CONFIDENCE_QUESTION_TARGET)}/${MODULE_CONFIDENCE_QUESTION_TARGET} tried · readiness after ${MODULE_READINESS_QUESTION_TARGET}`,
+	        label: `Practice the full ${MODULE_CONFIDENCE_QUESTION_TARGET}-question set`,
+	        description: `${Math.min(module.practiceQuestionsAttempted, MODULE_CONFIDENCE_QUESTION_TARGET)}/${MODULE_CONFIDENCE_QUESTION_TARGET} tried · preparation checkpoint after ${MODULE_READINESS_QUESTION_TARGET} attempts`,
         resourceId: module.resourceId
       },
       ...GUIDED_LABS.filter((lab) => lab.resourceId === module.resourceId).map((lab): ModuleNavigationItem => ({

@@ -194,12 +194,12 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
       title: 'Prepare with the open book before using the slides',
       paragraphs: [
         'The Learning Center maps each of the 13 lecture resources to focused sections of David Tarnoff’s open Computer Organization and Design Fundamentals and the targeted official author videos needed for its questions.',
-        'Use the self-paced Accessible lesson → Read → Watch → Practice → Build/debug path before class. Five distinct questions establish readiness; finish the eight-question confidence set and the mapped hands-on activity. Explanations point back to the reading, transcript-checked video, and lecture evidence.'
+	        'Use the self-paced Accessible lesson → Read → Watch → Practice → Build/debug path before class. Five distinct attempts complete the preparation checkpoint; finish all eight questions and the mapped hands-on activity for broader practice. This threshold is not a readiness or mastery claim. Explanations point back to the reading, transcript-checked video, and lecture evidence.'
       ],
       checklist: [
         'Open the next preparation module and study its direct HTML lesson, then read only the mapped chapter or sections.',
         'Watch the mapped author videos and write down one unresolved point.',
-        'Try the five-question readiness checkpoint without reopening the source.',
+	        'Try the five-question preparation checkpoint without reopening the source.',
         'Bring the unresolved point or a confident miss to class or to the instructor.'
       ],
       actions: [
@@ -333,7 +333,7 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     return {
       title: 'Separate an environment problem from a circuit problem',
       paragraphs: [
-        'Run the environment check first. Digital needs the pinned simulator and Java 8 or newer; the extension can install and verify Digital in its own storage.',
+	        'Run the environment check first. Digital needs the pinned simulator. Linux also needs supported host Java; on Windows/macOS the prepared container supplies Java for the primary in-tab path, while host Java is only for CLI tools or native fallback. The extension can install and verify Digital in its own storage.',
         'SystemStudio uses the complete upstream Digital application. Linux/Remote SSH hosts transport its real Swing desktop into the VS Code tab; Windows and macOS run that same upstream application in an extension-managed Docker Desktop container and stream it into the tab. The native window is an explicit fallback, not the default.'
       ],
       checklist: [

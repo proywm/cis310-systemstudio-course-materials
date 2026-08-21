@@ -72,12 +72,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   statusBar.show();
 
   const updateStatus = async (): Promise<void> => {
-    const status = await manager.getStatus();
-    const docker = await probeDockerEngine();
-    const dockerReady = docker.state === 'ready';
-    if (status.integrityVerified && (status.java.supported || dockerReady)) {
-      statusBar.text = `$(circuit-board) CIS 310: Digital ${status.version}`;
-      statusBar.tooltip = dockerReady
+	    const status = await manager.getStatus();
+	    const docker = await probeDockerEngine();
+	    const dockerReady = docker.state === 'ready';
+	    const embeddedReady = EMBEDDED_CONTAINER_PLATFORM && dockerReady;
+	    if (status.integrityVerified && (status.java.supported || embeddedReady)) {
+	      statusBar.text = `$(circuit-board) CIS 310: Digital ${status.version}`;
+	      statusBar.tooltip = embeddedReady
         ? `Digital is installed; Docker engine ${docker.serverVersion ?? ''} is ready for the in-tab simulator.`
         : `Digital and host Java are ready for the native simulator. ${docker.detail}`;
       statusBar.backgroundColor = undefined;
@@ -100,12 +101,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         'Verify host Java',
         'Reinstall'
       );
-      if (action === 'Verify host Java') {
-        await checkEnvironment(manager, output);
-        return existing.java.supported || (await probeDockerEngine()).state === 'ready';
-      }
-      if (action !== 'Reinstall') {
-        return existing.java.supported || (await probeDockerEngine()).state === 'ready';
+	      if (action === 'Verify host Java') {
+	        await checkEnvironment(manager, output);
+	        return existing.java.supported || (EMBEDDED_CONTAINER_PLATFORM && (await probeDockerEngine()).state === 'ready');
+	      }
+	      if (action !== 'Reinstall') {
+	        return existing.java.supported || (EMBEDDED_CONTAINER_PLATFORM && (await probeDockerEngine()).state === 'ready');
       }
     }
 
@@ -222,15 +223,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       output.appendLine(`Digital ${digital.version}: ${digital.integrityVerified ? 'verified' : 'not ready'}`);
       output.appendLine(`Embedded runtime: ${docker.state}${docker.serverVersion ? ` ${docker.serverVersion}` : ''}`);
       output.appendLine(`NASM workbench: ${assembly.available ? `ready via ${assembly.runtime}` : assembly.detail}`);
-      if (!digital.integrityVerified || !assembly.available || (!digital.java.supported && docker.state !== 'ready')) {
-        throw new Error('One or more verified course components did not become ready. Review the status lines above.');
-      }
+	      const unresolved = [
+	        !digital.integrityVerified ? `Digital ${digital.version} checksum verification did not complete` : undefined,
+	        !assembly.available ? `NASM/GDB environment is not ready: ${assembly.detail}` : undefined,
+	        !digital.java.supported && !(EMBEDDED_CONTAINER_PLATFORM && docker.state === 'ready')
+	          ? EMBEDDED_CONTAINER_PLATFORM
+	            ? `Embedded Digital runtime is not ready: ${docker.detail}`
+	            : `Host Java ${MINIMUM_JAVA_MAJOR}+ is required for Digital on Linux`
+	          : undefined
+	      ].filter((item): item is string => Boolean(item));
+	      if (unresolved.length > 0) throw new Error(unresolved.join(' | '));
       await vscode.window.showInformationMessage('CIS 310 setup is ready: verified Digital, embedded display runtime, and actual NASM/GDB course environment.');
-    } catch (error) {
-      output.appendLine(`SETUP FAILED: ${errorMessage(error)}`);
-      const detail = errorMessage(error);
-      const choice = await vscode.window.showErrorMessage(
-        'CIS 310 guided setup did not complete. The first error is preserved in the SystemStudio output.',
+	    } catch (error) {
+	      output.appendLine(`SETUP FAILED: ${errorMessage(error)}`);
+	      const detail = errorMessage(error);
+	      const firstError = detail.split(/\r?\n/).map((line) => line.trim()).find(Boolean)?.slice(0, 360)
+	        ?? 'The setup command stopped without a diagnostic line.';
+	      const choice = await vscode.window.showErrorMessage(
+	        `CIS 310 guided setup stopped. First error: ${firstError} Next step: retry once; if it repeats, open the setup guide or ask Orbit. Detailed output remains available for advanced troubleshooting.`,
         'Ask Orbit about this error',
         'Open setup guide',
         'Retry'
@@ -937,8 +947,9 @@ async function recoverDockerDesktop(): Promise<boolean> {
 
 async function checkEnvironment(manager: DigitalManager, output: vscode.OutputChannel): Promise<void> {
   const status = await manager.getStatus();
-  const docker = await probeDockerEngine();
-  const dockerReady = docker.state === 'ready';
+	  const docker = await probeDockerEngine();
+	  const dockerReady = docker.state === 'ready';
+	  const embeddedReady = EMBEDDED_CONTAINER_PLATFORM && dockerReady;
   const lines = [
     `SystemStudio CIS 310 environment check`,
     `Digital release: ${DIGITAL_RELEASE.displayVersion}`,
@@ -956,9 +967,9 @@ async function checkEnvironment(manager: DigitalManager, output: vscode.OutputCh
   output.appendLine(lines.join('\n'));
   output.show(true);
 
-  if (status.integrityVerified && (status.java.supported || dockerReady)) {
-    await vscode.window.showInformationMessage(
-      dockerReady
+	  if (status.integrityVerified && (status.java.supported || embeddedReady)) {
+	    await vscode.window.showInformationMessage(
+	      embeddedReady
         ? `CIS 310 environment ready: Digital ${status.version}, Docker engine ${docker.serverVersion}.`
         : `Digital ${status.version} and Java ${status.java.version?.raw} are ready for the native simulator. The in-tab simulator is unavailable: ${docker.detail}`
     );

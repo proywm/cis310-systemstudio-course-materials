@@ -8,6 +8,8 @@ const extensionRoot = path.resolve('.');
 describe('packaged setup and first-task guide', () => {
   const html = readFileSync(path.join(extensionRoot, 'GETTING_STARTED.html'), 'utf8');
   const manifest = readFileSync(path.join(extensionRoot, 'package.json'), 'utf8');
+  const extensionSource = readFileSync(path.join(extensionRoot, 'src', 'extension.ts'), 'utf8');
+  const tutorialSource = readFileSync(path.join(extensionRoot, 'src', 'tutorialPanel.ts'), 'utf8');
 
   it('provides a semantic, reflowable guide for every supported desktop platform', () => {
     assert.match(html, /<html lang="en">/);
@@ -31,5 +33,12 @@ describe('packaged setup and first-task guide', () => {
 
   it('registers the guide as an extension command', () => {
     assert.match(manifest, /systemstudioCis310\.openSetupGuide/);
+  });
+
+  it('surfaces the first setup error and describes one consistent Digital route', () => {
+    assert.match(extensionSource, /guided setup stopped\. First error: \$\{firstError\}/);
+    assert.match(tutorialSource, /primary path keeps the real Swing UI in a VS Code tab/);
+    assert.match(tutorialSource, /verified native Digital window is an explicit fallback/);
+    assert.doesNotMatch(tutorialSource, /on desktop hosts it opens the native window/);
   });
 });

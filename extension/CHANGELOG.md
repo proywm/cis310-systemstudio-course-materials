@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.24.0
+
+- Replaced dense learning pages with remembered, wrapping, keyboard-operable tabs for lesson concepts/examples/practice/sources and dashboard next-work/practice/module/progress views.
+- Grouped all thirteen modules and mapped labs into three visible course units while retaining the complete sequential outline requested for first-time navigation.
+- Added a generated-webview JavaScript parse regression after independent review found a release-blocking template error; fixed visible-panel focus, help focus restoration/state, answer radio navigation, and confidence semantics.
+- Reworded the five-attempt threshold as a preparation checkpoint—not evidence of readiness or mastery—and synchronized that boundary across the extension, exports, student guide, FAQ, and images.
+- Made setup failures show the specific first unresolved component and next action, corrected Linux versus Windows/macOS Digital-runtime readiness, and reconciled the tutorial’s embedded/native descriptions.
+- Added a two-axis feature-confidence scorecard and six-persona iterative usability evaluation that keep implementation evidence separate from observed learner evidence.
+
 ## 0.23.0
 
 - Replaced the beginner tool list with one verified **Set up or repair my course environment** workflow and moved manual controls under Advanced Setup and Diagnostics.
@@ -98,11 +107,11 @@
 - Added lesson-specific, attempt-first tutor prompts that students copy before opening the configured U-M course tutor; graded-work guardrails and external-AI limitations remain explicit.
 - Applied the instructor-supplied UM-Dearborn accessibility-course guidance to semantic headings, descriptive controls, keyboard focus, reflow, high-contrast/forced-color behavior, reduced motion, and a direct HTML alternative to visual PDFs.
 - Added automated narrative completeness and accessible-structure checks, plus a documented manual screen-reader, keyboard, zoom, contrast, caption, and disabled-student review checklist.
-- Corrected stale three-question and 43-question documentation to the current five-question readiness checkpoint, eight-question confidence set, and 104-question bank.
+- Corrected stale three-question and 43-question documentation to the current five-question preparation checkpoint, full eight-question set, and 104-question bank.
 
 ## 0.13.0
 
-- Expanded the evidence-mapped practice bank from 43 to 104 questions: exactly eight per module, a five-question readiness checkpoint, balanced answer positions, Bloom-level labels from Remember through Evaluate, and explanation/justification with reading, video, and lecture-slide evidence.
+- Expanded the evidence-mapped practice bank from 43 to 104 questions: exactly eight per module, a five-question preparation checkpoint, balanced answer positions, Bloom-level labels from Remember through Evaluate, and explanation/justification with reading, video, and lecture-slide evidence.
 - Moved the prerequisite-heavy CPU architecture/instruction-execution video out of Module 1 and retained it with the later CPU module after transcript review; added direct open readings/videos where the prior source set did not sufficiently cover logic/truth tables, I/O, or address spaces.
 - Integrated required circuit or assembly activities into the corresponding module status and added a K-map-to-Digital construction lab. Create-level outcomes now live in authentic hands-on work rather than multiple-choice claims.
 - Added an extension-managed Docker Desktop runtime on Windows/macOS that runs the unmodified upstream Digital application and streams it into the VS Code tab. Linux retains its private X11/noVNC path; native Digital is an explicit fallback.
@@ -111,7 +120,7 @@
 ## 0.12.0
 
 - Added an expanded **Course Modules** sidebar section that keeps all 13 sequential modules visible, with completed-module count and per-module progress.
-- Highlighted the next unfinished module without hiding the rest of the outline; expanding any module reveals its mapped readings, author videos, packaged lecture PDF, three-question readiness check, and relevant guided labs.
+- Highlighted the next unfinished module without hiding the rest of the outline; expanding any module reveals its mapped readings, author videos, packaged lecture PDF, three-question preparation check, and relevant guided labs.
 - Added sidebar controls for the existing local reading/video checkmarks and direct module-scoped readiness practice, while retaining **Start Here** as a short next-action area.
 - Renamed the former **Learn and Practice** utility group to **Practice and Progress** so it is not mistaken for the course-module outline.
 

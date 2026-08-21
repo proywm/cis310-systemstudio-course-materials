@@ -83,7 +83,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'book'
           ),
           describedActionItem(
-            dashboard.attempts > 0 ? 'Continue with 5-question practice' : 'Start a 5-question readiness check',
+	            dashboard.attempts > 0 ? 'Continue with 5-question practice' : 'Start a 5-question preparation check',
             dashboard.due > 0 ? `${dashboard.due} due for review` : 'recommended · explanations included',
             'systemstudioCis310.startQuickPractice',
             'sparkle'
@@ -130,7 +130,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         return [
           describedActionItem(
             'Prepare before class',
-            'accessible lesson · open book · author videos · readiness check',
+	            'accessible lesson · open book · author videos · preparation check',
             'systemstudioCis310.openPracticeCenter',
             'book'
           ),
@@ -320,7 +320,11 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       vscode.TreeItemCollapsibleState.None
     );
     dockerItem.iconPath = new vscode.ThemeIcon(docker.state === 'ready' ? 'pass-filled' : docker.state === 'not-required' ? 'info' : 'warning');
-    dockerItem.description = docker.state === 'ready' ? 'in-tab Digital enabled' : docker.detail;
+	    dockerItem.description = docker.state === 'ready'
+	      ? containerPlatform
+	        ? 'in-tab Digital enabled'
+	        : 'available for other course containers · Digital uses host Java'
+	      : docker.detail;
     dockerItem.tooltip = docker.detail;
     dockerItem.command = { command: 'systemstudioCis310.checkEnvironment', title: 'Check Docker and Digital environment' };
 

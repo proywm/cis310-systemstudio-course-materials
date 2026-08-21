@@ -8,7 +8,7 @@ CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 132
 
 ## Where do I begin?
 
-Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/debug** module, then open the matching Canvas module for current instructions. Five distinct questions are the readiness checkpoint; all eight make up the confidence set. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
+Open **Course Modules** in SystemStudio. Complete the next **Accessible lesson → Read → Watch → Practice → Build/debug** module, then open the matching Canvas module for current instructions. Five distinct attempts complete the preparation checkpoint; all eight provide broader practice. These counts do not certify readiness or mastery. Use the packaged lecture as the instructor's visual framing, not as a replacement for the required open book or its paired lesson text.
 
 ## Where is the text alternative to a presentation?
 
@@ -70,7 +70,7 @@ SystemStudio also offers an optional GitHub Copilot coach through VS Code. It us
 
 ## Can I paste a SystemStudio practice question into the AI tutor?
 
-You may use the tutor to learn from an ungraded readiness or tutorial question, but answer first. State your choice and one reason, then request a hint or feedback. Asking the tutor for the answer before attempting the question defeats the retrieval activity even when it is not an academic-integrity violation. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule. The tutor should not generate a final answer, finished circuit, complete program, report, or submission-ready artifact.
+You may use the tutor to learn from an ungraded preparation, practice, or tutorial question, but answer first. State your choice and one reason, then request a hint or feedback. Asking the tutor for the answer before attempting the question defeats the retrieval activity even when it is not an academic-integrity violation. For homework, projects, quizzes, exams, reports, or other graded work, follow the exact Canvas AI rule. The tutor should not generate a final answer, finished circuit, complete program, report, or submission-ready artifact.
 
 SystemStudio shows a learning-coach checkpoint before either AI route and blocks obvious direct-solution requests before its optional Copilot panel sends a prompt. It cannot control another AI website or guarantee that an external model will follow course rules. You remain responsible for the assistance you use and the work you submit. When the boundary is unclear, ask the instructor before using AI.
 

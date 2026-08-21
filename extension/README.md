@@ -36,7 +36,7 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 ## Main student workflow
 
 1. Open **SystemStudio CIS 310 → Start Here**.
-2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Accessible HTML lecture → Read → Watch → Practice 8 questions → guided activity** sequence plus an optional visual PDF archive. Five distinct questions form the readiness checkpoint; all eight form the confidence set.
+2. Use the expanded **Course Modules** outline to see and navigate all 13 modules; the next unfinished module is highlighted, and expanding any module reveals its **Accessible HTML lecture → Read → Watch → Practice 8 questions → guided activity** sequence plus an optional visual PDF archive. Five distinct attempts complete the preparation checkpoint; all eight provide broader practice. These counts do not certify readiness or mastery.
 3. Open **Coursework and Final Presentation** for the assignment roadmap, executable public circuit preflights, local file checks, final-presentation self-evaluation, opt-in Canvas-calendar import, missed-class recovery, diagnostics, and the manual grade estimate. These local indicators are not instructor grades.
 4. Check Canvas for live requirements, instructor evaluation, submission, and receipt.
 5. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
@@ -45,9 +45,9 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 
 ## Included learning features
 
-- an always-visible, sequential 13-module sidebar outline with direct navigation to a novice-facing accessible HTML lecture, focused open-textbook reading, official author video, readiness check, mapped guided lab, and optional visual PDF archive;
+- an always-visible, sequential 13-module sidebar outline with direct navigation to a novice-facing accessible HTML lecture, focused open-textbook reading, official author video, preparation check, mapped guided lab, and optional visual PDF archive;
 - 13 evidence-bounded HTML lectures with objectives, definitions, explanations, worked examples, self-checks, presentation evidence, and attempt-first AI tutor prompts;
-- 104 evidence-mapped questions—eight per module—with a five-question readiness checkpoint, Bloom-level labels, quiz mode, confidence checks, explanation/justification, and spaced local review;
+- 104 evidence-mapped questions—eight per module—with a five-question preparation checkpoint, Bloom-level labels, quiz mode, confidence checks, explanation/justification, and spaced local review;
 - 13 packaged legacy presentation PDFs retained as optional visual archives, three homework references, three cumulative 4-bit processor-project milestones, and a final-presentation planning reference;
 - Assignment Mission Control with requirements-oriented checklists, actual selected-file inspection, independently validated public circuit preflights, a safe local planning ZIP, Canvas receipt confirmation, cumulative 4-bit final-presentation progression and self-evaluation, deterministic Digital diagnostics, structured private grading-review requests, and a course-staff release checklist;
 - a manual grade estimate using student-entered Canvas scores, published 15/65/20 weights, two-lowest participation-item drops, retained earned/possible point aggregation, and syllabus letter boundaries—visually separated from official instructor evaluation in Canvas;

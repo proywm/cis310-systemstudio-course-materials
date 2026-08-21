@@ -10,4 +10,4 @@ The SystemStudio sidebar shows one short **Start Here** path followed by an expa
 6. **Environment and Setup**
 7. **Tutor, Questions, and Help**
 
-Expand any module to open its primary accessible HTML lecture, mapped readings, author videos, optional visual PDF archive, five-question readiness checkpoint, eight-question confidence set, and guided activity. The module row shows local reading, video, question, and hands-on progress. Use **Start Here** for the recommended next action or the current Canvas task, and use the remaining groups for practice history and tools.
+Expand any module to open its primary accessible HTML lecture, mapped readings, author videos, optional visual PDF archive, five-question preparation checkpoint, full eight-question practice set, and guided activity. The attempt counts do not certify readiness or mastery. The module row shows local reading, video, question, and hands-on progress. Use **Start Here** for the recommended next action or the current Canvas task, and use the remaining groups for practice history and tools.

@@ -11,8 +11,8 @@
       "pageTitle": "Lecture 1: Introduction and Data Representation — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-01.html",
       "standalone": "standalone/lecture-01.html",
-      "canvasBodySha256": "4217a6dbec203da1a08d34f5235cb5f263ee27ae2817450ae86b121beaf1bd4d",
-      "standaloneSha256": "de7450e688ea4ef07655e1f7effd7cb2d44141a9e4cd79fe82005454ffd473e9"
+      "canvasBodySha256": "3b229dec69b41e44d371fad8d217ce28473d61850f21ac27385dfbc45411bc6f",
+      "standaloneSha256": "c5a052bc362db3605e578d22255f78da4bfbb4449139857a761f40257264b0eb"
     },
     {
       "resourceId": "lecture-02",
@@ -20,8 +20,8 @@
       "pageTitle": "Lecture 2: Signed Data, Boolean Logic, and Adders — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-02.html",
       "standalone": "standalone/lecture-02.html",
-      "canvasBodySha256": "8d0b8b82b0753389d3cc7f08f015480fc93e58085c76f7c6b21020a2c564272d",
-      "standaloneSha256": "790aa512651b5bb3a6daf65e900ba782a4c8d2681baa78abc98feb8137475ad1"
+      "canvasBodySha256": "183ef9a366bb33c1c12dcb92b42886db39b08719fe4fbaea30edcf802041b321",
+      "standaloneSha256": "eb94e84ad373e84c83d03b234c062a2cd4087bf146e63372a52ccf82a5a42823"
     },
     {
       "resourceId": "lecture-03",
@@ -29,8 +29,8 @@
       "pageTitle": "Lecture 3: Boolean Algebra and Circuit Simplification — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-03.html",
       "standalone": "standalone/lecture-03.html",
-      "canvasBodySha256": "bad87323aeeefa056321fdfe75bcfc711ff9ef84f933fb78817a6336d8c0c7b3",
-      "standaloneSha256": "d0e08f0cdb3efbc4dd5641d7ef95adc28d6f65da8f47536d5a5d4149be3e715b"
+      "canvasBodySha256": "d9ae8bcde6db1f7ddeabaf7fffe16b5ac6c817ea1de372ae87f5fe39a4030aa9",
+      "standaloneSha256": "a4ac6a96ee4ae0dd7c6473bc849037d856b566492dc6eb17cc189c48a72d1394"
     },
     {
       "resourceId": "lecture-04",
@@ -38,8 +38,8 @@
       "pageTitle": "Lecture 4: Karnaugh Maps — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-04.html",
       "standalone": "standalone/lecture-04.html",
-      "canvasBodySha256": "59574d8a3d4311a0373ff7f9213d621900465429fc7d37137a26d8f9c6540b32",
-      "standaloneSha256": "ead6dcb41fbe95ab89c9f28a807bb536a88ffa382cbe515c7c5fd9034cece89f"
+      "canvasBodySha256": "c4f26771a2e599861d3527c1c25a1ce7c1e2d04f17eb708c73788aba9a2fe006",
+      "standaloneSha256": "c46b3a0abcabd463dfac6db7ee58d7203cffa795090e7b3abe3a7f48526c775a"
     },
     {
       "resourceId": "lecture-05",
@@ -47,8 +47,8 @@
       "pageTitle": "Lecture 5: Combinational Logic and Data Selection — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-05.html",
       "standalone": "standalone/lecture-05.html",
-      "canvasBodySha256": "3f0983324482f32cceacdd5b8826c4ea0d3709f6be3982f73824227d3cf062d2",
-      "standaloneSha256": "80030ab167c70ef5e3f5ccdc7da942d13ec8cb7ee91e7c79ee82f4c107275f28"
+      "canvasBodySha256": "df9e608ebeea677351098b99bb1ad7eeea8306c8b397ee0542dc401df6b83184",
+      "standaloneSha256": "82eeca8e41e5dae994142fdd8972809b828e2450031196a721888cfccda6fca1"
     },
     {
       "resourceId": "lecture-06",
@@ -56,8 +56,8 @@
       "pageTitle": "Lecture 6: Memory Cells and Sequential Logic — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-06.html",
       "standalone": "standalone/lecture-06.html",
-      "canvasBodySha256": "8fb6549407ba04b8412eb68c18aa2ef54966a20ff993fba0fec4c5609572f58c",
-      "standaloneSha256": "1bc07377f20b97c890b40b9b155603d3181d9cf8559ef821a8dba8ec9555f3b7"
+      "canvasBodySha256": "c4352c781d6b74f9187dbd04f5ac6521468ed97f7b252a856e741a2d653fe495",
+      "standaloneSha256": "e9547e8124e3c8741b1f794c559c5818826deb8f604a995f19ab81ca9c6deead"
     },
     {
       "resourceId": "lecture-07",
@@ -65,8 +65,8 @@
       "pageTitle": "Lecture 7: Memory Organization and Buses — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-07.html",
       "standalone": "standalone/lecture-07.html",
-      "canvasBodySha256": "f2840c2482cb7cae8d78ac4dcaa4787951547d5962a8650cef2695bd81ad281d",
-      "standaloneSha256": "c9dc398a28a8a82048b66d24e4b2d6b09d2c5a3176d9c15c1ac5762b66f751d5"
+      "canvasBodySha256": "b7c379a032444d80f9d65efbfea8ccfd8cc171ba605a2aa090ad658607e26480",
+      "standaloneSha256": "e6927595629b1b64d51ffe24d6c79aff963f9938f0560e7be46605d402c32cf5"
     },
     {
       "resourceId": "lecture-08",
@@ -74,8 +74,8 @@
       "pageTitle": "Lecture 8: Memory-Mapped I/O and Polling — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-08.html",
       "standalone": "standalone/lecture-08.html",
-      "canvasBodySha256": "2b701f81814795d731cced5a099f67691a505a547d4709dae28b2620a151555c",
-      "standaloneSha256": "5681be2e16ea732aad967de291f828118adf7be256e5a99e3db2265fe6adcf7f"
+      "canvasBodySha256": "d42945db56f355333a0344963738d97462d3a71cccb6b673ab86f21280426011",
+      "standaloneSha256": "a0eabd6ad48f02b4e79c408ed9b7f59ffa08483c219b7697f18ad69bd8060a0f"
     },
     {
       "resourceId": "lecture-08-supplement",
@@ -83,8 +83,8 @@
       "pageTitle": "Lecture 8 supplement: Detailed I/O and Memory — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-08-supplement.html",
       "standalone": "standalone/lecture-08-supplement.html",
-      "canvasBodySha256": "53176ff1f413bf09493d05e17277c2deccc75e201a79b0ca63c39b25ef7f2e90",
-      "standaloneSha256": "8fa63504d145279a64fb281aa9f3d7f8d4b0dfe87a4e79fdee9a4723eabf0c78"
+      "canvasBodySha256": "4cd09a1f7b6666538e87aa908492d9259c698e655637d057e7e30aef4f5d6285",
+      "standaloneSha256": "514d0a2e1dbe0472fdd89a29ae7e3f7e309814af9b9c2b57fa3a73dc7f3b509e"
     },
     {
       "resourceId": "lecture-09",
@@ -92,8 +92,8 @@
       "pageTitle": "Lecture 9: Memory Hierarchy and Cache — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-09.html",
       "standalone": "standalone/lecture-09.html",
-      "canvasBodySha256": "73355e4473757873481dedb8d0557797734898e991ddb3c2aebf98657d75295d",
-      "standaloneSha256": "e23be23ca1de3091428e6daa418bbcd6da73ab8531edc8765b9b1591d4d0ddde"
+      "canvasBodySha256": "7e5bca38bdb6371a846f7c2abd99362f1434db6376e9a7825e3e1587ac27f832",
+      "standaloneSha256": "4c147903b8a2d204f0b82b64c0daae15740cf51383ada8504539d137ba688ee4"
     },
     {
       "resourceId": "lecture-10",
@@ -101,8 +101,8 @@
       "pageTitle": "Lecture 10: CPU Components and Instruction Execution — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-10.html",
       "standalone": "standalone/lecture-10.html",
-      "canvasBodySha256": "8571a29e346b7756de13019fbf8f238f15e75358f392e410d17952d82b52a8a7",
-      "standaloneSha256": "6f49d4691d7fcf8eeea561e41bfa37d071981af996969ee65fc348c853dbb3ee"
+      "canvasBodySha256": "7acd010b2d3d51775a49f190922ea26f136ce4313cef0ca09a3ce6379c4f2b90",
+      "standaloneSha256": "a24971d030c08cbe1a90b3a4dd1c9d3e981341646eea4bedb0a9e35ae7f06b4c"
     },
     {
       "resourceId": "lecture-11",
@@ -110,8 +110,8 @@
       "pageTitle": "Lecture 11: Processor Pipelining — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-11.html",
       "standalone": "standalone/lecture-11.html",
-      "canvasBodySha256": "be2fe787f516440a6f33f8fe7f723975d559a838a109bbaee36ce6de90fd0dda",
-      "standaloneSha256": "a4a437b73090f04c917c6dc724b232f701a9107b9ef9f66511fcafb44813a1bb"
+      "canvasBodySha256": "47bc485833c95d3855c6b11476337231afa42dfb66dfa220c6d05355c7fe6205",
+      "standaloneSha256": "935689379fde667836475173031d99484dc42eed0761eb92ab3b34e58de724e2"
     },
     {
       "resourceId": "lecture-12",
@@ -119,8 +119,8 @@
       "pageTitle": "Lecture 12: Address Spaces, x86 Registers, and Assembly — Accessible Lecture",
       "canvasBody": "canvas-page-bodies/lecture-12.html",
       "standalone": "standalone/lecture-12.html",
-      "canvasBodySha256": "98e837fc08855a243d386405aeefe0d6cd0b42e33573261470c247f9af2926ef",
-      "standaloneSha256": "b109c5a937267ecb5c6d3fb4d4fb4e6eb5bfc9de2aa049c9656596112187b13e"
+      "canvasBodySha256": "a0060e9fe740b674ec2a3bbfbb00bea705b3931bf61b911cc74a057833a2ec15",
+      "standaloneSha256": "2cf98df3aa77de43ca5b2654fef9ce09414e165dd6346d2fb96c259a92259b19"
     }
   ]
 }

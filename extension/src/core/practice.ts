@@ -982,7 +982,7 @@ function reviewLabel(correct: boolean, confidence: PracticeConfidence, usedHint:
 }
 
 function recommendationText(topics: PracticeTopicSummary[], due: number, attempts: number): string {
-  if (attempts === 0) return 'Start with a five-question mixed readiness check. It is ungraded and explanations appear immediately.';
+	  if (attempts === 0) return 'Start with a five-question mixed preparation check. It is ungraded and explanations appear immediately.';
   if (due > 0) return `${due} ${due === 1 ? 'question is' : 'questions are'} ready for spaced review.`;
   const target = [...topics].sort((a, b) => {
     const aAccuracy = a.accuracy ?? 1;

@@ -24,7 +24,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 
 ## Student workflow
 
-1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Accessible HTML lecture → Read → Watch → five-question readiness checkpoint before class; continue through the eight-question confidence set and mapped hands-on activity.
+1. Open the expanded **Course Modules** outline, choose the scheduled module, and complete its Accessible HTML lecture → Read → Watch → five-question preparation checkpoint before class; continue through all eight questions and the mapped hands-on activity. Attempt counts do not certify readiness or mastery.
 2. Open the syllabus and course calendar from the SystemStudio sidebar.
 3. Use the optional visual PDF archive only when its diagrams help; the accessible HTML lecture is the primary lecture format.
 4. Open the matching Canvas assignment and confirm its current requirements.

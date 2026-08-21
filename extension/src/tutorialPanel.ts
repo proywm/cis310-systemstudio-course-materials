@@ -351,7 +351,7 @@ function tutorialStepsHtml(): string {
     <p>Start from your task, not from a list of tools. This practice choice does not change configuration.</p>
     <div class="instruction"><strong>Choose one:</strong> the path that best matches your immediate need.</div>
     <div class="choices">
-      ${choice('prepare', 'Prepare before class', 'Study the accessible lesson, read the mapped open-book section, watch the author video, then complete the five-question readiness checkpoint.')}
+	      ${choice('prepare', 'Prepare before class', 'Study the accessible lesson, read the mapped open-book section, watch the author video, then complete the five-question preparation checkpoint.')}
       ${choice('requirements', 'Find requirements or submit', 'Go to the current Fall 2026 Canvas course; SystemStudio never submits for you.')}
       ${choice('circuit', 'Design or debug a circuit', 'Move from a lecture concept to a small circuit, prediction, preview, and test.')}
       ${choice('assembly', 'Write, run, or trace assembly', 'Use an actual assembler for executable behavior and the separately labeled tutor for visualization.')}
@@ -372,13 +372,13 @@ function tutorialStepsHtml(): string {
       ${choice('homework', 'Three homework items', 'HW1 Logic Foundations; HW2 Sequential Logic; HW3 Memory and Assembly.')}
       ${choice('projects', 'Three milestones + final presentation', 'Processor memories, Register File/ALU, and the integrated 4-bit processor build one cumulative processor for the final instructional-ISA program demonstration.')}
       ${choice('mission', 'Assignment Mission Control', 'Use local status, checklists, file inspection, receipt confirmation, final-project self-evaluation, and the manual grade estimate without confusing them with Canvas evaluation.')}
-      ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/debug, with a five-question readiness checkpoint, explanations, source evidence, and local spaced review.')}
+	      ${choice('practice', 'CIS 310 Learning', 'Accessible lesson → Read → Watch → Practice 8 questions → Build/debug, with a five-question preparation checkpoint, explanations, source evidence, and local spaced review.')}
     </div>
     <div class="actions"><button data-action="open-coursework" class="primary">Open coursework and final project</button><button data-action="open-learning" class="secondary">Open preparation path</button><button data-action="practice-now" class="secondary">Try 5-question practice</button><button data-action="open-canvas" class="secondary">Open Fall 2026 Canvas</button><button data-action="open-syllabus" class="secondary">Open accessible syllabus</button><button data-action="open-calendar" class="secondary">Open course calendar</button><button data-action="show-materials" class="secondary">Open bundled material guide</button></div>
   </div></section>
   <section class="step" data-step="2" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Is it my setup or my work?</h2>
-    <p>SystemStudio uses the complete upstream Digital application. On headless Linux it prepares a private display and transports the real Swing UI into the VS Code tab; on desktop hosts it opens the native window.</p>
+	    <p>SystemStudio uses the complete upstream Digital application. Its primary path keeps the real Swing UI in a VS Code tab: a private display on Linux or the prepared Docker Desktop runtime on Windows/macOS. A verified native Digital window is an explicit fallback when that route is available; Remote SSH is not required.</p>
     <div class="instruction"><strong>Explore any case:</strong> identify the evidence that distinguishes it, then return for the others when relevant.</div>
     <div class="choices">
       ${choice('check', 'Run the environment check', 'Reports Digital checksum, Java version, and workspace trust without changing the machine.')}

@@ -23,7 +23,7 @@
   <rect x="15" y="138" width="320" height="54" rx="7" fill="#094771"/>
   <text x="32" y="160" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">▣  Prepare Lecture 1</text>
   <text x="55" y="180" fill="#c7dcec" font-family="Segoe UI, Arial, sans-serif" font-size="12">accessible lesson · book · videos · 8 questions · lab</text>
-  <text x="32" y="221" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">✦  Start a 5-question readiness check</text>
+  <text x="32" y="221" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">✦  Start a 5-question preparation check</text>
   <text x="55" y="241" fill="#999999" font-family="Segoe UI, Arial, sans-serif" font-size="12">recommended · explanations included</text>
   <text x="32" y="279" fill="#dedede" font-family="Segoe UI, Arial, sans-serif" font-size="15">☁  Open Canvas — submit coursework here</text>
   <text x="55" y="299" fill="#999999" font-family="Segoe UI, Arial, sans-serif" font-size="12">Fall 2026 authority</text>
@@ -83,7 +83,7 @@
   <text x="1092" y="394" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">Can I convert a value between</text>
   <text x="1092" y="416" fill="#bdbdbd" font-family="Segoe UI, Arial, sans-serif" font-size="13">binary and hexadecimal?</text>
   <rect x="1092" y="443" width="162" height="34" rx="5" fill="#0e639c"/><text x="1173" y="465" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Practice all 8 questions</text>
-  <text x="1092" y="511" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">readiness after 5 · confidence set 0/8</text>
+  <text x="1092" y="511" fill="#8f8f8f" font-family="Segoe UI, Arial, sans-serif" font-size="12">preparation after 5 attempts · full set 0/8</text>
 
   <rect x="392" y="614" width="1006" height="142" rx="10" fill="#252526" stroke="#474747"/>
   <text x="418" y="651" fill="#f0f0f0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="650">Practice and review</text>

@@ -40,6 +40,12 @@ describe('accessible novice lesson texts', () => {
     assert.match(source, /button:focus-visible/);
     assert.match(source, /@media \(forced-colors: active\)/);
     assert.match(source, /@media \(prefers-reduced-motion: reduce\)/);
+    assert.match(source, /role="tablist" aria-label="Lesson sections"/);
+    assert.equal((source.match(/role="tab" aria-selected=/g) ?? []).length, 4);
+    assert.equal((source.match(/class="lesson-panel" role="tabpanel"/g) ?? []).length, 4);
+    assert.match(source, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/);
+    assert.match(source, /savedState\.lessonId === lessonId/);
+    assert.match(source, /\.lesson-tabs \{[^}]*flex-wrap: wrap/);
     assert.doesNotMatch(source, /<img\b/i, 'Important visuals must be described in text, not added as inaccessible images');
     assert.doesNotMatch(source, /<table\b/i, 'Layout must not use tables');
     for (const lesson of LESSON_NARRATIVES) {

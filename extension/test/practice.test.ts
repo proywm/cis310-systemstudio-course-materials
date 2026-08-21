@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { describe, it } from 'node:test';
 import path from 'node:path';
+import vm from 'node:vm';
 import {
   PRACTICE_QUESTIONS,
   PRACTICE_TOPICS,
@@ -53,7 +54,7 @@ describe('CIS 310 formative practice', () => {
       assert.equal(
         PRACTICE_QUESTIONS.filter((question) => question.resourceId === resourceId).length,
         MODULE_CONFIDENCE_QUESTION_TARGET,
-        `${resourceId} does not have a complete confidence set`
+	        `${resourceId} does not have a complete eight-question set`
       );
     }
     assert.deepEqual(
@@ -116,11 +117,45 @@ describe('CIS 310 formative practice', () => {
 
   it('labels readiness sources and avoids claiming source links open at an exact locator', async () => {
     const source = await readFile(path.resolve('src/practicePanel.ts'), 'utf8');
-    assert.match(source, /Readiness source/);
+	    assert.match(source, /Core preparation source/);
     assert.match(source, /Additional reference/);
-    assert.match(source, /Five distinct questions establish readiness/);
+	    assert.match(source, /Five distinct question attempts complete the preparation checkpoint/);
+	    assert.match(source, /not a readiness or mastery claim/);
     assert.match(source, /Explanation and justification/);
     assert.doesNotMatch(source, /exact supporting source/i);
+  });
+
+  it('uses remembered, keyboard-operable tabs to control dashboard information load', async () => {
+    const source = await readFile(path.resolve('src/practicePanel.ts'), 'utf8');
+    assert.match(source, /role="tablist" aria-label="Learning dashboard sections"/);
+    assert.equal((source.match(/data-home-tab="(?:next|practice|modules|progress)"/g) ?? []).length, 4);
+    assert.match(source, /role','tablist'.*Module and lab groups/);
+    assert.match(source, /Logic foundations · 1–5/);
+    assert.match(source, /Memory & systems · 6–9/);
+    assert.match(source, /Processor & assembly · 10–13/);
+    assert.match(source, /\['ArrowLeft','ArrowRight','Home','End'\]/);
+    assert.match(source, /\[data-home-panel\]:not\(\[hidden\]\) h2/);
+    assert.match(source, /vscode\.setState\(viewState\)/);
+    assert.match(source, /\.choice\[role="radio"\]/);
+    assert.match(source, /'ArrowUp','ArrowDown','Home','End'/);
+    assert.match(source, /aria-pressed="false"/);
+    assert.match(source, /setHelp\(false,true\)/);
+  });
+
+  it('generates syntactically valid dashboard webview JavaScript', async () => {
+    const source = await readFile(path.resolve('src/practicePanel.ts'), 'utf8');
+    const embedded = source.match(/<script nonce="\$\{nonce\}">([\s\S]*?)<\/script><\/body>/)?.[1];
+    assert.ok(embedded, 'dashboard script template was not found');
+    const script = embedded
+      .replace('${topics}', '[]')
+      .replace('${guidedLabs}', '[]')
+      .replace('${MODULE_READINESS_QUESTION_TARGET}', '5')
+      .replace('${MODULE_CONFIDENCE_QUESTION_TARGET}', '8')
+      .replace('${initialDashboard}', '{}')
+      .replace('${initialLearningPath}', '[]')
+      .replaceAll('\\`', '`')
+      .replaceAll('\\${', '${');
+    assert.doesNotThrow(() => new vm.Script(script));
   });
 
   it('builds transparent topic and confidence summaries from local attempts', () => {

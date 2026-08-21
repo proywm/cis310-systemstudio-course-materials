@@ -73,8 +73,8 @@ export const PRE_CLASS_MODULES: readonly PreClassModule[] = [
     ],
     authorVideos: [
       { title: 'Ep 001: Pulse Trains and the Digital Signal', focus: 'Optional signal vocabulary: levels, edges, pulse width, and period', url: 'https://www.youtube.com/watch?v=2jfoLxQXq3Y' },
-      { title: 'Ep 004: Binary to Decimal Conversion', focus: 'Readiness: binary place value and conversion', url: 'https://www.youtube.com/watch?v=hBdGOb8w4DA' },
-      { title: 'Ep 006: Hexadecimal Conversion', focus: 'Readiness: four-bit binary groups and hexadecimal', url: 'https://www.youtube.com/watch?v=HoZ8_UIziX8' }
+	      { title: 'Ep 004: Binary to Decimal Conversion', focus: 'Core preparation: binary place value and conversion', url: 'https://www.youtube.com/watch?v=hBdGOb8w4DA' },
+	      { title: 'Ep 006: Hexadecimal Conversion', focus: 'Core preparation: four-bit binary groups and hexadecimal', url: 'https://www.youtube.com/watch?v=HoZ8_UIziX8' }
     ],
     readinessPrompt: 'Can I trace the source-to-hardware abstraction and convert short values among binary, decimal, and hexadecimal?',
     readinessSources: { readingIndexes: [0, 1], videoIndexes: [1, 2] }
