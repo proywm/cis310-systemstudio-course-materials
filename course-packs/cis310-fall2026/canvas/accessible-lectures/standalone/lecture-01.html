@@ -78,22 +78,31 @@
 
 <h2>Worked examples</h2>
 <h3>Example 1: Convert binary 1011 0010 to decimal and hexadecimal</h3>
-<p>Treat the pattern as an unsigned eight-bit value.</p>
+<p>Treat the pattern as an unsigned eight-bit value and write the weights 128, 64, 32, 16, 8, 4, 2, and 1 above the bits before adding.</p>
 <ol>
-<li>The 1-bits have weights 128, 32, 16, and 2.</li>
-<li>Their decimal sum is 178.</li>
-<li>Group 1011 and 0010; these groups are hexadecimal B and 2.</li>
+<li>Count only weights whose bit is 1: 128 + 32 + 16 + 2 = 178.</li>
+<li>Split the same bits into 1011 and 0010 from the right.</li>
+<li>1011 is 11, written B; 0010 is 2.</li>
 </ol>
-<p><strong>Conclusion:</strong> The same bit pattern can be written as binary 1011 0010, decimal 178, or hexadecimal B2.</p>
+<p><strong>Conclusion:</strong> Binary 1011 0010, decimal 178, and hexadecimal B2 are three notations for the same value.</p>
 
-<h3>Example 2: Add binary 1110 and 1111</h3>
-<p>Work from the least significant bit and preserve every carry.</p>
+<h3>Example 2: Add binary 1110 and 1111 column by column</h3>
+<p>Work right to left. In each column add A, B, and the carry entering that column.</p>
 <ol>
-<li>The values are decimal 14 and 15.</li>
-<li>Their sum is decimal 29.</li>
-<li>Decimal 29 is binary 11101, so a fifth bit is required.</li>
+<li>The one column totals 1, so write 1 and carry 0.</li>
+<li>The two column totals 2, so write 0 and carry 1; each remaining column totals 3, so write 1 and carry 1.</li>
+<li>Read the four stored bits as 1101 and preserve the final carry as a fifth bit.</li>
 </ol>
-<p><strong>Conclusion:</strong> A fixed four-bit destination would retain only 1101 and report a carry; a wider result is 11101.</p>
+<p><strong>Conclusion:</strong> The wider result is 11101 (decimal 29). A four-bit destination stores 1101 and reports the leftover carry separately.</p>
+
+<h3>Example 3: Add hexadecimal B2 and 9F</h3>
+<p>Carry when a hexadecimal column reaches 16.</p>
+<ol>
+<li>The low column is 2 + F = 17, so write 1 and carry 1.</li>
+<li>The high column is B + 9 + 1 = 21, so write 5 and carry 1.</li>
+<li>Place the final carry at the left.</li>
+</ol>
+<p><strong>Conclusion:</strong> The hexadecimal result is 151. In decimal, 178 + 159 = 337, and 337 = 1×256 + 5×16 + 1.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

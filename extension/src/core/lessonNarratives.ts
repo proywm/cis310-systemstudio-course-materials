@@ -78,15 +78,21 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     examples: [
       {
         title: 'Convert binary 1011 0010 to decimal and hexadecimal',
-        setup: 'Treat the pattern as an unsigned eight-bit value.',
-        steps: ['The 1-bits have weights 128, 32, 16, and 2.', 'Their decimal sum is 178.', 'Group 1011 and 0010; these groups are hexadecimal B and 2.'],
-        conclusion: 'The same bit pattern can be written as binary 1011 0010, decimal 178, or hexadecimal B2.'
+        setup: 'Treat the pattern as an unsigned eight-bit value and write the weights 128, 64, 32, 16, 8, 4, 2, and 1 above the bits before adding.',
+        steps: ['Count only weights whose bit is 1: 128 + 32 + 16 + 2 = 178.', 'Split the same bits into 1011 and 0010 from the right.', '1011 is 11, written B; 0010 is 2.'],
+        conclusion: 'Binary 1011 0010, decimal 178, and hexadecimal B2 are three notations for the same value.'
       },
       {
-        title: 'Add binary 1110 and 1111',
-        setup: 'Work from the least significant bit and preserve every carry.',
-        steps: ['The values are decimal 14 and 15.', 'Their sum is decimal 29.', 'Decimal 29 is binary 11101, so a fifth bit is required.'],
-        conclusion: 'A fixed four-bit destination would retain only 1101 and report a carry; a wider result is 11101.'
+        title: 'Add binary 1110 and 1111 column by column',
+        setup: 'Work right to left. In each column add A, B, and the carry entering that column.',
+        steps: ['The one column totals 1, so write 1 and carry 0.', 'The two column totals 2, so write 0 and carry 1; each remaining column totals 3, so write 1 and carry 1.', 'Read the four stored bits as 1101 and preserve the final carry as a fifth bit.'],
+        conclusion: 'The wider result is 11101 (decimal 29). A four-bit destination stores 1101 and reports the leftover carry separately.'
+      },
+      {
+        title: 'Add hexadecimal B2 and 9F',
+        setup: 'Carry when a hexadecimal column reaches 16.',
+        steps: ['The low column is 2 + F = 17, so write 1 and carry 1.', 'The high column is B + 9 + 1 = 21, so write 5 and carry 1.', 'Place the final carry at the left.'],
+        conclusion: 'The hexadecimal result is 151. In decimal, 178 + 159 = 337, and 337 = 1×256 + 5×16 + 1.'
       }
     ],
     selfChecks: ['Why can two different processor generations run the same ISA-compatible executable?', 'Which binary place weights are present in 0101 1010?', 'Why is hexadecimal easier to translate to binary than decimal is?'],
@@ -140,10 +146,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
         conclusion: 'Eight-bit 1110 0001 represents negative 31. Keeping all eight positions is essential.'
       },
       {
-        title: 'Evaluate one full-adder row',
-        setup: 'Let A equal 1, B equal 0, and Carry-in equal 1.',
-        steps: ['The input total is decimal 2.', 'Decimal 2 is binary 10.', 'The low result bit is Sum equal to 0; the high result bit is Carry-out equal to 1.'],
-        conclusion: 'Writing Carry-out followed by Sum gives 10, preserving the complete one-column result.'
+        title: 'Build the half-adder truth table before choosing gates',
+        setup: 'List 00, 01, 10, and 11, then write each two-bit result as Carry followed by Sum.',
+        steps: ['00 produces 00.', '01 and 10 produce 01.', '11 produces 10.', 'Sum is 1 exactly when the inputs differ, while Carry is 1 exactly when both inputs are 1.'],
+        conclusion: 'The table proves Sum = A XOR B and Carry = A AND B.'
+      },
+      {
+        title: 'Complete one full-adder row and generalize it',
+        setup: 'Let A=1, B=0, and Carry-in=1, then compare with all eight input rows.',
+        steps: ['The selected row totals 2, written binary 10, so Carry-out=1 and Sum=0.', 'Across all rows, Sum is 1 when an odd number of inputs are 1.', 'Carry-out is 1 when at least two inputs are 1.'],
+        conclusion: 'Sum = A XOR B XOR Carry-in; Carry-out can be written (A AND B) OR (Carry-in AND (A XOR B)).'
       }
     ],
     selfChecks: ['What two values can eight-bit 1000 0000 represent under unsigned and signed interpretations?', 'Why does a half adder need two outputs?', 'Which full-adder input rows make Carry-out equal to 1?'],
@@ -191,16 +203,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Create one canonical minterm',
-        setup: 'A truth-table output is 1 for A equal to 0, B equal to 1, and C equal to 0.',
-        steps: ['A is 0, so use NOT A.', 'B is 1, so use B.', 'C is 0, so use NOT C.', 'AND the three literals.'],
-        conclusion: 'The minterm is (NOT A) AND B AND (NOT C), true for exactly that input row.'
+        title: 'Build a canonical SOP expression from a truth table',
+        setup: 'Let X be 1 at ABC = 001, 011, 100, and 110. Write one product for each output-1 row, complementing every variable whose row value is 0.',
+        steps: ['001 contributes (NOT A)(NOT B)C.', '011 contributes (NOT A)BC.', '100 contributes A(NOT B)(NOT C).', '110 contributes AB(NOT C).', 'OR the four products to obtain the canonical SOP expression.'],
+        conclusion: 'Every output-1 row contributes exactly one product that is false for all other rows. The expression is correct but not yet minimal.'
       },
       {
-        title: 'Simplify AB plus A(NOT B)',
-        setup: 'The two terms share A.',
-        steps: ['Factor A to obtain A times (B plus NOT B).', 'Use the complement law: B plus NOT B equals 1.', 'Use the identity law: A times 1 equals A.'],
-        conclusion: 'The simpler expression A has the same truth table as the original expression.'
+        title: 'Reduce that canonical SOP expression with named laws',
+        setup: 'Start with (NOT A)(NOT B)C + (NOT A)BC + A(NOT B)(NOT C) + AB(NOT C). Pair terms that differ only in B.',
+        steps: ['Factor the first pair as (NOT A)C((NOT B)+B) and the second as A(NOT C)((NOT B)+B).', 'Use the complement law: (NOT B)+B = 1.', 'Use the identity law to obtain (NOT A)C + A(NOT C).', 'Recognize the remaining pattern as A XOR C and verify it against all eight original rows.'],
+        conclusion: 'Four three-literal products become two two-literal products, and B disappears because it changes inside each paired group without changing X.'
       }
     ],
     selfChecks: ['Why must a canonical minterm contain every input variable?', 'What two changes occur when DeMorgan’s theorem moves a complement inward?', 'What evidence would convince you that a simplification is correct?'],
@@ -248,16 +260,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Translate a four-cell group',
-        setup: 'In a three-variable map, a group contains all four cells where A is 1 while B and C take every combination.',
-        steps: ['A remains 1 in all four cells.', 'B changes, so B disappears.', 'C changes, so C disappears.'],
-        conclusion: 'The entire group contributes the single product term A.'
+        title: 'Minimize F(A,B,C) = Σm(2,3,4,5,6,7)',
+        setup: 'Use AB rows in Gray-code order 00, 01, 11, 10 and C columns 0, 1.',
+        steps: ['Group rows 01 and 11 across both C columns; B stays 1 while A and C change, so this group contributes B.', 'Group rows 11 and 10 across both columns; A stays 1 while B and C change, so this group contributes A.', 'Overlap in row 11 is legal; OR the surviving terms.'],
+        conclusion: 'F = A + B. A required 0-cell at A=0, B=0 also checks the result.'
       },
       {
-        title: 'Recognize an edge group',
-        setup: 'The first and last columns are labeled 00 and 10.',
-        steps: ['The labels differ only in the first bit.', 'Those columns are adjacent despite appearing on opposite edges.', 'A rectangle may wrap across the boundary if its cells satisfy the normal grouping rules.'],
-        conclusion: 'The drawn rectangle may look split, but it represents one adjacent group.'
+        title: 'Recognize a group that wraps across the map edge',
+        setup: 'For F(A,B,C) = Σm(0,1,4,5), the 1s occupy AB rows 00 and 10 across both C columns.',
+        steps: ['Rows 00 and 10 differ only in B and therefore are adjacent across the top/bottom boundary.', 'Across the four cells, A stays 0 while B and C change.', 'Keep only the constant complemented literal.'],
+        conclusion: 'The wraparound rectangle contributes NOT A; a rectangle may look split on paper while representing one adjacent group.'
       }
     ],
     selfChecks: ['Why does K-map column order use 00, 01, 11, 10?', 'Which variables survive when translating a group into a term?', 'When should a don’t-care be left unused?'],
@@ -306,15 +318,15 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     examples: [
       {
         title: 'Trace a four-input multiplexer',
-        setup: 'Let select bits S1 S0 equal 10, with D0 through D3 equal 1, 0, 1, 0.',
-        steps: ['The select code 10 is decimal 2.', 'The selected input is D2.', 'D2 is 1, so output Y is 1; unselected inputs do not affect Y.'],
-        conclusion: 'A MUX answers “which input reaches Y?” rather than “which output is enabled?”'
+        setup: 'Hold D3 D2 D1 D0 at 0, 1, 0, 1 and sweep S1 S0 through all four codes.',
+        steps: ['00 selects D0, so Y=1.', '01 selects D1, so Y=0.', '10 selects D2, so Y=1.', '11 selects D3, so Y=0.', 'Change an unselected input and confirm that Y does not change.'],
+        conclusion: 'A multiplexer answers which input reaches Y. Exactly one data term is enabled by the select code.'
       },
       {
-        title: 'Trace a two-to-four active-high decoder',
-        setup: 'Let address bits A1 A0 equal 01.',
-        steps: ['The code 01 is decimal 1.', 'Output Y1 is selected.', 'Y0, Y2, and Y3 remain 0.'],
-        conclusion: 'Exactly one output is 1 for each valid input code in this active-high decoder.'
+        title: 'Trace a 1-of-4 decoder in both polarities',
+        setup: 'Sweep A1 A0 through 00, 01, 10, and 11. Compare an active-high decoder with an active-low implementation.',
+        steps: ['00 asserts Y0: active-high outputs are 1000; active-low outputs are 0111.', '01 asserts Y1: active-high 0100; active-low 1011.', '10 asserts Y2: active-high 0010; active-low 1101.', '11 asserts Y3: active-high 0001; active-low 1110.', 'Relate each active-high output to its address minterm.'],
+        conclusion: 'Exactly one output is asserted per code, but the asserted voltage depends on polarity. Check polarity before wiring a chip select.'
       }
     ],
     selfChecks: ['How can you tell a component has combinational rather than sequential behavior?', 'How many select bits does an eight-input MUX require?', 'What changes when a decoder’s outputs are active-low?'],
@@ -362,16 +374,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Observe a D flip-flop holding state',
-        setup: 'Q initially stores 0. D changes to 1, but no active clock edge occurs.',
-        steps: ['D is the requested next value.', 'Without the configured edge, the storage event has not happened.', 'Q remains at its present value 0.', 'At the next rising edge, Q becomes 1.'],
-        conclusion: 'The difference between D and Q before the edge is direct evidence that the element stores state.'
+        title: 'Read a D flip-flop from a timing sequence',
+        setup: 'Use a rising-edge D flip-flop starting at Q=0. Record D, the clock event, Q before, and Q after at every step.',
+        steps: ['D changes to 1 with no edge: Q stays 0.', 'A rising edge samples D=1: Q becomes 1.', 'D changes to 0 with no edge: Q stays 1.', 'A falling edge occurs: Q still stays 1 because this device ignores it.', 'The next rising edge samples D=0: Q becomes 0.', 'Another rising edge with D still 0 stores 0 again.'],
+        conclusion: 'The no-edge rows prove storage. If Q follows D immediately, the circuit behaves like a transparent latch rather than a rising-edge flip-flop.'
       },
       {
-        title: 'Describe a divide-by-two sequence',
-        setup: 'A flip-flop is configured so its next state is the complement of its present state.',
-        steps: ['Start with Q equal to 0.', 'First active edge stores 1.', 'Second active edge stores 0.', 'One full output cycle therefore takes two input clock edges.'],
-        conclusion: 'The output frequency is half the input clock frequency because Q toggles once per edge.'
+        title: 'Build the state table for a two-bit enabled counter',
+        setup: 'Let S1 S0 hold a modulo-4 count and EN control whether the state holds or increments.',
+        steps: ['For EN=0, map 00→00, 01→01, 10→10, and 11→11.', 'For EN=1, map 00→01, 01→10, 10→11, and 11→00.', 'Treat next S0 and next S1 as ordinary Boolean functions of EN, S1, and S0.', 'Minimization gives next S0 = EN XOR S0 and next S1 = S1 XOR (EN AND S0).'],
+        conclusion: 'Sequential logic is combinational next-state logic wrapped around storage. The 11→00 row also demonstrates the modulo behavior required by the four-bit program counter.'
       }
     ],
     selfChecks: ['What observation proves that Q is stored rather than a direct copy of D?', 'What information belongs in a state table row?', 'Why is a clock useful when many storage elements must update together?'],
@@ -420,15 +432,15 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     examples: [
       {
         title: 'Find device capacity from signal widths',
-        setup: 'A memory has 12 address lines and 16 data lines.',
-        steps: ['Twelve address lines select 2 to the power 12, or 4,096, locations.', 'Sixteen data lines make each location 16 bits wide.', 'Total data capacity is 4,096 times 16 bits, or 65,536 bits.'],
-        conclusion: 'Address width determines location count; data width determines bits per location.'
+        setup: 'Read capacity as number of locations times bits per location; address lines determine the first factor and data lines the second.',
+        steps: ['12 address and 16 data lines give 4,096×16 = 65,536 bits = 8 KiB.', '10 address and 8 data lines give 1,024×8 = 8,192 bits = 1 KiB.', '4 address and 8 data lines give 16×8 = 128 bits, matching the instructional memory in Implementation 1.', '28 address and 8 data lines give 256 MiB.'],
+        conclusion: 'Capacity grows exponentially with address width and linearly with data width. Keep locations and width as separate quantities until the final multiplication.'
       },
       {
-        title: 'Separate device and local address bits',
-        setup: 'A processor has a 16-bit address and a selected device contains 1,024 locations.',
-        steps: ['1,024 equals 2 to the power 10, so ten low-order bits select a location.', 'The remaining six high-order bits can participate in device selection.', 'Holding those six bits fixed defines one aligned 1,024-address range.'],
-        conclusion: 'The same address simultaneously selects a device range and a row within that device.'
+        title: 'Split an address into device-select and local bits',
+        setup: 'Analyze the 20-bit range 0x20000 through 0x27FFF.',
+        steps: ['Write both endpoints in binary and observe that the high five bits are fixed at 00100.', 'Use those fixed bits to select the device.', 'The remaining 15 bits vary from all zeros to all ones and therefore select 32,768 local locations.', 'Check the inclusive range: 0x27FFF − 0x20000 + 1 = 0x8000 = 32,768.'],
+        conclusion: 'High bits select the aligned device range while low bits select a location within it. The inclusive subtraction check catches off-by-one errors.'
       }
     ],
     selfChecks: ['What does each of the address, data, and control buses contribute to a write?', 'How many locations can nine address lines select?', 'Why should only one device’s output drive a shared data bus during a read?'],
@@ -477,15 +489,15 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     examples: [
       {
         title: 'Trace a polled output request',
-        setup: 'A program needs to send one value to a device.',
-        steps: ['Read status until BUSY is false.', 'Write the value to the data register.', 'Write the operation to the command register.', 'Read status until completion or error is reported.'],
-        conclusion: 'The status checks protect the protocol, but repeated checks occupy processor time.'
+        setup: 'Use memory-mapped STATUS, DATA, and COMMAND registers to send one value.',
+        steps: ['Two STATUS reads return BUSY=1, so the processor must not write yet.', 'A third STATUS read returns BUSY=0.', 'Write the value to DATA, then write the opcode to COMMAND to start the operation.', 'Read STATUS while BUSY=1.', 'A final STATUS read returns BUSY=0 and ERR=0, proving successful completion.'],
+        conclusion: 'Order matters: COMMAND before DATA starts with a stale operand, while skipping the final status read hides errors. Repeated busy reads are the direct cost of polling.'
       },
       {
-        title: 'Choose polling or an interrupt',
-        setup: 'Device A completes in a few processor cycles; Device B may take milliseconds.',
-        steps: ['For Device A, interrupt and context-switch overhead may exceed the short wait.', 'For Device B, polling would waste many cycles.', 'A reasonable initial choice is brief polling for A and interrupt-driven completion for B.'],
-        conclusion: 'The decision depends on expected latency, event rate, and handling overhead—not on a universal rule.'
+        title: 'Choose polling or interrupts from latency evidence',
+        setup: 'Assume a 1 GHz processor and about 300 cycles of interrupt overhead.',
+        steps: ['A 50 ns register-level device costs about 50 polling cycles, so polling is cheaper than a 300-cycle interrupt.', 'A 1 ms serial operation would burn about 1,000,000 polling cycles, so an interrupt is preferable.', 'A 10 ms mechanical-disk wait would burn about 10,000,000 polling cycles.', 'Also consider event rate: a device that interrupts continuously may justify deliberate polling.'],
+        conclusion: 'The crossover occurs when expected wait approaches interrupt overhead. The decision depends on latency and event rate, not a universal rule.'
       }
     ],
     selfChecks: ['What information belongs in status, command, and data registers?', 'Why can an interrupt improve utilization while the requesting process is blocked?', 'Why might a very fast device still be polled?'],
@@ -533,16 +545,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Plan a DMA input transfer',
-        setup: 'A device will deliver a 4 KiB block into memory.',
-        steps: ['The processor configures the device and DMA destination/length.', 'The DMA controller performs the repeated transfers.', 'The processor runs other work during transfer.', 'A completion event causes software to verify status and consume the buffer.'],
-        conclusion: 'DMA changes who performs bulk movement, while the processor remains responsible for setup and completion handling.'
+        title: 'Compare programmed I/O and DMA for the same transfer',
+        setup: 'Move a 4 KiB block as 1,024 four-byte word transfers.',
+        steps: ['Programmed I/O makes the processor read each word, write it to memory, and execute loop overhead.', 'DMA adds destination and length setup, then the controller performs all 1,024 transfers while the processor does other work.', 'Programmed I/O completes when the loop exits; DMA completes through an interrupt followed by a status check.', 'DMA still competes with the processor for memory bandwidth.'],
+        conclusion: 'DMA changes who performs bulk movement, not whether it occurs. The processor still owns setup, completion, and the rule that software must not consume the buffer early.'
       },
       {
-        title: 'Choose storage for two data types',
-        setup: 'A sensor has a temporary sample buffer and a calibration value that must survive power loss.',
-        steps: ['The active sample buffer needs fast runtime access, so volatile RAM is suitable.', 'The calibration value needs retention, so flash or EEPROM is suitable.', 'If the calibration changes often, write endurance must also be considered.'],
-        conclusion: 'Retention is the first distinction, followed by performance and endurance tradeoffs.'
+        title: 'Match data to storage using retention and endurance',
+        setup: 'Choose storage separately for active samples, calibration data, and boot code.',
+        steps: ['Use SRAM or DRAM for a continuously updated active sample buffer: it is fast and does not need power-off retention.', 'Use flash or EEPROM for a calibration constant written almost never.', 'For a calibration value retuned every few minutes, account for flash wear; consider FRAM, battery-backed RAM, or buffered infrequent flash writes.', 'Use ROM or flash for boot code that survives power loss and is not normally rewritten.'],
+        conclusion: 'Retention alone is insufficient. A correct choice also considers speed, frequency of writes, endurance, power, and cost.'
       }
     ],
     selfChecks: ['What work remains for the processor when DMA moves the data?', 'What does volatile fail to guarantee for a shared variable?', 'Which memory characteristics matter beyond whether power is retained?'],
@@ -590,16 +602,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Count lines in a cache',
-        setup: 'A 32 KiB cache uses 64-byte blocks and metadata is ignored.',
-        steps: ['32 KiB equals 32 times 1,024, or 32,768 bytes.', 'Divide 32,768 by 64 bytes per block.', 'The result is 512 cache lines.'],
-        conclusion: 'Capacity and block size determine line count; associativity determines how those lines are organized into sets.'
+        title: 'Count cache lines and split block and offset bits',
+        setup: 'Use a 32 KiB cache, 64-byte blocks, and 32-bit byte addresses; ignore metadata.',
+        steps: ['32 KiB is 32,768 bytes.', 'A 64-byte block is 2^6 bytes, so the low 6 address bits are the block offset.', '32,768 ÷ 64 gives 512 cache lines.', 'The remaining 26 address bits identify the memory block before placement and tag/index division.'],
+        conclusion: 'Capacity and block size determine line count; block size determines offset width; associativity then determines which lines a block may occupy.'
       },
       {
-        title: 'Classify locality in an array loop',
-        setup: 'A loop reads A[0], A[1], A[2], and A[3], then repeats the loop.',
-        steps: ['Consecutive elements demonstrate spatial locality.', 'Repeating the loop demonstrates temporal reuse of the same elements.', 'A block containing several adjacent elements can help both patterns.'],
-        conclusion: 'One access sequence can exhibit both spatial and temporal locality for different reasons.'
+        title: 'Count hits and misses on an access sequence',
+        setup: 'Use four initially empty, direct-mapped, one-word lines and accesses 0, 1, 2, 0, 1, 3, 0. Place block b in line b mod 4.',
+        steps: ['Blocks 0, 1, and 2 miss on their first references.', 'The next references to 0 and 1 hit because both remain resident.', 'Block 3 misses on its first reference.', 'The final reference to 0 hits, giving 3 hits in 7 accesses, about 43%.', 'At 1 cycle per hit and 100 per miss, the stated assumptions give roughly 57 cycles average.'],
+        conclusion: 'A short trace is dominated by compulsory misses. Always report the access trace and timing assumptions alongside a hit rate.'
       }
     ],
     selfChecks: ['Why is executing directly from a mechanical disk impractical?', 'What is the difference between a cache hit and a miss?', 'How can increasing block size both help and hurt?'],
@@ -647,16 +659,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Trace c receives a plus b',
-        setup: 'Variables a and b are in memory and the ALU operates on registers.',
-        steps: ['Load a into register R1.', 'Load b into register R3.', 'Use the ALU to compute R1 plus R3 and store the result in R2.', 'Store R2 into memory location c.'],
-        conclusion: 'The trace separates memory transfers from the arithmetic operation.'
+        title: 'Trace c = a + b through the datapath',
+        setup: 'Variables a, b, and c are in memory. Use MAR and registers R1, R2, and R3.',
+        steps: ['MAR ← address(a); assert MAR load.', 'R1 ← M[MAR]; assert memory read and R1 load.', 'MAR ← address(b), then R3 ← M[MAR].', 'R2 ← R1 + R3; select ADD in the ALU and enable R2.', 'MAR ← address(c).', 'M[MAR] ← R2; assert memory write.'],
+        conclusion: 'Only one step is arithmetic; the others move data. The control unit must produce the load, read, ALU-select, and write signals in the proper order.'
       },
       {
-        title: 'Interpret one RTL statement',
-        setup: 'R4 receives R1 XOR R2.',
-        steps: ['R1 and R2 are source registers.', 'XOR is the selected ALU operation.', 'R4 is the destination state element.', 'The control unit must select all three roles and permit R4 to update.'],
-        conclusion: 'RTL is concise, but each symbol corresponds to a data path or control action.'
+        title: 'Read one RTL statement as control decisions',
+        setup: 'Decompose R4 ← R1 XOR R2.',
+        steps: ['Select R1 on register-file read port A.', 'Select R2 on read port B.', 'Select XOR on the ALU function lines.', 'Select R4 as the write address and assert write-enable at the active clock edge.'],
+        conclusion: 'RTL is compact, but every symbol maps to hardware and control. Without write-enable, the ALU result can be correct while R4 never changes.'
       }
     ],
     selfChecks: ['How do the IR and instruction pointer differ?', 'Why can’t an ALU by itself execute a complete instruction?', 'Which generic stages does a register-to-register ADD need, and which data-memory action can it skip?'],
@@ -704,16 +716,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Find an ideal completion count',
-        setup: 'Six instructions enter an ideal five-stage pipeline with no stalls.',
-        steps: ['The first instruction needs five cycles to pass through five stages.', 'Each of the remaining five instructions completes one cycle later.', 'Total cycles equal 5 plus 6 minus 1, which is 10.'],
-        conclusion: 'The pipeline fill cost is four extra cycles beyond the six steady completions.'
+        title: 'Chart six instructions through a five-stage pipeline',
+        setup: 'Use Fetch, Decode, Execute, Memory, and Writeback with no stalls.',
+        steps: ['Instruction 1 occupies F,D,X,M,W in cycles 1–5.', 'Instruction 2 begins in cycle 2 and finishes in cycle 6; each later instruction begins one cycle after the prior one.', 'Instruction 6 occupies F in cycle 6 and W in cycle 10.', 'The total is 5 + (6−1) = 10 cycles, compared with 30 without overlap.', 'If stage delays are 300, 200, 300, 250, and 200 ps, the shared clock period is at least the slowest 300 ps plus register overhead.'],
+        conclusion: 'Pipelining improves throughput, not single-instruction latency, and the slowest stage sets the ideal clock ceiling.'
       },
       {
-        title: 'Classify a dependency',
-        setup: 'ADD writes R1, and the next SUB reads R1.',
-        steps: ['The instructions require the same value in producer-consumer order.', 'This is a data hazard, not a resource or branch conflict.', 'If the ADD result exists in time, forwarding can feed SUB directly; otherwise a stall is needed.'],
-        conclusion: 'Classification alone does not prove the remedy; stage timing determines whether forwarding is sufficient.'
+        title: 'Distinguish a forwardable hazard from a required stall',
+        setup: 'Compare ADD R1,R2,R3 followed by SUB R4,R1,R5 with LOAD R1,0(R2) followed by the same SUB.',
+        steps: ['The ADD result exists after Execute in cycle 3 and the SUB needs it in Execute in cycle 4, so execute-to-execute forwarding can avoid a stall.', 'The LOAD value appears only after Memory in cycle 4, but the immediately following SUB needs it in Execute during that same cycle.', 'Forwarding cannot send a value backward in time, so the load-use pair needs one bubble and then forwarding.', 'An independent instruction may be scheduled into the bubble when program meaning allows it.'],
+        conclusion: 'Name the hazard, then compare producer-ready and consumer-needed timing. Classification alone does not prove the remedy.'
       }
     ],
     selfChecks: ['Why can throughput improve even if one instruction’s latency does not?', 'What determines the pipeline clock period?', 'Why can a load-use hazard remain after forwarding paths are added?'],
@@ -761,16 +773,16 @@ export const LESSON_NARRATIVES: readonly LessonNarrative[] = [
     ],
     examples: [
       {
-        title: 'Trace MOV and ADD',
-        setup: 'EAX begins at 0. Execute MOV EAX, 7 followed by ADD EAX, 5.',
-        steps: ['MOV replaces EAX with 7.', 'ADD reads the current 7 and adds 5.', 'EAX becomes 12.', 'The result is neither zero nor negative, so zero and sign flags are clear in this bounded example.'],
-        conclusion: 'Name the exact instruction responsible for each observed state change.'
+        title: 'Trace registers and flags instruction by instruction',
+        setup: 'Start with EAX=0 and EBX=0, then execute MOV EAX,7; ADD EAX,5; MOV EBX,12; CMP EAX,EBX.',
+        steps: ['MOV sets EAX to 7 and leaves flags unchanged.', 'ADD produces EAX=12 with ZF=0 and SF=0.', 'MOV sets EBX=12 and again leaves the prior flags unchanged.', 'CMP computes 12−12 without storing it, so EAX and EBX remain 12 while ZF becomes 1.', 'Contrast CMP with SUB: the flags could match, but SUB would write the zero result into its destination.'],
+        conclusion: 'Record both registers and flags. The destination state, not the flags alone, distinguishes CMP from SUB.'
       },
       {
-        title: 'Trace a call boundary',
-        setup: 'EIP points to a CALL and ESP points to the current stack top.',
-        steps: ['CALL places the return address on the stack and adjusts ESP.', 'EIP changes to the procedure entry.', 'The procedure may save registers or establish a frame.', 'RET obtains the saved return address and resumes the caller.'],
-        conclusion: 'The saved return address connects stack behavior to control flow.'
+        title: 'Follow ESP and EIP across CALL and RET',
+        setup: 'Let ESP=0x00FFF000, place a five-byte CALL at 0x08048400, and put the procedure at 0x08048500.',
+        steps: ['CALL pushes return address 0x08048405, decreases ESP to 0x00FFEFFC, and sets EIP to 0x08048500.', 'PUSH EBP decreases ESP again to 0x00FFEFF8 and places saved EBP above the return address.', 'POP EBP restores ESP to 0x00FFEFFC so the return address is on top.', 'RET pops 0x08048405 into EIP and restores ESP to 0x00FFF000.'],
+        conclusion: 'ESP must be restored before RET. An unmatched push makes RET treat saved data as an instruction address, so the crash appears at the return rather than at the original stack mistake.'
       }
     ],
     selfChecks: ['Why can identical virtual addresses in two processes map differently?', 'How do assembly text, machine bytes, and instruction addresses describe one program?', 'What evidence distinguishes CMP from SUB?'],

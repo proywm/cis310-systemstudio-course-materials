@@ -105,6 +105,8 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
       item.iconPath = new vscode.ThemeIcon(
         element.section === 'syllabus'
           ? 'book'
+          : element.section === 'diagnostic'
+            ? 'checklist'
           : element.section === 'lesson'
             ? 'book-open'
           : element.section === 'presentation'
@@ -133,17 +135,21 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     const item = new vscode.TreeItem(element.resource.title, vscode.TreeItemCollapsibleState.None);
     item.description = element.resource.kind === 'syllabus'
       ? 'primary accessible HTML · Canvas current'
+      : element.resource.kind === 'diagnostic'
+        ? '0 points · unaided baseline · submit in Canvas'
       : element.resource.kind === 'presentation'
         ? 'optional visual PDF archive · HTML lecture is primary'
         : 'packaged reference';
     item.tooltip = element.resource.kind === 'syllabus'
       ? 'Primary accessible Fall 2026 HTML syllabus with the verified Monday/Wednesday calendar. Canvas provides live section details and submission. An optional print PDF is also packaged.'
+      : element.resource.kind === 'diagnostic'
+        ? 'Beginning-of-course pre-test instructions. This diagnostic does not affect the course grade and must be completed without AI help so the baseline is meaningful.'
       : element.resource.kind === 'presentation'
       ? `${element.resource.sourceTitle}\nOptional visual PDF archive paired with a primary responsive HTML lecture. The PDF is not represented as independently remediated.`
       : `${element.resource.sourceTitle}\nUse this study reference with the current Canvas assignment.` +
         (element.resource.circuitStarter ? `\nHover and select “${element.resource.circuitStarter.label}” to create a blank .dig file.` : '');
     item.iconPath = new vscode.ThemeIcon(
-      element.resource.kind === 'syllabus' ? 'file-code' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'
+      element.resource.kind === 'syllabus' ? 'file-code' : element.resource.kind === 'diagnostic' ? 'checklist' : element.resource.kind === 'presentation' ? 'file-media' : 'markdown'
     );
     item.command = {
       command: 'systemstudioCis310.openCourseMaterial',
@@ -161,6 +167,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
       return [
         { type: 'notice' },
         { type: 'practice' },
+        { type: 'section', section: 'diagnostic', label: `Ungraded diagnostic (${this.materials.getResources('diagnostic').length})` },
         { type: 'section', section: 'syllabus', label: `Syllabus (${this.materials.getResources('syllabus').length})` },
         { type: 'section', section: 'lesson', label: `Accessible HTML lectures (${LESSON_NARRATIVES.length}) — primary` },
         { type: 'section', section: 'presentation', label: `Visual PDF archives (${this.materials.getResources('presentation').length}) — optional` },
@@ -174,7 +181,7 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
     if (element.section === 'lesson') {
       return LESSON_NARRATIVES.map((lesson) => ({ type: 'lesson', lesson }));
     }
-    const resources = element.section === 'presentation' || element.section === 'syllabus'
+    const resources = element.section === 'presentation' || element.section === 'syllabus' || element.section === 'diagnostic'
       ? this.materials.getResources(element.section)
       : this.materials.getAssignments(element.section);
     return resources.map((resource) => ({ type: 'resource', resource }));
@@ -188,6 +195,6 @@ export class CourseMaterialsTreeProvider implements vscode.TreeDataProvider<Mate
 type MaterialsNode =
   | { type: 'notice' }
   | { type: 'practice' }
-  | { type: 'section'; section: 'syllabus' | 'lesson' | 'presentation' | AssignmentCategory; label: string }
+  | { type: 'section'; section: 'syllabus' | 'diagnostic' | 'lesson' | 'presentation' | AssignmentCategory; label: string }
   | { type: 'lesson'; lesson: LessonNarrative }
   | { type: 'resource'; resource: CourseMaterialResource };

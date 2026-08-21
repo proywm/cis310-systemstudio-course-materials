@@ -54,6 +54,18 @@ describe('student helper', () => {
     assert.ok(reply.actions.some((action) => action.id === 'open-learning'));
   });
 
+  it('routes the beginning-of-course pre-test without compromising its unaided baseline', () => {
+    const reply = answerStudentQuestion('Where is the beginning-of-course pre-test?');
+    const text = JSON.stringify(reply);
+    assert.match(text, /0 points/);
+    assert.match(text, /does not affect your grade/);
+    assert.match(text, /Do not use notes, websites, classmates, or the AI learning coach/);
+    assert.ok(reply.actions.some((action) => action.id === 'open-pretest'));
+    assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'open-pretest' }), {
+      type: 'action', action: 'open-pretest'
+    });
+  });
+
   it('routes half-adder and hands-on questions to mapped guided labs', () => {
     const reply = answerStudentQuestion('Is there a half adder tutorial or circuit walkthrough?');
     assert.match(reply.title, /Hands-on Lab Center/);

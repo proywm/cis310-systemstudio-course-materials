@@ -79,23 +79,26 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Count lines in a cache</h3>
-<p>A 32 KiB cache uses 64-byte blocks and metadata is ignored.</p>
+<h3>Example 1: Count cache lines and split block and offset bits</h3>
+<p>Use a 32 KiB cache, 64-byte blocks, and 32-bit byte addresses; ignore metadata.</p>
 <ol>
-<li>32 KiB equals 32 times 1,024, or 32,768 bytes.</li>
-<li>Divide 32,768 by 64 bytes per block.</li>
-<li>The result is 512 cache lines.</li>
+<li>32 KiB is 32,768 bytes.</li>
+<li>A 64-byte block is 2^6 bytes, so the low 6 address bits are the block offset.</li>
+<li>32,768 ÷ 64 gives 512 cache lines.</li>
+<li>The remaining 26 address bits identify the memory block before placement and tag/index division.</li>
 </ol>
-<p><strong>Conclusion:</strong> Capacity and block size determine line count; associativity determines how those lines are organized into sets.</p>
+<p><strong>Conclusion:</strong> Capacity and block size determine line count; block size determines offset width; associativity then determines which lines a block may occupy.</p>
 
-<h3>Example 2: Classify locality in an array loop</h3>
-<p>A loop reads A[0], A[1], A[2], and A[3], then repeats the loop.</p>
+<h3>Example 2: Count hits and misses on an access sequence</h3>
+<p>Use four initially empty, direct-mapped, one-word lines and accesses 0, 1, 2, 0, 1, 3, 0. Place block b in line b mod 4.</p>
 <ol>
-<li>Consecutive elements demonstrate spatial locality.</li>
-<li>Repeating the loop demonstrates temporal reuse of the same elements.</li>
-<li>A block containing several adjacent elements can help both patterns.</li>
+<li>Blocks 0, 1, and 2 miss on their first references.</li>
+<li>The next references to 0 and 1 hit because both remain resident.</li>
+<li>Block 3 misses on its first reference.</li>
+<li>The final reference to 0 hits, giving 3 hits in 7 accesses, about 43%.</li>
+<li>At 1 cycle per hit and 100 per miss, the stated assumptions give roughly 57 cycles average.</li>
 </ol>
-<p><strong>Conclusion:</strong> One access sequence can exhibit both spatial and temporal locality for different reasons.</p>
+<p><strong>Conclusion:</strong> A short trace is dominated by compulsory misses. Always report the access trace and timing assumptions alongside a hit rate.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

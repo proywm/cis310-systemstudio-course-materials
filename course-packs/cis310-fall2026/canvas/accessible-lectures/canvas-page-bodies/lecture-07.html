@@ -43,22 +43,24 @@
 
 <h2>Worked examples</h2>
 <h3>Example 1: Find device capacity from signal widths</h3>
-<p>A memory has 12 address lines and 16 data lines.</p>
+<p>Read capacity as number of locations times bits per location; address lines determine the first factor and data lines the second.</p>
 <ol>
-<li>Twelve address lines select 2 to the power 12, or 4,096, locations.</li>
-<li>Sixteen data lines make each location 16 bits wide.</li>
-<li>Total data capacity is 4,096 times 16 bits, or 65,536 bits.</li>
+<li>12 address and 16 data lines give 4,096×16 = 65,536 bits = 8 KiB.</li>
+<li>10 address and 8 data lines give 1,024×8 = 8,192 bits = 1 KiB.</li>
+<li>4 address and 8 data lines give 16×8 = 128 bits, matching the instructional memory in Implementation 1.</li>
+<li>28 address and 8 data lines give 256 MiB.</li>
 </ol>
-<p><strong>Conclusion:</strong> Address width determines location count; data width determines bits per location.</p>
+<p><strong>Conclusion:</strong> Capacity grows exponentially with address width and linearly with data width. Keep locations and width as separate quantities until the final multiplication.</p>
 
-<h3>Example 2: Separate device and local address bits</h3>
-<p>A processor has a 16-bit address and a selected device contains 1,024 locations.</p>
+<h3>Example 2: Split an address into device-select and local bits</h3>
+<p>Analyze the 20-bit range 0x20000 through 0x27FFF.</p>
 <ol>
-<li>1,024 equals 2 to the power 10, so ten low-order bits select a location.</li>
-<li>The remaining six high-order bits can participate in device selection.</li>
-<li>Holding those six bits fixed defines one aligned 1,024-address range.</li>
+<li>Write both endpoints in binary and observe that the high five bits are fixed at 00100.</li>
+<li>Use those fixed bits to select the device.</li>
+<li>The remaining 15 bits vary from all zeros to all ones and therefore select 32,768 local locations.</li>
+<li>Check the inclusive range: 0x27FFF − 0x20000 + 1 = 0x8000 = 32,768.</li>
 </ol>
-<p><strong>Conclusion:</strong> The same address simultaneously selects a device range and a row within that device.</p>
+<p><strong>Conclusion:</strong> High bits select the aligned device range while low bits select a location within it. The inclusive subtraction check catches off-by-one errors.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

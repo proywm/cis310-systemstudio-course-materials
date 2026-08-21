@@ -79,23 +79,26 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Find an ideal completion count</h3>
-<p>Six instructions enter an ideal five-stage pipeline with no stalls.</p>
+<h3>Example 1: Chart six instructions through a five-stage pipeline</h3>
+<p>Use Fetch, Decode, Execute, Memory, and Writeback with no stalls.</p>
 <ol>
-<li>The first instruction needs five cycles to pass through five stages.</li>
-<li>Each of the remaining five instructions completes one cycle later.</li>
-<li>Total cycles equal 5 plus 6 minus 1, which is 10.</li>
+<li>Instruction 1 occupies F,D,X,M,W in cycles 1–5.</li>
+<li>Instruction 2 begins in cycle 2 and finishes in cycle 6; each later instruction begins one cycle after the prior one.</li>
+<li>Instruction 6 occupies F in cycle 6 and W in cycle 10.</li>
+<li>The total is 5 + (6−1) = 10 cycles, compared with 30 without overlap.</li>
+<li>If stage delays are 300, 200, 300, 250, and 200 ps, the shared clock period is at least the slowest 300 ps plus register overhead.</li>
 </ol>
-<p><strong>Conclusion:</strong> The pipeline fill cost is four extra cycles beyond the six steady completions.</p>
+<p><strong>Conclusion:</strong> Pipelining improves throughput, not single-instruction latency, and the slowest stage sets the ideal clock ceiling.</p>
 
-<h3>Example 2: Classify a dependency</h3>
-<p>ADD writes R1, and the next SUB reads R1.</p>
+<h3>Example 2: Distinguish a forwardable hazard from a required stall</h3>
+<p>Compare ADD R1,R2,R3 followed by SUB R4,R1,R5 with LOAD R1,0(R2) followed by the same SUB.</p>
 <ol>
-<li>The instructions require the same value in producer-consumer order.</li>
-<li>This is a data hazard, not a resource or branch conflict.</li>
-<li>If the ADD result exists in time, forwarding can feed SUB directly; otherwise a stall is needed.</li>
+<li>The ADD result exists after Execute in cycle 3 and the SUB needs it in Execute in cycle 4, so execute-to-execute forwarding can avoid a stall.</li>
+<li>The LOAD value appears only after Memory in cycle 4, but the immediately following SUB needs it in Execute during that same cycle.</li>
+<li>Forwarding cannot send a value backward in time, so the load-use pair needs one bubble and then forwarding.</li>
+<li>An independent instruction may be scheduled into the bubble when program meaning allows it.</li>
 </ol>
-<p><strong>Conclusion:</strong> Classification alone does not prove the remedy; stage timing determines whether forwarding is sufficient.</p>
+<p><strong>Conclusion:</strong> Name the hazard, then compare producer-ready and consumer-needed timing. Classification alone does not prove the remedy.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

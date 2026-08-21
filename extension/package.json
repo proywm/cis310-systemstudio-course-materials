@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, Full Digital, and an integrated actual NASM/ELF32 workbench.",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -63,6 +63,7 @@
     "onCommand:systemstudioCis310.exportCourseCalendar",
     "onCommand:systemstudioCis310.openAcademicCalendar",
     "onCommand:systemstudioCis310.openSyllabus",
+    "onCommand:systemstudioCis310.openPretest",
     "onCommand:systemstudioCis310.checkEnvironment",
     "onCommand:systemstudioCis310.openDigital",
     "onCommand:systemstudioCis310.createCircuit",
@@ -213,6 +214,12 @@
         "title": "CIS 310: Open Fall 2026 Syllabus",
         "category": "SystemStudio",
         "icon": "$(book-open)"
+      },
+      {
+        "command": "systemstudioCis310.openPretest",
+        "title": "CIS 310: Open Ungraded Beginning-of-Course Pre-test",
+        "category": "SystemStudio",
+        "icon": "$(checklist)"
       },
       {
         "command": "systemstudioCis310.setupDigital",

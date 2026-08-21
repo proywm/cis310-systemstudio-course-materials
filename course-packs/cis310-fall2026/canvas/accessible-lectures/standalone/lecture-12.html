@@ -78,25 +78,26 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Trace MOV and ADD</h3>
-<p>EAX begins at 0. Execute MOV EAX, 7 followed by ADD EAX, 5.</p>
+<h3>Example 1: Trace registers and flags instruction by instruction</h3>
+<p>Start with EAX=0 and EBX=0, then execute MOV EAX,7; ADD EAX,5; MOV EBX,12; CMP EAX,EBX.</p>
 <ol>
-<li>MOV replaces EAX with 7.</li>
-<li>ADD reads the current 7 and adds 5.</li>
-<li>EAX becomes 12.</li>
-<li>The result is neither zero nor negative, so zero and sign flags are clear in this bounded example.</li>
+<li>MOV sets EAX to 7 and leaves flags unchanged.</li>
+<li>ADD produces EAX=12 with ZF=0 and SF=0.</li>
+<li>MOV sets EBX=12 and again leaves the prior flags unchanged.</li>
+<li>CMP computes 12−12 without storing it, so EAX and EBX remain 12 while ZF becomes 1.</li>
+<li>Contrast CMP with SUB: the flags could match, but SUB would write the zero result into its destination.</li>
 </ol>
-<p><strong>Conclusion:</strong> Name the exact instruction responsible for each observed state change.</p>
+<p><strong>Conclusion:</strong> Record both registers and flags. The destination state, not the flags alone, distinguishes CMP from SUB.</p>
 
-<h3>Example 2: Trace a call boundary</h3>
-<p>EIP points to a CALL and ESP points to the current stack top.</p>
+<h3>Example 2: Follow ESP and EIP across CALL and RET</h3>
+<p>Let ESP=0x00FFF000, place a five-byte CALL at 0x08048400, and put the procedure at 0x08048500.</p>
 <ol>
-<li>CALL places the return address on the stack and adjusts ESP.</li>
-<li>EIP changes to the procedure entry.</li>
-<li>The procedure may save registers or establish a frame.</li>
-<li>RET obtains the saved return address and resumes the caller.</li>
+<li>CALL pushes return address 0x08048405, decreases ESP to 0x00FFEFFC, and sets EIP to 0x08048500.</li>
+<li>PUSH EBP decreases ESP again to 0x00FFEFF8 and places saved EBP above the return address.</li>
+<li>POP EBP restores ESP to 0x00FFEFFC so the return address is on top.</li>
+<li>RET pops 0x08048405 into EIP and restores ESP to 0x00FFF000.</li>
 </ol>
-<p><strong>Conclusion:</strong> The saved return address connects stack behavior to control flow.</p>
+<p><strong>Conclusion:</strong> ESP must be restored before RET. An unmatched push makes RET treat saved data as an instruction address, so the crash appears at the return rather than at the original stack mistake.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

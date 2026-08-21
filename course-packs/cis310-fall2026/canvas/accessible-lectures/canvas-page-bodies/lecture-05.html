@@ -43,22 +43,26 @@
 
 <h2>Worked examples</h2>
 <h3>Example 1: Trace a four-input multiplexer</h3>
-<p>Let select bits S1 S0 equal 10, with D0 through D3 equal 1, 0, 1, 0.</p>
+<p>Hold D3 D2 D1 D0 at 0, 1, 0, 1 and sweep S1 S0 through all four codes.</p>
 <ol>
-<li>The select code 10 is decimal 2.</li>
-<li>The selected input is D2.</li>
-<li>D2 is 1, so output Y is 1; unselected inputs do not affect Y.</li>
+<li>00 selects D0, so Y=1.</li>
+<li>01 selects D1, so Y=0.</li>
+<li>10 selects D2, so Y=1.</li>
+<li>11 selects D3, so Y=0.</li>
+<li>Change an unselected input and confirm that Y does not change.</li>
 </ol>
-<p><strong>Conclusion:</strong> A MUX answers “which input reaches Y?” rather than “which output is enabled?”</p>
+<p><strong>Conclusion:</strong> A multiplexer answers which input reaches Y. Exactly one data term is enabled by the select code.</p>
 
-<h3>Example 2: Trace a two-to-four active-high decoder</h3>
-<p>Let address bits A1 A0 equal 01.</p>
+<h3>Example 2: Trace a 1-of-4 decoder in both polarities</h3>
+<p>Sweep A1 A0 through 00, 01, 10, and 11. Compare an active-high decoder with an active-low implementation.</p>
 <ol>
-<li>The code 01 is decimal 1.</li>
-<li>Output Y1 is selected.</li>
-<li>Y0, Y2, and Y3 remain 0.</li>
+<li>00 asserts Y0: active-high outputs are 1000; active-low outputs are 0111.</li>
+<li>01 asserts Y1: active-high 0100; active-low 1011.</li>
+<li>10 asserts Y2: active-high 0010; active-low 1101.</li>
+<li>11 asserts Y3: active-high 0001; active-low 1110.</li>
+<li>Relate each active-high output to its address minterm.</li>
 </ol>
-<p><strong>Conclusion:</strong> Exactly one output is 1 for each valid input code in this active-high decoder.</p>
+<p><strong>Conclusion:</strong> Exactly one output is asserted per code, but the asserted voltage depends on polarity. Check polarity before wiring a chip select.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

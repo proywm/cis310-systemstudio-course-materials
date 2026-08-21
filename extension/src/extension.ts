@@ -490,6 +490,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
       await courseMaterials.openResource(syllabus);
     }),
+    vscode.commands.registerCommand('systemstudioCis310.openPretest', async () => {
+      const pretest = courseMaterials.getResource('pretest-fall-2026');
+      if (!pretest) {
+        await vscode.window.showErrorMessage('The packaged Fall 2026 ungraded pre-test is unavailable.');
+        return;
+      }
+      await courseMaterials.openResource(pretest);
+    }),
     vscode.commands.registerCommand('systemstudioCis310.setupDigital', setupDigital),
     vscode.commands.registerCommand('systemstudioCis310.setupCourseEnvironment', setupCourseEnvironment),
     vscode.commands.registerCommand('systemstudioCis310.checkEnvironment', async () => {
@@ -1082,7 +1090,7 @@ async function configureAiAssistance(
     return undefined;
   }
   await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('codex', 'local-ready'));
-  await vscode.window.showInformationMessage(`${status.version}: U-M Codex CLI is available. Authentication is checked inside Codex; SystemStudio does not read or store the student's key.`);
+  await vscode.window.showInformationMessage(`${status.version}: U-M Codex CLI is installed and login status is confirmed. SystemStudio does not read or store the student's key.`);
   if (offerTest) {
     await launchCodexLearningCoach(context, 'I am checking my CIS 310 learning-coach setup. Ask me one short, ungraded binary-conversion question and wait for my attempt before giving feedback.');
   }

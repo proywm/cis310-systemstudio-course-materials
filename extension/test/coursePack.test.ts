@@ -112,6 +112,7 @@ describe('course-material manifest', () => {
     assert.equal(manifest.version, extensionPackage.version);
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'presentation').length, 13);
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'syllabus').length, 1);
+    assert.equal(manifest.resources.filter((resource) => resource.kind === 'diagnostic').length, 1);
     assert.equal(manifest.course.deliveryTerm, 'Fall 2026');
     assert.equal(manifest.resources.filter((resource) => resource.kind === 'assignment').length, 7);
     assert.equal(manifest.resources.filter((resource) => resource.assignmentCategory === 'homework').length, 3);
@@ -124,17 +125,26 @@ describe('course-material manifest', () => {
     assert.match(syllabusHtml, /<main id="main-content">/i);
     assert.match(syllabusHtml, /<caption>Course contact and meeting information<\/caption>/i);
     assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>Instructor<\/strong><\/th>/i);
-    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>SystemStudio CIS 310<\/strong><\/th>/i);
+    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>Canvas<\/strong><\/th>/i);
+    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>Digital \(circuit simulator\)<\/strong><\/th>/i);
+    assert.match(syllabusHtml, /<th scope="row"[^>]*><strong>NASM, GNU <code>ld<\/code>, and GDB<\/strong><\/th>/i);
     assert.match(syllabusHtml, /Participation quizzes and in-class evidence checks<\/td>\s*<td[^>]*>15%<\/td>/i);
     assert.match(syllabusHtml, /Three written homework assignments and three implementation assignments\/processor milestones<\/td>\s*<td[^>]*>65%<\/td>/i);
     assert.match(syllabusHtml, /Final processor project and demonstration<\/td>\s*<td[^>]*>20%<\/td>/i);
     assert.match(syllabusHtml, /<strong>Total<\/strong><\/td>\s*<td[^>]*><strong>100%<\/strong><\/td>/i);
-    assert.match(syllabusHtml, /cumulative 4-bit processor and assembly-program presentation\/demonstration/i);
+    assert.match(syllabusHtml, /Final cumulative 4-bit processor presentation and demonstration/i);
+    assert.match(syllabusHtml, /same 4-bit processor developed through the three implementation assignments/i);
     assert.doesNotMatch(syllabusHtml, /Final 8-bit processor|separate 8-bit/i);
     assert.doesNotMatch(syllabusHtml, /<script\b/i);
     const calendarHtml = syllabusHtml.split('id="tentative-fall-2026-course-calendar"')[1] ?? '';
     assert.equal((calendarHtml.match(/<td style="text-align: left;">(?:[1-9]|1\d|2[0-7])<\/td>/g) ?? []).length, 27);
     assert.match(await readFile(path.join(packRoot, 'syllabus', 'CIS310_Fall_2026_Syllabus.pdf'), 'utf8'), /^%PDF/);
+    const pretest = manifest.resources.find((resource) => resource.kind === 'diagnostic');
+    assert.ok(pretest?.localPath);
+    const pretestHtml = await readFile(resolveCoursePackPath(packRoot, pretest.localPath), 'utf8');
+    assert.match(pretestHtml, /0 points/i);
+    assert.match(pretestHtml, /Do not use an AI assistant/i);
+    assert.match(pretestHtml, /does not affect your course grade/i);
     const implementationOne = await readFile(path.join(packRoot, 'assignments', 'project-1-registers-dram.md'), 'utf8');
     const implementationThree = await readFile(path.join(packRoot, 'assignments', 'project-3-processor.md'), 'utf8');
     const finalPresentation = await readFile(path.join(packRoot, 'assignments', 'final-project-4-bit-processor.md'), 'utf8');
@@ -162,6 +172,9 @@ describe('course-material manifest', () => {
       } else if (resource.kind === 'syllabus') {
         assert.equal(path.extname(resource.localPath).toLowerCase(), '.html');
         assert.equal(resource.id, 'syllabus-fall-2026');
+      } else if (resource.kind === 'diagnostic') {
+        assert.equal(path.extname(resource.localPath).toLowerCase(), '.html');
+        assert.equal(resource.id, 'pretest-fall-2026');
       } else {
         assert.ok(resource.relatedPresentationIds?.length);
         assert.ok(resource.assignmentCategory === 'homework' || resource.assignmentCategory === 'project');

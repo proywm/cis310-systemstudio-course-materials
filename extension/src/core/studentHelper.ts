@@ -6,6 +6,7 @@ export type StudentHelperAction =
   | 'ask-before-class'
   | 'open-calendar'
   | 'open-syllabus'
+  | 'open-pretest'
   | 'open-materials'
   | 'open-learning'
   | 'open-coursework'
@@ -38,6 +39,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'ask-before-class',
   'open-calendar',
   'open-syllabus',
+  'open-pretest',
   'open-materials',
   'open-learning',
   'open-coursework',
@@ -266,7 +268,27 @@ export function answerStudentQuestion(question: string): StudentHelperReply {
     };
   }
 
-  if (matches(text, ['pretest', 'expected output', 'assignment scope', 'instructions unclear', 'what is the assignment asking'])) {
+  if (matches(text, ['pretest', 'pre-test', 'beginning diagnostic', 'baseline diagnostic'])) {
+    return {
+      title: 'Complete the ungraded pre-test using only your current knowledge',
+      paragraphs: [
+        'The beginning-of-course pre-test is worth 0 points and does not affect your grade. Its purpose is to show the instructor which prerequisite topics need review.',
+        'Do not use notes, websites, classmates, or the AI learning coach. A wrong or incomplete answer is useful baseline evidence; AI-assisted answers would make the diagnostic less useful.'
+      ],
+      checklist: [
+        'Open the packaged instructions and the matching 0-point Canvas assignment.',
+        'Answer from your current knowledge without outside assistance.',
+        'Submit in Canvas and verify the receipt.',
+        'After submission, use the learning modules and coach for different practice examples.'
+      ],
+      actions: [
+        { id: 'open-pretest', label: 'Open pre-test instructions' },
+        { id: 'open-canvas', label: 'Open Canvas to submit' }
+      ]
+    };
+  }
+
+  if (matches(text, ['expected output', 'assignment scope', 'instructions unclear', 'what is the assignment asking'])) {
     return {
       title: 'Turn an ambiguous requirement into one concrete decision',
       paragraphs: [

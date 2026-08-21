@@ -28,6 +28,29 @@ describe('accessible novice lesson texts', () => {
     }
   });
 
+  it('carries the current Canvas worked examples into all extension lessons', () => {
+    const markers: Readonly<Record<string, readonly RegExp[]>> = {
+      'lecture-01': [/128 \+ 32 \+ 16 \+ 2 = 178/, /2 \+ F = 17/],
+      'lecture-02': [/1110 0001/, /Sum is 1 when an odd number/],
+      'lecture-03': [/\(NOT A\)\(NOT B\)C/, /Recognize the remaining pattern as A XOR C/],
+      'lecture-04': [/Σm\(2,3,4,5,6,7\)/, /adjacent across the top\/bottom boundary/],
+      'lecture-05': [/00 selects D0, so Y=1/, /active-low outputs are 0111/],
+      'lecture-06': [/falling edge occurs: Q still stays 1/, /next S1 = S1 XOR/],
+      'lecture-07': [/4,096×16 = 65,536 bits/, /0x27FFF − 0x20000 \+ 1/],
+      'lecture-08': [/Two STATUS reads return BUSY=1/, /1,000,000 polling cycles/],
+      'lecture-08-supplement': [/controller performs all 1,024 transfers/, /FRAM, battery-backed RAM/],
+      'lecture-09': [/32,768 ÷ 64 gives 512 cache lines/, /3 hits in 7 accesses/],
+      'lecture-10': [/MAR ← address\(a\)/, /Select R4 as the write address/],
+      'lecture-11': [/5 \+ \(6−1\) = 10 cycles/, /load-use pair needs one bubble/],
+      'lecture-12': [/CMP computes 12−12/, /return address 0x08048405/]
+    };
+
+    for (const lesson of LESSON_NARRATIVES) {
+      const content = JSON.stringify(lesson.examples);
+      for (const marker of markers[lesson.resourceId] ?? []) assert.match(content, marker, `${lesson.resourceId}: ${marker}`);
+    }
+  });
+
   it('renders a semantic, reflowable, keyboard-operable HTML alternative', () => {
     const source = readFileSync(path.resolve('src/lessonTextPanel.ts'), 'utf8');
     assert.match(source, /<html lang="en">/);

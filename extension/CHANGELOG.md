@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.25.1
+
+- Added the Fall 2026 0-point beginning-of-course pre-test to Start Here, the course-material tree, and the local FAQ; the AI coach blocks all requests to answer, solve, check, or transform its items so the unaided baseline remains meaningful.
+- Updated the packaged accessible syllabus and all 13 worked lesson narratives from the current Canvas material source, including the new circuit, cache, pipeline, I/O, and assembly traces.
+- Added regression coverage requiring the current Canvas worked examples to remain represented in every extension lesson.
+- Strengthened U-M Codex readiness so the extension checks both CLI installation and `codex login status` before reporting the online learning coach ready.
+- Exercised the signed-in Codex CLI against a request for a graded ALU deliverable and verified an attempt-first refusal, one diagnostic question, and a bounded Boolean-logic hint.
+
 ## 0.25.0
 
 - Replaced the multi-provider AI chooser with the student-owned U-M Codex CLI as the single online setup and learning coach; added cross-platform readiness checks, explicit in-terminal prompt consent, and persistent `AGENTS.md` academic-integrity guardrails.

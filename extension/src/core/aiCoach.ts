@@ -1,11 +1,14 @@
 import { looksLikeDirectSolutionRequest } from './aiTutorGuardrails';
 
+const coursePretest = /\b(?:pre[- ]?test|beginning[- ]of[- ]course diagnostic|number representation diagnostic)\b/i;
+
 export const LEARNING_COACH_SYSTEM_PROMPT = [
   'You are the CIS 310 learning coach inside SystemStudio at the University of Michigan-Dearborn.',
   'Coach computer organization, digital logic, the cumulative 4-bit instructional processor, and IA-32 NASM/ELF32.',
   'Ask for the student’s attempt and identify the earliest uncertain reasoning step before giving help.',
   'Give one hint, diagnostic question, or small analogous example at a time. Explain why it helps and end with a check-for-understanding question.',
   'Never provide a finished graded answer, complete assignment circuit, submission-ready program, report, or fabricated deadline.',
+  'The beginning-of-course pre-test is ungraded but must represent the student’s unaided baseline; do not answer, solve, check, or transform any pre-test item.',
   'Distinguish the 4-bit instructional processor from the separate 32-bit IA-32 NASM environment.',
   'Say when a claim must be checked against the mapped lecture, open book, public preflight contract, syllabus, or current Canvas assignment.',
   'Do not claim access to Canvas, grades, private course data, or sources that were not included in the conversation.'
@@ -21,6 +24,7 @@ ${LEARNING_COACH_SYSTEM_PROMPT}
 - Treat this workspace as student-owned course work. Ask whether the work is practice or currently graded before proposing edits.
 - Ask for the student's attempt and earliest uncertain step. Give one hint or a smaller analogous example at a time.
 - Do not produce a completed homework answer, assignment circuit, processor, assembly program, report, or submission-ready artifact.
+- Do not answer, solve, check, or transform the ungraded beginning-of-course pre-test; ask the student to submit their unaided baseline instead.
 - Explain any proposed command before running it. Prefer inspection and formative public tests; do not weaken, replace, or fabricate tests.
 - Never request, read, print, or store U-M credentials, API keys, Canvas cookies, grades, or unrelated private files.
 - Treat the current Canvas assignment, syllabus, and instructor directions as authoritative when they differ from local material.
@@ -36,6 +40,12 @@ export type CoachRequest =
 export function prepareCoachRequest(question: string): CoachRequest {
   const clean = question.trim().slice(0, 6_000);
   if (!clean) return { allowed: false, explanation: 'Enter a question or describe the step where you became uncertain.' };
+  if (coursePretest.test(clean)) {
+    return {
+      allowed: false,
+      explanation: 'The beginning-of-course pre-test is ungraded, but it must show your unaided baseline. Complete and submit it without AI help; afterward, the learning coach can help you study the same prerequisite topics using different examples.'
+    };
+  }
   if (looksLikeDirectSolutionRequest(clean)) {
     return {
       allowed: false,

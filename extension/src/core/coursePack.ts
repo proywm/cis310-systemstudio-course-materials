@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-export type CourseMaterialKind = 'syllabus' | 'presentation' | 'assignment';
+export type CourseMaterialKind = 'syllabus' | 'diagnostic' | 'presentation' | 'assignment';
 export type AssignmentCategory = 'homework' | 'project';
 
 export interface CircuitStarter {
@@ -126,7 +126,7 @@ export function resolveCoursePackPath(packRoot: string, relativePath: string): s
 function parseResource(value: unknown, index: number): CourseMaterialResource {
   const resource = requireRecord(value, `resources[${index}]`);
   const kind = resource.kind;
-  if (kind !== 'syllabus' && kind !== 'presentation' && kind !== 'assignment') {
+  if (kind !== 'syllabus' && kind !== 'diagnostic' && kind !== 'presentation' && kind !== 'assignment') {
     throw new Error(`resources[${index}].kind is invalid.`);
   }
   if (typeof resource.order !== 'number' || !Number.isFinite(resource.order)) {
@@ -144,6 +144,9 @@ function parseResource(value: unknown, index: number): CourseMaterialResource {
   }
   if (kind === 'syllabus' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.html')) {
     throw new Error(`resources[${index}] must provide a packaged accessible HTML syllabus.`);
+  }
+  if (kind === 'diagnostic' && (localPath === undefined || path.extname(localPath).toLowerCase() !== '.html')) {
+    throw new Error(`resources[${index}] must provide a packaged accessible HTML diagnostic.`);
   }
   if (sha256 && !/^[a-f0-9]{64}$/i.test(sha256)) {
     throw new Error(`resources[${index}].sha256 is invalid.`);

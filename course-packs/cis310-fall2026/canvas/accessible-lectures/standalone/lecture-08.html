@@ -80,23 +80,25 @@
 
 <h2>Worked examples</h2>
 <h3>Example 1: Trace a polled output request</h3>
-<p>A program needs to send one value to a device.</p>
+<p>Use memory-mapped STATUS, DATA, and COMMAND registers to send one value.</p>
 <ol>
-<li>Read status until BUSY is false.</li>
-<li>Write the value to the data register.</li>
-<li>Write the operation to the command register.</li>
-<li>Read status until completion or error is reported.</li>
+<li>Two STATUS reads return BUSY=1, so the processor must not write yet.</li>
+<li>A third STATUS read returns BUSY=0.</li>
+<li>Write the value to DATA, then write the opcode to COMMAND to start the operation.</li>
+<li>Read STATUS while BUSY=1.</li>
+<li>A final STATUS read returns BUSY=0 and ERR=0, proving successful completion.</li>
 </ol>
-<p><strong>Conclusion:</strong> The status checks protect the protocol, but repeated checks occupy processor time.</p>
+<p><strong>Conclusion:</strong> Order matters: COMMAND before DATA starts with a stale operand, while skipping the final status read hides errors. Repeated busy reads are the direct cost of polling.</p>
 
-<h3>Example 2: Choose polling or an interrupt</h3>
-<p>Device A completes in a few processor cycles; Device B may take milliseconds.</p>
+<h3>Example 2: Choose polling or interrupts from latency evidence</h3>
+<p>Assume a 1 GHz processor and about 300 cycles of interrupt overhead.</p>
 <ol>
-<li>For Device A, interrupt and context-switch overhead may exceed the short wait.</li>
-<li>For Device B, polling would waste many cycles.</li>
-<li>A reasonable initial choice is brief polling for A and interrupt-driven completion for B.</li>
+<li>A 50 ns register-level device costs about 50 polling cycles, so polling is cheaper than a 300-cycle interrupt.</li>
+<li>A 1 ms serial operation would burn about 1,000,000 polling cycles, so an interrupt is preferable.</li>
+<li>A 10 ms mechanical-disk wait would burn about 10,000,000 polling cycles.</li>
+<li>Also consider event rate: a device that interrupts continuously may justify deliberate polling.</li>
 </ol>
-<p><strong>Conclusion:</strong> The decision depends on expected latency, event rate, and handling overhead—not on a universal rule.</p>
+<p><strong>Conclusion:</strong> The crossover occurs when expected wait approaches interrupt overhead. The decision depends on latency and event rate, not a universal rule.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

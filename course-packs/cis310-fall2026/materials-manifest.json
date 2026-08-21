@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -21,8 +21,20 @@
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.html",
       "modifiedAt": "2026-08-21T20:00:00Z",
       "localPath": "syllabus/CIS310_Fall_2026_Syllabus.html",
-      "sha256": "2d04b41f7595cc3492a862ae4a777618216f30fb35daed35e917d2c6dbbb7413",
+      "sha256": "bc4b7be8199bfec0998247d57286e81da234f3d1dd6e8961af3d624ee73e7ee8",
       "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
+    },
+    {
+      "id": "pretest-fall-2026",
+      "kind": "diagnostic",
+      "order": 0.5,
+      "title": "Pre-test: Number Representation and C/C++ Foundations",
+      "sourceTitle": "CIS 310 Fall 2026 ungraded beginning-of-course pre-test",
+      "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/diagnostics/PRETEST.html",
+      "modifiedAt": "2026-08-21T21:00:00Z",
+      "localPath": "diagnostics/PRETEST.html",
+      "sha256": "0372995d6237bf4167be099cd1dba31ccd2154b1a89eccee7232766e6112c999",
+      "concepts": ["ungraded-diagnostic", "number-representation", "c-cpp-foundations", "baseline"]
     },
     {
       "id": "lecture-01",

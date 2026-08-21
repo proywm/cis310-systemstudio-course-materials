@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CIS 310 Fall 2026 — Ungraded Pre-test</title>
+  <style>
+    :root{color-scheme:light dark;--border:#777;--soft:#eef5ff;--warn:#fff4ce;--ok:#e9f8ee}
+    *{box-sizing:border-box}html{font-size:100%;scroll-behavior:smooth}
+    body{max-width:84ch;margin:0 auto;padding:1rem;font:1rem/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;color:CanvasText;background:Canvas}
+    h1,h2,h3{line-height:1.25}h1{font-size:clamp(1.8rem,5vw,2.7rem)}h2{margin-top:2.2rem;border-bottom:2px solid GrayText;padding-bottom:.3rem}
+    a{color:LinkText;text-decoration-thickness:.12em;text-underline-offset:.16em}a:focus-visible{outline:.2rem solid Highlight;outline-offset:.2rem}
+    nav{display:flex;flex-wrap:wrap;gap:.8rem;padding:1rem 0;border-block:1px solid GrayText}
+    .skip{position:absolute;left:-10000px}.skip:focus{left:1rem;top:1rem;background:Canvas;padding:.5rem;z-index:10}
+    .notice,.info,.success{padding:.8rem 1rem;margin:1rem 0;border-left:.4rem solid}.notice{border-color:#9a6700;background:var(--warn);color:#24292f}.info{border-color:#0969da;background:var(--soft);color:#1f2328}.success{border-color:#1a7f37;background:var(--ok);color:#1f2328}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}caption{font-weight:700;text-align:left;margin-bottom:.4rem}th,td{border:1px solid var(--border);padding:.55rem;text-align:left;vertical-align:top}th{background:var(--soft)}
+    pre{border:1px solid var(--border);padding:.8rem;overflow:auto;background:var(--soft)}code{white-space:pre-wrap;overflow-wrap:anywhere}li+li{margin-top:.5rem}
+    footer{margin-top:3rem;padding-top:1rem;border-top:1px solid GrayText;font-size:.95rem}
+    @media(prefers-color-scheme:dark){:root{--soft:#202d3d;--warn:#3b300c;--ok:#173d25}.notice,.info,.success{color:CanvasText}}
+    @media(max-width:36rem){body{padding:.75rem}nav a{display:block;width:100%}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{nav,.skip{display:none}body{max-width:none}a{color:inherit}}
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<nav aria-label="Course navigation"><a href="../START_HERE.html">Course landing page</a><a href="../CALENDAR.html">Course calendar</a><a href="../readings/READING_LIST.html">Reading list</a><a href="../syllabus/CIS310_Fall_2026_Syllabus.html">Syllabus</a></nav>
+<main id="main">
+<p><strong>CIS 310 · Fall 2026</strong></p>
+<h1 id="beginning-of-course-pre-test-number-representations">Beginning-of-course pre-test: number representations</h1>
+<div class="success">
+<strong>0 points; not graded.</strong> Your result does not affect your course grade. This diagnostic helps the instructor see what the class already knows and what needs additional explanation.
+</div>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>Make one honest attempt using only your current knowledge. Do not use an AI assistant, converter, completed solution, or another person’s code.</li>
+<li>It is fine not to know how to complete every part. That information is useful for planning the course.</li>
+<li>Canvas records your identity and submission. Any class-level summary will be reported in aggregate.</li>
+<li>This is a baseline diagnostic, not a test of material you were expected to learn before this course.</li>
+</ul>
+<h2 id="programming-task">Programming task</h2>
+<p>Write a program in <strong>C or C++</strong> that prints every decimal integer from <strong>0 through 255, inclusive</strong>, together with these three representations:</p>
+<ol type="1">
+<li><strong>Binary:</strong> exactly 8 bits, displayed as two groups of 4 bits.</li>
+<li><strong>Hexadecimal:</strong> exactly 2 digits. Uppercase or lowercase letters are acceptable.</li>
+<li><strong>Binary-coded decimal (BCD):</strong> treat the decimal value as three decimal digits from <code>000</code> through <code>255</code>; encode each decimal digit separately as 4 bits, including leading zero digits.</li>
+</ol>
+<p>Use computation or formatting logic to produce the conversions. Do not hard-code a table containing all 256 answers.</p>
+<h2 id="required-output-format">Required output format</h2>
+<p>Use a monospaced, aligned table with one heading row and 256 data rows. The beginning should follow this pattern:</p>
+<table>
+<caption>
+Required output pattern for the first three values
+</caption>
+<thead>
+<tr>
+<th scope="col">
+Decimal
+</th>
+<th scope="col">
+Binary
+</th>
+<th scope="col">
+Hexadecimal
+</th>
+<th scope="col">
+BCD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+0
+</th>
+<td>
+<code>0000 0000</code>
+</td>
+<td>
+<code>00</code>
+</td>
+<td>
+<code>0000 0000 0000</code>
+</td>
+</tr>
+<tr>
+<th scope="row">
+1
+</th>
+<td>
+<code>0000 0001</code>
+</td>
+<td>
+<code>01</code>
+</td>
+<td>
+<code>0000 0000 0001</code>
+</td>
+</tr>
+<tr>
+<th scope="row">
+2
+</th>
+<td>
+<code>0000 0010</code>
+</td>
+<td>
+<code>02</code>
+</td>
+<td>
+<code>0000 0000 0010</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Your program must continue through decimal 255. The table above defines formatting only; it does not provide the complete solution.</p>
+<h2 id="what-to-submit-in-canvas">What to submit in Canvas</h2>
+<p>Submit:</p>
+<ol type="1">
+<li>your <code>.c</code> or <code>.cpp</code> source file; and</li>
+<li>a plain-text or PDF capture of the program’s output for the heading and the rows for decimal values 0–20, 99–101, 210–212, and 253–255.</li>
+</ol>
+<p>If Canvas accepts only one file, place both items in one <code>.zip</code> file. Use the <strong>Pre-test: Number Representations</strong> Canvas assignment so your submission receipt is recorded.</p>
+<h2 id="accessibility-or-setup-barrier">Accessibility or setup barrier</h2>
+<p>If you cannot run a C/C++ compiler or cannot use the required submission format, contact the instructor promptly. Describe the operating system, what you attempted, and the exact error or access barrier. The diagnostic remains ungraded.</p>
+</main>
+<footer><p>Fall 2026 ungraded diagnostic. Canvas displays the authoritative availability window and submission receipt.</p></footer>
+</body>
+</html>

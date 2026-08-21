@@ -79,24 +79,26 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Create one canonical minterm</h3>
-<p>A truth-table output is 1 for A equal to 0, B equal to 1, and C equal to 0.</p>
+<h3>Example 1: Build a canonical SOP expression from a truth table</h3>
+<p>Let X be 1 at ABC = 001, 011, 100, and 110. Write one product for each output-1 row, complementing every variable whose row value is 0.</p>
 <ol>
-<li>A is 0, so use NOT A.</li>
-<li>B is 1, so use B.</li>
-<li>C is 0, so use NOT C.</li>
-<li>AND the three literals.</li>
+<li>001 contributes (NOT A)(NOT B)C.</li>
+<li>011 contributes (NOT A)BC.</li>
+<li>100 contributes A(NOT B)(NOT C).</li>
+<li>110 contributes AB(NOT C).</li>
+<li>OR the four products to obtain the canonical SOP expression.</li>
 </ol>
-<p><strong>Conclusion:</strong> The minterm is (NOT A) AND B AND (NOT C), true for exactly that input row.</p>
+<p><strong>Conclusion:</strong> Every output-1 row contributes exactly one product that is false for all other rows. The expression is correct but not yet minimal.</p>
 
-<h3>Example 2: Simplify AB plus A(NOT B)</h3>
-<p>The two terms share A.</p>
+<h3>Example 2: Reduce that canonical SOP expression with named laws</h3>
+<p>Start with (NOT A)(NOT B)C + (NOT A)BC + A(NOT B)(NOT C) + AB(NOT C). Pair terms that differ only in B.</p>
 <ol>
-<li>Factor A to obtain A times (B plus NOT B).</li>
-<li>Use the complement law: B plus NOT B equals 1.</li>
-<li>Use the identity law: A times 1 equals A.</li>
+<li>Factor the first pair as (NOT A)C((NOT B)+B) and the second as A(NOT C)((NOT B)+B).</li>
+<li>Use the complement law: (NOT B)+B = 1.</li>
+<li>Use the identity law to obtain (NOT A)C + A(NOT C).</li>
+<li>Recognize the remaining pattern as A XOR C and verify it against all eight original rows.</li>
 </ol>
-<p><strong>Conclusion:</strong> The simpler expression A has the same truth table as the original expression.</p>
+<p><strong>Conclusion:</strong> Four three-literal products become two two-literal products, and B disappears because it changes inside each paired group without changing X.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

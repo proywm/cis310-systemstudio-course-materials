@@ -42,23 +42,23 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Translate a four-cell group</h3>
-<p>In a three-variable map, a group contains all four cells where A is 1 while B and C take every combination.</p>
+<h3>Example 1: Minimize F(A,B,C) = Σm(2,3,4,5,6,7)</h3>
+<p>Use AB rows in Gray-code order 00, 01, 11, 10 and C columns 0, 1.</p>
 <ol>
-<li>A remains 1 in all four cells.</li>
-<li>B changes, so B disappears.</li>
-<li>C changes, so C disappears.</li>
+<li>Group rows 01 and 11 across both C columns; B stays 1 while A and C change, so this group contributes B.</li>
+<li>Group rows 11 and 10 across both columns; A stays 1 while B and C change, so this group contributes A.</li>
+<li>Overlap in row 11 is legal; OR the surviving terms.</li>
 </ol>
-<p><strong>Conclusion:</strong> The entire group contributes the single product term A.</p>
+<p><strong>Conclusion:</strong> F = A + B. A required 0-cell at A=0, B=0 also checks the result.</p>
 
-<h3>Example 2: Recognize an edge group</h3>
-<p>The first and last columns are labeled 00 and 10.</p>
+<h3>Example 2: Recognize a group that wraps across the map edge</h3>
+<p>For F(A,B,C) = Σm(0,1,4,5), the 1s occupy AB rows 00 and 10 across both C columns.</p>
 <ol>
-<li>The labels differ only in the first bit.</li>
-<li>Those columns are adjacent despite appearing on opposite edges.</li>
-<li>A rectangle may wrap across the boundary if its cells satisfy the normal grouping rules.</li>
+<li>Rows 00 and 10 differ only in B and therefore are adjacent across the top/bottom boundary.</li>
+<li>Across the four cells, A stays 0 while B and C change.</li>
+<li>Keep only the constant complemented literal.</li>
 </ol>
-<p><strong>Conclusion:</strong> The drawn rectangle may look split, but it represents one adjacent group.</p>
+<p><strong>Conclusion:</strong> The wraparound rectangle contributes NOT A; a rectangle may look split on paper while representing one adjacent group.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

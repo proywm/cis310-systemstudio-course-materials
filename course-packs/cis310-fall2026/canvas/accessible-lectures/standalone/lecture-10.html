@@ -79,25 +79,27 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Trace c receives a plus b</h3>
-<p>Variables a and b are in memory and the ALU operates on registers.</p>
+<h3>Example 1: Trace c = a + b through the datapath</h3>
+<p>Variables a, b, and c are in memory. Use MAR and registers R1, R2, and R3.</p>
 <ol>
-<li>Load a into register R1.</li>
-<li>Load b into register R3.</li>
-<li>Use the ALU to compute R1 plus R3 and store the result in R2.</li>
-<li>Store R2 into memory location c.</li>
+<li>MAR ← address(a); assert MAR load.</li>
+<li>R1 ← M[MAR]; assert memory read and R1 load.</li>
+<li>MAR ← address(b), then R3 ← M[MAR].</li>
+<li>R2 ← R1 + R3; select ADD in the ALU and enable R2.</li>
+<li>MAR ← address(c).</li>
+<li>M[MAR] ← R2; assert memory write.</li>
 </ol>
-<p><strong>Conclusion:</strong> The trace separates memory transfers from the arithmetic operation.</p>
+<p><strong>Conclusion:</strong> Only one step is arithmetic; the others move data. The control unit must produce the load, read, ALU-select, and write signals in the proper order.</p>
 
-<h3>Example 2: Interpret one RTL statement</h3>
-<p>R4 receives R1 XOR R2.</p>
+<h3>Example 2: Read one RTL statement as control decisions</h3>
+<p>Decompose R4 ← R1 XOR R2.</p>
 <ol>
-<li>R1 and R2 are source registers.</li>
-<li>XOR is the selected ALU operation.</li>
-<li>R4 is the destination state element.</li>
-<li>The control unit must select all three roles and permit R4 to update.</li>
+<li>Select R1 on register-file read port A.</li>
+<li>Select R2 on read port B.</li>
+<li>Select XOR on the ALU function lines.</li>
+<li>Select R4 as the write address and assert write-enable at the active clock edge.</li>
 </ol>
-<p><strong>Conclusion:</strong> RTL is concise, but each symbol corresponds to a data path or control action.</p>
+<p><strong>Conclusion:</strong> RTL is compact, but every symbol maps to hardware and control. Without write-enable, the ALU result can be correct while R4 never changes.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

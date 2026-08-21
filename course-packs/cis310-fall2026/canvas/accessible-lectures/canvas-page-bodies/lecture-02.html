@@ -51,14 +51,24 @@
 </ol>
 <p><strong>Conclusion:</strong> Eight-bit 1110 0001 represents negative 31. Keeping all eight positions is essential.</p>
 
-<h3>Example 2: Evaluate one full-adder row</h3>
-<p>Let A equal 1, B equal 0, and Carry-in equal 1.</p>
+<h3>Example 2: Build the half-adder truth table before choosing gates</h3>
+<p>List 00, 01, 10, and 11, then write each two-bit result as Carry followed by Sum.</p>
 <ol>
-<li>The input total is decimal 2.</li>
-<li>Decimal 2 is binary 10.</li>
-<li>The low result bit is Sum equal to 0; the high result bit is Carry-out equal to 1.</li>
+<li>00 produces 00.</li>
+<li>01 and 10 produce 01.</li>
+<li>11 produces 10.</li>
+<li>Sum is 1 exactly when the inputs differ, while Carry is 1 exactly when both inputs are 1.</li>
 </ol>
-<p><strong>Conclusion:</strong> Writing Carry-out followed by Sum gives 10, preserving the complete one-column result.</p>
+<p><strong>Conclusion:</strong> The table proves Sum = A XOR B and Carry = A AND B.</p>
+
+<h3>Example 3: Complete one full-adder row and generalize it</h3>
+<p>Let A=1, B=0, and Carry-in=1, then compare with all eight input rows.</p>
+<ol>
+<li>The selected row totals 2, written binary 10, so Carry-out=1 and Sum=0.</li>
+<li>Across all rows, Sum is 1 when an odd number of inputs are 1.</li>
+<li>Carry-out is 1 when at least two inputs are 1.</li>
+</ol>
+<p><strong>Conclusion:</strong> Sum = A XOR B XOR Carry-in; Carry-out can be written (A AND B) OR (Carry-in AND (A XOR B)).</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

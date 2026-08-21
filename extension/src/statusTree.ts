@@ -95,6 +95,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'sparkle'
           ),
           describedActionItem(
+            'Complete the ungraded beginning-of-course pre-test',
+            '0 points · unaided baseline · submit in Canvas',
+            'systemstudioCis310.openPretest',
+            'checklist'
+          ),
+          describedActionItem(
             'Open Canvas — submit coursework here',
             'Fall 2026 authority',
             'systemstudioCis310.openCanvas',

@@ -42,25 +42,27 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Observe a D flip-flop holding state</h3>
-<p>Q initially stores 0. D changes to 1, but no active clock edge occurs.</p>
+<h3>Example 1: Read a D flip-flop from a timing sequence</h3>
+<p>Use a rising-edge D flip-flop starting at Q=0. Record D, the clock event, Q before, and Q after at every step.</p>
 <ol>
-<li>D is the requested next value.</li>
-<li>Without the configured edge, the storage event has not happened.</li>
-<li>Q remains at its present value 0.</li>
-<li>At the next rising edge, Q becomes 1.</li>
+<li>D changes to 1 with no edge: Q stays 0.</li>
+<li>A rising edge samples D=1: Q becomes 1.</li>
+<li>D changes to 0 with no edge: Q stays 1.</li>
+<li>A falling edge occurs: Q still stays 1 because this device ignores it.</li>
+<li>The next rising edge samples D=0: Q becomes 0.</li>
+<li>Another rising edge with D still 0 stores 0 again.</li>
 </ol>
-<p><strong>Conclusion:</strong> The difference between D and Q before the edge is direct evidence that the element stores state.</p>
+<p><strong>Conclusion:</strong> The no-edge rows prove storage. If Q follows D immediately, the circuit behaves like a transparent latch rather than a rising-edge flip-flop.</p>
 
-<h3>Example 2: Describe a divide-by-two sequence</h3>
-<p>A flip-flop is configured so its next state is the complement of its present state.</p>
+<h3>Example 2: Build the state table for a two-bit enabled counter</h3>
+<p>Let S1 S0 hold a modulo-4 count and EN control whether the state holds or increments.</p>
 <ol>
-<li>Start with Q equal to 0.</li>
-<li>First active edge stores 1.</li>
-<li>Second active edge stores 0.</li>
-<li>One full output cycle therefore takes two input clock edges.</li>
+<li>For EN=0, map 00→00, 01→01, 10→10, and 11→11.</li>
+<li>For EN=1, map 00→01, 01→10, 10→11, and 11→00.</li>
+<li>Treat next S0 and next S1 as ordinary Boolean functions of EN, S1, and S0.</li>
+<li>Minimization gives next S0 = EN XOR S0 and next S1 = S1 XOR (EN AND S0).</li>
 </ol>
-<p><strong>Conclusion:</strong> The output frequency is half the input clock frequency because Q toggles once per edge.</p>
+<p><strong>Conclusion:</strong> Sequential logic is combinational next-state logic wrapped around storage. The 11→00 row also demonstrates the modulo behavior required by the four-bit program counter.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

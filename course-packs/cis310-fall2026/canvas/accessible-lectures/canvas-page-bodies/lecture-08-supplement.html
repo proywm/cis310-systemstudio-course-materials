@@ -42,24 +42,25 @@
 
 
 <h2>Worked examples</h2>
-<h3>Example 1: Plan a DMA input transfer</h3>
-<p>A device will deliver a 4 KiB block into memory.</p>
+<h3>Example 1: Compare programmed I/O and DMA for the same transfer</h3>
+<p>Move a 4 KiB block as 1,024 four-byte word transfers.</p>
 <ol>
-<li>The processor configures the device and DMA destination/length.</li>
-<li>The DMA controller performs the repeated transfers.</li>
-<li>The processor runs other work during transfer.</li>
-<li>A completion event causes software to verify status and consume the buffer.</li>
+<li>Programmed I/O makes the processor read each word, write it to memory, and execute loop overhead.</li>
+<li>DMA adds destination and length setup, then the controller performs all 1,024 transfers while the processor does other work.</li>
+<li>Programmed I/O completes when the loop exits; DMA completes through an interrupt followed by a status check.</li>
+<li>DMA still competes with the processor for memory bandwidth.</li>
 </ol>
-<p><strong>Conclusion:</strong> DMA changes who performs bulk movement, while the processor remains responsible for setup and completion handling.</p>
+<p><strong>Conclusion:</strong> DMA changes who performs bulk movement, not whether it occurs. The processor still owns setup, completion, and the rule that software must not consume the buffer early.</p>
 
-<h3>Example 2: Choose storage for two data types</h3>
-<p>A sensor has a temporary sample buffer and a calibration value that must survive power loss.</p>
+<h3>Example 2: Match data to storage using retention and endurance</h3>
+<p>Choose storage separately for active samples, calibration data, and boot code.</p>
 <ol>
-<li>The active sample buffer needs fast runtime access, so volatile RAM is suitable.</li>
-<li>The calibration value needs retention, so flash or EEPROM is suitable.</li>
-<li>If the calibration changes often, write endurance must also be considered.</li>
+<li>Use SRAM or DRAM for a continuously updated active sample buffer: it is fast and does not need power-off retention.</li>
+<li>Use flash or EEPROM for a calibration constant written almost never.</li>
+<li>For a calibration value retuned every few minutes, account for flash wear; consider FRAM, battery-backed RAM, or buffered infrequent flash writes.</li>
+<li>Use ROM or flash for boot code that survives power loss and is not normally rewritten.</li>
 </ol>
-<p><strong>Conclusion:</strong> Retention is the first distinction, followed by performance and endurance tradeoffs.</p>
+<p><strong>Conclusion:</strong> Retention alone is insufficient. A correct choice also considers speed, frequency of writes, endurance, power, and cost.</p>
 
 <h2>Check your understanding</h2>
 <p>Answer these questions in your own words before opening the SystemStudio practice set.</p>

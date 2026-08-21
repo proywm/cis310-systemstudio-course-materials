@@ -1,4 +1,4 @@
-export const AI_ASSISTANCE_ONBOARDING_VERSION = 3;
+export const AI_ASSISTANCE_ONBOARDING_VERSION = 4;
 
 export type AiAssistancePreference = 'codex' | 'offline';
 
