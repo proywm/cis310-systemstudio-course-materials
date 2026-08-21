@@ -18,7 +18,7 @@ import type { DigitalManager } from './digitalManager';
 import type { NativeAssemblyManager } from './nativeAssemblyManager';
 import type { PracticeStore } from './practiceStore';
 
-type StatusGroup = 'start' | 'team' | 'modules' | 'coursework' | 'learn' | 'digital' | 'assembly' | 'environment' | 'help';
+type StatusGroup = 'start' | 'modules' | 'coursework' | 'learn' | 'hands-on' | 'support' | 'advanced';
 type StatusNode = vscode.TreeItem & { groupId?: StatusGroup; module?: CourseModuleNavigation };
 type DockerStatusProvider = () => Promise<DockerEngineStatus>;
 
@@ -52,14 +52,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
       const complete = learningPath.filter((module) => module.complete).length;
       return [
         groupItem('start', 'Start Here', 'home', true),
-        groupItem('team', 'Course Team and Schedule', 'organization', false),
         groupItem('modules', `Course Modules (${complete}/${learningPath.length})`, 'list-tree', true),
-        groupItem('coursework', 'Coursework and Final Presentation', 'checklist', true),
         groupItem('learn', 'Practice and Progress', 'mortar-board', false),
-        groupItem('digital', 'Build Digital Circuits', 'circuit-board', false),
-        groupItem('assembly', 'Assembly Programming', 'terminal', false),
-        groupItem('environment', 'Environment and Setup', 'tools', false),
-        groupItem('help', 'Tutor, Questions, and Help', 'comment-discussion', false)
+        groupItem('coursework', 'Coursework and Final Presentation', 'checklist', false),
+        groupItem('hands-on', 'Hands-on Labs', 'tools', false),
+        groupItem('support', 'Help, Staff, and Canvas', 'comment-discussion', false),
+        groupItem('advanced', 'Advanced Setup and Diagnostics', 'settings-gear', false)
       ];
     }
 
@@ -73,6 +71,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         const nextPreparation = this.practiceStore.getLearningPath().find((module) => !module.complete);
         return [
           describedActionItem(
+            'Set up or repair my course environment',
+            'one guided Digital + Docker + NASM workflow · verified before ready',
+            'systemstudioCis310.setupCourseEnvironment',
+            'tools'
+          ),
+          describedActionItem(
             nextPreparation ? `Prepare ${nextPreparation.lectureLabel}` : 'Review my completed preparation path',
             nextPreparation ? 'open book · author video · 8-question bank · hands-on where assigned' : '13 lecture modules checked',
             'systemstudioCis310.openPracticeCenter',
@@ -85,16 +89,10 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'sparkle'
           ),
           describedActionItem(
-            'Open coursework roadmap',
-            'requirements · preflights · final-presentation progress · grade estimate',
-            'systemstudioCis310.openCourseworkCenter',
-            'checklist'
-          ),
-          describedActionItem(
-            'Open Student Unit Test Center',
-            'Digital Testcases · NASM self-tests · assignment preflights',
-            'systemstudioCis310.openUnitTestCenter',
-            'beaker'
+            'Ask Orbit AI learning coach',
+            'student-account Copilot · optional U-M Maizey · attempt-first help',
+            'systemstudioCis310.openAiTutor',
+            'sparkle'
           ),
           describedActionItem(
             'Open Canvas — submit coursework here',
@@ -102,12 +100,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'systemstudioCis310.openCanvas',
             'cloud'
           ),
-          describedActionItem(
-            'Open Fall 2026 course calendar',
-            'M/W 10:00–11:45 a.m. · ELB 1329',
-            'systemstudioCis310.openCourseCalendar',
-            'calendar'
-          )
+          describedActionItem('Open coursework roadmap', 'assignments · preflights · final · grade estimate', 'systemstudioCis310.openCourseworkCenter', 'checklist')
         ];
       }
       case 'modules':
@@ -131,29 +124,6 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'instructor grades and submission receipts',
             'systemstudioCis310.openCanvas',
             'cloud'
-          )
-        ];
-      case 'team':
-        return [
-          describedInfoItem(
-            `Instructor: ${CIS310_INSTRUCTOR.name}`,
-            `${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.office}`,
-            'person'
-          ),
-          describedInfoItem(
-            CIS310_GSI.label,
-            CIS310_GSI.detail,
-            'account'
-          ),
-          describedInfoItem(
-            `Class: M/W ${FALL_2026_CLASS_TIME_LABEL}`,
-            FALL_2026_CLASS_LOCATION,
-            'calendar'
-          ),
-          describedInfoItem(
-            'Instructor office hours: M/W',
-            `${FALL_2026_OFFICE_HOURS_LABEL} · ${FALL_2026_OFFICE_LOCATION}`,
-            'clock'
           )
         ];
       case 'learn':
@@ -195,17 +165,18 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'library'
           )
         ];
-      case 'digital':
-        return this.digitalItems();
-      case 'assembly':
-        return this.assemblyItems();
-      case 'environment':
-        return this.environmentItems();
-      case 'help':
+      case 'hands-on':
+        return [
+          describedActionItem('Open guided circuit and assembly labs', '7 circuits · 7 actual NASM labs · self-paced', 'systemstudioCis310.openGuidedLabs', 'map'),
+          describedActionItem('Create a circuit in Full Digital', 'complete upstream simulator · embedded tab', 'systemstudioCis310.createCircuit', 'circuit-board'),
+          describedActionItem('Open actual NASM debug workbench', 'registers · flags · stack · memory · disassembly', 'systemstudioCis310.openNasmWorkbench', 'debug-alt'),
+          describedActionItem('Open Student Unit Test Center', 'Digital Testcases · NASM self-tests · assignment preflights', 'systemstudioCis310.openUnitTestCenter', 'beaker')
+        ];
+      case 'support':
         return [
           describedActionItem(
-            'Choose an AI learning coach',
-            'Maizey course tutor · optional GitHub Copilot',
+            'Ask Orbit AI learning coach',
+            'student-account Copilot · optional U-M Maizey',
             'systemstudioCis310.openAiTutor',
             'sparkle'
           ),
@@ -217,15 +188,34 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Open local FAQ chat',
-            'private · topics · tools · Canvas routing',
+            'animated Orbit · private FAQ · topics · tools · Canvas routing',
             'systemstudioCis310.openStudentHelper',
             'comment-discussion'
           ),
+          describedInfoItem(`Instructor: ${CIS310_INSTRUCTOR.name}`, `${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.office}`, 'person'),
+          describedInfoItem(CIS310_GSI.label, CIS310_GSI.detail, 'account'),
+          describedInfoItem(`Class: M/W ${FALL_2026_CLASS_TIME_LABEL}`, FALL_2026_CLASS_LOCATION, 'calendar'),
+          describedInfoItem('Instructor office hours: M/W', `${FALL_2026_OFFICE_HOURS_LABEL} · ${FALL_2026_OFFICE_LOCATION}`, 'clock'),
+          describedActionItem('Open Fall 2026 course calendar', 'M/W 10:00–11:45 a.m. · ELB 1329', 'systemstudioCis310.openCourseCalendar', 'calendar'),
+          describedActionItem('Open Fall 2026 syllabus', 'primary accessible HTML · Canvas current', 'systemstudioCis310.openSyllabus', 'file-code'),
           actionItem('Start or rerun guided tutorial', 'systemstudioCis310.startTutorial', 'lightbulb'),
-          actionItem('Open native Getting Started', 'systemstudioCis310.openGettingStarted', 'map'),
+          actionItem('Open Canvas', 'systemstudioCis310.openCanvas', 'cloud')
+        ];
+      case 'advanced': {
+        const digital = await this.manager.getStatus();
+        const assembly = await this.nativeAssemblyManager.status();
+        const docker = await this.dockerStatus();
+        return [
+          describedActionItem('Run complete setup or repair', 'prepares every safe course-managed requirement', 'systemstudioCis310.setupCourseEnvironment', 'tools'),
+          describedActionItem('Run detailed environment check', 'Digital · Docker · Java · trust', 'systemstudioCis310.checkEnvironment', 'pulse'),
+          describedInfoItem(`Digital ${DIGITAL_RELEASE.displayVersion}`, digital.integrityVerified ? 'verified and installed' : 'setup required', digital.integrityVerified ? 'verified-filled' : 'warning'),
+          describedInfoItem('Embedded Docker runtime', docker.state === 'ready' ? `ready · ${docker.serverVersion ?? ''}` : docker.detail, docker.state === 'ready' ? 'pass-filled' : 'warning'),
+          describedInfoItem('Actual NASM/GDB workbench', assembly.available ? `ready via ${assembly.runtime}` : assembly.detail, assembly.available ? 'pass-filled' : 'warning'),
+          actionItem('Create full CIS 310 starter workspace', 'systemstudioCis310.createStarterWorkspace', 'new-folder'),
           actionItem('Open setup and first-task guide', 'systemstudioCis310.openSetupGuide', 'question'),
           actionItem('Open extension documentation', 'systemstudioCis310.openDocumentation', 'book')
         ];
+      }
       default:
         return [];
     }

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.23.0
+
+- Replaced the beginner tool list with one verified **Set up or repair my course environment** workflow and moved manual controls under Advanced Setup and Diagnostics.
+- Added bounded Orbit guidance at setup and embedded-Digital failures; students review the prompt before their own Copilot or published U-M tutor account receives it.
+- Added one-click Docker Desktop startup/retry where supported while keeping administrator installation and virtualization changes explicit and student-controlled.
+- Prepares verified Digital and actual NASM/GDB course runtimes in extension storage or pinned containers and reports ready only after checks pass.
+- Reorganized the main tree around Start Here, Modules, Practice, Coursework, Hands-on Labs, Help, and Advanced Diagnostics.
+
 ## 0.22.1
 
 - Fixed new-circuit creation so the workspace `circuits/work` directory is prepared before the save dialog opens, with a visible workspace-root fallback if directory preparation fails.

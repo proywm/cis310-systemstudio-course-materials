@@ -2,11 +2,11 @@
 
 SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, a Student Unit Test Center, local FAQ, U-M Maizey handoff, an optional GitHub Copilot learning coach, and the Canvas question workflow.
 
-For the platform setup, the first circuit, the first assembly lab, and a plain-language explanation of Docker Desktop errors, open **CIS 310: Open Setup and First-Task Guide**. The accessible HTML guide is packaged inside the extension and does not require a browser or external account.
+Start with **CIS 310: Set Up or Repair My Course Environment**. It verifies or prepares every course-managed component, starts Docker Desktop when the platform permits, and reports ready only after Digital and the actual NASM/GDB route pass their checks. When host installation, licensing, administrator approval, or virtualization is required, it makes that handoff explicit and offers the packaged guide or privacy-bounded Orbit guidance.
 
 Canvas course [552144](https://canvas.umd.umich.edu/courses/552144) is authoritative for current requirements, deadlines, points, collaboration rules, required files, and submission.
 
-The **Course Team and Schedule** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; Canvas and department announcements provide any future staffing update. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment.
+The **Help, Staff, and Canvas** section lists Dr. Probir Roy (`probirr@umich.edu`), instructor. No Graduate Student Instructor or grader is currently assigned or confirmed for CIS 310; Canvas and department announcements provide any future staffing update. CIS 310 section 001 meets Mondays and Wednesdays, 10:00–11:45 a.m., in ELB 1329. Instructor office hours are Mondays and Wednesdays, 9:30–10:00 a.m. and 12:00–1:00 p.m., in CIS Building Room 230, or by appointment.
 
 ## Tool integrity: no reduced substitutes
 
@@ -63,7 +63,7 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 
 ## Installation
 
-Download `systemstudio-cis310.vsix` from the [latest private course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest), then use **Extensions: Install from VSIX…** or:
+Download `systemstudio-cis310.vsix` from the [latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest), then use **Extensions: Install from VSIX…** or:
 
 ```bash
 code --install-extension systemstudio-cis310.vsix
@@ -75,6 +75,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 
 | Command | Purpose |
 |---|---|
+| `CIS 310: Set Up or Repair My Course Environment` | Prepares and verifies the course-managed Digital and NASM/GDB environments; guides required Docker host recovery |
 | `CIS 310: Open Full Digital Simulator` | Opens the selected `.dig` using the complete upstream application |
 | `CIS 310: Create a New Digital Circuit` | Creates a non-overwriting blank `.dig` and opens Full Digital |
 | `CIS 310: Preview Digital Circuit` | Generates a read-only view with Digital’s official exporter |

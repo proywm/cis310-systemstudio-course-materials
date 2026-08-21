@@ -179,6 +179,77 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }
   };
 
+  const setupCourseEnvironment = async (): Promise<void> => {
+    let digital = await manager.getStatus();
+    if (!digital.integrityVerified) {
+      const installed = await setupDigital();
+      digital = await manager.getStatus();
+      if (!installed && !digital.integrityVerified) return;
+    }
+
+    if (EMBEDDED_CONTAINER_PLATFORM) {
+      let docker = await probeDockerEngine();
+      if (docker.state === 'engine-unavailable') {
+        const recovered = await recoverDockerDesktop();
+        if (!recovered) return;
+        docker = await probeDockerEngine();
+      }
+      if (docker.state !== 'ready') {
+        const action = await vscode.window.showErrorMessage(
+          'Docker Desktop is required for the common in-tab Digital and NASM environment. The extension cannot silently install or authorize this system runtime.',
+          { modal: true },
+          'Ask Orbit for guidance',
+          'Open setup guide'
+        );
+        if (action === 'Ask Orbit for guidance') {
+          await vscode.commands.executeCommand('systemstudioCis310.openAiTutor', {
+            setupError: { area: 'CIS 310 Docker environment', detail: docker.detail }
+          });
+        }
+        if (action === 'Open setup guide') await SetupGuidePanel.show(context);
+        return;
+      }
+    }
+
+    output.clear();
+    output.appendLine('Preparing the verified CIS 310 environment. Course tools are installed only in extension storage or pinned Docker images.');
+    output.show(true);
+    try {
+      await fullDigitalRuntime.prepare();
+      const assembly = await nativeAssemblyManager.prepare({ automatic: true });
+      digital = await manager.getStatus();
+      const docker = await probeDockerEngine();
+      output.appendLine(`Digital ${digital.version}: ${digital.integrityVerified ? 'verified' : 'not ready'}`);
+      output.appendLine(`Embedded runtime: ${docker.state}${docker.serverVersion ? ` ${docker.serverVersion}` : ''}`);
+      output.appendLine(`NASM workbench: ${assembly.available ? `ready via ${assembly.runtime}` : assembly.detail}`);
+      if (!digital.integrityVerified || !assembly.available || (!digital.java.supported && docker.state !== 'ready')) {
+        throw new Error('One or more verified course components did not become ready. Review the status lines above.');
+      }
+      await vscode.window.showInformationMessage('CIS 310 setup is ready: verified Digital, embedded display runtime, and actual NASM/GDB course environment.');
+    } catch (error) {
+      output.appendLine(`SETUP FAILED: ${errorMessage(error)}`);
+      const detail = errorMessage(error);
+      const choice = await vscode.window.showErrorMessage(
+        'CIS 310 guided setup did not complete. The first error is preserved in the SystemStudio output.',
+        'Ask Orbit about this error',
+        'Open setup guide',
+        'Retry'
+      );
+      if (choice === 'Ask Orbit about this error') {
+        await vscode.commands.executeCommand('systemstudioCis310.openAiTutor', {
+          setupError: { area: 'CIS 310 course environment', detail }
+        });
+      }
+      if (choice === 'Open setup guide') await SetupGuidePanel.show(context);
+      if (choice === 'Retry') await setupCourseEnvironment();
+    } finally {
+      statusTree.refresh();
+      await tests.refresh();
+      await nasmTests.refresh();
+      await updateStatus();
+    }
+  };
+
   context.subscriptions.push(
     output,
     fullDigitalRuntime,
@@ -445,6 +516,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await courseMaterials.openResource(syllabus);
     }),
     vscode.commands.registerCommand('systemstudioCis310.setupDigital', setupDigital),
+    vscode.commands.registerCommand('systemstudioCis310.setupCourseEnvironment', setupCourseEnvironment),
     vscode.commands.registerCommand('systemstudioCis310.checkEnvironment', async () => {
       await checkEnvironment(manager, output);
       statusTree.refresh();
@@ -807,6 +879,62 @@ export function deactivate(): void {
   // Resources are disposed through ExtensionContext subscriptions.
 }
 
+async function recoverDockerDesktop(): Promise<boolean> {
+  if (!EMBEDDED_CONTAINER_PLATFORM) return false;
+  const action = await vscode.window.showWarningMessage(
+    'Docker Desktop is installed, but its engine is not running. Start it once; SystemStudio will wait and then continue preparing Digital and NASM.',
+    { modal: true },
+    'Start Docker Desktop and wait',
+    'Open setup guide'
+  );
+  if (action === 'Open setup guide') {
+    await vscode.commands.executeCommand('systemstudioCis310.openSetupGuide');
+    return false;
+  }
+  if (action !== 'Start Docker Desktop and wait') return false;
+  const opened = await vscode.env.openExternal(vscode.Uri.parse('docker-desktop://dashboard'));
+  if (!opened) {
+    const choice = await vscode.window.showErrorMessage(
+      'Docker Desktop could not be opened through its system link. Open it from the Start menu or Applications folder, then rerun guided setup.',
+      'Ask Orbit for guidance',
+      'Open setup guide'
+    );
+    if (choice === 'Ask Orbit for guidance') {
+      await vscode.commands.executeCommand('systemstudioCis310.openAiTutor', {
+        setupError: { area: 'Docker Desktop startup', detail: 'The docker-desktop system link could not be opened.' }
+      });
+    }
+    if (choice === 'Open setup guide') await vscode.commands.executeCommand('systemstudioCis310.openSetupGuide');
+    return false;
+  }
+  const ready = await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: 'Waiting for Docker Desktop', cancellable: true }, async (progress, token) => {
+    const started = Date.now();
+    while (!token.isCancellationRequested && Date.now() - started < 45_000) {
+      const docker = await probeDockerEngine();
+      if (docker.state === 'ready') return true;
+      progress.report({ message: `Engine is starting… ${Math.round((Date.now() - started) / 1_000)}s` });
+      await new Promise((resolve) => setTimeout(resolve, 2_000));
+    }
+    return false;
+  });
+  if (!ready) {
+    const choice = await vscode.window.showWarningMessage(
+      'Docker Desktop did not report a ready engine within 45 seconds. Keep it open and retry after its dashboard says the engine is running.',
+      'Ask Orbit for guidance',
+      'Retry setup',
+      'Open setup guide'
+    );
+    if (choice === 'Ask Orbit for guidance') {
+      await vscode.commands.executeCommand('systemstudioCis310.openAiTutor', {
+        setupError: { area: 'Docker Desktop startup', detail: 'The Docker client was found, but the Linux-container engine did not become ready within 45 seconds.' }
+      });
+    }
+    if (choice === 'Retry setup') await vscode.commands.executeCommand('systemstudioCis310.setupCourseEnvironment');
+    if (choice === 'Open setup guide') await vscode.commands.executeCommand('systemstudioCis310.openSetupGuide');
+  }
+  return ready;
+}
+
 async function checkEnvironment(manager: DigitalManager, output: vscode.OutputChannel): Promise<void> {
   const status = await manager.getStatus();
   const docker = await probeDockerEngine();
@@ -837,16 +965,20 @@ async function checkEnvironment(manager: DigitalManager, output: vscode.OutputCh
     return;
   }
   const suggestedAction = !status.integrityVerified
-    ? 'Install Digital'
-    : EMBEDDED_CONTAINER_PLATFORM
-      ? 'Open setup guide'
-      : 'Download Java';
+    ? 'Set up everything'
+    : EMBEDDED_CONTAINER_PLATFORM && docker.state === 'engine-unavailable'
+      ? 'Start Docker Desktop and retry'
+      : EMBEDDED_CONTAINER_PLATFORM
+        ? 'Open setup guide'
+        : 'Download Java';
   const action = await vscode.window.showWarningMessage(
     `The CIS 310 environment needs attention. ${docker.detail} See the SystemStudio output for details.`,
     suggestedAction
   );
-  if (action === 'Install Digital') {
-    await vscode.commands.executeCommand('systemstudioCis310.setupDigital');
+  if (action === 'Set up everything') {
+    await vscode.commands.executeCommand('systemstudioCis310.setupCourseEnvironment');
+  } else if (action === 'Start Docker Desktop and retry') {
+    await recoverDockerDesktop();
   } else if (action === 'Download Java') {
     await vscode.env.openExternal(JAVA_DOWNLOAD);
   } else if (action === 'Open setup guide') {
@@ -965,6 +1097,18 @@ function safeHttpsUri(value: string): vscode.Uri | undefined {
 function contextualTutorPrompt(value: unknown): string | undefined {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return undefined;
   const candidate = value as Record<string, unknown>;
+  if (typeof candidate.setupError === 'object' && candidate.setupError !== null && !Array.isArray(candidate.setupError)) {
+    const setupError = candidate.setupError as Record<string, unknown>;
+    const area = typeof setupError.area === 'string' ? setupError.area.slice(0, 120) : 'CIS 310 course environment';
+    const detail = typeof setupError.detail === 'string' ? setupError.detail.replace(/[\r\n]+/g, ' ').slice(0, 1_200) : 'No diagnostic detail was reported.';
+    return [
+      `Help me diagnose the ${area} setup without doing coursework for me.`,
+      `The local diagnostic says: ${detail}`,
+      'First explain in plain language what is ready, what is missing, and whether this is a host requirement or a course-container requirement.',
+      'Then give exactly one safe next step and tell me what success should look like before I retry.',
+      'Do not ask me to paste credentials, tokens, private files, grades, or unrestricted system logs. Do not claim that an installation succeeded unless I report the verification result.'
+    ].join('\n');
+  }
   if (typeof candidate.circuitPreflightId === 'string') {
     const mode = candidate.tutorMode === 'failed-preflight' ? 'failed-preflight' : 'design';
     return circuitTutorPrompt(candidate.circuitPreflightId, mode);

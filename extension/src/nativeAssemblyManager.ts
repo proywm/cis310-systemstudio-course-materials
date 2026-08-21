@@ -90,17 +90,17 @@ export class NativeAssemblyManager {
     };
   }
 
-  async prepare(): Promise<NasmStatus> {
+  async prepare(options: { automatic?: boolean } = {}): Promise<NasmStatus> {
     let status = await this.status();
     if (status.available) return status;
     const nativeInstallable = process.platform === 'linux' && (process.arch === 'x64' || process.arch === 'ia32') && await isDebianFamily();
     if (nativeInstallable) {
-      const choice = await vscode.window.showInformationMessage(
-        'Prepare the actual NASM package in private extension storage? GNU ld and GDB remain host tools. No administrator access or system modification is used.',
-        { modal: true },
-        'Prepare NASM',
-        'Use Course Container'
-      );
+      const choice = options.automatic ? 'Prepare NASM' : await vscode.window.showInformationMessage(
+          'Prepare the actual NASM package in private extension storage? GNU ld and GDB remain host tools. No administrator access or system modification is used.',
+          { modal: true },
+          'Prepare NASM',
+          'Use Course Container'
+        );
       if (choice === 'Prepare NASM') {
         await this.resolveNasm(true);
         status = await this.status();
@@ -113,7 +113,7 @@ export class NativeAssemblyManager {
     if (!docker || !(await dockerDaemonReady(docker))) {
       throw new Error('Docker is not ready. Start Docker Desktop, or install NASM, GNU ld, and GDB on x86 Linux.');
     }
-    await this.ensureContainerImage(docker, true);
+    await this.ensureContainerImage(docker, !options.automatic);
     return this.status();
   }
 

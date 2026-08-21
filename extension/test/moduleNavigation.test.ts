@@ -54,4 +54,13 @@ describe('sidebar course-module navigation', () => {
     assert.match(source, /groupItem\('modules',[\s\S]*'list-tree', true\)/);
     assert.match(source, /buildCourseModuleNavigation\(this\.practiceStore\.getLearningPath\(\)\)\.map\(moduleItem\)/);
   });
+
+  it('keeps beginner navigation task-based and manual tools under advanced diagnostics', () => {
+    const source = readFileSync(path.resolve('src/statusTree.ts'), 'utf8');
+    const manifest = readFileSync(path.resolve('package.json'), 'utf8');
+    assert.match(source, /Set up or repair my course environment/);
+    assert.match(source, /Advanced Setup and Diagnostics/);
+    assert.match(source, /Help, Staff, and Canvas/);
+    assert.match(manifest, /systemstudioCis310\.setupCourseEnvironment/);
+  });
 });

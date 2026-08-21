@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, Full Digital, and an integrated actual NASM/ELF32 workbench.",
-  "version": "0.22.1",
+  "version": "0.23.0",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -43,6 +43,7 @@
     "onCustomEditor:systemstudioCis310.fullDigitalEditor",
     "onLanguage:digital-circuit",
     "onLanguage:nasm",
+    "onCommand:systemstudioCis310.setupCourseEnvironment",
     "onCommand:systemstudioCis310.setupDigital",
     "onCommand:systemstudioCis310.startTutorial",
     "onCommand:systemstudioCis310.openGettingStarted",
@@ -103,6 +104,12 @@
   },
   "contributes": {
     "commands": [
+      {
+        "command": "systemstudioCis310.setupCourseEnvironment",
+        "title": "CIS 310: Set Up or Repair My Course Environment",
+        "category": "SystemStudio",
+        "icon": "$(tools)"
+      },
       {
         "command": "systemstudioCis310.startTutorial",
         "title": "CIS 310: Start or Rerun Guided Tutorial",
@@ -412,7 +419,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "Start with one recommended learning action, then open details only when needed. Expand Course Team and Schedule for the instructor, class room/time, office location, and current no-GSI/no-grader status. Reading/video checkmarks, practice progress, guided-lab checkmarks, coursework status, and self-evaluation stay on this device and are not instructor grades.\n[Open Coursework and Final Presentation](command:systemstudioCis310.openCourseworkCenter)\n[Open Student Unit Test Center](command:systemstudioCis310.openUnitTestCenter)\n[Open the accessible course preparation path](command:systemstudioCis310.openPracticeCenter)\n[Build a guided circuit or debug actual NASM](command:systemstudioCis310.openGuidedLabs)\n[Start 5-question practice](command:systemstudioCis310.startQuickPractice)\n[Choose an AI learning coach](command:systemstudioCis310.openAiTutor)\n[Ask a question before class](command:systemstudioCis310.openPreClassQuestion)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Open local FAQ chat](command:systemstudioCis310.openStudentHelper)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "Begin with the guided setup, then use Start Here for the next learning action. Detailed tool controls stay under Advanced Setup and Diagnostics. Reading/video checkmarks, practice progress, guided-lab checkmarks, coursework status, and self-evaluation stay on this device and are not instructor grades.\n[Set up or repair my course environment](command:systemstudioCis310.setupCourseEnvironment)\n[Open the learning dashboard](command:systemstudioCis310.openPracticeCenter)\n[Ask Orbit AI learning coach](command:systemstudioCis310.openAiTutor)\n[Open Coursework and Final Presentation](command:systemstudioCis310.openCourseworkCenter)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",

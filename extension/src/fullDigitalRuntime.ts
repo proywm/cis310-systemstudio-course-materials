@@ -65,6 +65,16 @@ export class FullDigitalRuntime implements vscode.Disposable {
     return process.platform === 'linux' || process.platform === 'win32' || process.platform === 'darwin';
   }
 
+  /** Prepare the verified display/runtime without opening or changing a student circuit. */
+  async prepare(): Promise<void> {
+    if (!this.supported) throw new Error('The in-editor Full Digital desktop requires desktop Linux, Windows, or macOS.');
+    if (process.platform === 'linux') {
+      await this.ensureDisplayTools();
+      return;
+    }
+    await this.ensureContainerImage();
+  }
+
   async open(circuitPath: string): Promise<FullDigitalSession> {
     if (!this.supported) {
       throw new Error('The in-editor Full Digital desktop requires a desktop Linux, Windows, or macOS extension host.');

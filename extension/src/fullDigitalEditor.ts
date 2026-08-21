@@ -26,6 +26,7 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
     _token: vscode.CancellationToken
   ): Promise<void> {
     let retryEmbedded: (() => Promise<void>) | undefined;
+    let lastDiagnosis: DigitalLaunchDiagnosis | undefined;
     panel.onDidDispose(() => {
       void this.runtime.disposeSession(document.uri.fsPath);
     });
@@ -50,6 +51,15 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
         await retryEmbedded();
       } else if (action === 'guide') {
         await SetupGuidePanel.show(this.context);
+      } else if (action === 'ai-help') {
+        await vscode.commands.executeCommand('systemstudioCis310.openAiTutor', {
+          setupError: {
+            area: 'embedded Full Digital simulator',
+            detail: lastDiagnosis
+              ? `${lastDiagnosis.title}: ${lastDiagnosis.summary} ${lastDiagnosis.explanation} Technical category: ${lastDiagnosis.technicalDetail}`
+              : 'The embedded simulator did not start. Help me choose one safe next check.'
+          }
+        });
       }
     });
     panel.webview.html = messageHtml(
@@ -95,6 +105,7 @@ export class FullDigitalEditorProvider implements vscode.CustomTextEditorProvide
         const status = await this.manager.getStatus();
         const nativeReady = nativeDigitalFallbackAvailable(process.platform, process.env, status);
         const diagnosis = diagnoseDigitalLaunchFailure(detail);
+        lastDiagnosis = diagnosis;
         panel.webview.html = failureHtml(panel.webview, diagnosis, nativeReady);
         void vscode.window.showErrorMessage(
           `${diagnosis.title}. Your circuit was not changed; use the recovery choices in the Digital tab.`
@@ -225,13 +236,13 @@ function failureHtml(webview: vscode.Webview, diagnosis: DigitalLaunchDiagnosis,
   const steps = diagnosis.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';"><style nonce="${nonce}">
 :root{color-scheme:light dark}body{padding:28px;color:var(--vscode-foreground);background:var(--vscode-editor-background);font:1rem/1.55 var(--vscode-font-family)}main{max-width:780px}h1{font-size:1.5rem}.safe{border-left:5px solid var(--vscode-testing-iconPassed);padding:11px 14px;background:var(--vscode-textBlockQuote-background)}ol{padding-left:1.4rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}button{min-height:40px;font:inherit;color:var(--vscode-button-foreground);background:var(--vscode-button-background);border:0;border-radius:4px;padding:8px 13px;cursor:pointer}.secondary{color:var(--vscode-button-secondaryForeground);background:var(--vscode-button-secondaryBackground)}button:focus-visible{outline:3px solid var(--vscode-focusBorder);outline-offset:2px}details{margin-top:22px;border:1px solid var(--vscode-panel-border);border-radius:5px;padding:10px 13px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--vscode-descriptionForeground)}
-</style></head><body><main><h1>${escapeHtml(diagnosis.title)}</h1><p class="safe"><strong>${escapeHtml(diagnosis.summary)}</strong></p><p>${escapeHtml(diagnosis.explanation)}</p><h2>What to do</h2><ol>${steps}</ol><div class="actions"><button data-action="retry">Retry embedded Digital</button>${nativeButton}<button class="secondary" data-action="guide">Open setup guide</button></div><details><summary>Technical detail for troubleshooting</summary><pre>${escapeHtml(diagnosis.technicalDetail)}</pre></details></main><script nonce="${nonce}">const vscode=acquireVsCodeApi();document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(button)vscode.postMessage({action:button.dataset.action});});</script></body></html>`;
+</style></head><body><main><h1>${escapeHtml(diagnosis.title)}</h1><p class="safe"><strong>${escapeHtml(diagnosis.summary)}</strong></p><p>${escapeHtml(diagnosis.explanation)}</p><h2>What to do</h2><ol>${steps}</ol><div class="actions"><button data-action="retry">Retry embedded Digital</button>${nativeButton}<button class="secondary" data-action="ai-help">Ask Orbit about this setup error</button><button class="secondary" data-action="guide">Open setup guide</button></div><p>Orbit opens only after you choose it. It receives a short setup prompt—not your files, credentials, grades, or full logs.</p><details><summary>Technical detail for troubleshooting</summary><pre>${escapeHtml(diagnosis.technicalDetail)}</pre></details></main><script nonce="${nonce}">const vscode=acquireVsCodeApi();document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(button)vscode.postMessage({action:button.dataset.action});});</script></body></html>`;
 }
 
-function webviewAction(message: unknown): 'stop' | 'native' | 'retry' | 'guide' | undefined {
+function webviewAction(message: unknown): 'stop' | 'native' | 'retry' | 'guide' | 'ai-help' | undefined {
   if (!message || typeof message !== 'object') return undefined;
   const action = (message as { action?: unknown }).action;
-  return action === 'stop' || action === 'native' || action === 'retry' || action === 'guide' ? action : undefined;
+  return action === 'stop' || action === 'native' || action === 'retry' || action === 'guide' || action === 'ai-help' ? action : undefined;
 }
 
 function canOpenNativeWindow(): boolean {

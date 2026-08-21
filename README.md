@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, a Student Unit Test Center, cumulative 4-bit final-presentation progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, a published U-M Maizey App handoff, an optional student-account GitHub Copilot coach, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, a Student Unit Test Center, cumulative 4-bit final-presentation progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, an optional published/indexed U-M tutor handoff, an optional student-account GitHub Copilot coach, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -19,6 +19,7 @@ This repository is the student-facing home for the course syllabus, semester cal
 | Practice design, research, and privacy boundary | [Learning Center design](extension/LEARNING_DESIGN.md) |
 | Independent validation of the public circuit preflights | [Circuit-preflight validation](docs/CIRCUIT_PREFLIGHT_VALIDATION.md) |
 | AI tutor, FAQ, privacy, and question-queue design | [AI tutor and student-support design](extension/AI_TUTOR_DESIGN.md) |
+| Professional learning-platform feature and release-boundary audit | [Professional learning-experience audit](docs/PROFESSIONAL_LEARNING_PLATFORM_AUDIT.md) |
 | Installable VS Code package | [Latest course release](https://github.com/proywm/cis310-systemstudio-course-materials/releases/latest) |
 
 > Canvas is authoritative for live course details. Submit every required deliverable in Canvas and verify that Canvas recorded the submission. SystemStudio does not submit coursework.
@@ -77,7 +78,7 @@ Download `systemstudio-cis310.vsix` from the [latest release](https://github.com
 code --install-extension systemstudio-cis310.vsix
 ```
 
-Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open the **SystemStudio CIS 310** activity-bar view, and start the guided tutorial.
+Alternatively, use **Extensions: Install from VSIX...** in desktop VS Code. Reload the VS Code window, open **SystemStudio CIS 310 → Start Here**, and select **Set up or repair my course environment**. The extension verifies every course-managed component before reporting ready; only system-level Docker installation, licensing, virtualization, or administrator approval remains an explicit student/IT handoff.
 
 Java 8 or newer is required for Full Digital on Linux and for native fallback/CLI use. On Windows/macOS, Docker Desktop supplies the pinned Java/X11 runtime used to embed upstream Digital in a VS Code tab and the NASM/GDB/QEMU runtime used by the assembly workbench. The extension can privately prepare Xvfb/x11vnc and NASM on Debian/Ubuntu hosts after confirmation. Native assembly additionally requires GNU `ld` and GDB. The optional trace tutor has no external toolchain requirement but is explicitly not an assembler.
 

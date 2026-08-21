@@ -82,6 +82,15 @@ describe('full Digital and real assembly declarations', () => {
     assert.doesNotMatch(editor.slice(recovery, notification + 50), /await vscode\.window\.showErrorMessage/);
   });
 
+  it('offers privacy-bounded Orbit guidance from Full Digital recovery', () => {
+    const editor = readFileSync(path.join(root, 'src', 'fullDigitalEditor.ts'), 'utf8');
+    const extension = readFileSync(path.join(root, 'src', 'extension.ts'), 'utf8');
+    assert.match(editor, /Ask Orbit about this setup error/);
+    assert.match(editor, /data-action="ai-help"/);
+    assert.match(extension, /Do not ask me to paste credentials, tokens, private files, grades/);
+    assert.match(extension, /Do not claim that an installation succeeded unless I report the verification result/);
+  });
+
   it('archives pre-0.20 assembly guides during a safe workspace upgrade', () => {
     const upgrader = readFileSync(path.join(root, 'src', 'core', 'assemblyGuideUpgrade.ts'), 'utf8');
     assert.match(upgrader, /systemstudio-assembly-guide: 0\.20/);
