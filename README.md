@@ -2,7 +2,7 @@
 
 Active Fall 2026 course materials for **CIS 310: Computer Organization and Assembly Language** at the University of Michigan-Dearborn.
 
-This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, a Student Unit Test Center, cumulative 4-bit final-presentation progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, U-M Maizey and U-M GPT handoffs, and a Canvas pre-class question workflow.
+This repository is the student-facing home for the course syllabus, semester calendar, primary accessible HTML lectures, open-textbook/author-video preparation map, optional visual PDF archives, homework and processor-project references, and the SystemStudio CIS 310 VS Code extension with low-stakes practice, Assignment Mission Control, a Student Unit Test Center, cumulative 4-bit final-presentation progression, the complete upstream Digital simulator, real assembly toolchain routing, a separate instruction trace tutor, local learning/coursework progress, a local FAQ chat, a U-M Codex CLI learning-coach handoff, and a Canvas pre-class question workflow.
 
 ## Start here
 
@@ -67,7 +67,7 @@ Use **CIS 310: Open Fall 2026 Course Calendar** in VS Code to view the calendar.
 - seven lecture-mapped, self-checking NASM walkthroughs covering arithmetic, flags/branches, an array loop, a stack frame, linear search, and iterative/recursive binary search, plus a separately labeled optional trace tutor;
 - a visible eight-lesson, freely navigable, skippable, resumable, and rerunnable tutorial;
 - a local helper for topic, tool, calendar, and Canvas routing;
-- an attempt-first AI learning-coach chooser, circuit-specific design/debugging prompt after public preflights, a published-student-App check for Maizey, a no-cost U-M GPT fallback for broader troubleshooting, and a graded-work boundary before either U-M AI route; and
+- an attempt-first U-M Codex CLI learning coach, circuit-specific design/debugging prompts after public preflights, persistent `AGENTS.md` course guardrails, and a graded-work boundary before the online AI route; and
 - a collapsible chat-style help entry, local FAQ, and structured Canvas Questions Before Class draft.
 
 No external document-hosting account is required to open the packaged syllabus, HTML lectures, or optional PDF archives. The required Tarnoff book and companion videos open from the author's official ETSU/YouTube sources; the extension does not redistribute them or use Google Drive.
@@ -95,7 +95,7 @@ SECURITY.md                     Security and privacy reporting
 
 ## Help and privacy
 
-The local FAQ does not transmit conversations, reading/video checkmarks, practice history, student code, circuit files, grades, or telemetry to an AI service. Learning history is stored locally in VS Code and can be reset by the student. Opening U-M Maizey, U-M GPT, or Canvas leaves VS Code and is governed by U-M's service notices. The extension copies only a student-reviewed prompt and never attaches files or Canvas data automatically. It contains no shared faculty LLM key, private instructor-hosted model endpoint, or Canvas token. External book/video links have their own privacy practices. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
+The local FAQ does not transmit conversations, reading/video checkmarks, practice history, student code, circuit files, grades, or telemetry to an AI service. Learning history is stored locally in VS Code and can be reset by the student. U-M Codex runs inside VS Code under the student's own U-M configuration and the permissions the student selects; SystemStudio sends the guarded starter prompt only after the student selects the explicit in-editor action. The extension contains no shared faculty or student LLM key, private instructor-hosted model endpoint, or Canvas token. Canvas and external book/video links have their own privacy practices. Do not commit student submissions, grades, credentials, private correspondence, answer keys, hidden tests, or instructor solutions to this repository.
 
 For a course requirement or deadline, check Canvas first. For a technical question, include what you expected, what happened, the exact evidence, and what you already tried.
 

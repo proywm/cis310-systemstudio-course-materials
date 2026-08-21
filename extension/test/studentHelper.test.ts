@@ -71,9 +71,9 @@ describe('student helper', () => {
     assert.ok(reply.actions.some((action) => action.id === 'check-environment'));
   });
 
-  it('routes AI tutoring to U-M Maizey without claiming the local FAQ is AI', () => {
+  it('routes AI tutoring to U-M Codex without claiming the local FAQ is AI', () => {
     const reply = answerStudentQuestion('What is the AI tutor?');
-    assert.match(JSON.stringify(reply), /U-M Maizey/);
+    assert.match(JSON.stringify(reply), /U-M Codex CLI/);
     assert.ok(reply.actions.some((action) => action.id === 'open-ai-tutor'));
   });
 

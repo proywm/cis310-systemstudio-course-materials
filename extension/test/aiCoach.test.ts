@@ -1,21 +1,17 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
-  classifyTutorDestination,
+  courseAgentsMd,
   LEARNING_COACH_SYSTEM_PROMPT,
   prepareCoachRequest
 } from '../src/core/aiCoach';
 
 describe('AI coach routing and prompt boundaries', () => {
-  it('rejects the observed Maizey management URL instead of treating it as student chat', () => {
-    assert.equal(
-      classifyTutorDestination('https://umgpt.umich.edu/maizey/2b85385a-a00d-4348-852a-b71a9b2ec0a5/detail/overview').kind,
-      'maizey-management'
-    );
-    assert.equal(classifyTutorDestination('https://canvas.umd.umich.edu/courses/552144').kind, 'canvas');
-    assert.equal(classifyTutorDestination('https://maizey.umich.edu/apps/cis310-chat').kind, 'maizey-app');
-    assert.equal(classifyTutorDestination('http://maizey.umich.edu/apps/cis310-chat').kind, 'invalid');
-    assert.equal(classifyTutorDestination('https://evil.example/apps/cis310-chat').kind, 'invalid');
+  it('packages persistent learning-coach and credential guardrails', () => {
+    const agents = courseAgentsMd();
+    assert.match(agents, /Ask for the student's attempt/);
+    assert.match(agents, /Do not produce a completed homework answer/);
+    assert.match(agents, /Never request, read, print, or store U-M credentials/);
   });
 
   it('blocks direct deliverables before an optional external tutor request', () => {

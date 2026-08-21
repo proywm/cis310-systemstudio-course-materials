@@ -50,7 +50,7 @@ Tutor buttons do not send course or student data to an instructor-owned model. T
 - The existing presentation PDFs are untagged and have not been certified as correctly ordered or independently WCAG-conformant. They are optional visual archives, not the primary lecture format. If the original PowerPoint sources become available, check them with Microsoft Accessibility Checker; review every Canvas HTML page with Panorama.
 - Each assigned video still requires accurate synchronized captions and a reviewed transcript. A video's presence in the content map does not certify its captions.
 - The complete Digital application is a streamed upstream Swing desktop. Its pixel canvas does not expose equivalent screen-reader semantics through noVNC. The textual circuit lessons, predictions, signal tables, and instructor accommodation process remain necessary alternatives; the extension explicitly discloses this limitation.
-- U-M Maizey, Canvas, YouTube, the open textbook site, Docker Desktop, and upstream Digital are external products with their own accessibility status.
+- U-M Codex CLI, Canvas, YouTube, the open textbook site, Docker Desktop, and upstream Digital are external products with their own accessibility status.
 
 ## Manual acceptance checks before the semester
 

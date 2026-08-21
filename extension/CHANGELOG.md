@@ -2,10 +2,9 @@
 
 ## 0.25.0
 
-- Added a first-run Orbit workflow that establishes optional student assistance before running the verified Digital and NASM environment setup.
-- Made the published U-M Maizey App the recommended course-grounded learning and installation coach, with bounded setup instructions, one-step recovery, verification evidence, privacy limits, and assessed-work guardrails.
-- Added no-cost U-M GPT as the university-supported general troubleshooting fallback and retained private offline Orbit; removed GitHub Copilot from student setup and learning paths.
-- Kept every U-M AI handoff student-reviewed: SystemStudio copies a bounded prompt but never sends files, grades, Canvas records, credentials, full logs, or an instructor-owned key/model endpoint.
+- Replaced the multi-provider AI chooser with the student-owned U-M Codex CLI as the single online setup and learning coach; added cross-platform readiness checks, explicit in-terminal prompt consent, and persistent `AGENTS.md` academic-integrity guardrails.
+- Made Codex assistance the first optional onboarding step before the verified Digital and NASM environment setup, while retaining private offline Orbit as a non-AI fallback.
+- Kept the handoff student-controlled: SystemStudio does not read or store credentials and sends no course prompt until the student selects **Send guarded course prompt** inside VS Code.
 
 ## 0.24.0
 

@@ -4,6 +4,7 @@ import { access, cp, mkdir, readFile, rename, rm, stat, writeFile } from 'node:f
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { equalsSha256, sha256File } from './core/checksum';
+import { courseAgentsMd } from './core/aiCoach';
 import { BLANK_DIGITAL_CIRCUIT } from './core/circuitTemplate';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
 import { downloadFile } from './core/download';
@@ -339,6 +340,7 @@ export class DigitalManager {
       );
 
       await writeFile(path.join(staging, 'README.md'), starterReadme(), { encoding: 'utf8', flag: 'wx' });
+      await writeFile(path.join(staging, 'AGENTS.md'), courseAgentsMd(), { encoding: 'utf8', flag: 'wx' });
       await writeFile(
         path.join(staging, 'THIRD_PARTY_NOTICES.md'),
         starterThirdPartyNotice(),

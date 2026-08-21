@@ -316,7 +316,7 @@ export class CourseworkPanel implements vscode.Disposable {
           detail: `${candidate.detail} The tutor will not produce a finished circuit.`,
           contractId: candidate.id
         })),
-        { title: 'Choose the circuit you want help reasoning about', placeHolder: 'Your circuit remains local; only a public contract prompt is copied' }
+        { title: 'Choose the circuit you want help reasoning about', placeHolder: 'Your circuit remains local; only a public contract prompt is prepared' }
       );
       if (!choice) return;
       contract = circuitPreflightById(choice.contractId);

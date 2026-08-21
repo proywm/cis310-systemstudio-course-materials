@@ -12,11 +12,11 @@ import {
 describe('first-run Orbit assistance setup', () => {
   it('normalizes only current, verified student assistance choices', () => {
     const now = new Date('2026-08-21T12:00:00Z');
-    const state = aiAssistanceState('umgpt', 'student-confirmed', now);
+    const state = aiAssistanceState('codex', 'local-ready', now);
     assert.deepEqual(normalizeAiAssistanceState(state), state);
     assert.equal(normalizeAiAssistanceState({ ...state, version: AI_ASSISTANCE_ONBOARDING_VERSION + 1 }), undefined);
     assert.equal(normalizeAiAssistanceState({ ...state, preference: 'instructor-key' }), undefined);
-    assert.match(aiAssistanceLabel('maizey'), /course and setup coach/i);
+    assert.match(aiAssistanceLabel('codex'), /Codex CLI learning and setup coach/i);
     assert.match(aiAssistanceLabel('offline'), /private offline/i);
   });
 
@@ -26,9 +26,10 @@ describe('first-run Orbit assistance setup', () => {
     const tutorial = source.indexOf('await TutorialPanel.promptOnFirstRun(context)');
     const install = source.indexOf('await maybePromptForInstall(context, manager, setupDigital)');
     assert.ok(onboarding >= 0 && onboarding < tutorial && tutorial < install);
-    assert.match(source, /Yes, U-M GPT opens/);
-    assert.match(source, /Yes, Maizey opens/);
+    assert.match(source, /probeCodexCli/);
+    assert.match(source, /Open official U-M setup/);
+    assert.doesNotMatch(source, /Maizey|U-M GPT/);
     assert.match(source, /private offline Orbit helper/i);
-    assert.match(source, /selected helper will receive only the short diagnostic you review/i);
+    assert.match(source, /only a short diagnostic that you review can be sent to U-M Codex after your explicit action/i);
   });
 });

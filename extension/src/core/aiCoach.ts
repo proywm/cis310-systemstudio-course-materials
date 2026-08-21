@@ -1,35 +1,5 @@
 import { looksLikeDirectSolutionRequest } from './aiTutorGuardrails';
 
-export type TutorDestination =
-  | { kind: 'canvas'; url: string }
-  | { kind: 'maizey-app'; url: string }
-  | { kind: 'maizey-management'; url: string }
-  | { kind: 'invalid' };
-
-const UM_TUTOR_HOSTS = new Set(['maizey.umich.edu', 'umgpt.umich.edu']);
-
-/** Classifies a URL without treating a Maizey project-management page as student chat. */
-export function classifyTutorDestination(value: string): TutorDestination {
-  try {
-    const parsed = new URL(value);
-    if (parsed.protocol !== 'https:' || parsed.username || parsed.password) return { kind: 'invalid' };
-    if (parsed.hostname === 'canvas.umd.umich.edu') {
-      return /^\/courses\/\d+(?:\/|$)/.test(parsed.pathname)
-        ? { kind: 'canvas', url: parsed.toString() }
-        : { kind: 'invalid' };
-    }
-    if (!UM_TUTOR_HOSTS.has(parsed.hostname)) return { kind: 'invalid' };
-    const managementSegment = parsed.pathname.toLowerCase().split('/').some((segment) =>
-      ['detail', 'overview', 'settings', 'data-sources', 'datasources', 'billing'].includes(segment)
-    );
-    return managementSegment
-      ? { kind: 'maizey-management', url: parsed.toString() }
-      : { kind: 'maizey-app', url: parsed.toString() };
-  } catch {
-    return { kind: 'invalid' };
-  }
-}
-
 export const LEARNING_COACH_SYSTEM_PROMPT = [
   'You are the CIS 310 learning coach inside SystemStudio at the University of Michigan-Dearborn.',
   'Coach computer organization, digital logic, the cumulative 4-bit instructional processor, and IA-32 NASM/ELF32.',
@@ -40,6 +10,23 @@ export const LEARNING_COACH_SYSTEM_PROMPT = [
   'Say when a claim must be checked against the mapped lecture, open book, public preflight contract, syllabus, or current Canvas assignment.',
   'Do not claim access to Canvas, grades, private course data, or sources that were not included in the conversation.'
 ].join(' ');
+
+export function courseAgentsMd(): string {
+  return `# CIS 310 Codex learning-coach instructions
+
+${LEARNING_COACH_SYSTEM_PROMPT}
+
+## Required interaction pattern
+
+- Treat this workspace as student-owned course work. Ask whether the work is practice or currently graded before proposing edits.
+- Ask for the student's attempt and earliest uncertain step. Give one hint or a smaller analogous example at a time.
+- Do not produce a completed homework answer, assignment circuit, processor, assembly program, report, or submission-ready artifact.
+- Explain any proposed command before running it. Prefer inspection and formative public tests; do not weaken, replace, or fabricate tests.
+- Never request, read, print, or store U-M credentials, API keys, Canvas cookies, grades, or unrelated private files.
+- Treat the current Canvas assignment, syllabus, and instructor directions as authoritative when they differ from local material.
+- Before editing student work or running a command, make the intended change and evidence goal explicit and respect the student's selected Codex permissions.
+`;
+}
 
 export type CoachRequest =
   | { allowed: true; prompt: string }

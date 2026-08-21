@@ -1,6 +1,6 @@
 # SystemStudio CIS 310 VS Code Extension
 
-SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, a Student Unit Test Center, local FAQ, U-M Maizey and U-M GPT handoffs, and the Canvas question workflow.
+SystemStudio is the active Fall 2026 learning environment for CIS 310. It packages a primary accessible HTML syllabus (plus an optional print PDF), the calendar, primary accessible HTML lectures, optional visual PDF archives, assignment references, open-book/video preparation path, formative practice, guided labs, Assignment Mission Control, cumulative final-presentation planning, a Student Unit Test Center, local FAQ, a U-M Codex CLI learning-coach handoff, and the Canvas question workflow.
 
 Start with **CIS 310: Set Up or Repair My Course Environment**. It verifies or prepares every course-managed component, starts Docker Desktop when the platform permits, and reports ready only after Digital and the actual NASM/GDB route pass their checks. When host installation, licensing, administrator approval, or virtualization is required, it makes that handoff explicit and offers the packaged guide or privacy-bounded Orbit guidance.
 
@@ -41,7 +41,7 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 4. Check Canvas for live requirements, instructor evaluation, submission, and receipt.
 5. For circuits, create or open a `.dig` file in **Full Digital Simulator**. Predict first, build with Digital’s original controls, simulate, save, then use the official preview/tests when relevant.
 6. For assembly, use the **Actual NASM Debug Workbench**: predict, build/run, break at an inspect label, compare machine state, step, and explain. Use **Instruction Trace Tutor** only for optional conceptual practice.
-7. Use the local FAQ, published U-M Maizey student App, U-M GPT general assistant, or structured Canvas Question Before Class when help is needed.
+7. Use the local FAQ, U-M Codex CLI learning coach, or structured Canvas Question Before Class when help is needed.
 
 ## Included learning features
 
@@ -58,7 +58,7 @@ The **Instruction Trace Tutor** remains a separate optional conceptual simulator
 - a Student Unit Test Center backed by VS Code's Testing view: Digital files with upstream Testcase components are discovered automatically, NASM `*.test.asm` programs are assembled/linked/run as actual ELF32, and assignment public preflights remain available in Mission Control;
 - an original optional animated tutor companion with a text-equivalent interface, pause control, and automatic reduced-motion behavior;
 - a visible, self-paced, skippable, resumable, and rerunnable tutorial;
-- local FAQ routing, a published-student-App check for Maizey, a U-M GPT fallback with deterministic attempt-first guardrails, and Canvas Questions Before Class support; and
+- local FAQ routing, U-M Codex CLI readiness with persistent attempt-first guardrails, and Canvas Questions Before Class support; and
 - no Google Drive dependency for the packaged syllabus, presentations, or assignments.
 
 ## Installation
@@ -89,7 +89,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Open Hands-on Circuit and Assembly Labs` | Opens lecture-mapped guided builds and traces |
 | `CIS 310: Open Learning and Practice` | Opens preparation, practice, quiz, confidence, and review tools |
 | `CIS 310: Open Coursework and Final Presentation` | Opens assignment checklists, circuit preflights, final-presentation progression, grade estimate, Canvas-calendar import, recovery, and diagnostics |
-| `CIS 310: Choose AI Learning Coach` | Chooses a published U-M Maizey App, U-M GPT, or private offline Orbit |
+| `CIS 310: Open U-M Codex Learning Coach` | Checks and opens the student-owned U-M Codex CLI in VS Code; offline Orbit remains a non-AI fallback |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page |
 | `CIS 310: Start or Rerun Guided Tutorial` | Opens the self-paced tutorial |
 | `CIS 310: Open Setup and First-Task Guide` | Explains platform setup, Docker messages, the first circuit, the first NASM lab, tests, and submission checks |
@@ -112,8 +112,8 @@ See the generated `assembly/README.md`, `assembly/COMPATIBILITY.md`, and `assemb
 - Real assembly execution has time and output bounds.
 - The Instruction Trace Tutor has no filesystem, shell, process, or network instruction.
 - Learning history, coursework planning, imported calendar events, self-evaluation, and FAQ conversations stay in VS Code local storage; the extension sends no telemetry or student artifacts to an AI service.
-- U-M Maizey and Canvas open only after student action and are governed by U-M service notices. A Maizey management/detail URL is rejected rather than presented as student chat.
-- U-M GPT opens under the student's U-M account only after an explicit choice. The extension copies a reviewed prompt but does not attach files, Canvas content, grades, or course records.
+- U-M Codex opens only after student action, uses the student's own U-M configuration, and follows the permissions the student selects. After Codex is visibly ready, the student explicitly selects **Send guarded course prompt**; the extension never reads or stores the U-M key.
+- Canvas opens only after student action and is governed by U-M service notices. Codex receives no automatic Canvas content, grades, or course records.
 
 ## Verification
 

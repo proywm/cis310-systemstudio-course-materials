@@ -1,4 +1,4 @@
-import { access, cp, mkdir, readFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import {
@@ -10,6 +10,7 @@ import {
   type MachineSnapshot
 } from './core/embeddedAssembly';
 import { installCurrentAssemblyGuides } from './core/assemblyGuideUpgrade';
+import { courseAgentsMd } from './core/aiCoach';
 
 export interface AssemblyExecutionOptions {
   profile?: AssemblyProfile;
@@ -115,6 +116,7 @@ export class AssemblyManager implements vscode.Disposable {
       force: false,
       errorOnExist: true
     });
+    await writeCourseAgentsIfMissing(workspaceRoot);
     return target;
   }
 
@@ -147,6 +149,7 @@ export class AssemblyManager implements vscode.Disposable {
     }
     const guidePath = path.join(target, 'README.md');
     addedFiles = await installCurrentAssemblyGuides(source, target) || addedFiles;
+    await writeCourseAgentsIfMissing(workspaceRoot);
 
     return {
       entryPath: path.join(target, 'nasm-elf32', 'RegisterArithmetic.asm'),
@@ -250,6 +253,15 @@ export class AssemblyManager implements vscode.Disposable {
     if (snapshot.output) {
       this.output.appendLine(`Program output:\n${snapshot.output}`);
     }
+  }
+}
+
+async function writeCourseAgentsIfMissing(workspaceRoot: string): Promise<void> {
+  const target = path.join(workspaceRoot, 'AGENTS.md');
+  try {
+    await access(target);
+  } catch {
+    await writeFile(target, courseAgentsMd(), { encoding: 'utf8', flag: 'wx' });
   }
 }
 

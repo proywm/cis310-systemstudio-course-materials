@@ -127,13 +127,13 @@
       },
       {
         "command": "systemstudioCis310.openAiTutor",
-        "title": "CIS 310: Choose AI Learning Coach",
+        "title": "CIS 310: Open U-M Codex Learning Coach",
         "category": "SystemStudio",
         "icon": "$(sparkle)"
       },
       {
         "command": "systemstudioCis310.configureAiAssistance",
-        "title": "CIS 310: Configure or Check AI Assistance",
+        "title": "CIS 310: Configure or Check U-M Codex",
         "category": "SystemStudio",
         "icon": "$(settings-gear)"
       },
@@ -419,7 +419,7 @@
     "viewsWelcome": [
       {
         "view": "systemstudioCis310.explorer",
-        "contents": "First let Orbit establish a student-owned assistance route, then run the guided course setup. Detailed controls stay under Advanced Setup and Diagnostics. Reading/video checkmarks, practice progress, guided-lab checkmarks, coursework status, and self-evaluation stay on this device and are not instructor grades.\n[1. Configure or check AI assistance](command:systemstudioCis310.configureAiAssistance)\n[2. Set up or repair my course environment](command:systemstudioCis310.setupCourseEnvironment)\n[Open the learning dashboard](command:systemstudioCis310.openPracticeCenter)\n[Ask Orbit learning coach](command:systemstudioCis310.openAiTutor)\n[Open Coursework and Final Presentation](command:systemstudioCis310.openCourseworkCenter)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
+        "contents": "First let Orbit check the student-owned U-M Codex CLI, then run the guided course setup. The deterministic offline FAQ remains available if AI is unavailable. Detailed controls stay under Advanced Setup and Diagnostics. Reading/video checkmarks, practice progress, guided-lab checkmarks, coursework status, and self-evaluation stay on this device and are not instructor grades.\n[1. Configure or check U-M Codex](command:systemstudioCis310.configureAiAssistance)\n[2. Set up or repair my course environment](command:systemstudioCis310.setupCourseEnvironment)\n[Open the learning dashboard](command:systemstudioCis310.openPracticeCenter)\n[Open U-M Codex learning coach](command:systemstudioCis310.openAiTutor)\n[Open Coursework and Final Presentation](command:systemstudioCis310.openCourseworkCenter)\n[Open Fall 2026 Canvas](command:systemstudioCis310.openCanvas)\n[Start Guided Tutorial](command:systemstudioCis310.startTutorial)"
       },
       {
         "view": "systemstudioCis310.materials",
@@ -614,11 +614,6 @@
           "type": "string",
           "default": "https://canvas.umd.umich.edu/courses/552144",
           "description": "Authoritative Fall 2026 CIS 310 Canvas course URL used for deadlines, requirements, and submission."
-        },
-        "systemstudioCis310.maizeyTutorUrl": {
-          "type": "string",
-          "default": "https://canvas.umd.umich.edu/courses/552144",
-          "description": "Published student-facing U-M Maizey App/share URL, or the Fall 2026 Canvas course URL. Do not use a Maizey project detail/overview, data-source, settings, or billing URL; SystemStudio rejects management pages."
         },
         "systemstudioCis310.preClassDiscussionUrl": {
           "type": "string",

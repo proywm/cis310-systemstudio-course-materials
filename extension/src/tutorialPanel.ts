@@ -443,16 +443,16 @@ function tutorialStepsHtml(): string {
   </div></section>
   <section class="step" data-step="7" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Choose the right kind of conversation</h2>
-    <p>The chat bubble separates a private local FAQ, the preferred course-grounded U-M Maizey App, the U-M GPT general assistant, and a Canvas question for the instructor.</p>
+    <p>The chat bubble separates the private local FAQ, the U-M Codex CLI learning coach, and a Canvas question for the instructor.</p>
     <div class="instruction"><strong>Explore the support path that fits today:</strong> you do not need to open every service.</div>
     <div class="choices">
       ${choice('faq', 'Local FAQ chat', 'Use recurring setup, navigation, Digital, assembly, or submission-process checklists without calling an AI service.')}
-      ${choice('tutor', 'AI learning coach choice', 'Prefer the indexed U-M Maizey App for course grounding. Use U-M GPT for broader troubleshooting. Both receive only what you deliberately submit through your U-M account. Attempt first and request a hint—not a deliverable.')}
+      ${choice('tutor', 'U-M Codex learning coach', 'Codex runs in the VS Code terminal with your own U-M configuration and course guardrails. It receives only the prompt and workspace access you deliberately allow. Attempt first and request a hint—not a deliverable.')}
       ${choice('before', 'Questions Before Class', 'Send a complex concept or unclear decision point early so the instructor can adapt the next lecture.')}
       ${choice('anonymous', 'Canvas controls anonymity', 'Choose anonymous only when the Canvas discussion displays that option; SystemStudio cannot promise anonymity.')}
       ${choice('evidence', 'Make the question answerable', 'Include expected, observed, exact evidence, and what you already tried—never credentials, private grades, or another student’s work.')}
     </div>
-    <div class="actions"><button data-action="open-helper" class="primary">Open local FAQ chat</button><button data-action="open-ai-tutor" class="secondary">Choose AI learning coach</button><button data-action="ask-before-class" class="secondary">Ask before class</button></div>
+    <div class="actions"><button data-action="open-helper" class="primary">Open local FAQ chat</button><button data-action="open-ai-tutor" class="secondary">Open U-M Codex coach</button><button data-action="ask-before-class" class="secondary">Ask before class</button></div>
   </div></section>
   <section class="step" data-step="8" data-require="all"><div class="focus-card">
     <h2 tabindex="-1">Recover, verify, and continue</h2>

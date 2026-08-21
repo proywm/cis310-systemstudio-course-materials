@@ -60,19 +60,17 @@ The unconnected element may be inside a nested subcircuit. Check every flip-flop
 
 ## I am stuck partway through a homework question.
 
-Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, the published U-M Maizey App for one course-grounded hint, U-M GPT for a student-typed general troubleshooting prompt, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
+Record five pieces of evidence: what you expected, what happened, the exact line/truth-table row/register/error, one change you tried, and the decision you need help making. Use the local FAQ for routing, U-M Codex CLI for one course-bounded hint, office hours for sustained help, or **Ask a Question Before Class** when the issue would benefit the class.
 
 ## What is the AI tutor?
 
-U-M Maizey is the preferred course-grounded conversational tutor after the instructor indexes visible Canvas sources and publishes a student-facing App. Ask it to diagnose your uncertainty, give one hint, explain a related example, or check your reasoning. It may be wrong. Open and verify the source it cites, and do not use it to generate a graded submission. A Maizey Project `detail/overview` page is an instructor-management page, not the student chat.
+U-M Codex CLI is the course's single online AI learning coach. It runs in VS Code with the student's own U-M configuration and reads the course guardrails in `AGENTS.md`. Ask it to diagnose uncertainty, give one hint, explain a related example, or check reasoning. It may be wrong; verify claims against the mapped source and do not use it to generate a graded submission. SystemStudio never asks for or stores the student's U-M key.
 
-SystemStudio also links to U-M GPT, the university-supported general assistant available to active students. It receives only what the student deliberately submits and has no automatic Canvas, grade, or local-file access. It is not course-grounded unless the relevant allowed source is included in the prompt, so Maizey remains preferred when available.
+## Can U-M Codex help install or repair the course tools?
 
-## Can Maizey help install or repair the course tools?
+Yes. Orbit can copy a short sanitized diagnostic for the student to review, and Codex can explain what it means, distinguish a host requirement from a course-container dependency, recommend one documented next step, and describe what successful verification should show.
 
-Yes, after the instructor enables the CIS 310 Canvas Maizey integration and indexes the current SystemStudio setup guide and FAQ. Orbit can copy a short sanitized diagnostic for the student to review, and Maizey can explain what it means, distinguish a host requirement from a course-container dependency, recommend one documented next step, and describe what successful verification should show.
-
-Maizey cannot inspect or control the laptop, install software, start Docker Desktop, authorize administrator or virtualization changes, run commands, or confirm that setup succeeded. Those actions and checks remain local in SystemStudio. Never paste passwords, Duo codes, tokens, private files, grades, unrestricted logs, or another student's work.
+Codex cannot accept licenses, authorize administrator or virtualization changes, or confirm that setup succeeded without a reported verification result. Review `/permissions` before allowing file edits or commands. Never paste passwords, Duo codes, API keys, tokens, private grades, unrestricted logs, or another student's work.
 
 ## Can I paste a SystemStudio practice question into the AI tutor?
 
@@ -82,7 +80,7 @@ SystemStudio shows a learning-coach checkpoint before either U-M AI route and do
 
 ## Does the extension use the instructor's private AI account or API key?
 
-No. Maizey and U-M GPT use each student's U-M authentication. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token, faculty LLM key, or private instructor-hosted model endpoint and does not attach student files automatically.
+No. Codex CLI uses each student's own U-M configuration. The local FAQ does not call an AI service. SystemStudio does not contain a shared Canvas token, faculty LLM key, student API key, or private instructor-hosted model endpoint. Workspace access is controlled through Codex permissions.
 
 ## Can I ask something anonymously before class?
 

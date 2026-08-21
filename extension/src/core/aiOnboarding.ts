@@ -1,6 +1,6 @@
-export const AI_ASSISTANCE_ONBOARDING_VERSION = 2;
+export const AI_ASSISTANCE_ONBOARDING_VERSION = 3;
 
-export type AiAssistancePreference = 'maizey' | 'umgpt' | 'offline';
+export type AiAssistancePreference = 'codex' | 'offline';
 
 export interface AiAssistanceState {
   version: number;
@@ -11,7 +11,7 @@ export interface AiAssistanceState {
 
 export function normalizeAiAssistanceState(value: unknown): AiAssistanceState | undefined {
   if (!isRecord(value) || value.version !== AI_ASSISTANCE_ONBOARDING_VERSION) return undefined;
-  if (!['maizey', 'umgpt', 'offline'].includes(String(value.preference))) return undefined;
+  if (!['codex', 'offline'].includes(String(value.preference))) return undefined;
   if (!['student-confirmed', 'local-ready'].includes(String(value.verification))) return undefined;
   if (typeof value.verifiedAt !== 'string' || !Number.isFinite(Date.parse(value.verifiedAt))) return undefined;
   return value as unknown as AiAssistanceState;
@@ -31,8 +31,7 @@ export function aiAssistanceState(
 }
 
 export function aiAssistanceLabel(preference: AiAssistancePreference): string {
-  if (preference === 'maizey') return 'U-M Maizey course and setup coach';
-  if (preference === 'umgpt') return 'U-M GPT general learning and setup coach';
+  if (preference === 'codex') return 'U-M Codex CLI learning and setup coach';
   return 'private offline Orbit helper';
 }
 

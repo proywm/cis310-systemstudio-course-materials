@@ -90,7 +90,7 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
           ),
           describedActionItem(
             'Ask Orbit AI learning coach',
-            'U-M Maizey · U-M GPT · private offline Orbit · attempt-first help',
+            'U-M Codex CLI · private offline Orbit · attempt-first help',
             'systemstudioCis310.openAiTutor',
             'sparkle'
           ),
@@ -176,13 +176,13 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
         return [
           describedActionItem(
             'Ask Orbit AI learning coach',
-            'U-M Maizey · U-M GPT · private offline Orbit',
+            'U-M Codex CLI · private offline Orbit',
             'systemstudioCis310.openAiTutor',
             'sparkle'
           ),
           describedActionItem(
-            'Configure or check AI assistance',
-            'Maizey · U-M GPT · private offline Orbit',
+            'Configure or check U-M Codex',
+            'U-M Codex CLI · private offline Orbit',
             'systemstudioCis310.configureAiAssistance',
             'settings-gear'
           ),

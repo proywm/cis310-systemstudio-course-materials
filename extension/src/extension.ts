@@ -12,7 +12,8 @@ import {
   type AiAssistancePreference
 } from './core/aiOnboarding';
 import { AI_TUTOR_PREFLIGHT } from './core/aiTutorGuardrails';
-import { classifyTutorDestination } from './core/aiCoach';
+import { courseAgentsMd, LEARNING_COACH_SYSTEM_PROMPT } from './core/aiCoach';
+import { probeCodexCli, UM_CODEX_CLASSROOM_URL } from './core/codexCli';
 import { prepareSaveParent } from './core/circuitSave';
 import { circuitTutorPrompt } from './core/circuitPreflight';
 import { DIGITAL_RELEASE, MINIMUM_JAVA_MAJOR } from './core/digitalRelease';
@@ -53,10 +54,9 @@ import { UnitTestCenterPanel } from './unitTestCenterPanel';
 const JAVA_DOWNLOAD = vscode.Uri.parse('https://adoptium.net/temurin/releases/');
 const DEFAULT_CANVAS_COURSE = 'https://canvas.umd.umich.edu/courses/552144';
 const EMBEDDED_CONTAINER_PLATFORM = process.platform === 'win32' || process.platform === 'darwin';
-const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Choose Learning Coach';
+const CONTEXTUAL_TUTOR_OPEN_LABEL = 'Open U-M Codex Coach';
 const AI_ASSISTANCE_STATE_KEY = 'aiAssistance.state';
 const FIRST_RUN_SETUP_KEY = 'orbitSetupOnboarding.version';
-const UM_GPT_URL = 'https://umgpt.umich.edu/';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const output = vscode.window.createOutputChannel('SystemStudio CIS 310', { log: true });
@@ -322,7 +322,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         {
           modal: true,
           detail: starterPrompt
-            ? `For Maizey or U-M GPT, the source-bounded prompt is copied to the clipboard for review before sending. ${AI_TUTOR_PREFLIGHT.detail}`
+            ? `The source-bounded prompt is prepared for review, then U-M Codex opens in VS Code's terminal. You explicitly choose when to send it. ${AI_TUTOR_PREFLIGHT.detail}`
             : AI_TUTOR_PREFLIGHT.detail
         },
         openLabel,
@@ -337,7 +337,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       if (!provider) return;
       if (provider === 'explain') {
         await vscode.window.showInformationMessage(
-          'Maizey is the preferred course-grounded tutor after its Canvas integration is enabled and visible sources are indexed. U-M GPT is the no-cost U-M general assistant for broader troubleshooting. The private offline Orbit helper remains available without an AI service. None receives grades, private files, or Canvas records automatically.'
+          'U-M Codex CLI is the only online AI route. It runs in VS Code with the student’s own U-M configuration and course guardrails. The deterministic offline Orbit FAQ remains available without an AI service. Neither receives grades, Canvas records, credentials, or unrelated files automatically.'
         );
         return;
       }
@@ -345,43 +345,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await StudentHelperPanel.show(context, starterPrompt);
         return;
       }
-      if (provider === 'umgpt') {
-        if (starterPrompt) await vscode.env.clipboard.writeText(starterPrompt);
-        await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
-        if (starterPrompt) {
-          await vscode.window.showInformationMessage('The reviewed course prompt is on your clipboard. Paste it into U-M GPT, include your attempt, and ask for one hint at a time.');
-        }
-        return;
-      }
-      if (starterPrompt) await vscode.env.clipboard.writeText(starterPrompt);
-      const configured = vscode.workspace.getConfiguration('systemstudioCis310')
-        .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
-      const destination = classifyTutorDestination(configured);
-      if (destination.kind === 'maizey-management') {
-        const action = await vscode.window.showWarningMessage(
-          'That URL is a Maizey project-management page, not a student chat App. It will not be opened. Publish an App after indexing course data, then configure its student-facing share URL.',
-          'Open Canvas Course',
-          'Configure Student App URL'
-        );
-        if (action === 'Configure Student App URL') {
-          await vscode.commands.executeCommand('workbench.action.openSettings', 'systemstudioCis310.maizeyTutorUrl');
-          return;
-        }
-        if (action !== 'Open Canvas Course') return;
-        await vscode.env.openExternal(vscode.Uri.parse(DEFAULT_CANVAS_COURSE));
-      } else if (destination.kind === 'maizey-app') {
-        await vscode.env.openExternal(vscode.Uri.parse(destination.url));
-      } else {
-        await vscode.window.showInformationMessage(
-          'A published student Maizey App URL is not configured yet. Opening the CIS 310 Canvas course; use the Maizey course-navigation item after the instructor enables it.'
-        );
-        await vscode.env.openExternal(vscode.Uri.parse(DEFAULT_CANVAS_COURSE));
-      }
-      if (starterPrompt) {
-        await vscode.window.showInformationMessage(
-          'The lesson prompt is on your clipboard. Paste it into the U-M tutor, make an attempt, and ask for one hint at a time.'
-        );
-      }
+      await launchCodexLearningCoach(context, starterPrompt);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openPreClassQuestion', async () => {
       PreClassQuestionPanel.show(context);
@@ -1060,28 +1024,7 @@ type QuestionProvider = AiAssistancePreference | 'explain';
 
 async function chooseQuestionProvider(context: vscode.ExtensionContext): Promise<QuestionProvider | undefined> {
   const saved = normalizeAiAssistanceState(context.globalState.get(AI_ASSISTANCE_STATE_KEY));
-  if (saved) {
-    const selected = await vscode.window.showQuickPick([
-      {
-        label: `$(sparkle) Use ${aiAssistanceLabel(saved.preference)}`,
-        description: 'saved during first-run setup; change it at any time',
-        provider: saved.preference as QuestionProvider
-      },
-      {
-        label: '$(settings-gear) Choose or check a different helper',
-        description: 'verify Maizey, U-M GPT, or private offline support',
-        provider: 'configure' as const
-      },
-      {
-        label: '$(info) Compare the choices',
-        description: 'course grounding, general troubleshooting, availability, and privacy',
-        provider: 'explain' as const
-      }
-    ], { placeHolder: 'Use the saved Orbit assistance route or choose another' });
-    if (!selected) return undefined;
-    if (selected.provider === 'configure') return configureAiAssistance(context, false);
-    return selected.provider;
-  }
+  if (saved) return saved.preference;
   return configureAiAssistance(context, false);
 }
 
@@ -1091,14 +1034,9 @@ async function configureAiAssistance(
 ): Promise<AiAssistancePreference | 'explain' | undefined> {
   const selection = await vscode.window.showQuickPick([
     {
-      label: '$(mortar-board) U-M Maizey in Canvas (Recommended for course questions)',
-      description: 'U-M sign-in · indexed visible Canvas sources · setup guidance after indexing',
-      preference: 'maizey' as const
-    },
-    {
-      label: '$(comment-discussion) U-M GPT (General U-M assistant)',
-      description: 'no-cost U-M access · broad troubleshooting · not automatically course-grounded',
-      preference: 'umgpt' as const
+      label: '$(terminal) U-M Codex CLI (Recommended)',
+      description: 'one U-M-supported AI route · integrated terminal · student-owned authentication',
+      preference: 'codex' as const
     },
     {
       label: '$(shield) Private offline Orbit helper',
@@ -1106,11 +1044,11 @@ async function configureAiAssistance(
       preference: 'offline' as const
     },
     {
-      label: '$(info) Compare before choosing',
-      description: 'Maizey for course grounding; U-M GPT for broad help; offline for no-network support',
+      label: '$(info) What is shared?',
+      description: 'Codex sees the reviewed prompt and permitted workspace; offline FAQ sends nothing',
       preference: 'explain' as const
     }
-  ], { placeHolder: 'Choose the assistance Orbit should use during setup and learning' });
+  ], { placeHolder: 'Use U-M Codex for AI help or the non-AI offline FAQ' });
   if (!selection) return undefined;
   if (selection.preference === 'explain') return 'explain';
 
@@ -1123,66 +1061,67 @@ async function configureAiAssistance(
     return 'offline';
   }
 
-  if (selection.preference === 'umgpt') {
-    await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
-    const confirmation = await vscode.window.showInformationMessage(
-      'After signing in with your U-M uniqname and MFA, can you open U-M GPT? Orbit cannot inspect your browser session, so only you can confirm access.',
+  const status = await probeCodexCli();
+  if (!status.ready) {
+    const action = await vscode.window.showWarningMessage(
+      status.detail,
       { modal: true },
-      'Yes, U-M GPT opens',
+      'Open official U-M setup',
+      'Retry check',
       'Use offline Orbit'
     );
-    if (confirmation === 'Yes, U-M GPT opens') {
-      await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('umgpt', 'student-confirmed'));
-      if (offerTest) {
-        const testPrompt = 'I am checking my CIS 310 learning-coach setup. Ask me one short, ungraded binary-conversion question and wait for my attempt before giving feedback.';
-        await vscode.env.clipboard.writeText(testPrompt);
-        await vscode.window.showInformationMessage('U-M GPT is selected. A reviewed test prompt is on your clipboard; nothing was sent automatically.');
-      }
-      return 'umgpt';
-    }
-    if (confirmation === 'Use offline Orbit') {
+    if (action === 'Open official U-M setup') {
+      await vscode.env.openExternal(vscode.Uri.parse(UM_CODEX_CLASSROOM_URL));
+      await vscode.window.showInformationMessage('After completing the U-M Codex CLI setup, restart VS Code so its PATH is refreshed, then run “Configure or Check U-M Codex” again. The extension never asks for or stores your API key.');
+    } else if (action === 'Retry check') {
+      return configureAiAssistance(context, offerTest);
+    } else if (action === 'Use offline Orbit') {
       await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('offline', 'local-ready'));
       return 'offline';
     }
     return undefined;
   }
+  await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('codex', 'local-ready'));
+  await vscode.window.showInformationMessage(`${status.version}: U-M Codex CLI is available. Authentication is checked inside Codex; SystemStudio does not read or store the student's key.`);
+  if (offerTest) {
+    await launchCodexLearningCoach(context, 'I am checking my CIS 310 learning-coach setup. Ask me one short, ungraded binary-conversion question and wait for my attempt before giving feedback.');
+  }
+  return 'codex';
+}
 
-  const configured = vscode.workspace.getConfiguration('systemstudioCis310')
-    .get<string>('maizeyTutorUrl', DEFAULT_CANVAS_COURSE);
-  const destination = classifyTutorDestination(configured);
-  if (destination.kind === 'maizey-management' || destination.kind === 'invalid') {
-    await vscode.window.showWarningMessage(
-      'The configured Maizey destination is not a student tutor. Use the Fall 2026 Canvas course or configure a published student-facing App—not a project overview, settings, data-source, or billing page.'
-    );
-    return undefined;
+async function launchCodexLearningCoach(context: vscode.ExtensionContext, starterPrompt?: string): Promise<boolean> {
+  const status = await probeCodexCli();
+  if (!status.ready || !status.command) {
+    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, undefined);
+    await configureAiAssistance(context, false);
+    return false;
   }
-  const target = destination.kind === 'maizey-app' ? destination.url : DEFAULT_CANVAS_COURSE;
-  await vscode.env.openExternal(vscode.Uri.parse(target));
-  const confirmation = await vscode.window.showInformationMessage(
-    'After U-M sign-in, can you open the CIS 310 Maizey tutor from the Canvas course navigation or this published App? The extension cannot inspect your browser session, so only you can confirm access.',
-    { modal: true },
-    'Yes, Maizey opens',
-    'Use U-M GPT instead',
-    'Use offline Orbit'
-  );
-  if (confirmation === 'Yes, Maizey opens') {
-    await context.globalState.update(
-      AI_ASSISTANCE_STATE_KEY,
-      aiAssistanceState('maizey', 'student-confirmed')
-    );
-    await vscode.window.showInformationMessage('U-M Maizey is selected as Orbit’s course and installation coach. Setup diagnostics are copied for your review; no files, credentials, grades, or unrestricted logs are sent automatically.');
-    return 'maizey';
+  const activeFolder = vscode.window.activeTextEditor
+    ? vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)
+    : undefined;
+  let cwd = activeFolder?.uri ?? vscode.workspace.workspaceFolders?.[0]?.uri;
+  if (!cwd) {
+    cwd = vscode.Uri.joinPath(context.globalStorageUri, 'codex-learning-coach');
+    await vscode.workspace.fs.createDirectory(cwd);
+    await vscode.workspace.fs.writeFile(vscode.Uri.joinPath(cwd, 'AGENTS.md'), Buffer.from(courseAgentsMd(), 'utf8'));
   }
-  if (confirmation === 'Use U-M GPT instead') {
-    await vscode.env.openExternal(vscode.Uri.parse(UM_GPT_URL));
-    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('umgpt', 'student-confirmed'));
-    return 'umgpt';
-  }
-  if (confirmation === 'Use offline Orbit') {
-    await context.globalState.update(AI_ASSISTANCE_STATE_KEY, aiAssistanceState('offline', 'local-ready'));
-    return 'offline';
-  }
-  return undefined;
+  const prompt = [
+    LEARNING_COACH_SYSTEM_PROMPT,
+    '',
+    starterPrompt ?? 'Begin by asking which CIS 310 concept I am studying, what I tried, and where my reasoning first became uncertain. Give one hint at a time.'
+  ].join('\n');
+  const terminal = vscode.window.createTerminal({ name: 'U-M Codex — CIS 310', cwd });
+  terminal.show(false);
+  terminal.sendText(status.command, true);
+  await vscode.window.showInformationMessage(
+    'U-M Codex opened inside VS Code. Wait until its composer appears, review /permissions, then send the guarded course prompt. SystemStudio has sent no key, grade, Canvas record, or prompt; Codex workspace access follows your selected permissions.',
+    'Send guarded course prompt',
+    'Open U-M setup page'
+  ).then(async (action) => {
+    if (action === 'Send guarded course prompt') terminal.sendText(prompt.replace(/[\r\n]+/g, ' '), true);
+    if (action === 'Open U-M setup page') await vscode.env.openExternal(vscode.Uri.parse(UM_CODEX_CLASSROOM_URL));
+  });
+  return true;
 }
 
 async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): Promise<boolean> {
@@ -1190,7 +1129,7 @@ async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): 
   if (context.globalState.get<number>(FIRST_RUN_SETUP_KEY) === AI_ASSISTANCE_ONBOARDING_VERSION) return false;
   await context.globalState.update(FIRST_RUN_SETUP_KEY, AI_ASSISTANCE_ONBOARDING_VERSION);
   const action = await vscode.window.showInformationMessage(
-    'Welcome to CIS 310. Orbit will first help you choose a private support route, verify it when possible, and then guide the course-environment setup. AI is optional and never blocks course access.',
+    'Welcome to CIS 310. Orbit will first check the U-M Codex CLI learning coach, then guide the course-environment setup. The offline FAQ remains available, and AI never blocks course access.',
     { modal: true },
     'Begin assisted setup',
     'Use offline support',
@@ -1204,13 +1143,13 @@ async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): 
   } else {
     preference = await configureAiAssistance(context, true);
     if (preference === 'explain') {
-      await vscode.window.showInformationMessage('Use Maizey for indexed course and setup guidance, U-M GPT for broader troubleshooting, or offline Orbit when you prefer no network service. You can change this choice later.');
+      await vscode.window.showInformationMessage('U-M Codex CLI is the course’s only online AI route. It uses the student’s own U-M configuration in VS Code; offline Orbit is a deterministic no-network FAQ. You can change this choice later.');
       preference = await configureAiAssistance(context, true);
     }
   }
   const saved = normalizeAiAssistanceState(context.globalState.get(AI_ASSISTANCE_STATE_KEY));
   const next = await vscode.window.showInformationMessage(
-    `${saved ? aiAssistanceLabel(saved.preference) : 'Orbit offline guidance'} is available. Next, let Orbit run the verified Digital and NASM environment setup; if it stops, the selected helper will receive only the short diagnostic you review.`,
+    `${saved ? aiAssistanceLabel(saved.preference) : 'Orbit offline guidance'} is available. Next, let Orbit run the verified Digital and NASM environment setup; if it stops, only a short diagnostic that you review can be sent to U-M Codex after your explicit action.`,
     { modal: true },
     'Set up course environment',
     'Open guided tutorial',

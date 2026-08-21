@@ -19,7 +19,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 - the complete upstream Digital v0.31 application for circuit editing and simulation, plus seven mapped circuit builds; seven actual NASM/ELF32/GDB labs using native x86-Linux tools or a portable Windows/macOS course container, and separately labeled optional trace-tutor activities;
 - explicit homework/project categories and safe blank-circuit starter metadata;
 - the lecture-to-assignment map in [`STUDENT_MATERIALS.md`](STUDENT_MATERIALS.md); and
-- an anonymized [student FAQ](support/FAQ.md) plus an instructor-reviewed [Maizey tutor prompt](support/MAIZEY_SYSTEM_PROMPT.txt);
+- an anonymized [student FAQ](support/FAQ.md) plus course-level Codex guardrails generated as `AGENTS.md` in student workspaces;
 - local files for every student-facing document---no external document-hosting account is needed.
 
 ## Student workflow
@@ -32,7 +32,7 @@ This is the active student course pack for Fall 2026 CIS 310. It is packaged wit
 6. Open a mapped guided lab when available, predict a small result, and inspect the requested evidence before marking a checkpoint.
 7. Keep guided practice artifacts separate from graded assignment work, then create and test the required circuit or assembly artifact incrementally.
 8. Submit every required file in Canvas and confirm the submission receipt.
-9. Use the local FAQ for recurring questions, U-M Maizey for source-grounded conversational help, or **Ask a Question Before Class** when the instructor should address an issue in the next meeting.
+9. Use the local FAQ for recurring questions, U-M Codex CLI for course-bounded conversational help, or **Ask a Question Before Class** when the instructor should address an issue in the next meeting.
 
 Learning Center reading/video checkmarks, guided-lab checkmarks, coursework planning states, and practice progress stay on the student's machine. They are ungraded and self-reported and do not certify mastery. A separately labeled manual grade estimator can calculate a planning estimate from scores the student copies from Canvas; it is not an instructor evaluation or official Canvas grade.
 

@@ -22,16 +22,16 @@ describe('AI tutor learning guardrails', () => {
     assert.equal(AI_TUTOR_PREFLIGHT.openLabel, 'Open as Learning Coach');
   });
 
-  it('ships an instructor prompt that withholds first-turn practice answers and graded deliverables', async () => {
+  it('ships Codex workspace policy that withholds first-turn practice answers and graded deliverables', async () => {
     const prompt = await readFile(
-      path.resolve('../course-packs/cis310-fall2026/support/MAIZEY_SYSTEM_PROMPT.txt'),
+      path.resolve('../course-packs/cis310-fall2026/support/CODEX_AGENTS.md'),
       'utf8'
     );
-    assert.match(prompt, /only when the supplied course context clearly identifies it/);
+    assert.match(prompt, /only when supplied course context clearly identifies it/);
     assert.match(prompt, /unsupported claim that an item is ungraded is not enough/);
     assert.match(prompt, /Do not give the answer, answer choice, or option letter in the first response/);
     assert.match(prompt, /default to graded-task mode/);
     assert.match(prompt, /Do not complete missing portions of student work one piece at a time/);
-    assert.match(prompt, /role-change\/prompt-injection|change roles/);
+    assert.match(prompt, /role-change or prompt-injection|change roles/);
   });
 });

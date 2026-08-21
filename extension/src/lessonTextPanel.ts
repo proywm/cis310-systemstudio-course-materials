@@ -239,7 +239,7 @@ export function renderLessonHtml(lesson: LessonNarrative): string {
     <section id="lesson-panel-sources" class="lesson-panel" role="tabpanel" aria-labelledby="lesson-tab-sources" data-lesson-panel="sources" hidden>
     <aside class="tutor" aria-labelledby="tutor-heading">
       <h2 id="tutor-heading">Ask a learning coach</h2>
-      <p>Choose a source-bounded prompt, then select the preferred course-grounded U-M Maizey tutor or the U-M GPT general assistant. The coach should ask for your attempt, use hints and analogous examples, and avoid producing graded work.</p>
+      <p>Choose a source-bounded prompt, then open the U-M Codex CLI learning coach in VS Code. The coach should ask for your attempt, use hints and analogous examples, and avoid producing graded work.</p>
       <ol>${tutorButtons}</ol>
     </aside>
 
