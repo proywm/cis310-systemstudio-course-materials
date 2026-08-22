@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.25.5",
+  "version": "0.25.6",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",

@@ -62,6 +62,11 @@ export class GuidedLabPanel implements vscode.Disposable {
               request.completed
             );
             await this.saveAndPostProgress();
+            await this.practiceStore.recordGuidedLabStep(
+              request.labId,
+              guidedLab(request.labId)?.resourceId ?? 'unknown-module',
+              request.completed
+            );
             break;
           case 'reset-lab':
             if (await vscode.window.showWarningMessage(

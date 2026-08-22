@@ -333,3 +333,8 @@
 - Added embedded-test execution and VS Code Test Explorer integration.
 - Added CIS 310 starter workspace generation.
 - Added Workspace Trust, local-storage, and no-shell execution controls.
+# 0.25.6
+
+- Added a privacy-bounded learning-improvement framework for a possible future approved study.
+- Kept the institutional gate compiled off with no protocol identifier or endpoint; this release records and sends no learning-improvement data.
+- Added dormant category-specific consent, preview, export, explicit batch approval, withdrawal, deletion, bounded queues, and allowlisted coarse event schemas with unit tests.

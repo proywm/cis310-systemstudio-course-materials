@@ -210,6 +210,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'systemstudioCis310.reportIssue',
             'issues'
           ),
+          describedActionItem(
+            'Learning-improvement privacy controls',
+            'institutional gate off · no collection or upload before IRB-approved release',
+            'systemstudioCis310.openLearningImprovementPrivacy',
+            'shield'
+          ),
           describedInfoItem(`Instructor: ${CIS310_INSTRUCTOR.name}`, `${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.office}`, 'person'),
           describedInfoItem(CIS310_GSI.label, CIS310_GSI.detail, 'account'),
           describedInfoItem(`Class: M/W ${FALL_2026_CLASS_TIME_LABEL}`, FALL_2026_CLASS_LOCATION, 'calendar'),

@@ -8,6 +8,7 @@ import {
   type TutorialAction,
   type TutorialProgress
 } from './core/tutorial';
+import type { LearningImprovementManager } from './learningImprovement';
 
 const PROGRESS_KEY = 'guidedTutorial.progress';
 const WALKTHROUGH_ID = 'probir-roy.systemstudio-cis310#systemstudioCis310.gettingStarted';
@@ -17,7 +18,7 @@ export class TutorialPanel implements vscode.Disposable {
   private readonly disposables: vscode.Disposable[] = [];
   private step: number;
 
-  static async show(context: vscode.ExtensionContext, restart = false): Promise<void> {
+  static async show(context: vscode.ExtensionContext, learningImprovement: LearningImprovementManager, restart = false): Promise<void> {
     const saved = context.globalState.get<TutorialProgress>(PROGRESS_KEY);
     const initialStep = restart ? 0 : resumeTutorialStep(saved);
     if (TutorialPanel.current) {
@@ -25,11 +26,12 @@ export class TutorialPanel implements vscode.Disposable {
       if (restart) await TutorialPanel.current.restart();
       return;
     }
-    TutorialPanel.current = new TutorialPanel(context, initialStep);
+    TutorialPanel.current = new TutorialPanel(context, learningImprovement, initialStep);
     await context.globalState.update(PROGRESS_KEY, tutorialProgress('in-progress', initialStep));
+    await learningImprovement.record({ category: 'learning', name: 'tutorial-result', activityId: 'guided-tutorial', outcome: 'started' });
   }
 
-  static async promptOnFirstRun(context: vscode.ExtensionContext): Promise<boolean> {
+  static async promptOnFirstRun(context: vscode.ExtensionContext, learningImprovement: LearningImprovementManager): Promise<boolean> {
     if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
     if (context.globalState.get<TutorialProgress>(PROGRESS_KEY)) return false;
     const action = await vscode.window.showInformationMessage(
@@ -38,9 +40,10 @@ export class TutorialPanel implements vscode.Disposable {
       'Skip for now'
     );
     if (action === 'Start Guided Tutorial') {
-      await TutorialPanel.show(context, true);
+      await TutorialPanel.show(context, learningImprovement, true);
     } else {
       await context.globalState.update(PROGRESS_KEY, tutorialProgress('skipped', 0));
+      await learningImprovement.record({ category: 'learning', name: 'tutorial-result', activityId: 'guided-tutorial', outcome: 'skipped' });
       if (action === 'Skip for now') {
         await vscode.window.showInformationMessage(
           'Tutorial skipped. Run “CIS 310: Start or Rerun Guided Tutorial” whenever you want it.'
@@ -56,6 +59,7 @@ export class TutorialPanel implements vscode.Disposable {
 
   private constructor(
     private readonly context: vscode.ExtensionContext,
+    private readonly learningImprovement: LearningImprovementManager,
     initialStep: number
   ) {
     this.step = initialStep;
@@ -85,6 +89,7 @@ export class TutorialPanel implements vscode.Disposable {
             break;
           case 'skip':
             await this.context.globalState.update(PROGRESS_KEY, tutorialProgress('skipped', this.step));
+            await this.learningImprovement.record({ category: 'learning', name: 'tutorial-result', activityId: 'guided-tutorial', outcome: 'skipped' });
             this.panel.dispose();
             await vscode.window.showInformationMessage(
               'Tutorial skipped. Use the SystemStudio sidebar or Command Palette to run it again.'
@@ -93,9 +98,11 @@ export class TutorialPanel implements vscode.Disposable {
           case 'complete':
             this.step = TUTORIAL_STEP_IDS.length - 1;
             await this.context.globalState.update(PROGRESS_KEY, tutorialProgress('completed', this.step));
+            await this.learningImprovement.record({ category: 'learning', name: 'tutorial-result', activityId: 'guided-tutorial', outcome: 'completed' });
             await vscode.window.showInformationMessage(
               'SystemStudio tutorial completed. You can rerun it at any time from the sidebar.'
             );
+            await this.learningImprovement.askHelpfulness('guided-tutorial');
             break;
         }
       },
@@ -114,6 +121,7 @@ export class TutorialPanel implements vscode.Disposable {
   private async restart(): Promise<void> {
     this.step = 0;
     await this.context.globalState.update(PROGRESS_KEY, tutorialProgress('in-progress', 0));
+    await this.learningImprovement.record({ category: 'learning', name: 'tutorial-result', activityId: 'guided-tutorial', outcome: 'started' });
     await this.panel.webview.postMessage({ type: 'restart', step: 0 });
   }
 }
@@ -213,7 +221,7 @@ function tutorialHtml(webview: vscode.Webview, initialStep: number): string {
 <body>
 <div class="shell">
   <header>
-    <div><h1>SystemStudio CIS 310 Guided Tutorial</h1><div class="status">Clickable practice—no telemetry and no automatic installation</div></div>
+    <div><h1>SystemStudio CIS 310 Guided Tutorial</h1><div class="status">Self-paced. Learning-improvement sharing is disabled in this release.</div></div>
     <div class="header-actions"><button id="restart" class="quiet">Restart</button><button id="skip" class="quiet">Skip tutorial</button></div>
   </header>
   <div class="progress-wrap">

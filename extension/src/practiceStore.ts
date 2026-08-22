@@ -46,6 +46,7 @@ import {
   type CourseworkStatus,
   type FinalSelfEvaluationDimension
 } from './core/coursework';
+import type { LearningImprovementManager } from './learningImprovement';
 
 const PRACTICE_PROGRESS_KEY = 'practice.progress.v1';
 const PREPARATION_PROGRESS_KEY = 'preparation.progress.v1';
@@ -55,7 +56,10 @@ export class PracticeStore implements vscode.Disposable {
   private readonly changeEmitter = new vscode.EventEmitter<void>();
   readonly onDidChange = this.changeEmitter.event;
 
-  constructor(private readonly state: vscode.Memento) {}
+  constructor(
+    private readonly state: vscode.Memento,
+    private readonly learningImprovement?: LearningImprovementManager
+  ) {}
 
   getProgress(): PracticeProgress {
     return normalizePracticeProgress(this.state.get<unknown>(PRACTICE_PROGRESS_KEY));
@@ -134,6 +138,18 @@ export class PracticeStore implements vscode.Disposable {
   async answer(input: PracticeAnswerInput, now = new Date()): Promise<PracticeAnswerResult> {
     const updated = recordPracticeAnswer(this.getProgress(), input, now);
     await this.save(updated.progress);
+    await this.learningImprovement?.record({
+      category: 'learning',
+      name: 'practice-attempt',
+      moduleId: updated.result.question.resourceId,
+      activityId: updated.result.question.id,
+      selectedOption: updated.result.selectedIndex,
+      correct: updated.result.correct,
+      confidence: updated.result.confidence,
+      usedHint: updated.result.usedHint,
+      durationMs: input.durationMs,
+      attemptNumber: updated.progress.questions[updated.result.question.id]?.attempts
+    });
     return updated.result;
   }
 
@@ -151,6 +167,23 @@ export class PracticeStore implements vscode.Disposable {
     const updated = togglePreparation(this.getPreparation(), resourceId, field);
     await this.state.update(PREPARATION_PROGRESS_KEY, updated);
     this.changeEmitter.fire();
+    await this.learningImprovement?.record({
+      category: 'learning',
+      name: 'preparation-step',
+      moduleId: resourceId,
+      activityId: field,
+      outcome: updated.modules[resourceId]?.[field] ? 'checked' : 'unchecked'
+    });
+  }
+
+  async recordGuidedLabStep(labId: string, moduleId: string, completed: boolean): Promise<void> {
+    await this.learningImprovement?.record({
+      category: 'learning',
+      name: 'guided-lab-step',
+      moduleId,
+      activityId: labId,
+      outcome: completed ? 'checked' : 'unchecked'
+    });
   }
 
   async reset(): Promise<void> {

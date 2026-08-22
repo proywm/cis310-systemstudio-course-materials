@@ -22,8 +22,8 @@ describe('first-run Orbit assistance setup', () => {
 
   it('runs assistance onboarding before the existing tutorial and environment prompt', async () => {
     const source = await readFile(path.resolve('src/extension.ts'), 'utf8');
-    const onboarding = source.indexOf('await promptForOrbitSetupOnFirstRun(context)');
-    const tutorial = source.indexOf('await TutorialPanel.promptOnFirstRun(context)');
+    const onboarding = source.indexOf('await promptForOrbitSetupOnFirstRun(context, learningImprovement)');
+    const tutorial = source.indexOf('await TutorialPanel.promptOnFirstRun(context, learningImprovement)');
     const install = source.indexOf('await maybePromptForInstall(context, manager, setupDigital)');
     assert.ok(onboarding >= 0 && onboarding < tutorial && tutorial < install);
     assert.match(source, /probeCodexCli/);

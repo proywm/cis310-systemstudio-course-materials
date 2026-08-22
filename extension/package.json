@@ -2,7 +2,7 @@
   "name": "systemstudio-cis310",
   "displayName": "SystemStudio CIS 310",
   "description": "Active Fall 2026 CIS 310 learning materials with accessible lectures, Full Digital, and an integrated actual NASM/ELF32 workbench.",
-  "version": "0.25.5",
+  "version": "0.25.6",
   "private": true,
   "publisher": "probir-roy",
   "license": "UNLICENSED",
@@ -49,6 +49,7 @@
     "onCommand:systemstudioCis310.openGettingStarted",
     "onCommand:systemstudioCis310.openStudentHelper",
     "onCommand:systemstudioCis310.reportIssue",
+    "onCommand:systemstudioCis310.openLearningImprovementPrivacy",
     "onCommand:systemstudioCis310.openAiTutor",
     "onCommand:systemstudioCis310.configureAiAssistance",
     "onCommand:systemstudioCis310.openUnitTestCenter",
@@ -132,6 +133,12 @@
         "title": "CIS 310: Report an Extension Problem",
         "category": "SystemStudio",
         "icon": "$(issues)"
+      },
+      {
+        "command": "systemstudioCis310.openLearningImprovementPrivacy",
+        "title": "CIS 310: Learning-Improvement Privacy Controls",
+        "category": "SystemStudio",
+        "icon": "$(shield)"
       },
       {
         "command": "systemstudioCis310.openAiTutor",

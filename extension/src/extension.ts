@@ -40,6 +40,7 @@ import { DigitalTestController } from './digitalTests';
 import { GuidedLabPanel } from './guidedLabPanel';
 import { reportCis310Issue } from './issueReporter';
 import { LessonTextPanel } from './lessonTextPanel';
+import { LearningImprovementManager } from './learningImprovement';
 import { NativeAssemblyManager } from './nativeAssemblyManager';
 import { NasmTestController } from './nasmTests';
 import { NasmWorkbenchPanel } from './nasmWorkbenchPanel';
@@ -66,7 +67,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const assemblyManager = new AssemblyManager(context, output);
   const nativeAssemblyManager = new NativeAssemblyManager(context, output);
   const courseMaterials = await CourseMaterials.load(context);
-  const practiceStore = new PracticeStore(context.globalState);
+  const learningImprovement = new LearningImprovementManager(context);
+  const practiceStore = new PracticeStore(context.globalState, learningImprovement);
   const materialsTree = new CourseMaterialsTreeProvider(courseMaterials);
   const statusTree = new StatusTreeProvider(
     manager,
@@ -191,18 +193,25 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   };
 
   const setupCourseEnvironment = async (): Promise<void> => {
+    await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'course-environment', outcome: 'started' });
     let digital = await manager.getStatus();
     if (!digital.integrityVerified) {
       const installed = await setupDigital();
       digital = await manager.getStatus();
-      if (!installed && !digital.integrityVerified) return;
+      if (!installed && !digital.integrityVerified) {
+        await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'digital-unavailable', outcome: 'cancelled' });
+        return;
+      }
     }
 
     if (EMBEDDED_CONTAINER_PLATFORM) {
       let docker = await probeDockerEngine();
       if (docker.state === 'engine-unavailable') {
         const recovered = await recoverDockerDesktop();
-        if (!recovered) return;
+        if (!recovered) {
+          await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'docker-not-started', outcome: 'cancelled' });
+          return;
+        }
         docker = await probeDockerEngine();
       }
       if (docker.state !== 'ready') {
@@ -218,6 +227,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           });
         }
         if (action === 'Open setup guide') await SetupGuidePanel.show(context);
+        await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'docker-unavailable', outcome: 'failure' });
         return;
       }
     }
@@ -242,9 +252,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	            : `Host Java ${MINIMUM_JAVA_MAJOR}+ is required for Digital on Linux`
 	          : undefined
 	      ].filter((item): item is string => Boolean(item));
-	      if (unresolved.length > 0) throw new Error(unresolved.join(' | '));
+      if (unresolved.length > 0) throw new Error(unresolved.join(' | '));
       await vscode.window.showInformationMessage('CIS 310 setup is ready: verified Digital, embedded display runtime, and actual NASM/GDB course environment.');
+	  await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'course-environment', outcome: 'success' });
 	    } catch (error) {
+	      await learningImprovement.record({ category: 'technical', name: 'setup-result', activityId: 'course-environment', outcome: 'failure' });
 	      output.appendLine(`SETUP FAILED: ${errorMessage(error)}`);
 	      const detail = errorMessage(error);
 	      const firstError = detail.split(/\r?\n/).map((line) => line.trim()).find(Boolean)?.slice(0, 360)
@@ -299,7 +311,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       { webviewOptions: { retainContextWhenHidden: false }, supportsMultipleEditorsPerDocument: false }
     ),
     vscode.commands.registerCommand('systemstudioCis310.startTutorial', async () => {
-      await TutorialPanel.show(context, true);
+      await TutorialPanel.show(context, learningImprovement, true);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openGettingStarted', async () => {
       await TutorialPanel.openNativeWalkthrough();
@@ -309,6 +321,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.reportIssue', async () => {
       await reportCis310Issue(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.openLearningImprovementPrivacy', async () => {
+      await learningImprovement.openPrivacyCenter();
     }),
     vscode.commands.registerCommand('systemstudioCis310.openUnitTestCenter', async () => {
       await tests.refresh();
@@ -838,9 +853,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   void (async () => {
     await updateStatus();
-    const setupOnboardingHandled = await promptForOrbitSetupOnFirstRun(context);
+    const setupOnboardingHandled = await promptForOrbitSetupOnFirstRun(context, learningImprovement);
     if (!setupOnboardingHandled) {
-      const tutorialPromptHandled = await TutorialPanel.promptOnFirstRun(context);
+      const tutorialPromptHandled = await TutorialPanel.promptOnFirstRun(context, learningImprovement);
       if (tutorialPromptHandled) return;
       await maybePromptForInstall(context, manager, setupDigital);
     }
@@ -1136,7 +1151,10 @@ async function launchCodexLearningCoach(context: vscode.ExtensionContext, starte
   return true;
 }
 
-async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): Promise<boolean> {
+async function promptForOrbitSetupOnFirstRun(
+  context: vscode.ExtensionContext,
+  learningImprovement: LearningImprovementManager
+): Promise<boolean> {
   if (context.extensionMode !== vscode.ExtensionMode.Production) return false;
   if (context.globalState.get<number>(FIRST_RUN_SETUP_KEY) === AI_ASSISTANCE_ONBOARDING_VERSION) return false;
   await context.globalState.update(FIRST_RUN_SETUP_KEY, AI_ASSISTANCE_ONBOARDING_VERSION);
@@ -1170,7 +1188,7 @@ async function promptForOrbitSetupOnFirstRun(context: vscode.ExtensionContext): 
   if (next === 'Set up course environment') {
     await vscode.commands.executeCommand('systemstudioCis310.setupCourseEnvironment');
   } else if (next === 'Open guided tutorial') {
-    await TutorialPanel.show(context, true);
+    await TutorialPanel.show(context, learningImprovement, true);
   }
   return true;
 }
