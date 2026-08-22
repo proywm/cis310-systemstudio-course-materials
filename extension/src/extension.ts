@@ -38,6 +38,7 @@ import { FullDigitalEditorProvider } from './fullDigitalEditor';
 import { FullDigitalRuntime } from './fullDigitalRuntime';
 import { DigitalTestController } from './digitalTests';
 import { GuidedLabPanel } from './guidedLabPanel';
+import { reportCis310Issue } from './issueReporter';
 import { LessonTextPanel } from './lessonTextPanel';
 import { NativeAssemblyManager } from './nativeAssemblyManager';
 import { NasmTestController } from './nasmTests';
@@ -305,6 +306,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
     vscode.commands.registerCommand('systemstudioCis310.openStudentHelper', async () => {
       await StudentHelperPanel.show(context);
+    }),
+    vscode.commands.registerCommand('systemstudioCis310.reportIssue', async () => {
+      await reportCis310Issue(context);
     }),
     vscode.commands.registerCommand('systemstudioCis310.openUnitTestCenter', async () => {
       await tests.refresh();

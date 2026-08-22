@@ -90,6 +90,7 @@ Reload VS Code and open the **SystemStudio CIS 310** activity-bar view.
 | `CIS 310: Open Learning and Practice` | Opens preparation, practice, quiz, confidence, and review tools |
 | `CIS 310: Open Coursework and Final Presentation` | Opens assignment checklists, circuit preflights, final-presentation progression, grade estimate, Canvas-calendar import, recovery, and diagnostics |
 | `CIS 310: Open U-M Codex Learning Coach` | Checks and opens the student-owned U-M Codex CLI in VS Code; offline Orbit remains a non-AI fallback |
+| `CIS 310: Report an Extension Problem` | Collects three short student-entered fields, shows exactly what will be shared, and opens a reviewable public GitHub issue draft only after consent |
 | `CIS 310: Open Fall 2026 Canvas Course` | Opens the authoritative course page |
 | `CIS 310: Start or Rerun Guided Tutorial` | Opens the self-paced tutorial |
 | `CIS 310: Open Setup and First-Task Guide` | Explains platform setup, Docker messages, the first circuit, the first NASM lab, tests, and submission checks |
@@ -114,6 +115,7 @@ See the generated `assembly/README.md`, `assembly/COMPATIBILITY.md`, and `assemb
 - Learning history, coursework planning, imported calendar events, self-evaluation, and FAQ conversations stay in VS Code local storage; the extension sends no telemetry or student artifacts to an AI service.
 - U-M Codex opens only after student action, uses the student's own U-M configuration, and follows the permissions the student selects. After Codex is visibly ready, the student explicitly selects **Send guarded course prompt**; the extension never reads or stores the U-M key.
 - Canvas opens only after student action and is governed by U-M service notices. Codex receives no automatic Canvas content, grades, or course records.
+- Issue reporting reads no files, code, grades, credentials, Canvas data, or logs. After explicit consent it sends only the reviewed short answers and basic extension/VS Code/platform diagnostics to a prefilled GitHub page; GitHub creates nothing until the student selects **Submit new issue**.
 
 ## Verification
 

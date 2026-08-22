@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.25.5
+
+- Added a student-controlled **Report an Extension Problem** workflow in the course tree, help center, and Command Palette. It collects only short student-entered descriptions plus version/platform metadata, discloses the exact fields, asks explicit permission, and opens a reviewable public GitHub draft without submitting it.
+- Added privacy and URL-construction regressions for issue drafts; source files, coursework, grades, credentials, Canvas data, and logs are never attached automatically.
+- Removed the final stale student-facing Maizey references from the packaged syllabus; U-M Codex CLI is now the consistent online AI learning-coach route, with deterministic offline Orbit as the non-AI fallback.
+
 ## 0.25.4
 
 - Replaced sandbox-blocked browser confirmations in practice and guided labs with direct navigation or VS Code-native confirmation, fixing the inert **End session** action.

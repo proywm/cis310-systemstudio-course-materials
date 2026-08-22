@@ -204,6 +204,12 @@ export class StatusTreeProvider implements vscode.TreeDataProvider<StatusNode> {
             'systemstudioCis310.openStudentHelper',
             'comment-discussion'
           ),
+          describedActionItem(
+            'Report an extension problem',
+            'review a privacy-limited public GitHub draft before submitting',
+            'systemstudioCis310.reportIssue',
+            'issues'
+          ),
           describedInfoItem(`Instructor: ${CIS310_INSTRUCTOR.name}`, `${CIS310_INSTRUCTOR.email} · ${CIS310_INSTRUCTOR.office}`, 'person'),
           describedInfoItem(CIS310_GSI.label, CIS310_GSI.detail, 'account'),
           describedInfoItem(`Class: M/W ${FALL_2026_CLASS_TIME_LABEL}`, FALL_2026_CLASS_LOCATION, 'calendar'),

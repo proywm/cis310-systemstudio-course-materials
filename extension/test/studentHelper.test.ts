@@ -112,6 +112,7 @@ describe('student helper', () => {
     assert.equal((parseStudentHelperRequest({ type: 'ask', question: 'x'.repeat(3_000) }) as { question: string }).question.length, 2_000);
     assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'open-canvas' }), { type: 'action', action: 'open-canvas' });
     assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'ask-before-class' }), { type: 'action', action: 'ask-before-class' });
+    assert.deepEqual(parseStudentHelperRequest({ type: 'action', action: 'report-issue' }), { type: 'action', action: 'report-issue' });
     assert.equal(parseStudentHelperRequest({ type: 'action', action: 'workbench.action.terminal.kill' }), undefined);
   });
 

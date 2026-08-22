@@ -11,6 +11,7 @@ export type StudentHelperAction =
   | 'open-learning'
   | 'open-coursework'
   | 'open-unit-tests'
+  | 'report-issue'
   | 'open-guided-labs'
   | 'practice-now'
   | 'start-tutorial'
@@ -44,6 +45,7 @@ const STUDENT_HELPER_ACTIONS = new Set<StudentHelperAction>([
   'open-learning',
   'open-coursework',
   'open-unit-tests',
+  'report-issue',
   'open-guided-labs',
   'practice-now',
   'start-tutorial',

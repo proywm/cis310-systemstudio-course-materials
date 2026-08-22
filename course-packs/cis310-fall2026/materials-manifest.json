@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "cis310-fall2026",
-  "version": "0.25.4",
+  "version": "0.25.5",
   "course": {
     "code": "CIS 310",
     "title": "Computer Organization and Assembly Language",
@@ -21,7 +21,7 @@
       "sourceUrl": "https://github.com/proywm/cis310-systemstudio-course-materials/blob/main/course-packs/cis310-fall2026/syllabus/CIS310_Fall_2026_Syllabus.html",
       "modifiedAt": "2026-08-21T20:00:00Z",
       "localPath": "syllabus/CIS310_Fall_2026_Syllabus.html",
-      "sha256": "bc4b7be8199bfec0998247d57286e81da234f3d1dd6e8961af3d624ee73e7ee8",
+      "sha256": "31c0b37093882faace3fd76a0e0d9ebb957db1d00ee96c6c68bc8e1fdd04b866",
       "concepts": ["course-structure", "learning-outcomes", "policies", "fall-2026-calendar"]
     },
     {

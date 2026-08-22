@@ -6,6 +6,7 @@ const REQUIRED_COMMANDS = [
   'systemstudioCis310.openSetupGuide',
   'systemstudioCis310.openUnitTestCenter',
   'systemstudioCis310.openStudentHelper',
+  'systemstudioCis310.reportIssue',
   'systemstudioCis310.openPracticeCenter',
   'systemstudioCis310.openCourseworkCenter',
   'systemstudioCis310.openGuidedLabs',
