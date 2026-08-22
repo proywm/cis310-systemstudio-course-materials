@@ -8,6 +8,7 @@ import * as path from 'node:path';
 const digitalRoot = path.resolve(process.argv[2] || '.digital-smoke');
 const temporary = await mkdtemp(path.join(tmpdir(), 'systemstudio-container-smoke-'));
 const digitalName = `systemstudio-digital-ci-${process.pid}`;
+const digitalHomeVolume = `systemstudio-digital-home-ci-${process.pid}`;
 try {
   await run('docker', ['build', '--pull', '-t', 'systemstudio-cis310-nasm:ci', 'media/nasm-container']);
   await run('docker', [
@@ -21,7 +22,7 @@ try {
   await run('docker', [
     'run', '--detach', '--rm', '--name', digitalName, '--cap-drop=ALL', '--security-opt', 'no-new-privileges',
     '--pids-limit', '256', '--memory', '1g', '--read-only',
-    '--tmpfs', '/tmp:rw,noexec,nosuid,size=256m', '--tmpfs', '/home/digital:rw,nosuid,size=64m',
+    '--tmpfs', '/tmp:rw,noexec,nosuid,size=256m', '--mount', `type=volume,src=${digitalHomeVolume},dst=/home/digital`,
     '-p', '127.0.0.1::5900',
     '-v', `${path.join(digitalRoot, 'Digital')}:/opt/digital:ro`,
     '-v', `${digitalRoot}:/workspace:rw`, 'systemstudio-cis310-full-digital:ci', '/workspace/blank-smoke.dig'
@@ -32,10 +33,12 @@ try {
   const greeting = await waitForRfb(Number(match[1]), 60_000);
   assert.match(greeting, /^RFB 003\./);
   const processes = await run('docker', ['top', digitalName]);
-  assert.match(processes.stdout, /java\s+-Duser\.home=.*Digital\.jar/);
+  assert.match(processes.stdout, /java\s+-Duser\.home=.*-Djava\.util\.prefs\.userRoot=.*Digital\.jar/);
+  await run('docker', ['exec', digitalName, 'sh', '-lc', 'test -w /home/digital && test -d /home/digital/.java/.userPrefs && touch /home/digital/Digital_smoke.log']);
   process.stdout.write('Container smoke passed: all NASM starters assembled/linked/executed and Full Digital exposed a live RFB desktop.\n');
 } finally {
   await run('docker', ['rm', '-f', digitalName], true);
+  await run('docker', ['volume', 'rm', '-f', digitalHomeVolume], true);
   await rm(temporary, { recursive: true, force: true });
 }
 

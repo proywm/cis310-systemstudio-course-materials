@@ -29,7 +29,12 @@ describe('full Digital and real assembly declarations', () => {
     assert.match(runtime, /process\.platform === 'darwin'/);
     assert.match(runtime, /127\.0\.0\.1:\$\{vncPort\}:5900/);
     assert.match(runtime, /--cap-drop=ALL/);
+    assert.match(runtime, /type=volume,src=\$\{CONTAINER_HOME_VOLUME\},dst=\/home\/digital/);
+    assert.match(runtime, /systemstudio-cis310-full-digital:0\.31-v2/);
     assert.match(dockerfile, /eclipse-temurin:17\.0\.16_8-jre-jammy/);
+    assert.match(dockerfile, /useradd --create-home --home-dir \/home\/digital --uid 10001 digital/);
+    assert.match(entrypoint, /-w \/home\/digital/);
+    assert.match(entrypoint, /-Djava\.util\.prefs\.userRoot=\/home\/digital\/\.java\/\.userPrefs/);
     assert.match(entrypoint, /-jar \/opt\/digital\/Digital\.jar/);
   });
 

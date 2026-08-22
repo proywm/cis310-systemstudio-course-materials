@@ -16,7 +16,8 @@ const DISPLAY_WIDTH = 1440;
 const DISPLAY_HEIGHT = 900;
 const START_TIMEOUT_MS = 15_000;
 const CONTAINER_START_TIMEOUT_MS = 60_000;
-const CONTAINER_IMAGE = 'systemstudio-cis310-full-digital:0.31';
+const CONTAINER_IMAGE = 'systemstudio-cis310-full-digital:0.31-v2';
+const CONTAINER_HOME_VOLUME = 'systemstudio-cis310-digital-home-v1';
 
 export interface FullDigitalSession {
   readonly id: string;
@@ -224,7 +225,7 @@ export class FullDigitalRuntime implements vscode.Disposable {
       '--cap-drop=ALL', '--security-opt', 'no-new-privileges',
       '--pids-limit', '256', '--memory', '1g',
       '--tmpfs', '/tmp:rw,noexec,nosuid,size=256m',
-      '--tmpfs', '/home/digital:rw,nosuid,size=64m',
+      '--mount', `type=volume,src=${CONTAINER_HOME_VOLUME},dst=/home/digital`,
       '-p', `127.0.0.1:${vncPort}:5900`,
       '-v', `${this.digitalManager.digitalHome}:/opt/digital:ro`,
       '-v', `${circuitDirectory}:/workspace:rw`,

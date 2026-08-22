@@ -27,7 +27,13 @@ vnc_pid=$!
 export DISPLAY="$display"
 export GDK_BACKEND=x11
 export _JAVA_AWT_WM_NONREPARENTING=1
+mkdir -p /home/digital/.java/.userPrefs
+if [ ! -w /home/digital ]; then
+  echo "Digital's container home is not writable; preferences and crash logs cannot be saved." >&2
+  exit 1
+fi
 exec java \
   -Duser.home=/home/digital \
+  -Djava.util.prefs.userRoot=/home/digital/.java/.userPrefs \
   -Dapple.awt.application.name="SystemStudio Digital" \
   -jar /opt/digital/Digital.jar "$@"

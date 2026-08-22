@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.25.4
+
+- Replaced sandbox-blocked browser confirmations in practice and guided labs with direct navigation or VS Code-native confirmation, fixing the inert **End session** action.
+- Corrected generated JavaScript escaping in Coursework Mission Control and the actual NASM/GDB workbench, restoring tabs, the grade estimator, environment status, and all workbench controls.
+- Added a generated-webview parser and source-wide blocked-modal regression so malformed scripts and `confirm`/`alert`/`prompt` calls fail the release build.
+- Moved the Full Digital container home to an automatically managed persistent Docker volume, added an explicit writable-home check and Java preferences root, and smoke-tested preferences/crash-log writes.
+
 ## 0.25.3
 
 - Removed internal slide-audit provenance and product-specific instructions from all generated Canvas lecture pages while retaining the mapped readings, videos, examples, accessibility note, and course-tool requirements.
